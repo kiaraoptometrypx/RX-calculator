@@ -177,7 +177,12 @@ table {
   border-collapse: collapse;
 }
 
-
+/* Responsive for small screens */
+@media (max-width: 500px) {
+    body { font-size: 12px; }
+    th, td { font-size: 12px; padding: 4px; min-width: 50px; }
+    input, select { max-width: 60px; font-size: 12px; }
+}
 	
 </style>
 </head>
@@ -223,7 +228,6 @@ table {
 
 
 
-<table style="width:90%; margin:0 auto; border-collapse:collapse;">
 
 <!-- Import Manrope font in your <head> -->
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
@@ -1526,6 +1530,7 @@ if (r.className === "now") {
 </div>
 </body>
 </html>
+
 
 
 
