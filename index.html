@@ -11,10 +11,9 @@
 <style>
 body { 
   font-family: 'Manrope', Helvetica, Arial, system-ui; 
-  padding:10px; 
+  padding:30px; 
   background:#f5f5f5; 
   font-weight: bold; /* added */
-  zoom: 0.8; 
 }
 
 
@@ -155,6 +154,7 @@ button {
   min-width: 70px;
   color: black; 
   font-weight: bold; /* added */
+  max-width: 500px;
 }
 
 #savedResultsTable th {
@@ -166,7 +166,11 @@ button {
 <!-- Import Manrope font in your <head> -->
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
 
-
+.page-wrapper {
+  max-width: 500px;   /* limits page width */
+  margin: 20px auto;     /* centers the page */
+  padding: 20px;      /* optional spacing around content */
+}
 
 </style>
 </head>
