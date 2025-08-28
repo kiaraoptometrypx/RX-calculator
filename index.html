@@ -76,13 +76,13 @@ input {
 }
 
 .fullbal { 
-  background: #DFE6CF; 
+  background: #FBFFAB; 
   font-weight: bold; /* changed from normal to bold */
   font-style:normal; 
 }
 
 .roundbal { 
-  background: #CFF2BD; 
+  background: #F9FF66; 
   font-weight:bold; 
 }
 
@@ -159,8 +159,8 @@ button {
   font-weight: bold;    /* added */
 }
 
-
-
+<!-- Import Manrope font in your <head> -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
 
 
 
@@ -335,12 +335,6 @@ document.querySelectorAll(".dc-result-select").forEach(sel => {
     </span>
   </td>
 </tr>
-
-
-
-
-
-
 
 
 
@@ -540,25 +534,9 @@ function calcAxisAvg() {
 </tr>
 
 
-<tr class="spacer" style="height: 30px;">
+<tr class="spacer" style="height: 10px;">
   <td colspan="10"></td>
 </tr>
-
-<!-- Import Manrope font in your <head> -->
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
-
-<!-- NEW HEADER ROW -->
-<tr class="top-header">
-  <td colspan="5" style="text-align:center; background:#395239; color:#f5f5f5; font-weight:bold; font-size:20px; height:30px; font-family:'Manrope', sans-serif;">
-    Calculated Prescription Section - Press Enter To Update Value!
-  </td>
-</tr>
-
-<tr class="table-header">
-  <td></td><td>Sphere</td><td>Cylinder</td><td>Axis</td><td>SE</td>
-</tr>
-
-
 
 
 
@@ -578,14 +556,14 @@ function calcAxisAvg() {
 </tr>
 
 <tr class="fullbal">
-  <td>Bal RX Right</td>
+  <td>Real Bal RX Right</td>
   <td><span id="res-sph-od-2">0.00</span></td>
   <td><span id="res-cyl-od-2">0.00</span></td>
   <td><span id="res-axis-od-180">0</span></td>
   <td id="res-se-diff-od-2">—</td>
 </tr>
 <tr class="fullbal">
-  <td>Bal RX Left</td>
+  <td>Real Bal RX Left</td>
   <td><span id="res-sph-os-2">0.00</span></td>
   <td><span id="res-cyl-os-2">0.00</span></td>
   <td><span id="res-axis-os-180">0</span></td>
@@ -593,7 +571,7 @@ function calcAxisAvg() {
 </tr>
 
 <tr class="summary-row">
-  <td colspan="5" style="padding:10px; font-family:'Manrope', sans-serif; font-weight:bold; background:#DFE6CF;">
+  <td colspan="5" style="padding:10px; font-family:'Manrope', sans-serif; font-weight:bold; background:#FBFFAB;">
     <div style="display:flex; justify-content:center; align-items:center; gap:40px; flex-wrap:wrap; text-align:center; font-size:16px">
       <!-- DC Analysis -->
       <div>
@@ -614,15 +592,10 @@ function calcAxisAvg() {
 
 <tr class="spacer"><td colspan="10"></td></tr>
 
+
 <!-- NEW HEADER ROW -->
 <tr class="top-header">
-  <td colspan="5" style="text-align:center; background:#fff; color:#f5f5f5; font-weight:bold; font-size:1px; height:15px; font-family:'Manrope', sans-serif;">
-    Preferred Prescription Section - Press Enter To Update Value!
-  </td>
-</tr>
-<!-- NEW HEADER ROW -->
-<tr class="top-header">
-  <td colspan="5" style="text-align:center; background:#395239; color:#f5f5f5; font-weight:bold; font-size:20px; height:30px; font-family:'Manrope', sans-serif;">
+  <td colspan="5" style="text-align:center; background:#395239; color:#f5f5f5; font-weight:bold; font-size:16px; height:25px; font-family:'Manrope', sans-serif;">
     Preferred Prescription Section - Press Enter To Update Value!
   </td>
 </tr>
@@ -636,7 +609,7 @@ function calcAxisAvg() {
   <td style="font-family:'Manrope', sans-serif; font-size:16px;">DC Preferred Right</td>
   <td colspan="4" style="text-align:center;">
     <select id="dc-preferred-od" class="dc-result-select" style="width:550px; font-family:'Manrope', sans-serif; font-size:16px;">
-      <option value="0" data-color="black" selected>BAL : Balance (0)</option>
+      <option value="+0.00" data-color="black" selected>BAL : Balance (0)</option>
       <option value="-0.25" data-color="green">G1 : Green 1 Overcorrection of -0.25 </option>
       <option value="0.25" data-color="red">R1 : Red 1 Undercorrection of -0.25</option>
       <option value="-0.50" data-color="green">G2 : Green 2 Overcorrection of -0.50</option>
@@ -654,7 +627,7 @@ function calcAxisAvg() {
   <td style="font-family:'Manrope', sans-serif; font-size:16px;">DC Preferred Left</td>
   <td colspan="4" style="text-align:center;">
     <select id="dc-preferred-os" class="dc-result-select" style="width:550px; font-family:'Manrope', sans-serif; font-size:16px;">
-      <option value="0" data-color="black" selected>BAL : Balance (0)</option>
+      <option value="+0.00" data-color="black" selected>BAL : Balance (0)</option>
       <option value="-0.25" data-color="green">G1 : Green 1 Overcorrection of -0.25 </option>
       <option value="0.25" data-color="red">R1 : Red 1 Undercorrection of -0.25</option>
       <option value="-0.50" data-color="green">G2 : Green 2 Overcorrection of -0.50</option>
@@ -884,6 +857,7 @@ function formatValueForDisplay(n){
         if(id.startsWith('a1')){
             el.value = (val === 0 ? 180 : Math.round(val));
         }
+
     });
 });
 
@@ -914,7 +888,10 @@ function formatValueForDisplay(n){
     return /axis/.test(id) || /^a\d/.test(id);
   }
 
-  // ======= Auto-formatting for inputs =======
+
+
+ 
+// ======= Auto-formatting for inputs =======
   function autoFormatInput(el){
     if(!el) return;
     const id = el.id || '';
@@ -936,43 +913,6 @@ function formatValueForDisplay(n){
     }
   }
 
-  // ======= Auto-copy OD -> OS for DC & FC Preferred (editable) =======
-  function setupAutoCopy(odId, osId){
-    const od = document.getElementById(odId);
-    const os = document.getElementById(osId);
-    if(!od || !os) return;
-    od.addEventListener('input', () => {
-    if(os.dataset.userEdited !== "true"){
-        // live copy
-        os.value = od.value;
-    }
-});
-
-od.addEventListener('blur', () => {
-    if(os.dataset.userEdited !== "true"){
-        // copy + round to nearest 0.25 on blur
-        const rounded = roundQuarterNumber(od.value);
-        os.value = (rounded >= 0 ? "+" : "") + rounded.toFixed(2);
-    }
-});
-
-    os.addEventListener('input', () => { os.dataset.userEdited = "true"; });
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -983,11 +923,7 @@ od.addEventListener('blur', () => {
 document.getElementById("dc-sph").addEventListener("blur", function() {
     let val = parseFloat(this.value);
 
-    // If input is empty, clear analysis
-    if (isNaN(val)) {
-        document.getElementById("dc-analysis-text").innerText = "";
-        return;
-    }
+   
 
     // Round to nearest 0.25
     let roundedVal = Math.round(val * 4) / 4;
@@ -1215,12 +1151,7 @@ updateDCSummary();
     });
   });
 
-  // Setup auto-copy (OD -> OS) for preferred controls (won't overwrite if OS edited)
-  setupAutoCopy("dc-preferred-od","dc-preferred-os");
-  setupAutoCopy("fc-cyl-pref-od","fc-cyl-pref-os");
-  setupAutoCopy("fc-axis-pref-od","fc-axis-pref-os");
-
-
+  
 
 
 }); // DOMContentLoaded
@@ -1276,24 +1207,24 @@ rightCyl.addEventListener('blur', () => {
 });
 
 
-// 1. SE Diff: difference between Right and Left of the same group
-function calculateSEDiff(seRight, seLeft) {
-    return parseFloat((seRight - seLeft).toFixed(3));
-}
+const rightAxis = document.getElementById('fc-axis-pref-od');
+const leftAxis = document.getElementById('fc-axis-pref-os');
 
-// 2. DX Preferred2 - Now RX: difference of Sph, Cyl, Axis per eye
-function calculateDXDiff(nowRx, dxPreferred2) {
-    return {
-        sphDiff: parseFloat((dxPreferred2.sph - nowRx.sph).toFixed(3)),
-        cylDiff: parseFloat((dxPreferred2.cyl - nowRx.cyl).toFixed(3)),
-        axisDiff: parseFloat((dxPreferred2.axis - nowRx.axis).toFixed(0)) // axis usually rounded to integer
-    };
-}
+rightAxis.addEventListener('blur', () => {
+    let val = parseInt(rightAxis.value, 10);
+    if (!isNaN(val)) {
+        // Keep axis within 0-180
+        val = Math.max(0, Math.min(180, val));
+        rightAxis.value = val;
+        leftAxis.value = val; // copy to left
+    }
+});
 
-let seDiffNow = calculateSEDiff(nowRxRight.se, nowRxLeft.se);
 
-let diffRight = calculateDXDiff(nowRxRight, dxPref2Right);
-let diffLeft = calculateDXDiff(nowRxLeft, dxPref2Left);
+
+
+
+
 
 // Get DC value for a given type and eye
 function getDCValue(type, eye) {
@@ -1338,7 +1269,7 @@ document.querySelectorAll('input').forEach(input => {
 
 
 
-function saveResults(){
+function saveResults() {
     let table = document.getElementById("savedResultsTable");
 
     // Reset table with header
@@ -1352,12 +1283,10 @@ function saveResults(){
         {label:"Now RX Right", sph:"s1_od", cyl:"c1_od", axis:"a1_od", se:"now-se-diff-od", className:"now"},
         {label:"Now RX Left", sph:"s1_os", cyl:"c1_os", axis:"a1_os", se:"now-se-diff-os", className:"now"},
         {label:"Preferred RX Right", sph:"pref-rx-sph-2-od", cyl:"pref-rx-cyl-2-od", axis:"pref-rx-axis-180-od", se:"pref-rx-se-2-od", className:"roundbal"},
-        {label:"Preferred RX Left", sph:"pref-rx-sph-2-os", cyl:"pref-rx-cyl-2-os", axis:"pref-rx-axis-180-os", se:"pref-rx-se-2-os", className:"roundbal"},
-        {label:"DX Preferred – Now Right", sph:"dx-pref-rx-sph-od", cyl:"dx-pref-rx-cyl-od", axis:"dx-pref-rx-axis-od", se:"dx-pref-rx-se-od", className:"dx-fullnow"},
-        {label:"DX Preferred – Now Left", sph:"dx-pref-rx-sph-os", cyl:"dx-pref-rx-cyl-os", axis:"dx-pref-rx-axis-os", se:"dx-pref-rx-se-os", className:"dx-fullnow"},
+        {label:"Preferred RX Left", sph:"pref-rx-sph-2-os", cyl:"pref-rx-cyl-2-os", axis:"pref-rx-axis-180-os", se:"pref-rx-se-2-os", className:"roundbal"}
     ];
 
-    rows.forEach(r=>{
+    rows.forEach(r => {
         let tr = document.createElement("tr");
         tr.className = r.className;
 
@@ -1367,71 +1296,73 @@ function saveResults(){
 
         // fetch values (works for <input> or <span>)
         let sphVal = parseFloat(document.getElementById(r.sph)?.value || document.getElementById(r.sph)?.innerText || 0);
-let cylVal = parseFloat(document.getElementById(r.cyl)?.value || document.getElementById(r.cyl)?.innerText || 0);
-let axisVal = document.getElementById(r.axis)?.value || document.getElementById(r.axis)?.innerText || 0;
-let displayAxis = (r.className === "now" && parseFloat(axisVal) === 0) ? 180 : axisVal;
+        let cylVal = parseFloat(document.getElementById(r.cyl)?.value || document.getElementById(r.cyl)?.innerText || 0);
+        let axisVal = document.getElementById(r.axis)?.value || document.getElementById(r.axis)?.innerText || 0;
+        let displayAxis = (r.className === "now" && parseFloat(axisVal) === 0) ? 180 : axisVal;
 
-
-// Format sph and cyl as diopters
-let sph = (sphVal >= 0 ? "+" : "") + sphVal.toFixed(2);
-let cyl = (cylVal >= 0 ? "+" : "") + cylVal.toFixed(2);
-let axis = axisVal; // keep axis as integer or string
-
-
-
-        // handle DX subtraction
-        if(r.className === "dx-fullnow"){
-            let prefSph = parseFloat(document.getElementById(r.sph.replace("dx-",""))?.innerText || 0);
-	    let nowSph  = parseFloat(document.getElementById(r.sph.includes("od") ? "s1_od" : "s1_os")?.value || 0);
-	    sph = ((prefSph - nowSph) >= 0 ? "+" : "") + (prefSph - nowSph).toFixed(2);
-
-            let prefCyl = parseFloat(document.getElementById(r.cyl.replace("dx-",""))?.innerText || 0);
-	    let nowCyl  = parseFloat(document.getElementById(r.cyl.includes("od") ? "c1_od" : "c1_os")?.value || 0);
-	    cyl = ((prefCyl - nowCyl) >= 0 ? "+" : "") + (prefCyl - nowCyl).toFixed(2);
-
-            let prefAxis = parseFloat(document.getElementById(r.axis.replace("dx-",""))?.innerText || 0);
-	    let nowAxis = parseFloat(document.getElementById(r.axis.includes("od") ? "a1_od" : "a1_os")?.value || 0);
-            axis = (prefAxis - nowAxis);
-        }
-
-        // then when appending cells
-[sph, cyl, displayAxis].forEach(val => {  // use displayAxis instead of axis
-    let td = document.createElement("td");
-    td.innerText = val;
-    tr.appendChild(td);
-});
+        // Format sph and cyl as diopters
+        let sph = (sphVal >= 0 ? "+" : "") + sphVal.toFixed(2);
+        let cyl = (cylVal >= 0 ? "+" : "") + cylVal.toFixed(2);
+        let axis = axisVal;
 
         let tdSE = document.createElement("td");
-
-// Only calculate SE Diff for Right rows
 if(r.label.includes("Right")) {
+    // SE Diff: Right - Left
     let seRight = parseFloat(document.getElementById(r.se)?.innerText || 0);
     let leftRow = rows.find(row => row.label.includes("Left") && row.className === r.className);
     let seLeft = parseFloat(document.getElementById(leftRow.se)?.innerText || 0);
     let diff = seRight - seLeft;
-
-    tdSE.innerText = (diff >= 0 ? "+" : "") + diff.toFixed(2); // always show + or -
+    tdSE.innerText = (diff >= 0 ? "+" : "") + diff.toFixed(2);
 } else {
-    tdSE.innerText = ""; // Left row stays empty
+    // Always dash for Left
+    tdSE.innerText = "—";
 }
 
-tr.appendChild(tdSE);
+
+        // Append sph, cyl, axis
+        [sph, cyl, displayAxis].forEach(val => {
+            let td = document.createElement("td");
+            td.innerText = val;
+            tr.appendChild(td);
+        });
+
+        tr.appendChild(tdSE);
+
+     // ---- DC column ----
+let tdDC = document.createElement("td");
+
+if (r.className === "now") {
+    // try dc-sph first, fallback to dc-summary
+    let dcValStr = document.getElementById("dc-sph")?.value || document.getElementById("dc-summary")?.innerText || "0";
+    let dcVal = parseFloat(dcValStr);
+    if (isNaN(dcVal)) dcVal = 0; // treat non-numeric as 0
+    dcVal = -dcVal; // invert the sign
+
+    tdDC.innerText = (dcVal >= 0 ? "+" : "") + dcVal.toFixed(2);
+
+} else if (r.className === "roundbal") {
+    let eye = r.sph.includes("od") ? "od" : "os";
+    let valStr = document.getElementById(`dc-preferred-${eye}`)?.value || "0";
+    let valNum = parseFloat(valStr) || 0; // fallback to 0 if empty
+    tdDC.innerText = (valNum >= 0 ? "+" : "") + valNum.toFixed(2);
+}
 
 
-        let tdDC = document.createElement("td");
-        tdDC.innerText = ""; // keep your DC logic if needed
+
+
+
+
+
+
         tr.appendChild(tdDC);
 
-        // colors
+        // Row colors
         if(r.className === "now") tdLabel.style.background = "#D6CDAE";
-        if(r.className === "roundbal") tdLabel.style.background = "#CFF2BD";
-        if(r.className === "dx-fullnow") tdLabel.style.background = "#e2e2e2";
+        if(r.className === "roundbal") tdLabel.style.background = "#F9FF66";
 
         table.appendChild(tr);
     });
 }
-
-
 
 
 
