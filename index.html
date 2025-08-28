@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<div style="overflow-x:auto;">
-	<meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=no">
-
-<title>V3 AUG 2025 RX Combiner - Both Eyes Over RX</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V3 AUG 2025 RX Combiner</title>
 
 <!-- Import Manrope font from Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -17,6 +16,13 @@ body {
   font-weight: bold; /* added */
 }
 
+/* Responsive table wrapper */
+.table-container {
+  overflow-x: auto;
+  width: 100%;
+}
+
+
 h2, h3 { 
   text-align:center; 
   margin-bottom:12px; 
@@ -28,6 +34,7 @@ table {
   margin:0 auto; 
   width: 80%; 
   font-weight: bold; /* added */
+  max-width: 100%;
 }
 
 th, td { 
@@ -165,9 +172,11 @@ button {
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
 
 
-
-
-
+/* Optional: adjust for very small screens */
+@media (max-width: 400px) {
+  th, td { font-size:12px; padding:4px; }
+  input, select { max-width: 60px; font-size:12px; }
+}
 </style>
 </head>
 </html>
@@ -1515,6 +1524,7 @@ if (r.className === "now") {
 
 </body>
 </html>
+
 
 
 
