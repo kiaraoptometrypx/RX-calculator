@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>V3 AUG 2025 RX Combiner - Both Eyes Over RX</title>
+
+<!-- Import Manrope font from Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+body { 
+  font-family: 'Manrope', Helvetica, Arial, system-ui; 
+  padding:10px; 
+  background:#f5f5f5; 
+  font-weight: bold; /* added */
+}
+
+h2, h3 { 
+  text-align:center; 
+  margin-bottom:12px; 
+  font-weight: bold; /* added */
+}
+
+table { 
+  border-collapse: collapse; 
+  margin:0 auto; 
+  width: 80%; 
+  font-weight: bold; /* added */
+}
+
+th, td { 
+  border:1px solid #999; 
+  padding:7px 7px; 
+  text-align:center; 
+  min-width:90px; 
+  font-weight: bold; /* added */
+}
+
+th { 
+  background:#395239; 
+  font-weight: bold; /* added */
+}
+
+input { 
+  width:80px; 
+  padding:6px; 
+  text-align:center; 
+  font-family:'Manrope', sans-serif; 
+  font-weight: bold; /* added */
+}
+
+.now td { 
+  background: #D6CDAE; 
+  font-weight: bold; /* added */
+}
+
+.fc-results td { 
+  background: #f5f5f5; 
+  font-weight: bold; 
+}
+
+.dc-bal td { 
+  background: #fff; 
+  font-weight: bold; /* added */
+}
+
+.dc-result-select option {
+  font-size: 15px; 
+  font-weight: bold; 
+}
+
+.dc-result-select {
+  font-size: 15px; 
+  font-weight: bold; 
+  text-align: center;
+}
+
+.fullbal { 
+  background: #DFE6CF; 
+  font-weight: bold; /* changed from normal to bold */
+  font-style:normal; 
+}
+
+.roundbal { 
+  background: #CFF2BD; 
+  font-weight:bold; 
+}
+
+.dx-fullnow { 
+  background: #e2e2e2; 
+  font-style:italic; 
+  font-weight: bold; /* added */
+}
+
+.result-sphere { 
+  background:#fff; 
+  border:0; 
+  font-size: 15px; 
+  font-weight:bold; 
+}
+
+.fc-gr-input {
+  font-weight: bold;
+  text-transform: uppercase; 
+}
+
+.table-header {
+  background: #395239;
+  color: #EBF2E9;
+  font-weight: bold;  
+  font-size: 15px;
+}
+
+.hide {display: none;}
+
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 5px 40px;
+  font-size: 16px;
+  border-radius: 20px;
+  border: none;
+  background: #444;
+  color: white;
+  cursor: pointer;
+  font-family: 'Manrope', sans-serif;
+  font-weight: bold; /* added */
+}
+
+#resultsTable { 
+  border-collapse: collapse; 
+  margin: 20px auto; 
+  width: 50%; 
+  font-weight: bold; /* added */
+}
+
+#resultsTable th, #resultsTable td { 
+  border:1px solid #999; 
+  padding:8px 12px; 
+  text-align:center; 
+  min-width:70px; 
+  font-weight: bold; /* added */
+}
+
+#resultsTable th { background:#f2f2f2; font-weight: bold; }
+
+#savedResultsTable th, #savedResultsTable td {
+  border: 1px solid #395239;
+  padding: 8px 12px;
+  text-align: center;
+  min-width: 70px;
+  color: black; 
+  font-weight: bold; /* added */
+}
+
+#savedResultsTable th {
+  background: #395239;  /* dark green header */
+  color: #ffffff;       /* white text */
+  font-weight: bold;    /* added */
+}
+
+
+
+
+
+
+
+
+</style>
+</head>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<body>
+
+
+
+
+
+
+
+
+
+
+
+<h2>V3 AUG 2025 RX Combiner - Both Eyes Shared Over RX</h2>
+
+
+
+
+
+<table style="width:90%; margin:0 auto; border-collapse:collapse;">
+
+<!-- Import Manrope font in your <head> -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+
+<!-- NEW HEADER ROW -->
+<tr class="top-header">
+  <td colspan="5" style="text-align:center; background:#395239; color:#f5f5f5; font-weight:bold; font-size:20px; height:40px; font-family:'Manrope', sans-serif;">
+    Diagnostic Section
+  </td>
+</tr>
+
+
+<tr class="table-header">
+  <td></td><td>Sphere</td><td>Cylinder</td><td>Axis</td><td>SE</td>
+</tr>
+
+
+<!-- Now RX -->
+<tr class="now">
+  <td>Now RX Right</td>
+  <td><input id="s1_od" placeholder="+0.00" style="width:80px; text-align:center;"></td>
+  <td><input id="c1_od" placeholder="+0.00" style="width:80px; text-align:center;"></td>
+  <td><input id="a1_od" placeholder="0" style="width:80px; text-align:center;"></td>
+  <td id="now-se-diff-od">—</td>
+</tr>
+<tr class="now">
+  <td>Now RX Left</td>
+  <td><input id="s1_os" placeholder="+0.00" style="width:80px; text-align:center;"></td>
+  <td><input id="c1_os" placeholder="+0.00" style="width:80px; text-align:center;"></td>
+  <td><input id="a1_os" placeholder="0" style="width:80px; text-align:center;"></td>
+  <td id="now-se-diff-os">—</td>
+</tr>
+
+<!-- DC Clearer Side (nested table so outer stays 5 columns) -->
+<tr class="dc-results">
+  <td colspan="5" style="padding-top:25px; padding-bottom:25px;">
+    <table style="width:100%; border:1px solid #999; border-collapse:collapse; background:#fff;">
+      <tr>
+        <td style="font-weight:bold; text-align:center; padding:6px 6px; min-width:80px;">
+          DC Clearer Side 
+        </td>
+        <td style="text-align:center; padding:20px;">
+          <label class="result-label">+1.00</label><br>
+          <select class="dc-result-select" style="width:100%;">
+            <option>-</option>
+            <option style="color:green;">Green</option>
+            <option>Balance</option>
+            <option style="color:red;">Red</option>
+          </select>
+        </td>
+        <td style="text-align:center; padding:20px;">
+          <label class="result-label">+0.50</label><br>
+          <select class="dc-result-select" style="width:100%;">
+            <option>-</option>
+            <option style="color:green;">Green</option>
+            <option>Balance</option>
+            <option style="color:red;">Red</option>
+          </select>
+        </td>
+        <td style="text-align:center; padding:20px;">
+          <label class="result-label">Now RX</label><br>
+          <select class="dc-result-select" style="width:100%;">
+            <option>-</option>
+            <option style="color:green;">Green</option>
+            <option>Balance</option>
+            <option style="color:red;">Red</option>
+          </select>
+        </td>
+        <td style="text-align:center; padding:20px;">
+          <label class="result-label">-0.50</label><br>
+          <select class="dc-result-select" style="width:100%;">
+            <option>-</option>
+            <option style="color:green;">Green</option>
+            <option>Balance</option>
+            <option style="color:red;">Red</option>
+          </select>
+        </td>
+        <td style="text-align:center; padding:20px;">
+          <label class="result-label">-1.00</label><br>
+          <select class="dc-result-select" style="width:100%;">
+            <option>-</option>
+            <option style="color:green;">Green</option>
+            <option>Balance</option>
+            <option style="color:red;">Red</option>
+          </select>
+        </td>
+      </tr>
+
+<script>
+// Colorize DC Clearer Side select
+document.querySelectorAll(".dc-result-select").forEach(sel => {
+  function updateColor() {
+    const selectedOption = sel.options[sel.selectedIndex];
+    if(selectedOption.dataset.color){
+      sel.style.color = selectedOption.dataset.color;
+    } else if(selectedOption.text.includes("Green")) {
+      sel.style.color = "green";
+    } else if(selectedOption.text.includes("Red")) {
+      sel.style.color = "red";
+    } else {
+      sel.style.color = "black";
+    }
+    sel.style.fontWeight = "bold"; // make selected text bold
+  }
+
+  sel.addEventListener("change", updateColor);
+  updateColor(); // initialize color on load
+});
+</script>
+
+
+
+<!-- DC Balance input -->
+<tr class="dc-bal">
+  <td colspan="2" style="text-align: center;">
+    Lens for DC Balance: 
+    <input id="dc-sph" placeholder="0.00" style="width:60px; margin-left: 20px; text-align:center; font-weight:bold;">
+  </td>
+  <td colspan="4" style="text-align: left;">
+    <span style="font-family:'Manrope', sans-serif; font-weight: bold;">
+      Current DC: <span id="dc-analysis-text"></span>
+    </span>
+  </td>
+</tr>
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+<!-- R/G Codes table compact -->
+<tr>
+  <td colspan="5" style="padding-top:5px; padding-bottom:5px;">
+    <table style="width:100%; border:1px solid #999; border-collapse:collapse; font-size:14px; background:#e0e0e0; font-weight:bold; color:#f5f5f5; text-align:center;">
+      <tr>
+        <th colspan="3">R Codes</th>
+        <th colspan="3">G Codes</th>
+      </tr>
+      <tr>
+        <td style="color:#cc0000;">R0 = 90</td>
+        <td style="color:#cc0000;">R2 = 120</td>
+        <td style="color:#cc0000;">R4 = 150</td>
+        <td style="color:green;">G0 = 180</td>
+        <td style="color:green;">G2 = 30</td>
+        <td style="color:green;">G4 = 60</td>
+      </tr>
+      <tr>
+        <td style="color:#cc0000;">R1 = 105</td>
+        <td style="color:#cc0000;">R3 = 135</td>
+        <td style="color:#cc0000;">R5 = 165</td>
+        <td style="color:green;">G1 = 15</td>
+        <td style="color:green;">G3 = 45</td>
+        <td style="color:green;">G5 = 75</td>
+      </tr>
+    </table>
+  </td>
+</tr>
+
+
+<!-- FC 3 Darker Lines (RG Code ready) -->
+<tr class="fc-results">
+  <td>FC 3 Darker Lines</td>
+  
+  <td>
+    <label class="result-label">Now RX</label>
+    <input type="text" class="rg-code" placeholder="—" style="width:80px;">
+  </td>
+  
+  <td>
+    <label class="result-label">+0.50 Cyl</label>
+    <input type="text" class="rg-code" placeholder="—" style="width:80px;">
+  </td>
+  
+  <td>
+    <label class="result-label">+1.00 Cyl</label>
+    <input type="text" class="rg-code" placeholder="—" style="width:80px;">
+  </td>
+  
+  <td></td>
+</tr>
+
+<script>
+(function(){
+  const validCodes = new Set(['BAL']);
+  for(let i=0;i<=5;i++){
+    validCodes.add('R'+i);
+    validCodes.add('G'+i);
+  }
+
+  const colorize = (el, codes) => {
+    const first = codes.find(c => validCodes.has(c));
+    if(first){
+      if(first === 'BAL'){ el.style.background='#666'; el.style.color='#fff'; }
+      else if(first.startsWith('R')){ el.style.background='#fff'; el.style.color='#cc0000'; }
+      else if(first.startsWith('G')){ el.style.background='#fff'; el.style.color='green'; }
+    } else {
+      el.style.background='';
+      el.style.color='';
+    }
+  };
+
+  document.querySelectorAll('input.rg-code').forEach(el => {
+
+    el.addEventListener('input', () => {
+      let val = el.value.toUpperCase();
+      let codes = val.split(/\s+/).filter(Boolean);
+
+     // Allow empty string
+    if(val === '') return;
+
+      // Only keep valid or potentially valid partial codes
+      codes = codes.map(c => {
+        if(c === 'BAL') return 'BAL';
+        if(/^R[0-5]?$/.test(c)) return c;
+        if(/^G[0-5]?$/.test(c)) return c;
+        return null;
+      }).filter(Boolean);
+
+      // Limit to 3 codes
+      if(codes.length > 3) codes = codes.slice(0,3);
+
+      // Auto-space after a complete code if < 3 codes
+      const last = codes[codes.length-1];
+      if(last && validCodes.has(last) && codes.length < 3){
+        el.value = codes.join(' ') + ' ';
+      } else {
+        el.value = codes.join(' ');
+      }
+
+      colorize(el, codes);
+    });
+
+    el.addEventListener('blur', () => {
+      let codes = el.value.toUpperCase().trim().split(/\s+/).slice(0,3);
+      codes = codes.filter(c => validCodes.has(c));
+      el.value = codes.join(' ');
+      colorize(el, codes);
+    });
+
+  });
+})();
+</script>
+
+
+
+
+
+<!-- Axis Average Calculator in one line -->
+<tr>
+  <td colspan="5" style="padding-top:0px; padding-bottom:0px;">
+   <div style="display:flex; align-items:center; gap:10px; font-weight:bold;">
+  <span>Axis Average Calculator</span>
+  
+  <!-- Input group -->
+  <div style="display:flex; gap:5px; align-items:center;">
+  <span>Code 1: <input type="text" id="calc1" class="rg-code" style="width:50px;"></span>
+  <span>Code 2: <input type="text" id="calc2" class="rg-code" style="width:50px;"></span>
+</div>
+
+  
+  <!-- Button and result group -->
+  <div style="display:flex; gap:20px; align-items:center;">
+<button onclick="calcAxisAvg()" style="margin-left:35px;">Calculate</button>
+    <span>Average Axis: <span id="axisAvg">—</span></span>
+  </div>
+</div>
+  </td>
+</tr>
+
+<script>
+const axisMap = {
+  "R0": 90, "R1": 105, "R2": 120, "R3": 135, "R4": 150, "R5": 165,
+  "G0": 180, "G1": 15, "G2": 30, "G3": 45, "G4": 60, "G5": 75
+};
+
+const colorMap = { "R": "#cc0000", "G": "green" };
+
+
+
+function calcAxisAvg() {
+  const code1 = document.getElementById("calc1").value.trim().toUpperCase();
+  const code2 = document.getElementById("calc2").value.trim().toUpperCase();
+
+  const a1 = axisMap[code1];
+  const a2 = axisMap[code2];
+
+  if (a1 === undefined || a2 === undefined) {
+    document.getElementById("axisAvg").innerText = "—";
+    return;
+  }
+
+  const rad1 = a1 * Math.PI / 180;
+  const rad2 = a2 * Math.PI / 180;
+
+  const x = Math.cos(2*rad1) + Math.cos(2*rad2);
+  const y = Math.sin(2*rad1) + Math.sin(2*rad2);
+
+  let avgRad = 0.5 * Math.atan2(y, x);
+  if (avgRad < 0) avgRad += Math.PI;
+
+  const avgDeg = Math.round(avgRad * 180 / Math.PI);
+  document.getElementById("axisAvg").innerText = avgDeg;
+}
+</script>
+
+
+<!-- FC Bal -->
+<tr class="fc-results">
+  <td>FC Balance</td>
+  <td><span id="s2" class="result-sphere">0.00</span></td>
+  <td><input id="c2" placeholder="+0.00" style="width:80px; text-align:center;"></td>
+  <td><input id="a2" placeholder="0" style="width:80px; text-align:center;"></td>
+  <td> </td>
+</tr>
+
+
+<tr class="spacer" style="height: 30px;">
+  <td colspan="10"></td>
+</tr>
+
+<!-- Import Manrope font in your <head> -->
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+
+<!-- NEW HEADER ROW -->
+<tr class="top-header">
+  <td colspan="5" style="text-align:center; background:#395239; color:#f5f5f5; font-weight:bold; font-size:20px; height:30px; font-family:'Manrope', sans-serif;">
+    Calculated Prescription Section - Press Enter To Update Value!
+  </td>
+</tr>
+
+<tr class="table-header">
+  <td></td><td>Sphere</td><td>Cylinder</td><td>Axis</td><td>SE</td>
+</tr>
+
+
+
+
+
+<tr style="display:none;">
+  <td>Bal raw RX Right</td>
+  <td><span id="res-sph-od-rounded">0.00</span></td>
+  <td><span id="res-cyl-od-rounded">0.00</span></td>
+  <td><span id="res-axis-od-rounded">0</span></td>
+  <td id="res-se-diff-od-rounded">—</td>
+</tr>
+<tr style="display:none;">
+  <td>Bal raw RX Left</td>
+  <td><span id="res-sph-os-rounded">0.00</span></td>
+  <td><span id="res-cyl-os-rounded">0.00</span></td>
+  <td><span id="res-axis-os-rounded">0</span></td>
+  <td id="res-se-diff-os-rounded">—</td>
+</tr>
+
+<tr class="fullbal">
+  <td>Bal RX Right</td>
+  <td><span id="res-sph-od-2">0.00</span></td>
+  <td><span id="res-cyl-od-2">0.00</span></td>
+  <td><span id="res-axis-od-180">0</span></td>
+  <td id="res-se-diff-od-2">—</td>
+</tr>
+<tr class="fullbal">
+  <td>Bal RX Left</td>
+  <td><span id="res-sph-os-2">0.00</span></td>
+  <td><span id="res-cyl-os-2">0.00</span></td>
+  <td><span id="res-axis-os-180">0</span></td>
+  <td id="res-se-diff-os-2">—</td>
+</tr>
+
+<tr class="summary-row">
+  <td colspan="5" style="padding:10px; font-family:'Manrope', sans-serif; font-weight:bold; background:#DFE6CF;">
+    <div style="display:flex; justify-content:center; align-items:center; gap:40px; flex-wrap:wrap; text-align:center; font-size:16px">
+      <!-- DC Analysis -->
+      <div>
+        Current RX DC Status = <span id="dc-summary" style="font-weight:bold; color:black;">BAL</span>
+      </div>
+
+      <!-- FC Bal Details -->
+      <div>
+        Current FC Imbalance =  <span id="fc-cyl-summary">0.00</span>
+        x <span id="fc-axis-summary">0</span>
+      </div>
+    </div>
+  </td>
+</tr>
+
+
+
+
+<tr class="spacer"><td colspan="10"></td></tr>
+
+<!-- NEW HEADER ROW -->
+<tr class="top-header">
+  <td colspan="5" style="text-align:center; background:#fff; color:#f5f5f5; font-weight:bold; font-size:1px; height:15px; font-family:'Manrope', sans-serif;">
+    Preferred Prescription Section - Press Enter To Update Value!
+  </td>
+</tr>
+<!-- NEW HEADER ROW -->
+<tr class="top-header">
+  <td colspan="5" style="text-align:center; background:#395239; color:#f5f5f5; font-weight:bold; font-size:20px; height:30px; font-family:'Manrope', sans-serif;">
+    Preferred Prescription Section - Press Enter To Update Value!
+  </td>
+</tr>
+
+<tr class="table-header">
+  <td></td><td>Sphere</td><td>Cylinder</td><td>Axis</td><td>SE</td>
+</tr>
+
+<!-- DC Preferred Right -->
+<tr class="fc-results">
+  <td style="font-family:'Manrope', sans-serif; font-size:16px;">DC Preferred Right</td>
+  <td colspan="4" style="text-align:center;">
+    <select id="dc-preferred-od" class="dc-result-select" style="width:550px; font-family:'Manrope', sans-serif; font-size:16px;">
+      <option value="0" data-color="black" selected>BAL : Balance (0)</option>
+      <option value="-0.25" data-color="green">G1 : Green 1 Overcorrection of -0.25 </option>
+      <option value="0.25" data-color="red">R1 : Red 1 Undercorrection of -0.25</option>
+      <option value="-0.50" data-color="green">G2 : Green 2 Overcorrection of -0.50</option>
+      <option value="0.50" data-color="red">R2 : Red 2 Undercorrection of -0.50</option>
+      <option value="-0.75" data-color="green">G3 : Green 3 Overcorrection of -0.75</option>
+      <option value="0.75" data-color="red">R3 : Red 3 Undercorrection of -0.75</option>
+      <option value="-1.00" data-color="green">G4 : Green 4 Overcorrection of -1.00</option>
+      <option value="1.00" data-color="red">R4 : Red 4 Undercorrection of -1.00</option>
+    </select>
+  </td>
+</tr>
+
+<!-- DC Preferred Left -->
+<tr class="fc-results">
+  <td style="font-family:'Manrope', sans-serif; font-size:16px;">DC Preferred Left</td>
+  <td colspan="4" style="text-align:center;">
+    <select id="dc-preferred-os" class="dc-result-select" style="width:550px; font-family:'Manrope', sans-serif; font-size:16px;">
+      <option value="0" data-color="black" selected>BAL : Balance (0)</option>
+      <option value="-0.25" data-color="green">G1 : Green 1 Overcorrection of -0.25 </option>
+      <option value="0.25" data-color="red">R1 : Red 1 Undercorrection of -0.25</option>
+      <option value="-0.50" data-color="green">G2 : Green 2 Overcorrection of -0.50</option>
+      <option value="0.50" data-color="red">R2 : Red 2 Undercorrection of -0.50</option>
+      <option value="-0.75" data-color="green">G3 : Green 3 Overcorrection of -0.75</option>
+      <option value="0.75" data-color="red">R3 : Red 3 Undercorrection of -0.75</option>
+      <option value="-1.00" data-color="green">G4 : Green 4 Overcorrection of -1.00</option>
+      <option value="1.00" data-color="red">R4 : Red 4 Undercorrection of -1.00</option>
+    </select>
+  </td>
+</tr>
+
+
+
+
+<tr class="fc-results">
+  <td>FC Preferred Right</td>
+  <td><span id="fc-sph-pref-od" class="result-sphere">0.00</span></td>
+  <td><input id="fc-cyl-pref-od" placeholder="+0.00" style="width:80px; text-align:center;"></td>
+  <td><input id="fc-axis-pref-od" placeholder="0" style="width:80px; text-align:center;"></td>
+  <td></td>
+</tr>
+
+<tr class="fc-results">
+  <td>FC Preferred Left</td>
+  <td><span id="fc-sph-pref-os" class="result-sphere">0.00</span></td>
+  <td><input id="fc-cyl-pref-os" placeholder="+0.00" style="width:80px; text-align:center;"></td>
+  <td><input id="fc-axis-pref-os" placeholder="0" style="width:80px; text-align:center;"></td>
+  <td></td>
+</tr>
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Preferred RX Right -->
+<tr style="display:none;">
+  <td>Preferred raw Right</td>
+  <td><span id="pref-rx-sph-od">0.00</span></td>
+  <td><span id="pref-rx-cyl-od">0.00</span></td>
+  <td><span id="pref-rx-axis-od">0</span></td>
+  <td id="pref-rx-se-od">—</td>
+</tr>
+<!-- Preferred RX Left -->
+<tr style="display:none;">
+  <td>Preferred raw RX Left</td>
+  <td><span id="pref-rx-sph-os">0.00</span></td>
+  <td><span id="pref-rx-cyl-os">0.00</span></td>
+  <td><span id="pref-rx-axis-os">0</span></td>
+  <td id="pref-rx-se-os">—</td>
+</tr>
+
+<tr class="roundbal">
+  <td>Preferred RX Right</td>
+  <td><span id="pref-rx-sph-2-od">0.00</span></td>
+  <td><span id="pref-rx-cyl-2-od">0.00</span></td>
+  <td><span id="pref-rx-axis-180-od">0</span></td>
+  <td id="pref-rx-se-2-od">—</td>
+</tr>
+<tr class="roundbal">
+  <td>Preferred RX Left</td>
+  <td><span id="pref-rx-sph-2-os">0.00</span></td>
+  <td><span id="pref-rx-cyl-2-os">0.00</span></td>
+  <td><span id="pref-rx-axis-180-os">0</span></td>
+  <td id="pref-rx-se-2-os">—</td>
+</tr>
+<!-- Now RX Mirror -->
+<tr class="mirror now">
+  <td>Now RX Right</td>
+  <td><span id="mirror-s1-od">—</span></td>
+  <td><span id="mirror-c1-od">—</span></td>
+  <td><span id="mirror-a1-od">—</span></td>
+  <td><span id="mirror-now-se-diff-od">—</span></td>
+</tr>
+<tr class="mirror now">
+  <td>Now RX Left</td>
+  <td><span id="mirror-s1-os">—</span></td>
+  <td><span id="mirror-c1-os">—</span></td>
+  <td><span id="mirror-a1-os">—</span></td>
+  <td><span id="mirror-now-se-diff-os">—</span></td>
+</tr>
+
+
+</table>
+
+
+
+<button onclick="combineRX(); saveResults();">Press Enter To <br>Update Value</button>
+
+
+
+
+<div id="savedResults">
+  <h3>Saved Results</h3>
+  <table id="savedResultsTable">
+    <tr>
+      <th>Type</th><th>Sphere</th><th>Cylinder</th><th>Axis</th><th>SE Diff</th><th>DC</th>
+    </tr>
+
+
+  </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+
+
+
+  // ======= Helpers =======
+  function safeParseFloat(v){
+    if(v === null || v === undefined) return 0;
+    if(typeof v === 'number') return Number.isFinite(v) ? v : 0;
+    v = String(v).trim();
+    if(v === '' || v === '—' || v === '–') return 0;
+    v = v.replace(',', '.');
+
+    // Try straightforward parseFloat first (handles "-.25", ".25", "-1", "1.5" etc.)
+    const n = parseFloat(v);
+    if(!Number.isNaN(n)) return n;
+
+    // Fallback: extract first numeric token (handles odd inputs)
+    const m = v.match(/[+-]?(?:\d+\.?\d*|\.\d+)/);
+    if(m) return parseFloat(m[0]);
+    return 0;
+  }
+
+  function roundQuarterNumber(n){
+    n = safeParseFloat(n);
+    return Math.round(n * 4) / 4;
+  }
+
+function formatValueForDisplay(n){
+    let val = roundQuarterNumber(n);
+    return (val > 0 ? "+" : "") + val.toFixed(2);
+}
+
+// _____________________________________________________________________________________________________________________
+
+
+['s1_od','s1_os','c1_od','c1_os','a1_od','a1_os','dc-sph','c2','a2','fc-cyl-pref-od','fc-axis-pref-od','fc-cyl-pref-os','fc-axis-pref-os'].forEach(id => {
+    const el = document.getElementById(id);
+    if(!el) return;
+
+    el.addEventListener('blur', () => {
+        if(el.value.trim() === '') el.value = '0';
+        let val = parseFloat(el.value) || 0;
+
+        if(id.startsWith('s1') || id.startsWith('c1')){
+            val = Math.round(val * 4)/4;
+            el.value = (val >= 0 ? '+' : '') + val.toFixed(2);
+        }
+
+        if(id.startsWith('a1')){
+            el.value = (val === 0 ? 180 : Math.round(val));
+        }
+    });
+});
+
+
+
+  function deg2rad(d){ return d * Math.PI / 180; }
+  function rad2deg(r){ return r * 180 / Math.PI; }
+
+  function toMinusCyl({S, C, A}){
+    S = safeParseFloat(S); C = safeParseFloat(C); A = safeParseFloat(A);
+    if(C > 0){
+      S = S + C;
+      C = -C;
+      A = (A + 90) % 180;
+    }
+    A = ((A % 180) + 180) % 180;
+    return {S, C, A};
+  }
+
+  function calcSE(S, C){
+    S = safeParseFloat(S); C = safeParseFloat(C);
+    return (S + C/2).toFixed(2);
+  }
+
+  // Detect axis inputs by id convention (matches a1_od, a1_os, a2, fc-axis-pref-*, etc.)
+  function isAxisId(id){
+    if(!id) return false;
+    return /axis/.test(id) || /^a\d/.test(id);
+  }
+
+  // ======= Auto-formatting for inputs =======
+  function autoFormatInput(el){
+    if(!el) return;
+    const id = el.id || '';
+    let raw = String(el.value || '').trim();
+    if(raw === '') return;
+
+    if(isAxisId(id)){
+      // axis -> integer 0..180
+      let num = parseInt(raw, 10);
+      if(Number.isNaN(num)) num = 0;
+      num = Math.max(0, Math.min(180, num));
+      el.value = String(num);
+    } else {
+      // sphere/cyl -> round to nearest 0.25 and format with 2 decimals
+      let num = roundQuarterNumber(raw);
+      // Show sign only if negative; keep output like "-1.00" or "1.00"
+      // (If you prefer explicit '+', we can add it — currently we don't prepend '+')
+      el.value = (num > 0 ? "+" : "") + num.toFixed(2);
+    }
+  }
+
+  // ======= Auto-copy OD -> OS for DC & FC Preferred (editable) =======
+  function setupAutoCopy(odId, osId){
+    const od = document.getElementById(odId);
+    const os = document.getElementById(osId);
+    if(!od || !os) return;
+    od.addEventListener('input', () => {
+    if(os.dataset.userEdited !== "true"){
+        // live copy
+        os.value = od.value;
+    }
+});
+
+od.addEventListener('blur', () => {
+    if(os.dataset.userEdited !== "true"){
+        // copy + round to nearest 0.25 on blur
+        const rounded = roundQuarterNumber(od.value);
+        os.value = (rounded >= 0 ? "+" : "") + rounded.toFixed(2);
+    }
+});
+
+    os.addEventListener('input', () => { os.dataset.userEdited = "true"; });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.getElementById("dc-sph").addEventListener("blur", function() {
+    let val = parseFloat(this.value);
+
+    // If input is empty, clear analysis
+    if (isNaN(val)) {
+        document.getElementById("dc-analysis-text").innerText = "";
+        return;
+    }
+
+    // Round to nearest 0.25
+    let roundedVal = Math.round(val * 4) / 4;
+    this.value = roundedVal.toFixed(2);
+
+    let absVal = Math.abs(roundedVal);
+    let level = Math.round(absVal / 0.25);
+
+    let analysisText = "";
+    let color = "black";
+
+    if (roundedVal === 0) {
+        analysisText = "BAL : Balanced (0)";
+        color = "black";
+    } else if (roundedVal > 0) { 
+        // Extra plus → overcorrection
+        analysisText = `G${level} : Green ${level} Overcorrection of -${absVal.toFixed(2)}`;
+        color = "green";
+    } else { 
+        // Extra minus → undercorrection
+        analysisText = `R${level} : Red ${level} Undercorrection of -${absVal.toFixed(2)}`;
+        color = "red";
+    }
+
+    let analysisSpan = document.getElementById("dc-analysis-text");
+    analysisSpan.innerText = analysisText;
+    analysisSpan.style.color = color;
+});
+
+
+
+
+  // ======= Main combineRX (keeps same logic you provided) =======
+  window.combineRX = function combineRX(){
+    ['od','os'].forEach(eye => {
+      // Flow 1: Now RX + FC Bal + DC Bal
+      const S1_in = safeParseFloat(document.getElementById('s1_'+eye)?.value);
+      const C1_in = safeParseFloat(document.getElementById('c1_'+eye)?.value);
+      const A1_in = safeParseFloat(document.getElementById('a1_'+eye)?.value);
+
+// Now RX SE
+const nowSEEl = document.getElementById('now-se-diff-' + eye);
+if(nowSEEl) nowSEEl.textContent = calcSE(S1_in, C1_in);
+
+
+      const C2_in = safeParseFloat(document.getElementById('c2')?.value);
+      const A2_in = safeParseFloat(document.getElementById('a2')?.value);
+      const S2_from_FC = - C2_in / 2;
+
+      const DC_S_bal = safeParseFloat(document.getElementById('dc-sph')?.value);
+
+      const rx1 = toMinusCyl({S:S1_in, C:C1_in, A:A1_in});
+      const rx2 = toMinusCyl({S:S2_from_FC, C:C2_in, A:A2_in});
+
+      const M1 = rx1.S + rx1.C/2;
+      const J01 = -rx1.C/2 * Math.cos(2 * deg2rad(rx1.A));
+      const J451 = -rx1.C/2 * Math.sin(2 * deg2rad(rx1.A));
+
+      const M2 = rx2.S + rx2.C/2;
+      const J02 = -rx2.C/2 * Math.cos(2 * deg2rad(rx2.A));
+      const J452 = -rx2.C/2 * Math.sin(2 * deg2rad(rx2.A));
+
+      const M_total = M1 + M2 + DC_S_bal;
+      const J0_total = J01 + J02;
+      const J45_total = J451 + J452;
+
+      let C_total = -2 * Math.sqrt(J0_total*J0_total + J45_total*J45_total);
+      let S_total = M_total - C_total/2;
+      let A_total = 0.5 * rad2deg(Math.atan2(J45_total, J0_total));
+      if(A_total < 0) A_total += 180;
+      A_total = Math.round(A_total);
+
+      const S_total_q = roundQuarterNumber(S_total);
+      const C_total_q = roundQuarterNumber(C_total);
+
+      const s2El = document.getElementById('s2');
+      if(s2El) s2El.textContent = formatValueForDisplay(S2_from_FC);
+
+      const resSphEl = document.getElementById('res-sph-'+eye+'-rounded');
+      const resCylEl = document.getElementById('res-cyl-'+eye+'-rounded');
+      const resAxisEl = document.getElementById('res-axis-'+eye+'-rounded');
+      const resSEEl = document.getElementById('res-se-diff-'+eye+'-rounded');
+
+      if(resSphEl) resSphEl.textContent = formatValueForDisplay(S_total_q);
+      if(resCylEl) resCylEl.textContent = formatValueForDisplay(C_total_q);
+      if(resAxisEl) resAxisEl.textContent = String(A_total);
+      if(resSEEl) resSEEl.textContent = calcSE(S_total_q, C_total_q);
+
+      // Mirrors
+      const mirrorS = document.getElementById('mirror-s1-'+eye);
+      const mirrorC = document.getElementById('mirror-c1-'+eye);
+      const mirrorA = document.getElementById('mirror-a1-'+eye);
+      const mirrorSE = document.getElementById('mirror-now-se-diff-'+eye);
+      if(mirrorS) mirrorS.textContent = formatValueForDisplay(S1_in);
+      if(mirrorC) mirrorC.textContent = formatValueForDisplay(C1_in);
+      if(mirrorA) mirrorA.textContent = String(Math.round(A1_in || 0));
+      if(mirrorSE) mirrorSE.textContent = calcSE(S1_in, C1_in);
+
+      // Flow 2: Now + DC Preferred + FC Preferred
+      const dcPrefVal = safeParseFloat(document.getElementById('dc-preferred-'+eye)?.value);
+      const fcPrefC_in = safeParseFloat(document.getElementById('fc-cyl-pref-'+eye)?.value);
+      const fcPrefA_in = safeParseFloat(document.getElementById('fc-axis-pref-'+eye)?.value);
+      const fcPrefS_computed = - fcPrefC_in / 2;
+
+      const fcSspan = document.getElementById('fc-sph-pref-'+eye);
+      if(fcSspan) fcSspan.textContent = formatValueForDisplay(fcPrefS_computed);
+
+      const rxPref1 = toMinusCyl({S:S1_in, C:C1_in, A:A1_in});
+      const rxPref2 = toMinusCyl({S:fcPrefS_computed, C:fcPrefC_in, A:fcPrefA_in});
+
+      const M1p = rxPref1.S + rxPref1.C/2;
+      const J01p = -rxPref1.C/2 * Math.cos(2 * deg2rad(rxPref1.A));
+      const J451p = -rxPref1.C/2 * Math.sin(2 * deg2rad(rxPref1.A));
+
+      const M2p = rxPref2.S + rxPref2.C/2;
+      const J02p = -rxPref2.C/2 * Math.cos(2 * deg2rad(rxPref2.A));
+      const J452p = -rxPref2.C/2 * Math.sin(2 * deg2rad(rxPref2.A));
+
+      const M_pref = M1p + M2p + dcPrefVal + DC_S_bal;
+      const J0_pref = J01p + J02p;
+      const J45_pref = J451p + J452p;
+
+      let C_pref = -2 * Math.sqrt(J0_pref*J0_pref + J45_pref*J45_pref);
+      let S_pref = M_pref - C_pref/2;
+      let A_pref = 0.5 * rad2deg(Math.atan2(J45_pref, J0_pref));
+      if(A_pref < 0) A_pref += 180;
+      A_pref = Math.round(A_pref);
+
+      const S_pref_q = roundQuarterNumber(S_pref);
+      const C_pref_q = roundQuarterNumber(C_pref);
+
+      const prefS = document.getElementById('pref-rx-sph-'+eye);
+      const prefC = document.getElementById('pref-rx-cyl-'+eye);
+      const prefA = document.getElementById('pref-rx-axis-'+eye);
+      const prefSE = document.getElementById('pref-rx-se-'+eye);
+
+      if(prefS) prefS.textContent = formatValueForDisplay(S_pref_q);
+      if(prefC) prefC.textContent = formatValueForDisplay(C_pref_q);
+      if(prefA) prefA.textContent = String(A_pref);
+      if(prefSE) prefSE.textContent = calcSE(S_pref_q, C_pref_q);
+
+// ---- Bal2 RX ----
+const resSph2El = document.getElementById('res-sph-'+eye+'-2');
+const resCyl2El = document.getElementById('res-cyl-'+eye+'-2');
+const resAxis2El = document.getElementById('res-axis-'+eye+'-180');
+const resSE2El = document.getElementById('res-se-diff-'+eye+'-2');
+
+if(resSph2El) resSph2El.textContent = formatValueForDisplay(S_total_q);
+if(resCyl2El) resCyl2El.textContent = formatValueForDisplay(C_total_q);
+if(resAxis2El) resAxis2El.textContent = (A_total === 0 ? 180 : A_total);
+if(resSE2El) resSE2El.textContent = calcSE(S_total_q, C_total_q);
+
+// ---- Preferred2 RX ----
+const prefS2El = document.getElementById('pref-rx-sph-2-'+eye);
+const prefC2El = document.getElementById('pref-rx-cyl-2-'+eye);
+const prefA2El = document.getElementById('pref-rx-axis-180-'+eye);
+const prefSE2El = document.getElementById('pref-rx-se-2-'+eye);
+
+if(prefS2El) prefS2El.textContent = formatValueForDisplay(S_pref_q);
+if(prefC2El) prefC2El.textContent = formatValueForDisplay(C_pref_q);
+if(prefA2El) prefA2El.textContent = (A_pref === 0 ? 180 : A_pref);
+if(prefSE2El) prefSE2El.textContent = calcSE(S_pref_q, C_pref_q);
+
+
+    }); // end eyes loop
+
+    // Summary
+   function updateDCSummary() {
+    const dcSphInput = document.getElementById('dc-sph');
+    const dcSummary = document.getElementById('dc-summary');
+    const fcCsummary = document.getElementById('fc-cyl-summary');
+    const fcAsummary = document.getElementById('fc-axis-summary');
+    
+    if(fcCsummary) fcCsummary.textContent = (document.getElementById('c2')?.value) || '0.00';
+    if(fcAsummary) fcAsummary.textContent = (document.getElementById('a2')?.value) || '0';
+    let val = parseFloat(dcSphInput?.value);
+    let displayText = "BAL";
+    let color = "black";
+
+    if (!isNaN(val)) {
+        let roundedVal = Math.round(val * 4) / 4;
+        let absVal = Math.abs(roundedVal);
+        let level = Math.max(Math.round(absVal / 0.25), 1); // minimum 1
+
+        if (roundedVal > 0) {
+            displayText = `G${level} Over -${absVal.toFixed(2)}`;
+            color = "green";
+        } else if (roundedVal < 0) {
+            displayText = `R${level} Under -${absVal.toFixed(2)}`;
+            color = "red";
+        }
+    }
+
+    if(dcSummary) {
+        dcSummary.textContent = displayText;
+        dcSummary.style.color = color;
+    }
+}
+
+// Run on blur
+document.getElementById("dc-sph")?.addEventListener("blur", updateDCSummary);
+// Initial run
+updateDCSummary();
+
+
+    // final UI cleanup: blur inputs
+    document.querySelectorAll('input').forEach(i => i.blur());
+  }; // end combineRX
+
+
+  // ======= Attach event handlers to inputs =======
+  // Format on blur, and on Enter run formatting + combine
+  document.querySelectorAll('input').forEach(el => {
+  if(el.classList.contains('rg-code')) return; // skip R/G inputs
+
+
+    el.addEventListener('blur', () => autoFormatInput(el));
+    el.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        autoFormatInput(el);
+        window.combineRX();
+	saveResults();
+      }
+    });
+  });
+
+  // Setup auto-copy (OD -> OS) for preferred controls (won't overwrite if OS edited)
+  setupAutoCopy("dc-preferred-od","dc-preferred-os");
+  setupAutoCopy("fc-cyl-pref-od","fc-cyl-pref-os");
+  setupAutoCopy("fc-axis-pref-od","fc-axis-pref-os");
+
+
+
+
+}); // DOMContentLoaded
+
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  const selects = document.querySelectorAll(".dc-result-select");
+
+  selects.forEach(select => {
+    select.addEventListener("change", function() {
+      const selectedOption = this.options[this.selectedIndex];
+      const color = selectedOption.dataset.color || "black";
+
+      // Apply color to the current select
+      this.style.color = color;
+
+      // If right eye changes, sync left eye value + color
+      if (this.id === "dc-preferred-od") {
+        const leftSelect = document.getElementById("dc-preferred-os");
+        leftSelect.value = this.value;
+        const leftOption = leftSelect.options[leftSelect.selectedIndex];
+        leftSelect.style.color = leftOption.dataset.color || "black";
+      }
+    });
+
+    // Initialize default colors (on load)
+    const selectedOption = select.options[select.selectedIndex];
+    select.style.color = selectedOption.dataset.color || "black";
+  });
+});
+
+
+['od','os'].forEach(eye => {
+    const dcPrefEl = document.getElementById('dc-preferred-' + eye);
+    if (dcPrefEl) {
+        dcPrefEl.addEventListener('change', () => {
+            combineRX(); // call your existing combineRX function
+        });
+    }
+});
+
+const rightCyl = document.getElementById('fc-cyl-pref-od');
+const leftCyl = document.getElementById('fc-cyl-pref-os');
+
+rightCyl.addEventListener('blur', () => {
+    let val = parseFloat(rightCyl.value);
+    if (!isNaN(val)) {
+        rightCyl.value = (val >= 0 ? '+' : '') + val.toFixed(2);
+        leftCyl.value = rightCyl.value; // copy formatted value to left
+    }
+});
+
+
+// 1. SE Diff: difference between Right and Left of the same group
+function calculateSEDiff(seRight, seLeft) {
+    return parseFloat((seRight - seLeft).toFixed(3));
+}
+
+// 2. DX Preferred2 - Now RX: difference of Sph, Cyl, Axis per eye
+function calculateDXDiff(nowRx, dxPreferred2) {
+    return {
+        sphDiff: parseFloat((dxPreferred2.sph - nowRx.sph).toFixed(3)),
+        cylDiff: parseFloat((dxPreferred2.cyl - nowRx.cyl).toFixed(3)),
+        axisDiff: parseFloat((dxPreferred2.axis - nowRx.axis).toFixed(0)) // axis usually rounded to integer
+    };
+}
+
+let seDiffNow = calculateSEDiff(nowRxRight.se, nowRxLeft.se);
+
+let diffRight = calculateDXDiff(nowRxRight, dxPref2Right);
+let diffLeft = calculateDXDiff(nowRxLeft, dxPref2Left);
+
+// Get DC value for a given type and eye
+function getDCValue(type, eye) {
+    if (type === "Now RX") {
+        // DC comes from the DC Balance input
+        return document.getElementById(`dc-bal-${eye}`).value || "-";
+    } else if (type === "Preferred2 RX") {
+        // DC comes from the DC Preferred selection
+        const select = document.getElementById(`dc-pref-${eye}`);
+        return select ? select.value : "-";
+    } else {
+        return "-";
+    }
+}
+
+let dcNowRight = getDCValue("Now RX", "od");
+let dcNowLeft  = getDCValue("Now RX", "os");
+
+let dcPref2Right = getDCValue("Preferred2 RX", "od");
+let dcPref2Left  = getDCValue("Preferred2 RX", "os");
+
+
+
+
+document.querySelectorAll('input').forEach(input => {
+    if (/^(s1_|c1_|a1_)/.test(input.id)) {
+        input.addEventListener('blur', () => {
+            let val = input.value.trim();
+            if (val === '') {
+                if (/^a1_/.test(input.id)) {
+                    input.value = '180'; // axis
+                } else {
+                    input.value = '+0.00'; // sphere/cyl
+                }
+            } else if (!/^a1_/.test(input.id)) {
+                // format sphere/cyl even if user entered value
+                input.value = (parseFloat(val) >= 0 ? "+" : "") + parseFloat(val).toFixed(2);
+            }
+        });
+    }
+});
+
+
+
+function saveResults(){
+    let table = document.getElementById("savedResultsTable");
+
+    // Reset table with header
+    table.innerHTML = `
+        <tr>
+            <th>Type</th><th>Sphere</th><th>Cylinder</th><th>Axis</th><th>SE Diff</th><th>DC</th>
+        </tr>
+    `;
+
+    const rows = [
+        {label:"Now RX Right", sph:"s1_od", cyl:"c1_od", axis:"a1_od", se:"now-se-diff-od", className:"now"},
+        {label:"Now RX Left", sph:"s1_os", cyl:"c1_os", axis:"a1_os", se:"now-se-diff-os", className:"now"},
+        {label:"Preferred RX Right", sph:"pref-rx-sph-2-od", cyl:"pref-rx-cyl-2-od", axis:"pref-rx-axis-180-od", se:"pref-rx-se-2-od", className:"roundbal"},
+        {label:"Preferred RX Left", sph:"pref-rx-sph-2-os", cyl:"pref-rx-cyl-2-os", axis:"pref-rx-axis-180-os", se:"pref-rx-se-2-os", className:"roundbal"},
+        {label:"DX Preferred – Now Right", sph:"dx-pref-rx-sph-od", cyl:"dx-pref-rx-cyl-od", axis:"dx-pref-rx-axis-od", se:"dx-pref-rx-se-od", className:"dx-fullnow"},
+        {label:"DX Preferred – Now Left", sph:"dx-pref-rx-sph-os", cyl:"dx-pref-rx-cyl-os", axis:"dx-pref-rx-axis-os", se:"dx-pref-rx-se-os", className:"dx-fullnow"},
+    ];
+
+    rows.forEach(r=>{
+        let tr = document.createElement("tr");
+        tr.className = r.className;
+
+        let tdLabel = document.createElement("td");
+        tdLabel.innerText = r.label;
+        tr.appendChild(tdLabel);
+
+        // fetch values (works for <input> or <span>)
+        let sphVal = parseFloat(document.getElementById(r.sph)?.value || document.getElementById(r.sph)?.innerText || 0);
+let cylVal = parseFloat(document.getElementById(r.cyl)?.value || document.getElementById(r.cyl)?.innerText || 0);
+let axisVal = document.getElementById(r.axis)?.value || document.getElementById(r.axis)?.innerText || 0;
+let displayAxis = (r.className === "now" && parseFloat(axisVal) === 0) ? 180 : axisVal;
+
+
+// Format sph and cyl as diopters
+let sph = (sphVal >= 0 ? "+" : "") + sphVal.toFixed(2);
+let cyl = (cylVal >= 0 ? "+" : "") + cylVal.toFixed(2);
+let axis = axisVal; // keep axis as integer or string
+
+
+
+        // handle DX subtraction
+        if(r.className === "dx-fullnow"){
+            let prefSph = parseFloat(document.getElementById(r.sph.replace("dx-",""))?.innerText || 0);
+	    let nowSph  = parseFloat(document.getElementById(r.sph.includes("od") ? "s1_od" : "s1_os")?.value || 0);
+	    sph = ((prefSph - nowSph) >= 0 ? "+" : "") + (prefSph - nowSph).toFixed(2);
+
+            let prefCyl = parseFloat(document.getElementById(r.cyl.replace("dx-",""))?.innerText || 0);
+	    let nowCyl  = parseFloat(document.getElementById(r.cyl.includes("od") ? "c1_od" : "c1_os")?.value || 0);
+	    cyl = ((prefCyl - nowCyl) >= 0 ? "+" : "") + (prefCyl - nowCyl).toFixed(2);
+
+            let prefAxis = parseFloat(document.getElementById(r.axis.replace("dx-",""))?.innerText || 0);
+	    let nowAxis = parseFloat(document.getElementById(r.axis.includes("od") ? "a1_od" : "a1_os")?.value || 0);
+            axis = (prefAxis - nowAxis);
+        }
+
+        // then when appending cells
+[sph, cyl, displayAxis].forEach(val => {  // use displayAxis instead of axis
+    let td = document.createElement("td");
+    td.innerText = val;
+    tr.appendChild(td);
+});
+
+        let tdSE = document.createElement("td");
+
+// Only calculate SE Diff for Right rows
+if(r.label.includes("Right")) {
+    let seRight = parseFloat(document.getElementById(r.se)?.innerText || 0);
+    let leftRow = rows.find(row => row.label.includes("Left") && row.className === r.className);
+    let seLeft = parseFloat(document.getElementById(leftRow.se)?.innerText || 0);
+    let diff = seRight - seLeft;
+
+    tdSE.innerText = (diff >= 0 ? "+" : "") + diff.toFixed(2); // always show + or -
+} else {
+    tdSE.innerText = ""; // Left row stays empty
+}
+
+tr.appendChild(tdSE);
+
+
+        let tdDC = document.createElement("td");
+        tdDC.innerText = ""; // keep your DC logic if needed
+        tr.appendChild(tdDC);
+
+        // colors
+        if(r.className === "now") tdLabel.style.background = "#D6CDAE";
+        if(r.className === "roundbal") tdLabel.style.background = "#CFF2BD";
+        if(r.className === "dx-fullnow") tdLabel.style.background = "#e2e2e2";
+
+        table.appendChild(tr);
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Spacer at the bottom for scrolling -->
+<div style="height:400px;"></div>
+
+
+
+
+
+</body>
+</html>
