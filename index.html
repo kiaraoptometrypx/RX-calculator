@@ -277,15 +277,9 @@ table { width: 100%; border-collapse: collapse; }
 document.querySelectorAll(".dc-result-select").forEach(sel => {
   function updateColor() {
     const selectedOption = sel.options[sel.selectedIndex];
-    if(selectedOption.dataset.color){
-      sel.style.color = selectedOption.dataset.color;
-    } else if(selectedOption.text.includes("Green")) {
-      sel.style.color = "green";
-    } else if(selectedOption.text.includes("Red")) {
-      sel.style.color = "red";
-    } else {
-      sel.style.color = "black";
-    }
+    // use the option's inline color if it exists, otherwise default to black
+    const color = selectedOption.style.color || "black";
+    sel.style.color = color;
     sel.style.fontWeight = "bold"; // make selected text bold
   }
 
@@ -293,6 +287,7 @@ document.querySelectorAll(".dc-result-select").forEach(sel => {
   updateColor(); // initialize color on load
 });
 </script>
+
 
 
 
