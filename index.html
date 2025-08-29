@@ -61,8 +61,8 @@ input {
   font-weight: bold; 
 }
 
-.fullbal { background: #FBFFAB; }
-.roundbal { background: #F9FF66; }
+.fullbal { background: #F2D880; }
+.roundbal { background: #FFF6E3; }
 .dx-fullnow { background: #e2e2e2; font-style:italic; }
 
 .result-sphere { 
@@ -113,18 +113,18 @@ button {
 #resultsTable th { background:#f2f2f2; }
 
 #savedResultsTable th, #savedResultsTable td {
-  border: 20px solid #395239;
+  border: 1px solid #black;
   padding: 8px 12px;
   text-align: center;
-  min-width: 70px;
+  min-width: 80px;
   color: black; 
   font-weight: bold; 
-  max-width: 70px;
+  max-width: 100px;
 }
 
 #savedResultsTable th {
-  background: #395239;  
-  color: #ffffff;       
+  background: #d1d1d1;  
+  color: #black;       
   font-weight: bold;    
 }
 
@@ -544,7 +544,7 @@ function calcAxisAvg() {
 </tr>
 
 <tr class="summary-row">
-  <td colspan="5" style="padding:10px; font-family:'Manrope', sans-serif; font-weight:bold; background:#FBFFAB;">
+  <td colspan="5" style="padding:10px; font-family:'Manrope', sans-serif; font-weight:bold; background:#F2D880;">
     <div style="display:flex; justify-content:center; align-items:center; gap:40px; flex-wrap:wrap; text-align:center; font-size:16px">
       <!-- DC Analysis -->
       <div>
@@ -1255,8 +1255,8 @@ function saveResults() {
     const rows = [
         {label:"Now RX Right", sph:"s1_od", cyl:"c1_od", axis:"a1_od", se:"now-se-diff-od", className:"now"},
         {label:"Now RX Left", sph:"s1_os", cyl:"c1_os", axis:"a1_os", se:"now-se-diff-os", className:"now"},
-        {label:"Preferred RX Right", sph:"pref-rx-sph-2-od", cyl:"pref-rx-cyl-2-od", axis:"pref-rx-axis-180-od", se:"pref-rx-se-2-od", className:"roundbal"},
-        {label:"Preferred RX Left", sph:"pref-rx-sph-2-os", cyl:"pref-rx-cyl-2-os", axis:"pref-rx-axis-180-os", se:"pref-rx-se-2-os", className:"roundbal"}
+        {label:"Pref RX Right", sph:"pref-rx-sph-2-od", cyl:"pref-rx-cyl-2-od", axis:"pref-rx-axis-180-od", se:"pref-rx-se-2-od", className:"roundbal"},
+        {label:"Pref RX Left", sph:"pref-rx-sph-2-os", cyl:"pref-rx-cyl-2-os", axis:"pref-rx-axis-180-os", se:"pref-rx-se-2-os", className:"roundbal"}
     ];
 
     rows.forEach(r => {
@@ -1331,7 +1331,7 @@ if (r.className === "now") {
 
         // Row colors
         if(r.className === "now") tdLabel.style.background = "#D6CDAE";
-        if(r.className === "roundbal") tdLabel.style.background = "#F9FF66";
+        if(r.className === "roundbal") tdLabel.style.background = "#FFF6E3";
 
         table.appendChild(tr);
     });
@@ -1486,6 +1486,7 @@ if (r.className === "now") {
 </div>
 </body>
 </html>
+
 
 
 
