@@ -190,7 +190,7 @@ table { width: 100%; border-collapse: collapse; }
 
 <!-- NEW HEADER ROW -->
 <tr class="top-header">
-  <td colspan="5" style="text-align:center; background:#395239; color:#f5f5f5; font-weight:bold; font-size:20px; height:25px; font-family:'Manrope', sans-serif;">
+  <td colspan="5" style="text-align:center; background:#395239; color:#f5f5f5; font-weight:bold; font-size:20px; height:30px; font-family:'Manrope', sans-serif;">
     Diagnostic Section
   </td>
 </tr>
@@ -704,8 +704,8 @@ function calcAxisAvg() {
   <h3>Saved Results</h3>
   <table id="savedResultsTable">
     <tr>
-      <th>Type</th><th>Sphere</th><th>Cylinder</th><th>Axis</th><th>SE Diff</th><th>DC</th>
-    </tr>
+            <th>Type</th><th>Sphere</th><th>Cylinder</th><th>Axis</th><th>SE Diff</th><th>DC Level</th>
+        </tr>
 
 
   </table>
@@ -1248,7 +1248,7 @@ function saveResults() {
     // Reset table with header
     table.innerHTML = `
         <tr>
-            <th>Type</th><th>Sphere</th><th>Cylinder</th><th>Axis</th><th>SE Diff</th><th>DC</th>
+            <th>Type</th><th>Sphere</th><th>Cylinder</th><th>Axis</th><th>SE Diff</th><th>DC Level</th>
         </tr>
     `;
 
@@ -1302,32 +1302,66 @@ if(r.label.includes("Right")) {
         tr.appendChild(tdSE);
 
      // ---- DC column ----
+// ---- helper: get color code ----
+function getColorCode(val) {
+    // Round to nearest 0.25 step
+    let step = Math.round(val / 0.25);
+
+    if (step === 0) return "BAL";       // Neutral / plano
+    if (step > 0) return "R " + step;   // Positive = Red
+    return "G " + Math.abs(step);       // Negative = Green
+}
+
+// ---- DC column ----
 let tdDC = document.createElement("td");
 
+function formatDC(val) {
+    let displayVal = (val >= 0 ? "+" : "") + val.toFixed(2);
+    let colorCode = getColorCode(val);
+
+    // Create spans for styling
+    let numberSpan = document.createElement("span");
+    numberSpan.innerText = displayVal; // stays black
+
+    let dashSpan = document.createElement("span");
+    dashSpan.innerText = " - "; // separator
+
+    let codeSpan = document.createElement("span");
+    codeSpan.innerText = colorCode;
+
+    // Color only the code
+    if (val > 0) codeSpan.style.color = "red";
+    if (val < 0) codeSpan.style.color = "green";
+    if (val === 0) codeSpan.style.color = "gray";
+
+    tdDC.innerHTML = ""; // reset
+    tdDC.appendChild(numberSpan);
+    tdDC.appendChild(dashSpan);
+    tdDC.appendChild(codeSpan);
+}
+
 if (r.className === "now") {
-    // try dc-sph first, fallback to dc-summary
     let dcValStr = document.getElementById("dc-sph")?.value || document.getElementById("dc-summary")?.innerText || "0";
     let dcVal = parseFloat(dcValStr);
-    if (isNaN(dcVal)) dcVal = 0; // treat non-numeric as 0
-    dcVal = -dcVal; // invert the sign
-
-    tdDC.innerText = (dcVal >= 0 ? "+" : "") + dcVal.toFixed(2);
+    if (isNaN(dcVal)) dcVal = 0;
+    dcVal = -dcVal; // invert sign
+    formatDC(dcVal);
 
 } else if (r.className === "roundbal") {
     let eye = r.sph.includes("od") ? "od" : "os";
     let valStr = document.getElementById(`dc-preferred-${eye}`)?.value || "0";
-    let valNum = parseFloat(valStr) || 0; // fallback to 0 if empty
-    tdDC.innerText = (valNum >= 0 ? "+" : "") + valNum.toFixed(2);
+    let valNum = parseFloat(valStr) || 0;
+    formatDC(valNum);
 }
 
+tr.appendChild(tdDC);
 
+// Row colors
+if (r.className === "now") tdLabel.style.background = "#D6CDAE";
+if (r.className === "roundbal") tdLabel.style.background = "#FFF6E3";
 
+table.appendChild(tr);
 
-
-
-
-
-        tr.appendChild(tdDC);
 
         // Row colors
         if(r.className === "now") tdLabel.style.background = "#D6CDAE";
@@ -1486,7 +1520,6 @@ if (r.className === "now") {
 </div>
 </body>
 </html>
-
 
 
 
