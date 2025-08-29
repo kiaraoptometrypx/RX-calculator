@@ -9,25 +9,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-body { 
-  font-family: 'Manrope', Helvetica, Arial, system-ui; 
-  padding:10px; 
-  background:#f5f5f5; 
-  font-weight: bold; /* added */
+/* Force all fonts to 10px */
+* {
+  font-size: 10px !important;
+  font-family: 'Manrope', Helvetica, Arial, system-ui !important;
 }
 
+body { 
+  padding:10px; 
+  background:#f5f5f5; 
+  font-weight: bold; 
+}
 
 h2, h3 { 
   text-align:center; 
   margin-bottom:10px; 
-  font-weight: bold; /* added */
 }
 
 table { 
   border-collapse: collapse; 
   margin:0 auto; 
   width: 80%; 
-  font-weight: bold; /* added */
+  font-weight: bold; 
   max-width: 80%;
 }
 
@@ -36,74 +39,39 @@ th, td {
   padding:7px 7px; 
   text-align:center; 
   min-width:80px; 
-  font-weight: bold; /* added */
 }
 
 th { 
   background:#395239; 
-  font-weight: bold; /* added */
 }
 
 input { 
   width:80px; 
   padding:6px; 
   text-align:center; 
-  font-family:'Manrope', sans-serif; 
-  font-weight: bold; /* added */
-	font-size: 10px;
-}
-
-.now td { 
-  background: #D6CDAE; 
-  font-weight: bold; /* added */
-}
-
-.fc-results td { 
-  background: #f5f5f5; 
   font-weight: bold; 
 }
 
-.dc-bal td { 
-  background: #fff; 
-  font-weight: bold; /* added */
-}
-
-.dc-result-select option {
-  font-size: 10px; 
-  font-weight: bold; 
-}
+.now td { background: #D6CDAE; }
+.fc-results td { background: #f5f5f5; }
+.dc-bal td { background: #fff; }
 
 .dc-result-select {
-  font-size: 10px; 
-  font-weight: bold; 
   text-align: center;
+  font-weight: bold; 
 }
 
-.fullbal { 
-  background: #FBFFAB; 
-  font-weight: bold; /* changed from normal to bold */
-  font-style:normal; 
-}
-
-.roundbal { 
-  background: #F9FF66; 
-  font-weight:bold; 
-}
-
-.dx-fullnow { 
-  background: #e2e2e2; 
-  font-style:italic; 
-  font-weight: bold; /* added */
-}
+.fullbal { background: #FBFFAB; }
+.roundbal { background: #F9FF66; }
+.dx-fullnow { background: #e2e2e2; font-style:italic; }
 
 .result-sphere { 
   background:#fff; 
   border:0; 
-  font-size: 10px; 
   font-weight:bold; 
 }
 
-.fc-gr-input {
+.fc-gr-input { 
   font-weight: bold;
   text-transform: uppercase; 
 }
@@ -112,7 +80,6 @@ input {
   background: #395239;
   color: #EBF2E9;
   font-weight: bold;  
-  font-size: 10px;
 }
 
 .hide {display: none;}
@@ -121,21 +88,19 @@ button {
   display: block;
   margin: 20px auto;
   padding: 5px 40px;
-  font-size: 10px;
   border-radius: 10px;
   border: none;
   background: #444;
   color: white;
   cursor: pointer;
-  font-family: 'Manrope', sans-serif;
-  font-weight: bold; /* added */
+  font-weight: bold; 
 }
 
 #resultsTable { 
   border-collapse: collapse; 
   margin: 20px auto; 
   width: 50%; 
-  font-weight: bold; /* added */
+  font-weight: bold; 
 }
 
 #resultsTable th, #resultsTable td { 
@@ -143,10 +108,9 @@ button {
   padding:8px 12px; 
   text-align:center; 
   min-width:70px; 
-  font-weight: bold; /* added */
 }
 
-#resultsTable th { background:#f2f2f2; font-weight: bold; }
+#resultsTable th { background:#f2f2f2; }
 
 #savedResultsTable th, #savedResultsTable td {
   border: 20px solid #395239;
@@ -154,38 +118,29 @@ button {
   text-align: center;
   min-width: 70px;
   color: black; 
-  font-weight: bold; /* added */
+  font-weight: bold; 
   max-width: 70px;
 }
 
 #savedResultsTable th {
-  background: #395239;  /* dark green header */
-  color: #ffffff;       /* white text */
-  font-weight: bold;    /* added */
+  background: #395239;  
+  color: #ffffff;       
+  font-weight: bold;    
 }
-
-<!-- Import Manrope font in your <head> -->
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
-
 
 .page-wrapper {
-  max-width: 700px;   /* limits page width */
-  margin: 0 auto;     /* centers the page */
-  padding: 15px;      /* optional spacing */
-	transform: scale(0.8);   /* 80% of normal size */
-  transform-origin: top center; /* shrink toward top center */
-}
-}
-	
-table {
-  width: 100%;        /* table fills container */
-  border-collapse: collapse;
+  max-width: 700px;   
+  margin: 0 auto;     
+  padding: 15px;      
+  transform: scale(0.8);   
+  transform-origin: top center;
 }
 
-	
+table { width: 100%; border-collapse: collapse; }
 </style>
 </head>
 </html>
+
 
 
 
@@ -1530,6 +1485,7 @@ if (r.className === "now") {
 </div>
 </body>
 </html>
+
 
 
 
