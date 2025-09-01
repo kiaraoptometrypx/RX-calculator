@@ -35,7 +35,7 @@ table {
 
 th, td { 
   border:1px solid #999; 
-  padding:7px 7px; 
+  padding:4px 4px; 
   text-align:center; 
   min-width:80px; 
 }
@@ -45,14 +45,14 @@ th {
 }
 
 input { 
-  width:80px; 
-  padding:2px; 
+  width:70px; 
+  padding:1px; 
   text-align:center; 
   font-weight: bold; 
 }
 
-.now td { background: #D6CDAE; }
-.fc-results td { background: #f5f5f5; }
+.now td { background: #EDEADF; }
+.fc-results td { background: #EFF5E6; }
 .dc-bal td { background: #fff; }
 
 .dc-result-select {
@@ -60,8 +60,8 @@ input {
   font-weight: bold; 
 }
 
-.fullbal { background: #F2D880; }
-.roundbal { background: #FFF6E3; }
+.fullbal { background: #E4EDDA; }
+.roundbal { background: #C5D69F; }
 .dx-fullnow { background: #e2e2e2; font-style:italic; }
 
 .result-sphere { 
@@ -76,18 +76,24 @@ input {
 }
 
 .table-header {
-  background: #395239;
-  color: #EBF2E9;
+  background: #C5D69F;
+  color: #black;
+  font-weight: bold;  
+}
+
+.table-headernow {
+  background: #E8D1A0;
+  color: #black;
   font-weight: bold;  
 }
 
 .hide {display: none;}
 
-button {
-  display: block;
-  margin: 20px auto;
-  padding: 5px 40px;
-  border-radius: 10px;
+button{
+  display:block;
+  margin: 2px auto;
+  padding: 5px 5px;
+  border-radius: 5px;
   border: none;
   background: #444;
   color: white;
@@ -97,14 +103,14 @@ button {
 
 #resultsTable { 
   border-collapse: collapse; 
-  margin: 20px auto; 
-  width: 50%; 
+  margin: 20px; 
+  width: 90%; 
   font-weight: bold; 
 }
 
 #resultsTable th, #resultsTable td { 
   border:20px solid #999; 
-  padding:8px 12px; 
+  padding:5px 5px; 
   text-align:center; 
   min-width:70px; 
 }
@@ -113,12 +119,12 @@ button {
 
 #savedResultsTable th, #savedResultsTable td {
   border: 1px solid #black;
-  padding: 8px 12px;
+
   text-align: center;
-  min-width: 80px;
+  min-width: 95px;
   color: black; 
   font-weight: bold; 
-  max-width: 100px;
+  max-width: 120px;
 }
 
 #savedResultsTable th {
@@ -157,15 +163,8 @@ button {
 
 
 <body>
- <div class="page-wrapper">
 
-
-
-
-
-
-
-<table style="width:70%; margin:0 auto; border-collapse:collapse;">
+<table style="width:95%; margin:0 auto; border-collapse:collapse;">
 
 
 
@@ -180,14 +179,14 @@ button {
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
 
 <!-- NEW HEADER ROW -->
-<tr class="top-header">
-  <td colspan="5" style="text-align:center; background:#395239; color:#f5f5f5; font-weight:bold; font-size:20px; height:30px; font-family:'Manrope', sans-serif;">
-    Diagnostic Section
+<tr class="table-headernow">
+  <td colspan="5" style="text-align:center;">
+    Now RX Status
   </td>
 </tr>
 
 
-<tr class="table-header">
+<tr class="table-headernow">
   <td></td><td>Sphere</td><td>Cylinder</td><td>Axis</td><td>SE</td>
 </tr>
 
@@ -209,55 +208,55 @@ button {
 </tr>
 
 <!-- DC Clearer Side (nested table so outer stays 5 columns) -->
-<tr class="dc-results">
-  <td colspan="5" style="padding-top:2px; padding-bottom:2px;">
+<tr class="now">
+  <td colspan="5" style="padding-top:5px; padding-bottom:5px;">
     <table style="width:100%; border:0px solid #999; border-collapse:collapse; background:#fff;">
       <tr>
-        <td style="font-weight:bold; text-align:center; padding:8px 8px; min-width:80px;">
+        <td style="font-weight:bold; text-align:center; padding:1px 1px; min-width:80px;">
           DC Stats 
         </td>
-        <td style="text-align:center; padding:10px;">
+        <td style="text-align:center; padding:3px;">
           <label class="result-label">+1.00</label><br>
-          <select class="dc-result-select" style="width:100%;">
+          <select class="dc-result-select" style="width:80%;">
             <option>-</option>
             <option style="color:green;">Green</option>
-            <option>Balance</option>
+            <option>Bal</option>
             <option style="color:red;">Red</option>
           </select>
         </td>
-        <td style="text-align:center; padding:10px;">
+        <td style="text-align:center; padding:3px;">
           <label class="result-label">+0.50</label><br>
-          <select class="dc-result-select" style="width:100%;">
+          <select class="dc-result-select" style="width:80%;">
             <option>-</option>
             <option style="color:green;">Green</option>
-            <option>Balance</option>
+            <option>Bal</option>
             <option style="color:red;">Red</option>
           </select>
         </td>
-        <td style="text-align:center; padding:10px;">
+        <td style="text-align:center; padding:3px;">
           <label class="result-label">Now RX</label><br>
-          <select class="dc-result-select" style="width:100%;">
+          <select class="dc-result-select" style="width:80%;">
             <option>-</option>
             <option style="color:green;">Green</option>
-            <option>Balance</option>
+            <option>Bal</option>
             <option style="color:red;">Red</option>
           </select>
         </td>
-        <td style="text-align:center; padding:10px;">
+        <td style="text-align:center; padding:3px;">
           <label class="result-label">-0.50</label><br>
-          <select class="dc-result-select" style="width:100%;">
+          <select class="dc-result-select" style="width:80%;">
             <option>-</option>
             <option style="color:green;">Green</option>
-            <option>Balance</option>
+            <option>Bal</option>
             <option style="color:red;">Red</option>
           </select>
         </td>
-        <td style="text-align:center; padding:10px;">
+        <td style="text-align:center; padding:3px;">
           <label class="result-label">-1.00</label><br>
-          <select class="dc-result-select" style="width:100%;">
+          <select class="dc-result-select" style="width:80%;">
             <option>-</option>
             <option style="color:green;">Green</option>
-            <option>Balance</option>
+            <option>Bal</option>
             <option style="color:red;">Red</option>
           </select>
         </td>
@@ -282,14 +281,14 @@ document.querySelectorAll(".dc-result-select").forEach(sel => {
 
 
 <!-- DC Balance input -->
-<tr class="dc-bal">
-  <td colspan="2" style="text-align: center;">
-    Lens for DC Balance: 
+<tr class="now">
+  <td colspan="3" style="text-align: center;">
+    Sph that balances DC: 
     <input id="dc-sph" placeholder="0.00" style="width:60px; margin-left: 20px; text-align:center; font-weight:bold;">
   </td>
-  <td colspan="4" style="text-align: left;">
+  <td colspan="3" style="text-align: center;">
     <span style="font-family:'Manrope', sans-serif; font-weight: bold;">
-      Current DC: <span id="dc-analysis-text"></span>
+      Now DC: <span id="dc-analysis-text">_____________________</span>
     </span>
   </td>
 </tr>
@@ -308,12 +307,10 @@ document.querySelectorAll(".dc-result-select").forEach(sel => {
 
 <!-- R/G Codes table compact -->
 <tr>
-  <td colspan="5" style="padding-top:5px; padding-bottom:5px;">
-    <table style="width:100%; border:1px solid #999; border-collapse:collapse; font-size:14px; background:#e0e0e0; font-weight:bold; color:#f5f5f5; text-align:center;">
-      <tr>
-        <th colspan="3">R Codes</th>
-        <th colspan="3">G Codes</th>
-      </tr>
+<tr class="now">
+  <td colspan="6" style="padding-top:10px; padding-bottom:10px;">
+    <table style="width:100%;">
+  
       <tr>
         <td style="color:#cc0000;">R0 = 90</td>
         <td style="color:#cc0000;">R2 = 120</td>
@@ -330,32 +327,26 @@ document.querySelectorAll(".dc-result-select").forEach(sel => {
         <td style="color:green;">G3 = 45</td>
         <td style="color:green;">G5 = 75</td>
       </tr>
-    </table>
-  </td>
-</tr>
+
+<!-- FC Dark Lines (RG Code ready) -->
 
 
-<!-- FC 3 Darker Lines (RG Code ready) -->
-<tr class="fc-results">
-  <td>FC 3 Darker Lines</td>
-  
-  <td>
-    <label class="result-label">Now RX</label>
-    <input type="text" class="rg-code" placeholder="—" style="width:80px;">
+   <td colspan="1"; >FC Darker</td>
+   <td colspan="5>
+    <label class="result-label">Now RX: </label>
+    <input type="text" class="rg-code" placeholder=" " style="width:50px; margin-right:10px;">
+    <label class="result-label">+0.25 :</label>
+    <input type="text" class="rg-code" placeholder=" " style="width:50px; margin-right:10px;">  
+    <label class="result-label">+0.50 :</label>
+    <input type="text" class="rg-code" placeholder=" " style="width:50px; margin-right:10px;">  
+    <label class="result-label">+1.00 :</label>
+    <input type="text" class="rg-code" placeholder=" " style="width:50px; margin-right:10px;">
   </td>
-  
-  <td>
-    <label class="result-label">+0.50 Cyl</label>
-    <input type="text" class="rg-code" placeholder="—" style="width:80px;">
-  </td>
-  
-  <td>
-    <label class="result-label">+1.00 Cyl</label>
-    <input type="text" class="rg-code" placeholder="—" style="width:80px;">
-  </td>
-  
-  <td></td>
-</tr>
+
+
+  </tr>
+
+ 
 
 <script>
 (function(){
@@ -424,36 +415,24 @@ document.querySelectorAll(".dc-result-select").forEach(sel => {
 
 
 <!-- Axis Average Calculator in one line -->
-<tr>
-  <td colspan="5" style="padding-top:0px; padding-bottom:0px;">
-   <div style="display:flex; align-items:center; gap:10px; font-weight:bold;">
-  <span>Axis Average Calculator</span>
-  
-  <!-- Input group -->
-  <div style="display:flex; gap:5px; align-items:center;">
-  <span>Code 1: <input type="text" id="calc1" class="rg-code" style="width:50px;"></span>
-  <span>Code 2: <input type="text" id="calc2" class="rg-code" style="width:50px;"></span>
-</div>
 
-  
-  <!-- Button and result group -->
-  <div style="display:flex; gap:20px; align-items:center;">
-<button onclick="calcAxisAvg()" style="margin-left:35px;">Calculate</button>
-    <span>Average Axis: <span id="axisAvg">—</span></span>
-  </div>
-</div>
+  <td colspan="1" style="padding-top:0px; padding-bottom:0px;">Axis Finder</td>
   </td>
-</tr>
+
+<td colspan="5">
+    <!-- Input group -->
+    Code 1 : <input type="text" id="calc1" class="rg-code" style="width:50px; margin-right:10px;">
+    Code 2 : <input type="text" id="calc2" class="rg-code" style="width:50px;margin-right:10px;">
+    Axis: <span id="axisAvg" style="width:50px; margin-right:170px;"> — </span>
+
+</td>
+
 
 <script>
 const axisMap = {
   "R0": 90, "R1": 105, "R2": 120, "R3": 135, "R4": 150, "R5": 165,
   "G0": 180, "G1": 15, "G2": 30, "G3": 45, "G4": 60, "G5": 75
 };
-
-const colorMap = { "R": "#cc0000", "G": "green" };
-
-
 
 function calcAxisAvg() {
   const code1 = document.getElementById("calc1").value.trim().toUpperCase();
@@ -462,8 +441,10 @@ function calcAxisAvg() {
   const a1 = axisMap[code1];
   const a2 = axisMap[code2];
 
+  const axisEl = document.getElementById("axisAvg");
+
   if (a1 === undefined || a2 === undefined) {
-    document.getElementById("axisAvg").innerText = "—";
+    axisEl.innerText = "—";
     return;
   }
 
@@ -477,25 +458,35 @@ function calcAxisAvg() {
   if (avgRad < 0) avgRad += Math.PI;
 
   const avgDeg = Math.round(avgRad * 180 / Math.PI);
-  document.getElementById("axisAvg").innerText = avgDeg;
+  axisEl.innerText = avgDeg;
 }
+
+// Make it auto-live by listening to input events
+document.getElementById("calc1").addEventListener("input", calcAxisAvg);
+document.getElementById("calc2").addEventListener("input", calcAxisAvg);
 </script>
 
 
+
+
+
 <!-- FC Bal -->
-<tr class="fc-results">
-  <td>FC Balance</td>
-  <td><span id="s2" class="result-sphere">0.00</span></td>
-  <td><input id="c2" placeholder="+0.00" style="width:80px; text-align:center;"></td>
-  <td><input id="a2" placeholder="0" style="width:80px; text-align:center;"></td>
-  <td> </td>
+ <tr>
+ <td>FC Balance</td>
+  <td colspan="5">
+  Sph : <span id="s2" class="result-sphere" style="margin-right:40px;">0.00</span>
+  Cyl : <input id="c2" placeholder="+0.00" style="width:80px; text-align:center; margin-right:15px;">
+  Axis : <input id="a2" placeholder="0" style="width:80px; text-align:center; margin-right:100px">
+</td>
 </tr>
 
 
-<tr class="spacer" style="height: 10px;">
-  <td colspan="10"></td>
-</tr>
 
+ 
+</tr>
+</table>
+  </td>
+</tr>
 
 
 <tr style="display:none;">
@@ -513,47 +504,47 @@ function calcAxisAvg() {
   <td id="res-se-diff-os-rounded">—</td>
 </tr>
 
-<tr class="fullbal">
-  <td>Real Bal RX Right</td>
+
+
+<tr class="table-headernow">
+  <td colspan="5" style="padding:5px; font-family:'Manrope', sans-serif; font-weight:bold;">
+    <div style="display:flex; justify-content:center; align-items:center; gap:40px; flex-wrap:wrap; text-align:center; font-size:16px">
+      <!-- DC Analysis -->
+      <div>
+        ** Conclusion: DC Status is <span id="dc-summary" style="font-weight:bold; color:black;">balance</span>
+   
+
+      <!-- FC Bal Details -->
+    
+        and <span id="fc-cyl-summary">0.00</span>
+        x <span id="fc-axis-summary">0</span> to balance FC.
+      </div>
+    </div>
+  </td>
+</tr>
+
+<tr class="table-headernow">
+  <td>Bal RX Right</td>
   <td><span id="res-sph-od-2">0.00</span></td>
   <td><span id="res-cyl-od-2">0.00</span></td>
   <td><span id="res-axis-od-180">0</span></td>
   <td id="res-se-diff-od-2">—</td>
 </tr>
-<tr class="fullbal">
-  <td>Real Bal RX Left</td>
+<tr class="table-headernow">
+  <td>Bal RX Left</td>
   <td><span id="res-sph-os-2">0.00</span></td>
   <td><span id="res-cyl-os-2">0.00</span></td>
   <td><span id="res-axis-os-180">0</span></td>
   <td id="res-se-diff-os-2">—</td>
 </tr>
 
-<tr class="summary-row">
-  <td colspan="5" style="padding:10px; font-family:'Manrope', sans-serif; font-weight:bold; background:#F2D880;">
-    <div style="display:flex; justify-content:center; align-items:center; gap:40px; flex-wrap:wrap; text-align:center; font-size:16px">
-      <!-- DC Analysis -->
-      <div>
-        Current RX DC Status = <span id="dc-summary" style="font-weight:bold; color:black;">BAL</span>
-      </div>
-
-      <!-- FC Bal Details -->
-      <div>
-        Current FC Imbalance =  <span id="fc-cyl-summary">0.00</span>
-        x <span id="fc-axis-summary">0</span>
-      </div>
-    </div>
-  </td>
-</tr>
-
-
-
 
 <tr class="spacer"><td colspan="10"></td></tr>
 
 
 <!-- NEW HEADER ROW -->
-<tr class="top-header">
-  <td colspan="5" style="text-align:center; background:#395239; color:#f5f5f5; font-weight:bold; font-size:16px; height:25px; font-family:'Manrope', sans-serif;">
+<tr class="table-header">
+  <td colspan="5" style="text-align:center;">
     Adjusted Prescription Section - Press Enter To Update Value!
   </td>
 </tr>
@@ -666,21 +657,22 @@ function calcAxisAvg() {
 
 
 
-<button onclick="combineRX(); saveResults();">Press Enter To <br>Update Value</button>
+<button onclick="combineRX(); saveResults();">Press Enter To Update Value</button>
 
 
 
+ <h3>Saved Results</h3>
+<table id="savedResultsTable" style="width:90%; max-width:90%; border-collapse: collapse; text-align:center;">
+  <tr>
+    <th>Type</th>
+    <th>Sphere</th>
+    <th>Cylinder</th>
+    <th>Axis</th>
+    <th>SE Diff</th>
+    <th>DC Level</th>
+  </tr>
+</table>
 
-<div id="savedResults">
-  <h3>Saved Results</h3>
-  <table id="savedResultsTable">
-    <tr>
-            <th>Type</th><th>Sphere</th><th>Cylinder</th><th>Axis</th><th>SE Diff</th><th>DC Level</th>
-        </tr>
-
-
-  </table>
-</div>
 
 
 
@@ -1226,8 +1218,8 @@ function saveResults() {
     const rows = [
         {label:"Now RX Right", sph:"s1_od", cyl:"c1_od", axis:"a1_od", se:"now-se-diff-od", className:"now"},
         {label:"Now RX Left", sph:"s1_os", cyl:"c1_os", axis:"a1_os", se:"now-se-diff-os", className:"now"},
-        {label:"Pref RX Right", sph:"pref-rx-sph-2-od", cyl:"pref-rx-cyl-2-od", axis:"pref-rx-axis-180-od", se:"pref-rx-se-2-od", className:"roundbal"},
-        {label:"Pref RX Left", sph:"pref-rx-sph-2-os", cyl:"pref-rx-cyl-2-os", axis:"pref-rx-axis-180-os", se:"pref-rx-se-2-os", className:"roundbal"}
+        {label:"Adj RX Right", sph:"pref-rx-sph-2-od", cyl:"pref-rx-cyl-2-od", axis:"pref-rx-axis-180-od", se:"pref-rx-se-2-od", className:"roundbal"},
+        {label:"Adj RX Left", sph:"pref-rx-sph-2-os", cyl:"pref-rx-cyl-2-os", axis:"pref-rx-axis-180-os", se:"pref-rx-se-2-os", className:"roundbal"}
     ];
 
     rows.forEach(r => {
@@ -1327,19 +1319,9 @@ if (r.className === "now") {
 
 tr.appendChild(tdDC);
 
-// Row colors
-if (r.className === "now") tdLabel.style.background = "#D6CDAE";
-if (r.className === "roundbal") tdLabel.style.background = "#FFF6E3";
-
 table.appendChild(tr);
 
-
-        // Row colors
-        if(r.className === "now") tdLabel.style.background = "#D6CDAE";
-        if(r.className === "roundbal") tdLabel.style.background = "#FFF6E3";
-
-        table.appendChild(tr);
-    });
+});
 }
 
 
