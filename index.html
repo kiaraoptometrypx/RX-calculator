@@ -23,7 +23,7 @@ body {
 
 h2, h3 { 
   text-align:center; 
-  margin-bottom:10px; 
+margin: 2px 2px
 }
 
 table { 
@@ -199,15 +199,8 @@ button{
 <!-- Import Manrope font in your <head> -->
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
 
-<!-- NEW HEADER ROW -->
-<tr class="table-headernow">
-  <td colspan="5" style="text-align:center;">
-    Now RX Status
-  </td>
-</tr>
 
-
-<tr class="table-headernow">
+<tr class="now">
   <td></td><td>Sphere</td><td>Cylinder</td><td>Axis</td><td>SE</td>
 </tr>
 
@@ -227,6 +220,9 @@ button{
   <td><input id="a1_os" placeholder="0" style="width:80px; text-align:center;"></td>
   <td id="now-se-diff-os">—</td>
 </tr>
+
+<!-- Wrap everything you want to hide -->
+<tbody id="examSection" style="display:none;">
 
 <!-- DC Clearer Side (nested table so outer stays 5 columns) -->
 <tr class="now">
@@ -300,54 +296,23 @@ document.querySelectorAll(".dc-result-select").forEach(sel => {
 
 
 
-
-<!-- DC Balance input -->
-<tr class="now">
-  <td colspan="3" style="text-align: center;">
-    Sph that balances DC: 
-    <input id="dc-sph" placeholder="0.00" style="width:60px; margin-left: 20px; text-align:center; font-weight:bold;">
-  </td>
-  <td colspan="3" style="text-align: center;">
-    <span style="font-family:'Manrope', sans-serif; font-weight: bold;">
-      Now DC: <span id="dc-analysis-text">_____________________</span>
-    </span>
-  </td>
-</tr>
-
-
-
-
-
-
-
       </tr>
-    </table>
-  </td>
+      </td>
 </tr>
 
 
 <!-- R/G Codes table compact -->
 <tr>
 <tr class="now">
-  <td colspan="6" style="padding-top:10px; padding-bottom:10px;">
-    <table style="width:100%;">
   
-      <tr>
-        <td style="color:#cc0000;">R0 = 90</td>
-        <td style="color:#cc0000;">R2 = 120</td>
-        <td style="color:#cc0000;">R4 = 150</td>
-        <td style="color:green;">G0 = 180</td>
-        <td style="color:green;">G2 = 30</td>
-        <td style="color:green;">G4 = 60</td>
-      </tr>
-      <tr>
-        <td style="color:#cc0000;">R1 = 105</td>
-        <td style="color:#cc0000;">R3 = 135</td>
-        <td style="color:#cc0000;">R5 = 165</td>
-        <td style="color:green;">G1 = 15</td>
-        <td style="color:green;">G3 = 45</td>
-        <td style="color:green;">G5 = 75</td>
-      </tr>
+<tr>
+  <td colspan="1">Axis Chart</td>
+  <td colspan="5">
+    <div style="color:#cc0000;">R0 = 90 , R1 = 105 , R2 = 120 , R3 = 135 , R4 = 150 , R5 = 165</div>
+    <div style="color:green;">G0 = 180 , G1 = 15 , G2 = 30 , G3 = 45 , G4 = 60 , G5 = 75</div>
+  </td>
+</tr>
+
 
 <!-- FC Dark Lines (RG Code ready) -->
 
@@ -491,17 +456,6 @@ document.getElementById("calc2").addEventListener("input", calcAxisAvg);
 
 
 
-<!-- FC Bal -->
- <tr>
- <td>FC Balance</td>
-  <td colspan="5">
-  Sph : <span id="s2" class="result-sphere" style="margin-right:40px;">0.00</span>
-  Cyl : <input id="c2" placeholder="+0.00" style="width:80px; text-align:center; margin-right:15px;">
-  Axis : <input id="a2" placeholder="0" style="width:80px; text-align:center; margin-right:100px">
-</td>
-</tr>
-
-
 
  
 </tr>
@@ -525,17 +479,74 @@ document.getElementById("calc2").addEventListener("input", calcAxisAvg);
   <td id="res-se-diff-os-rounded">—</td>
 </tr>
 
+</tbody>
+
+
+
+<script>
+document.getElementById("toggleBtn").addEventListener("click", () => {
+  const sec = document.getElementById("examSection");
+  sec.style.display = (sec.style.display === "none") ? "table-row-group" : "none";
+});
+</script>
+</tbody>
+
+
+
+<!-- DC Balance input -->
+<tr class="table-headernow">
+  <td colspan="1" style="text-align: center;">
+    DC / FC Margin
+</td>
+<td>
+    <input id="dc-sph" placeholder="+0.00" style="width:80px; margin-left: 0px; text-align:center; font-weight:bold;">
+  </td>
+<td colspan="1">
+  <input id="c2" placeholder="+0.00" style="width:80px; text-align:center;">
+</td>
+<td colspan="1">
+  <input id="a2" placeholder="0" style="width:80px; text-align:center;">
+</td>
+<td>-</td>
+
+  <td colspan="3" style="text-align: center; display:none">
+    <span style="font-family:'Manrope', sans-serif; font-weight: bold;">
+      Now DC: <span id="dc-analysis-text">_____________________</span>
+    </span>
+  </td>
+</tr>
+
+ 
+
+</tr>
 
 
 <tr class="table-headernow">
-  <td colspan="5" style="padding:5px; font-family:'Manrope', sans-serif; font-weight:bold;">
-    <div style="display:flex; justify-content:center; align-items:center; gap:40px; flex-wrap:wrap; text-align:center; font-size:16px">
-      <!-- DC Analysis -->
-      <div>
-        ** Conclusion: DC Status is <span id="dc-summary" style="font-weight:bold; color:black;">balance</span>
-   
+<td colspan="1">
+<!-- Toggle Heading -->
+<h3 id="toggleExam" 
+    style="cursor:pointer; text-decoration:underline; color:black;">
+Toggle Exams
+</h3>
 
-      <!-- FC Bal Details -->
+</td>
+
+  <td colspan="4" style="padding:5px; font-family:'Manrope', sans-serif; font-weight:bold;">
+    <div style="display:flex; justify-content:center; align-items:center; gap:40px; flex-wrap:wrap; text-align:center; font-size:16px">
+
+
+<script>
+document.getElementById("toggleExam").addEventListener("click", () => {
+  const sec = document.getElementById("examSection");
+  sec.style.display = (sec.style.display === "none") ? "table-row-group" : "none";
+});
+</script>
+
+
+<!-- DC Analysis -->
+      <div>
+        Now RX DC is <span id="dc-summary" style="font-weight:bold; color:black;">balance</span>
+ <!-- FC Bal Details -->
     
         and <span id="fc-cyl-summary">0.00</span>
         x <span id="fc-axis-summary">0</span> to balance FC.
@@ -576,58 +587,51 @@ document.getElementById("calc2").addEventListener("input", calcAxisAvg);
 
 <!-- DC Preferred Right -->
 <tr class="fc-results">
-  <td style="font-family:'Manrope', sans-serif;">DC Adj Right</td>
-  <td colspan="4" style="text-align:center;">
-    <select id="dc-preferred-od" class="dc-result-select" style="width:400px; font-family:'Manrope', sans-serif;">
-      <option value="+0.00" data-color="black" selected>BAL : Balance (0)</option>
-      <option value="-0.25" data-color="green">G1 : Green 1 Overcorrection of -0.25 </option>
-      <option value="0.25" data-color="red">R1 : Red 1 Undercorrection of -0.25</option>
-      <option value="-0.50" data-color="green">G2 : Green 2 Overcorrection of -0.50</option>
-      <option value="0.50" data-color="red">R2 : Red 2 Undercorrection of -0.50</option>
-      <option value="-0.75" data-color="green">G3 : Green 3 Overcorrection of -0.75</option>
-      <option value="0.75" data-color="red">R3 : Red 3 Undercorrection of -0.75</option>
-      <option value="-1.00" data-color="green">G4 : Green 4 Overcorrection of -1.00</option>
-      <option value="1.00" data-color="red">R4 : Red 4 Undercorrection of -1.00</option>
+  <td style="font-family:'Manrope', sans-serif;">DC / FC Adj Right</td>
+  <td colspan="1" style="text-align:center;">
+    <select id="dc-preferred-od" class="dc-result-select" style="width:90px; font-family:'Manrope', sans-serif;">
+      <option value="+0.00" data-color="black" selected>Bal PL</option>
+      <option value="-0.25" data-color="green">-0.25 G1</option>
+      <option value="0.25" data-color="red">+0.25 R1</option>
+      <option value="-0.50" data-color="green">-0.50 G2</option>
+      <option value="0.50" data-color="red">+0.50 R2</option>
+      <option value="-0.75" data-color="green">-0.75 G3</option>
+      <option value="0.75" data-color="red">+0.75 R3</option>
+      <option value="-1.00" data-color="green">-1.00 G4</option>
+      <option value="1.00" data-color="red">+1.00 R4</option>
     </select>
-  </td>
-</tr>
-
-<!-- DC Preferred Left -->
-<tr class="fc-results">
-  <td style="font-family:'Manrope', sans-serif;">DC Adj Left</td>
-  <td colspan="4" style="text-align:center;">
-    <select id="dc-preferred-os" class="dc-result-select" style="width:400px; font-family:'Manrope', sans-serif;">
-      <option value="+0.00" data-color="black" selected>BAL : Balance (0)</option>
-      <option value="-0.25" data-color="green">G1 : Green 1 Overcorrection of -0.25 </option>
-      <option value="0.25" data-color="red">R1 : Red 1 Undercorrection of -0.25</option>
-      <option value="-0.50" data-color="green">G2 : Green 2 Overcorrection of -0.50</option>
-      <option value="0.50" data-color="red">R2 : Red 2 Undercorrection of -0.50</option>
-      <option value="-0.75" data-color="green">G3 : Green 3 Overcorrection of -0.75</option>
-      <option value="0.75" data-color="red">R3 : Red 3 Undercorrection of -0.75</option>
-      <option value="-1.00" data-color="green">G4 : Green 4 Overcorrection of -1.00</option>
-      <option value="1.00" data-color="red">R4 : Red 4 Undercorrection of -1.00</option>
-    </select>
-  </td>
-</tr>
-
-
-
-
-<tr class="fc-results">
-  <td>FC Adj Right</td>
-  <td><span id="fc-sph-pref-od" class="result-sphere">0.00</span></td>
+  
   <td><input id="fc-cyl-pref-od" placeholder="+0.00" style="width:80px; text-align:center;"></td>
   <td><input id="fc-axis-pref-od" placeholder="0" style="width:80px; text-align:center;"></td>
   <td></td>
 </tr>
 
+</tr>
+
+<!-- DC Preferred Left -->
 <tr class="fc-results">
-  <td>FC Adj Left</td>
-  <td><span id="fc-sph-pref-os" class="result-sphere">0.00</span></td>
+  <td style="font-family:'Manrope', sans-serif;">DC / FC Adj Left</td>
+  <td colspan="1" style="text-align:center;">
+    <select id="dc-preferred-os" class="dc-result-select" style="width:90px; font-family:'Manrope', sans-serif;">
+      <option value="+0.00" data-color="black" selected>Bal PL</option>
+      <option value="-0.25" data-color="green">-0.25 G1</option>
+      <option value="0.25" data-color="red">+0.25 R1</option>
+      <option value="-0.50" data-color="green">-0.50 G2</option>
+      <option value="0.50" data-color="red">+0.50 R2</option>
+      <option value="-0.75" data-color="green">-0.75 G3</option>
+      <option value="0.75" data-color="red">+0.75 R3</option>
+      <option value="-1.00" data-color="green">-1.00 G4</option>
+      <option value="1.00" data-color="red">+1.00 R4</option>
+    </select>
+
   <td><input id="fc-cyl-pref-os" placeholder="+0.00" style="width:80px; text-align:center;"></td>
   <td><input id="fc-axis-pref-os" placeholder="0" style="width:80px; text-align:center;"></td>
   <td></td>
 </tr>
+
+</tr>
+
+
 
 
 
@@ -897,11 +901,11 @@ document.getElementById("dc-sph").addEventListener("blur", function() {
         color = "black";
     } else if (roundedVal > 0) { 
         // Extra plus → overcorrection
-        analysisText = `G${level} : Green ${level} Overcorrection of -${absVal.toFixed(2)}`;
+        analysisText = `G${level} : Green ${level} Over of -${absVal.toFixed(2)}`;
         color = "green";
     } else { 
         // Extra minus → undercorrection
-        analysisText = `R${level} : Red ${level} Undercorrection of -${absVal.toFixed(2)}`;
+        analysisText = `R${level} : Red ${level} Under of -${absVal.toFixed(2)}`;
         color = "red";
     }
 
@@ -1066,10 +1070,10 @@ if(prefSE2El) prefSE2El.textContent = calcSE(S_pref_q, C_pref_q);
         let level = Math.max(Math.round(absVal / 0.25), 1); // minimum 1
 
         if (roundedVal > 0) {
-            displayText = `G${level} Over -${absVal.toFixed(2)}`;
+            displayText = `-${absVal.toFixed(2)} G${level}`;
             color = "green";
         } else if (roundedVal < 0) {
-            displayText = `R${level} Under -${absVal.toFixed(2)}`;
+            displayText = `+${absVal.toFixed(2)} R${level}`;
             color = "red";
         }
     }
