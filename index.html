@@ -60,11 +60,60 @@ input {
   background: #E8D1A0;
   font-weight: bold;  
 }
+
+/* 🔒 Overlay for blackout */
+#overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #EDEADF;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  z-index: 9999;
+}
+
+#apply-controls { text-align:left; margin-bottom:10px; margin-top:10px; margin-left:10px }
+#addMinus025 { cursor:pointer; color:black; text-decoration:underline; user-select:none; }
 </style>
 </head>
 <body>
 
+<!-- 🔒 Locked screen -->
+<div id="overlay">🔒 Entering password...</div>
+
+<script>
+  function checkPassword() {
+    let password = "";
+    const correctPassword = "kiara"; // change this
+
+    while (password !== correctPassword) {
+      password = prompt("Please enter password to use:");
+      if (password === null) {
+        document.getElementById("overlay").innerHTML = "Sorry, Access Denied.";
+        return false;
+      }
+      if (password !== correctPassword) {
+        alert("Wrong password. Try again.");
+      }
+    }
+    return true;
+  }
+
+  window.onload = function () {
+    if (checkPassword()) {
+      document.getElementById("overlay").style.display = "none";
+      // there's no #content in your original but leaving safe
+      const c = document.getElementById("content");
+      if(c) c.style.display = "block";
+    }
+  };
+</script>
+
 <h2>V4 CALCULATOR</h2>
+
 
 <table>
   <tr class="white">
@@ -95,7 +144,9 @@ input {
     <td>-</td>
   </tr>
 
-<td colspan="7"></td>
+<td colspan="7">
+
+</td>
 
   <!-- Deficit Rows -->
   <tr class="now">
@@ -107,7 +158,7 @@ input {
   </tr>
  
   <tr class="now">
-    <td>Both Eye</td>
+    <td>Bino Test</td>
     <td><input id="dc-sph-ou" placeholder="0.00"></td>
     <td><input id="c2_ou" placeholder="+0.00"></td>
     <td><input id="a2_ou" placeholder="0"></td>
@@ -116,7 +167,7 @@ input {
   </tr>
 
   <tr class="now">
-    <td>Mono RE</td>
+    <td>Mono RE Test</td>
     <td><input id="dc-sph-od" placeholder="0.00"></td>
     <td><input id="c2_od" placeholder="+0.00"></td>
     <td><input id="a2_od" placeholder="0"></td>
@@ -125,7 +176,7 @@ input {
   </tr>
 
   <tr class="now">
-    <td>Mono LE</td>
+    <td>Mono LE Test</td>
     <td><input id="dc-sph-os" placeholder="0.00"></td>
     <td><input id="c2_os" placeholder="+0.00"></td>
     <td><input id="a2_os" placeholder="0"></td>
@@ -133,7 +184,12 @@ input {
     <td id="now-dc-os">—</td> 
   </tr>
 
-<td colspan="7"></td>
+<td colspan="7">
+<!-- Clickable control to apply -0.25 x 180 -->
+<div id="apply-controls">
+  <span id="addMinus025">Click to Apply -0.25 × 180</span>
+</div>
+</td>
 
   <!-- Results -->
   <tr class="table-headernow">
@@ -168,7 +224,7 @@ input {
     <td id="res-sph-od-2">0.00</td>
     <td id="res-cyl-od-2">0.00</td>
     <td id="res-axis-od-2">0</td>
-    <td id="res-se-diff-od-2">—</td>
+    <td id="res-se-od-2">—</td>
     <td id="res-dc-od-2">BAL</td> 
   </tr>
 
@@ -177,19 +233,24 @@ input {
     <td id="res-sph-os-2">0.00</td>
     <td id="res-cyl-os-2">0.00</td>
     <td id="res-axis-os-2">0</td>
-    <td id="res-se-diff-os-2">—</td>
+    <td id="res-se-os-2">—</td>
     <td id="res-dc-os-2">BAL</td> 
   </tr>
 
 </table>
 
-
-
-
-
-
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+
+  // ---------- Toggle for extra -0.25 @ 180 ----------
+  let extraMinus025 = false;
+  const toggleEl = document.getElementById("addMinus025");
+  toggleEl.addEventListener("click", () => {
+    extraMinus025 = !extraMinus025;
+    toggleEl.style.color = extraMinus025 ? "red" : "black";
+    toggleEl.textContent = extraMinus025 ? "Applied -0.25 × 180 (click to remove)" : "Click to Apply -0.25 × 180";
+    combineAll();
+  });
 
   // ---------- Helpers ----------
   function safeParseFloat(v){
@@ -210,7 +271,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function calcSENumber(S, C){ S = safeParseFloat(S); C = safeParseFloat(C); return S + C/2; }
   function formatSEforDisplay(n){ return (n >= 0 ? "+" : "") + n.toFixed(2); }
 
-  // NEW: SE diff formatter (no 0.25 snapping)
   function formatSEDiffForDisplay(n){
     const num = safeParseFloat(n);
     if (isNaN(num)) return "—";
@@ -232,7 +292,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if(el) el.textContent = val;
   }
 
-  // duochrome status helper (keeps your text format)
   function dcStatusText(val){
     let v = roundQuarterNumber(val);
     if(v === 0) return { text: "BAL", color: "black" };
@@ -268,9 +327,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const J02 = -rx2.C/2 * Math.cos(2 * deg2rad(rx2.A));
     const J452 = -rx2.C/2 * Math.sin(2 * deg2rad(rx2.A));
 
-    const M_total = M1 + M2 + safeParseFloat(DC_S);
-    const J0_total = J01 + J02;
-    const J45_total = J451 + J452;
+    let M_total = M1 + M2 + safeParseFloat(DC_S);
+    let J0_total = J01 + J02;
+    let J45_total = J451 + J452;
+
+    if (extraMinus025) {
+    // Add cyl-only vector for -0.25 × 180 (J0 = +0.25)
+    M_total -= 0.25;
+    J0_total += 0.125;
+    }
 
     const C_total_raw = -2 * Math.sqrt(J0_total * J0_total + J45_total * J45_total);
     const S_total_raw = M_total - C_total_raw / 2;
@@ -324,13 +389,15 @@ document.addEventListener("DOMContentLoaded", () => {
       // write OU result fields
       setIf("res-sph-ou-re", formatValueForDisplay(RE_ou.S));
       setIf("res-cyl-ou-re", formatValueForDisplay(RE_ou.C));
-      setIf("res-axis-ou-re", RE_ou.A === 0 ? "180" : String(RE_ou.A));
-      setIf("res-se-ou-re", formatSEforDisplay(RE_ou.SE));
+const axisRE_OU = (Math.abs(RE_ou.C) < 0.001) ? "—" : (RE_ou.A === 0 ? "180" : String(RE_ou.A));
+setIf("res-axis-ou-re", axisRE_OU);
+setIf("res-se-ou-re", formatSEforDisplay(RE_ou.SE));
 
       setIf("res-sph-ou-le", formatValueForDisplay(LE_ou.S));
       setIf("res-cyl-ou-le", formatValueForDisplay(LE_ou.C));
-      setIf("res-axis-ou-le", LE_ou.A === 0 ? "180" : String(LE_ou.A));
-      setIf("res-se-ou-le", formatSEforDisplay(LE_ou.SE));
+const axisLE_OU = (Math.abs(LE_ou.C) < 0.001) ? "—" : (LE_ou.A === 0 ? "180" : String(LE_ou.A));
+setIf("res-axis-ou-le", axisLE_OU);
+setIf("res-se-ou-le", formatSEforDisplay(LE_ou.SE));
 
       // OU SE diff — high sensitivity (0.01)
       const ouDiff = RE_ou.SE - LE_ou.SE;
@@ -353,15 +420,15 @@ document.addEventListener("DOMContentLoaded", () => {
       // write Mono result fields
       setIf("res-sph-od-2", formatValueForDisplay(RE_mono.S));
       setIf("res-cyl-od-2", formatValueForDisplay(RE_mono.C));
-      setIf("res-axis-od-180", RE_mono.A === 0 ? "180" : String(RE_mono.A));
-      setIf("res-se-od-2", formatSEforDisplay(RE_mono.SE));
-      setIf("res-axis-od-2", RE_mono.A === 0 ? "180" : String(RE_mono.A));
+const axisOD_MONO = (Math.abs(RE_mono.C) < 0.001) ? "—" : (RE_mono.A === 0 ? "180" : String(RE_mono.A));
+setIf("res-axis-od-2", axisOD_MONO);
+setIf("res-se-od-2", formatSEforDisplay(RE_mono.SE));
 
       setIf("res-sph-os-2", formatValueForDisplay(LE_mono.S));
       setIf("res-cyl-os-2", formatValueForDisplay(LE_mono.C));
-      setIf("res-axis-os-180", LE_mono.A === 0 ? "180" : String(LE_mono.A));
-      setIf("res-se-os-2", formatSEforDisplay(LE_mono.SE));
-      setIf("res-axis-os-2", LE_mono.A === 0 ? "180" : String(LE_mono.A));
+const axisOS_MONO = (Math.abs(LE_mono.C) < 0.001) ? "—" : (LE_mono.A === 0 ? "180" : String(LE_mono.A));
+setIf("res-axis-os-2", axisOS_MONO);
+setIf("res-se-os-2", formatSEforDisplay(LE_mono.SE));
 
       // Mono SE diff — high sensitivity (0.01)
       const monoDiff = RE_mono.SE - LE_mono.SE;
@@ -437,9 +504,6 @@ document.addEventListener("DOMContentLoaded", () => {
   combineAll();
 });
 </script>
-
-
-
 
 </body>
 </html>
