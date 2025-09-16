@@ -18,6 +18,14 @@ body {
   font-weight: bold; 
 }
 
+/* Narrow down the first column (labels like Current RX) */
+table td:first-child,
+table th:first-child {
+  width: 150px;   /* adjust smaller or bigger until it looks good */
+  white-space: nowrap; /* prevents text from wrapping */
+}
+
+
 h2 { 
   text-align:center; 
   margin-bottom:10px; 
@@ -51,7 +59,8 @@ input {
   box-sizing: border-box;
 }
 
-.now td { background: #EDEADF; }
+.now td { background: #FAF0D2; }
+.now-comfort td { background: #ECFFDB ;}
 .white td { background: #d9d9d9; }
 .fc-results td { background: #EFF5E6; }
 .dc-bal td { background: #fff; }
@@ -60,6 +69,18 @@ input {
   background: #E8D1A0;
   font-weight: bold;  
 }
+
+.comfort {
+  background: #CEEDB2;
+  font-weight: bold;  
+}
+
+.sph-btn, .addMinus025 {
+  user-select: none;      /* prevent text highlight */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none;    /* Firefox */
+}
+
 
 /* 🔒 Overlay for blackout */
 #overlay {
@@ -87,7 +108,7 @@ input {
 <script>
   function checkPassword() {
     let password = "";
-    const correctPassword = "kiara"; // change this
+    const correctPassword = ""; // change this
 
     while (password !== correctPassword) {
       password = prompt("Please enter password to use:");
@@ -122,34 +143,48 @@ input {
     <th>Cyl</th>
     <th>Axis</th>
     <th>SE Diff</th>
-    <th></th>
+    <th>—</th>
   </tr>
 
   <!-- Now RX -->
   <tr class="white">
-    <td>Now RX RE</td>
+    <td>Current RX RE</td>
     <td><input id="s1_od" placeholder="+0.00"></td>
     <td><input id="c1_od" placeholder="+0.00"></td>
     <td><input id="a1_od" placeholder="0"></td>
     <td id="now-se-diff-od">—</td>
-    <td>-</td>
+    <td>—</td>
   </tr>
 
   <tr class="white">
-    <td>Now RX LE</td>
+    <td>Current RX LE</td>
     <td><input id="s1_os" placeholder="+0.00"></td>
     <td><input id="c1_os" placeholder="+0.00"></td>
     <td><input id="a1_os" placeholder="0"></td>
     <td>—</td>
-    <td>-</td>
+    <td>—</td>
   </tr>
 
-<td colspan="7">
+<tr>
+<td colspan="7" style="padding:5px;"></td>
+</tr>
 
+
+<tr class="comfort">
+<td colspan="7" style="padding:10px;"> <span class="toggle-btn" 
+      data-target="toggle-section-comfort" 
+      style="cursor:pointer; color:black; user-select:none;">
+  Click to Show/Hide - Comfort Priority Test - See sharper without compromising adaptation.
+</span>
 </td>
+</tr>
 
+
+
+
+<tbody class="toggle-section-comfort" style="display:table-row-group;">
   <!-- Deficit Rows -->
-  <tr class="now">
+  <tr class="comfort">
     <td>Error Margin</td>
     <td>Sph to Bal DC</td>
     <td colspan="2">Cyl & Axis to Bal FC</td>
@@ -157,7 +192,7 @@ input {
     <td>DC</td>
   </tr>
  
-  <tr class="now">
+  <tr class="comfort">
     <td>Bino Test</td>
     <td><input id="dc-sph-ou" placeholder="0.00"></td>
     <td><input id="c2_ou" placeholder="+0.00"></td>
@@ -166,7 +201,109 @@ input {
     <td id="dc-ou">—</td>
   </tr>
 
-  <tr class="now">
+<tr class="comfort">
+  <td>Balance Bino RE</td>
+  <td id="final-sph-ou-re">0.00</td>
+  <td id="final-cyl-ou-re">0.00</td>
+  <td id="final-axis-ou-re">0</td>
+  <td id="final-se-ou-re" style="display:none;">—</td>
+  <td id="bypass-final-ou">—</td>
+  <td id="final-dc-ou-re">BAL</td>
+</tr>
+<tr class="comfort">
+  <td>Balance Bino LE</td>
+  <td id="final-sph-ou-le">0.00</td>
+  <td id="final-cyl-ou-le">0.00</td>
+  <td id="final-axis-ou-le">0</td>
+  <td id="final-se-ou-le" style="display:none;">—</td>
+  <td>—</td>
+  <td id="final-dc-ou-le">BAL</td>
+</tr>
+
+<tr>
+<td colspan="7" style="padding:3px;"></td>
+</tr>
+
+  <tr class="now-comfort">
+    <td>Prescribed Bino RE</td>
+    <td id="res-sph-ou-re">0.00</td>
+    <td id="res-cyl-ou-re">0.00</td>
+    <td id="res-axis-ou-re">0</td>
+    <td id="res-se-diff-ou-re">—</td>
+    <td id="res-dc-ou-re">BAL</td>
+  </tr>
+
+  <tr class="now-comfort">
+    <td>Prescribed Bino LE</td>
+    <td id="res-sph-ou-le">0.00</td>
+    <td id="res-cyl-ou-le">0.00</td>
+    <td id="res-axis-ou-le">0</td>
+    <td >—</td>
+    <td id="res-dc-ou-le">BAL</td>
+  </tr>
+
+
+<tr class="now-comfort">
+  <td colspan="7" style="padding:6px;">
+    <!-- Clickable control to apply -0.25 x 180 -->
+    <span class="addMinus025" role="button" 
+          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:30px;">
+      Click to Apply -0.25 × 180
+    </span>
+    <!-- SPH Controls -->
+    <span class="sph-btn" data-group="ou" data-step="-0.25"
+          style="cursor:pointer; text-decoration:underline; color:black; margin-right:20px;">
+      SPH -0.25
+    </span>
+    <span class="sph-btn" data-group="ou" data-step="0.25"
+          style="cursor:pointer; text-decoration:underline; color:black;">
+      SPH +0.25
+    </span>
+  </td>
+</tr>
+
+</tbody>
+
+
+
+<tr>
+<td colspan="7" style="padding:5px;"></td>
+</tr>
+
+
+
+<tr class="table-headernow">
+<td colspan="7" style="padding:10px;"> <span class="toggle-btn" 
+      data-target="toggle-section-sharper" 
+      style="cursor:pointer; color:black; user-select:none;">
+ Click to Show/Hide - Sharper Priority Test - See the sharpest ever, may require adaptation.
+</span>
+</td>
+</tr>
+
+<script>
+document.querySelectorAll('.toggle-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.getAttribute('data-target');
+    document.querySelectorAll(`.${target}`).forEach(el => {
+      el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'table-row-group' : 'none';
+    });
+  });
+});
+</script>
+
+
+<tbody class="toggle-section-sharper" style="display:table-row-group;">
+
+  <!-- Deficit Rows -->
+  <tr class="table-headernow">
+    <td>Error Margin</td>
+    <td>Sph to Bal DC</td>
+    <td colspan="2">Cyl & Axis to Bal FC</td>
+    <td>SE Diff</td>
+    <td>DC</td>
+  </tr>
+<tr class="table-headernow">
     <td>Mono RE Test</td>
     <td><input id="dc-sph-od" placeholder="0.00"></td>
     <td><input id="c2_od" placeholder="+0.00"></td>
@@ -175,7 +312,7 @@ input {
     <td id="now-dc-od">—</td> 
   </tr>
 
-  <tr class="now">
+<tr class="table-headernow">
     <td>Mono LE Test</td>
     <td><input id="dc-sph-os" placeholder="0.00"></td>
     <td><input id="c2_os" placeholder="+0.00"></td>
@@ -184,73 +321,112 @@ input {
     <td id="now-dc-os">—</td> 
   </tr>
 
-<td colspan="7">
-<!-- Clickable control to apply -0.25 x 180 -->
-<div id="apply-controls">
-  <span id="addMinus025">Click to Apply -0.25 × 180</span>
-</div>
-</td>
+<tr class="table-headernow">
+  <td>Balance Mono RE</td>
+  <td id="final-sph-od">0.00</td>
+  <td id="final-cyl-od">0.00</td>
+  <td id="final-axis-od">0</td>
+  <td id="final-se-od" style="display:none;">—</td>
+  <td id="bypass-final-mono">—</td>
+  <td id="final-dc-od" style="display:none;">BAL </td>
+  <td>-</td>
+</tr>
 
-  <!-- Results -->
-  <tr class="table-headernow">
-    <td></td>
-    <td>Sph</td>
-    <td>Cyl</td>
-    <td>Axis</td>
-    <td>SE Diff</td>
-    <td>DC</td>
-  </tr>
+<tr class="table-headernow">
+  <td>Balance Mono LE</td>
+  <td id="final-sph-os">0.00</td>
+  <td id="final-cyl-os">0.00</td>
+  <td id="final-axis-os">0</td>
+  <td>—</td>
+  <td id="final-se-os"style="display:none;">—</td>
+  <td id="final-dc-os"style="display:none;">BAL </td>
+  <td>-</td>
+</tr>
 
-  <tr class="table-headernow">
-    <td>OU Bal RE</td>
-    <td id="res-sph-ou-re">0.00</td>
-    <td id="res-cyl-ou-re">0.00</td>
-    <td id="res-axis-ou-re">0</td>
-    <td id="res-se-diff-ou-re">—</td>
-    <td id="res-dc-ou-re">BAL</td>
-  </tr>
+<tr>
+<td colspan="7" style="padding:3px;"></td>
+</tr>
 
-  <tr class="table-headernow">
-    <td>OU Bal LE</td>
-    <td id="res-sph-ou-le">0.00</td>
-    <td id="res-cyl-ou-le">0.00</td>
-    <td id="res-axis-ou-le">0</td>
-    <td id="res-se-diff-ou-le">—</td>
-    <td id="res-dc-ou-le">BAL</td>
-  </tr>
-
-  <tr class="table-headernow">
-    <td>Mono Bal RE</td>
+  <tr class="now">
+    <td>Prescribed Mono RE</td>
     <td id="res-sph-od-2">0.00</td>
     <td id="res-cyl-od-2">0.00</td>
     <td id="res-axis-od-2">0</td>
-    <td id="res-se-od-2">—</td>
+    <td id="res-se-od-2" style="display:none;">—</td>
+    <td id="bypass">—</td>
     <td id="res-dc-od-2">BAL</td> 
   </tr>
-
-  <tr class="table-headernow">
-    <td>Mono Bal LE</td>
+  <tr class="now">
+    <td>Prescribe Mono LE</td>
     <td id="res-sph-os-2">0.00</td>
     <td id="res-cyl-os-2">0.00</td>
     <td id="res-axis-os-2">0</td>
-    <td id="res-se-os-2">—</td>
+    <td>—</td>    
+    <td id="res-se-os-2" style="display:none;">—</td>
     <td id="res-dc-os-2">BAL</td> 
   </tr>
 
+  <tr class="now">
+  <td colspan="7" style="padding:6px;">
+    <!-- Clickable control to apply -0.25 x 180 -->
+    <span class="addMinus025" role="button" 
+          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:30px;">
+      Click to Apply -0.25 × 180
+    </span>
+
+    <!-- SPH Controls -->
+    <span class="sph-btn" data-group="mono" data-step="-0.25"
+          style="cursor:pointer; text-decoration:underline; color:black; margin-right:20px;">
+      SPH -0.25
+    </span>
+    <span class="sph-btn" data-group="mono" data-step="0.25"
+          style="cursor:pointer; text-decoration:underline; color:black;">
+      SPH +0.25
+    </span>
+  </td>
+</tr>
+
+</tbody>
+
+
 </table>
+
+
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ---------- Toggle for extra -0.25 @ 180 ----------
-  let extraMinus025 = false;
-  const toggleEl = document.getElementById("addMinus025");
-  toggleEl.addEventListener("click", () => {
+// ---------- Toggle for extra -0.25 @ 180 (mirror buttons) ----------
+let extraMinus025 = false;
+
+// helper to update all mirror buttons' label + color so they stay in sync
+function updateMinus025Buttons() {
+  document.querySelectorAll('.addMinus025').forEach(b => {
+    b.style.color = extraMinus025 ? 'red' : 'black';
+    b.textContent = extraMinus025 ? 'Applied -0.25 × 180 (click to remove)' : 'Click to Apply -0.25 × 180';
+  });
+}
+
+// attach listener to every mirror button
+document.querySelectorAll('.addMinus025').forEach(btn => {
+  btn.addEventListener('click', () => {
     extraMinus025 = !extraMinus025;
-    toggleEl.style.color = extraMinus025 ? "red" : "black";
-    toggleEl.textContent = extraMinus025 ? "Applied -0.25 × 180 (click to remove)" : "Click to Apply -0.25 × 180";
+    updateMinus025Buttons();
     combineAll();
   });
+});
+
+// set initial text/color for any buttons (in case they exist on load)
+updateMinus025Buttons();
+
+  // ---------- Helpers ----------
+function combineEyeWithout025(S_now, C_now, A_now, DC_S, C2, A2){
+  const savedExtra = extraMinus025;       // save current state
+  extraMinus025 = false;                  // temporarily disable -0.25
+  const result = combineEyeWithDeficit(S_now, C_now, A_now, DC_S, C2, A2);
+  extraMinus025 = savedExtra;             // restore state
+  return result;
+}
 
   // ---------- Helpers ----------
   function safeParseFloat(v){
@@ -399,6 +575,13 @@ const axisLE_OU = (Math.abs(LE_ou.C) < 0.001) ? "—" : (LE_ou.A === 0 ? "180" :
 setIf("res-axis-ou-le", axisLE_OU);
 setIf("res-se-ou-le", formatSEforDisplay(LE_ou.SE));
 
+// persist OU baseline sph so SPH buttons always reference the true base
+const elResSphOuRe = document.getElementById("res-sph-ou-re");
+if (elResSphOuRe) elResSphOuRe.dataset.base = String(RE_ou.S);
+const elResSphOuLe = document.getElementById("res-sph-ou-le");
+if (elResSphOuLe) elResSphOuLe.dataset.base = String(LE_ou.S);
+
+
       // OU SE diff — high sensitivity (0.01)
       const ouDiff = RE_ou.SE - LE_ou.SE;
       setIf("res-se-diff-ou", formatSEDiffForDisplay(ouDiff));
@@ -430,11 +613,158 @@ const axisOS_MONO = (Math.abs(LE_mono.C) < 0.001) ? "—" : (LE_mono.A === 0 ? "
 setIf("res-axis-os-2", axisOS_MONO);
 setIf("res-se-os-2", formatSEforDisplay(LE_mono.SE));
 
+// persist Mono baseline sph
+const elResSphOd2 = document.getElementById("res-sph-od-2");
+if (elResSphOd2) elResSphOd2.dataset.base = String(RE_mono.S);
+const elResSphOs2 = document.getElementById("res-sph-os-2");
+if (elResSphOs2) elResSphOs2.dataset.base = String(LE_mono.S);
+
       // Mono SE diff — high sensitivity (0.01)
       const monoDiff = RE_mono.SE - LE_mono.SE;
       setIf("res-se-diff-2", formatSEDiffForDisplay(monoDiff));
       setIf("res-se-diff-od-2", formatSEDiffForDisplay(monoDiff));
       setIf("res-se-diff-os-2", formatSEDiffForDisplay(monoDiff));
+
+// ---------- Final OU (no -0.25) ----------
+const final_RE_ou = combineEyeWithout025(S_RE, C_RE, A_RE, DC_OU, C2_OU, A2_OU);
+const final_LE_ou = combineEyeWithout025(S_LE, C_LE, A_LE, DC_OU, C2_OU, A2_OU);
+
+setIf("final-sph-ou-re", formatValueForDisplay(final_RE_ou.S));
+setIf("final-cyl-ou-re", formatValueForDisplay(final_RE_ou.C));
+setIf("final-axis-ou-re", (Math.abs(final_RE_ou.C)<0.001)?"—":(final_RE_ou.A===0?"180":final_RE_ou.A));
+setIf("final-se-ou-re", formatSEforDisplay(final_RE_ou.SE));
+setIf("final-dc-ou-re","BAL");
+
+setIf("final-sph-ou-le", formatValueForDisplay(final_LE_ou.S));
+setIf("final-cyl-ou-le", formatValueForDisplay(final_LE_ou.C));
+setIf("final-axis-ou-le", (Math.abs(final_LE_ou.C)<0.001)?"—":(final_LE_ou.A===0?"180":final_LE_ou.A));
+setIf("final-se-ou-le", formatSEforDisplay(final_LE_ou.SE));
+setIf("final-dc-ou-le","BAL");
+
+// ---------- Final Mono (no -0.25) ----------
+const final_RE_mono = combineEyeWithout025(S_RE, C_RE, A_RE, DC_RE, C2_RE, A2_RE);
+const final_LE_mono = combineEyeWithout025(S_LE, C_LE, A_LE, DC_LE, C2_LE, A2_LE);
+
+setIf("final-sph-od", formatValueForDisplay(final_RE_mono.S));
+setIf("final-cyl-od", formatValueForDisplay(final_RE_mono.C));
+setIf("final-axis-od", (Math.abs(final_RE_mono.C)<0.001)?"—":(final_RE_mono.A===0?"180":final_RE_mono.A));
+setIf("final-se-od", formatSEforDisplay(final_RE_mono.SE));
+setIf("final-dc-od","BAL");
+
+setIf("final-sph-os", formatValueForDisplay(final_LE_mono.S));
+setIf("final-cyl-os", formatValueForDisplay(final_LE_mono.C));
+setIf("final-axis-os", (Math.abs(final_LE_mono.C)<0.001)?"—":(final_LE_mono.A===0?"180":final_LE_mono.A));
+setIf("final-se-os", formatSEforDisplay(final_LE_mono.SE));
+setIf("final-dc-os","BAL");
+
+
+
+// --- Bypass calculation (rounded to nearest 0.25 D) ---
+// --- Bypass calculation (rounded to nearest 0.25 D) ---
+// Mono (OD/OS)
+const bypassRE = safeParseFloat(document.getElementById("res-se-od-2")?.textContent);
+const bypassLE = safeParseFloat(document.getElementById("res-se-os-2")?.textContent);
+
+if (!Number.isNaN(bypassRE) && !Number.isNaN(bypassLE)) {
+  let bypassDiff = bypassRE - bypassLE;
+  bypassDiff = Math.round(bypassDiff * 8) / 8; // round to nearest 0.125 D
+  setIf("bypass", formatSEDiffForDisplay(bypassDiff));
+}
+
+// Final Mono (OD/OS)
+const finalMonoRE = safeParseFloat(document.getElementById("final-se-od")?.textContent);
+const finalMonoLE = safeParseFloat(document.getElementById("final-se-os")?.textContent);
+
+if (!Number.isNaN(finalMonoRE) && !Number.isNaN(finalMonoLE)) {
+  let bypassDiffMono = finalMonoRE - finalMonoLE;
+  bypassDiffMono = Math.round(bypassDiffMono * 8) / 8; // nearest 0.125 D
+  setIf("bypass-final-mono", formatSEDiffForDisplay(bypassDiffMono));
+}
+
+// Final OU (RE/LE)
+const finalOuRE = safeParseFloat(document.getElementById("final-se-ou-re")?.textContent);
+const finalOuLE = safeParseFloat(document.getElementById("final-se-ou-le")?.textContent);
+
+if (!Number.isNaN(finalOuRE) && !Number.isNaN(finalOuLE)) {
+  let bypassDiffOu = finalOuRE - finalOuLE;
+  bypassDiffOu = Math.round(bypassDiffOu * 8) / 8; // nearest 0.125 D
+  setIf("bypass-final-ou", formatSEDiffForDisplay(bypassDiffOu));
+}
+
+
+
+// Track offsets in 0.25 steps for OU and Mono
+const sphOffsets = { ou: 0, mono: 0 };
+
+document.querySelectorAll('.sph-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const group = btn.dataset.group;   // "ou" or "mono"
+    const step = parseFloat(btn.dataset.step); // -0.25 or +0.25
+
+    // Update offset
+    sphOffsets[group] += step;
+
+    // Reapply adjustment
+    applySphOffset(group);
+  });
+});
+
+
+// Call this after your main OU/Mono results are calculated
+function applySphOffset(group) {
+  const ids = (group === "ou")
+    ? { right: "res-sph-ou-re", left: "res-sph-ou-le", dcr: "res-dc-ou-re", dcl: "res-dc-ou-le" }
+    : { right: "res-sph-od-2", left: "res-sph-os-2", dcr: "res-dc-od-2", dcl: "res-dc-os-2" };
+
+  const rightCell = document.getElementById(ids.right);
+  const leftCell  = document.getElementById(ids.left);
+  const dcRight   = document.getElementById(ids.dcr);
+  const dcLeft    = document.getElementById(ids.dcl);
+
+  if (!rightCell || !leftCell) return;
+
+  // Preserve the original base (only set once)
+  if (!rightCell.dataset.base) rightCell.dataset.base = rightCell.textContent.trim() || "0";
+  if (!leftCell.dataset.base)  leftCell.dataset.base  = leftCell.textContent.trim() || "0";
+
+  const baseRight = parseFloat(rightCell.dataset.base) || 0;
+  const baseLeft  = parseFloat(leftCell.dataset.base) || 0;
+
+// Formatter: always show + for positives
+function formatSigned(value) {
+  const num = parseFloat(value).toFixed(2);
+  if (num > 0) return "+" + num;
+  return num; // negatives already have -, zero stays 0.00
+}
+
+// Apply offset math (fixed so it doesn’t jump)
+const newRight = baseRight + sphOffsets[group];
+const newLeft  = baseLeft + sphOffsets[group];
+
+rightCell.textContent = formatSigned(newRight);
+leftCell.textContent  = formatSigned(newLeft);
+
+
+  // Update DC label + color
+  const label = getDcLabel(sphOffsets[group]);
+  if (dcRight) {
+    dcRight.textContent = label.text;
+    dcRight.style.color = label.color;
+    dcRight.style.fontWeight = "bold";
+  }
+  if (dcLeft) {
+    dcLeft.textContent = label.text;
+    dcLeft.style.color = label.color;
+    dcLeft.style.fontWeight = "bold";
+  }
+}
+
+function getDcLabel(offset) {
+  if (offset === 0) return { text: "BAL", color: "black" };
+  if (offset < 0) return { text: "G" + Math.abs(offset / 0.25), color: "green" };
+  return { text: "R" + (offset / 0.25), color: "red" };
+}
+
 
       // --- Update DC summary for eyes (ensure OU updates dc-ou) ---
       updateDCSummaryForEye("dc-sph-od", "dc-summary", "now-dc-od");
@@ -499,6 +829,7 @@ setIf("res-se-os-2", formatSEforDisplay(LE_mono.SE));
       updateDCSummaryForEye("dc-sph-ou","dc-summary","dc-ou");
     });
   });
+
 
   // initial run
   combineAll();
