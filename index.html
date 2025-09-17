@@ -405,6 +405,24 @@ function downloadPDF() {
 }
 </script>
 
+<td colspan="6" style="padding:15px;">
+  <label for="analysisBox"><b>Analysis:</b></label><br>
+  <textarea id="analysisBox" rows="6" style="width:100%; padding:8px; border-radius:8px; border:1px solid #ccc;">
+Patient shows clearer vision with -0.25 × 180 adjustment.
+Comfort is acceptable with current prescription.
+  </textarea>
+  <br><br>
+  <button onclick="sendToGmail()">Send Analysis via Gmail</button>
+</td>
+
+<script>
+function sendToGmail() {
+  const analysisText = document.getElementById("analysisBox").value;
+  const body = encodeURIComponent("Hello,\n\nHere is your analysis:\n\n" + analysisText + "\n\nRegards,\nKiara Optometry");
+  const gmailURL = `https://mail.google.com/mail/?view=cm&fs=1&su=Refraction Analysis&body=${body}`;
+  window.open(gmailURL, "_blank");
+}
+</script>
 
 
 </table>
