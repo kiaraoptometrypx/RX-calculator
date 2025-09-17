@@ -3,25 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>V4 SEP 2025 RX Combiner</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>-</title>
 <style>
 * {
   font-size: 11px;
-  font-family: 'Manrope', sans-serif;
   letter-spacing: 0.5px;
 }
 
 body { 
-  padding:20px; 
-  background:#f5f5f5; 
-  font-weight: bold; 
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 12px;
+  line-height: 1.3;
+  margin: 0;
+  background: #f8f8f5;
+  color: black;
 }
 
 /* Narrow down the first column (labels like Current RX) */
 table td:first-child,
 table th:first-child {
-  width: 150px;   /* adjust smaller or bigger until it looks good */
+  width: 130px;   /* adjust smaller or bigger until it looks good */
   white-space: nowrap; /* prevents text from wrapping */
 }
 
@@ -34,7 +35,7 @@ h2 {
 table { 
   border-collapse: collapse; 
   margin:0 auto; 
-  width: 95%; 
+  width: 95%;
   font-weight: bold; 
 }
 
@@ -59,8 +60,8 @@ input {
   box-sizing: border-box;
 }
 
-.now td { background: #FAF0D2; }
-.now-comfort td { background: #ECFFDB ;}
+.now td { background: #FFF3DA; }
+.now-comfort td { background: #F5FFFB ;}
 .white td { background: #d9d9d9; }
 .fc-results td { background: #EFF5E6; }
 .dc-bal td { background: #fff; }
@@ -71,7 +72,7 @@ input {
 }
 
 .comfort {
-  background: #CEEDB2;
+  background: #D5E8E1;
   font-weight: bold;  
 }
 
@@ -171,7 +172,7 @@ input {
 
 
 <tr class="comfort">
-<td colspan="7" style="padding:10px;"> <span class="toggle-btn" 
+<td colspan="7" style="padding:15px;"> <span class="toggle-btn" 
       data-target="toggle-section-comfort" 
       style="cursor:pointer; color:black; user-select:none;">
   Click to Show/Hide - Comfort Priority Test - See sharper without compromising adaptation.
@@ -220,10 +221,6 @@ input {
   <td id="final-dc-ou-le">BAL</td>
 </tr>
 
-<tr>
-<td colspan="7" style="padding:3px;"></td>
-</tr>
-
   <tr class="now-comfort">
     <td>Prescribed Bino RE</td>
     <td id="res-sph-ou-re">0.00</td>
@@ -244,39 +241,37 @@ input {
 
 
 <tr class="now-comfort">
-  <td colspan="7" style="padding:6px;">
+  <td colspan="1" style="padding:15px;">
+<div>
     <!-- Clickable control to apply -0.25 x 180 -->
     <span class="addMinus025" role="button" 
-          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:30px;">
+          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:0px;">
       Click to Apply -0.25 × 180
     </span>
+</div>
+<div>
     <!-- SPH Controls -->
     <span class="sph-btn" data-group="ou" data-step="-0.25"
-          style="cursor:pointer; text-decoration:underline; color:black; margin-right:20px;">
+          style="cursor:pointer; text-decoration:underline; color:black; margin-right:5px;">
       SPH -0.25
     </span>
     <span class="sph-btn" data-group="ou" data-step="0.25"
           style="cursor:pointer; text-decoration:underline; color:black;">
       SPH +0.25
     </span>
+</div>
   </td>
+  <td colspan="6" style="padding:15px;">
+</td>
 </tr>
 
 </tbody>
 
-
-
-<tr>
-<td colspan="7" style="padding:5px;"></td>
-</tr>
-
-
-
 <tr class="table-headernow">
-<td colspan="7" style="padding:10px;"> <span class="toggle-btn" 
+<td colspan="7" style="padding:15px;"> <span class="toggle-btn" 
       data-target="toggle-section-sharper" 
       style="cursor:pointer; color:black; user-select:none;">
- Click to Show/Hide - Sharper Priority Test - See the sharpest ever, may require adaptation.
+ Click to Show/Hide - Sharper Priority Test - See the sharpest ever, requires some adaptation.
 </span>
 </td>
 </tr>
@@ -343,10 +338,6 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
   <td>-</td>
 </tr>
 
-<tr>
-<td colspan="7" style="padding:3px;"></td>
-</tr>
-
   <tr class="now">
     <td>Prescribed Mono RE</td>
     <td id="res-sph-od-2">0.00</td>
@@ -366,27 +357,54 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
     <td id="res-dc-os-2">BAL</td> 
   </tr>
 
+
   <tr class="now">
-  <td colspan="7" style="padding:6px;">
+  <td colspan="1" style="padding:15px;">
     <!-- Clickable control to apply -0.25 x 180 -->
-    <span class="addMinus025" role="button" 
-          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:30px;">
+<div>    
+<span class="addMinus025" role="button" 
+          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:0px;">
       Click to Apply -0.25 × 180
     </span>
+</div>
 
+<div>
     <!-- SPH Controls -->
     <span class="sph-btn" data-group="mono" data-step="-0.25"
-          style="cursor:pointer; text-decoration:underline; color:black; margin-right:20px;">
+          style="cursor:pointer; text-decoration:underline; color:black; margin-right:5px;">
       SPH -0.25
     </span>
     <span class="sph-btn" data-group="mono" data-step="0.25"
           style="cursor:pointer; text-decoration:underline; color:black;">
       SPH +0.25
     </span>
+</div>
+
   </td>
+  <td colspan="6" style="padding:15px;">
+</td>
+
 </tr>
 
 </tbody>
+<button onclick="downloadPDF()">Download as PDF</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<script>
+function downloadPDF() {
+  const element = document.body; // or a specific div with your table
+  html2pdf()
+    .from(element)
+    .set({
+      margin: 0.5,
+      filename: 'EyeExamResults.pdf',
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    })
+    .save();
+}
+</script>
+
 
 
 </table>
@@ -403,7 +421,7 @@ let extraMinus025 = false;
 function updateMinus025Buttons() {
   document.querySelectorAll('.addMinus025').forEach(b => {
     b.style.color = extraMinus025 ? 'red' : 'black';
-    b.textContent = extraMinus025 ? 'Applied -0.25 × 180 (click to remove)' : 'Click to Apply -0.25 × 180';
+    b.textContent = extraMinus025 ? 'Added Cyl -0.25 × 180' : 'Apply Cyl -0.25 × 180';
   });
 }
 
