@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>-</title>
+<title>Kiara Optometry V4 Calculator</title>
 <style>
 * {
   font-size: 11px;
@@ -22,10 +22,50 @@ body {
 /* Narrow down the first column (labels like Current RX) */
 table td:first-child,
 table th:first-child {
-  width: 130px;   /* adjust smaller or bigger until it looks good */
+  width: 80px;
   white-space: nowrap; /* prevents text from wrapping */
 }
 
+table td:nth-child(3),
+table th:nth-child(3) {
+  min-width: 90px;
+  width: 90px;
+  white-space: nowrap;
+}
+
+table td:nth-child(4),
+table th:nth-child(4) {
+  min-width: 90px;
+  width: 90px;
+  white-space: nowrap;
+}
+
+table td:nth-child(5),
+table th:nth-child(5) {
+  min-width: 90px;
+  width: 90px;
+  white-space: nowrap;
+}
+
+table td:nth-child(6),
+table th:nth-child(6) {
+  min-width: 50px;
+  width: 50px;
+  white-space: nowrap;
+}
+
+table td:nth-child(7),
+table th:nth-child(7) {
+  min-width: 50px;
+  width: 50px;
+  white-space: nowrap;
+}
+
+table td:nth-child(2),
+table th:nth-child(2){
+  max-width: 40px;
+  width: 40px;
+}
 
 h2 { 
   text-align:center; 
@@ -33,9 +73,10 @@ h2 {
 }
 
 table { 
-  border-collapse: collapse; 
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 95%; /* keep your width */ 
   margin:0 auto; 
-  width: 95%;
   font-weight: bold; 
 }
 
@@ -43,7 +84,6 @@ th, td {
   border:0.5px solid #999; 
   padding:5px; 
   text-align:center; 
-  min-width:40px; 
   vertical-align: middle;
 }
 
@@ -134,22 +174,33 @@ input {
   };
 </script>
 
-<h2>V4 CALCULATOR</h2>
 
+
+<h2><br><br>KIARA OPTOMETRY V4 CALCULATOR<br>--------------<br><span style="cursor:pointer; color:black;" onclick="location.reload();">
+  Press here to Delete & Reload Page
+</span><br>--------------<br>
+ </h2>
+<script>
+document.getElementById('refresh-btn').addEventListener('click', () => {
+  location.reload();
+});
+</script>
 
 <table>
   <tr class="white">
-    <th></th>
+    <th>Rx Type</th>
+    <th>Sides</th>
     <th>Sph</th>
     <th>Cyl</th>
     <th>Axis</th>
     <th>SE Diff</th>
-    <th>—</th>
+    <th>DC</th>
   </tr>
 
   <!-- Now RX -->
   <tr class="white">
-    <td>Current RX RE</td>
+  <td rowspan="2">Current RX</td>
+    <td>Right</td>
     <td><input id="s1_od" placeholder="+0.00"></td>
     <td><input id="c1_od" placeholder="+0.00"></td>
     <td><input id="a1_od" placeholder="0"></td>
@@ -158,7 +209,7 @@ input {
   </tr>
 
   <tr class="white">
-    <td>Current RX LE</td>
+    <td>Left</td>
     <td><input id="s1_os" placeholder="+0.00"></td>
     <td><input id="c1_os" placeholder="+0.00"></td>
     <td><input id="a1_os" placeholder="0"></td>
@@ -170,45 +221,60 @@ input {
 <td colspan="7" style="padding:5px;"></td>
 </tr>
 
-
 <tr class="comfort">
-<td colspan="7" style="padding:15px;"> <span class="toggle-btn" 
-      data-target="toggle-section-comfort" 
-      style="cursor:pointer; color:black; user-select:none;">
-  Click to Show/Hide - Comfort Priority Test - See sharper without compromising adaptation.
-</span>
-</td>
-</tr>
+  <td colspan="7" style="padding:10px; color: #0A2E4A; text-align:left;">
+    <span class="toggle-btn" data-target="toggle-section-comfort-rx"
+          style="cursor:pointer; color: #0A2E4A; user-select:none; margin-left:10px;">
+      <b>Comfortably Sharper RX</b>
+    </span>
 
-<tbody class="toggle-section-comfort" style="display:table-row-group;">
+    <span style="margin-left:15px; text-decoration:none; font-style:italic; cursor:pointer; color:#0A2E4A; user-select:none;"
+          onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-comfort'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
+      --> Start the Test (show/hide)
+    </span>
 
-<tr class="comfort">
-  <td colspan="7" style="padding:5px; text-align:left; cursor:pointer;" 
-      onclick="this.querySelector('div').style.display = this.querySelector('div').style.display === 'none' ? 'block' : 'none';">
-    <i>Guide (click to show/hide)</i>
-    <div style="margin-top:8px; display:none;">
-      <i>
-        Seeing the sharpest requires each eye to be refracted to their own balance.<br>
-        Then they may become binocularly imbalanced.<br>
-        Hence creating new prismatic sensation when looking off of lens centre.<br>
-        SE Diff up to 0.25 may require a week of adaptation.<br>
-        SE diff of more than 0.50 is not recommended and may come at the risk of re-do.
-      </i>
-    </div>
+    <span class="toggle-btn" data-target="toggle-section-guide-comfort"
+          style="cursor:pointer; color: #0A2E4A; user-select:none; margin-left:15px;">
+      <i>--> How to Do (show/hide)</i>
+    </span>
   </td>
 </tr>
 
+
+
+
+<tbody class="toggle-section-guide-comfort" style="display:none;">
+<tr class="comfort">
+  <td colspan="7" style="padding:10px; color:#0A2E4A; text-align:left;">
+      <i>
+        1. Test is done ontop of the current prescription.<br>
+	2. Check both eyes simultaneously; to honour binocularity and familiarity.<br>
+        3. Lenses change are done symmetrically and equally; no new prismatic effect created.<br>
+	4. This is to maintain equal prismatic effect in all directions even if there is new prescription.<br>
+        5. Find the balance SPH of Duochrome (DC) and Fanchart (FC).<br>
+	6. SE Diff maintains the same as the current pair.<br>
+        7. One eye will still have errors when checked indivudally.<br>
+      </i>
+  </td>
+</tr>
+
+</tbody>
+
+
+  <tbody id="deficit-rows-comfort" style="display:none;">
+
   <!-- Deficit Rows -->
-  <tr class="comfort">
-    <td>Error Margin & DX</td>
+<tr class="now-comfort">
+    <td colspan="2">Error Margin & DX</td>
     <td>Sph to Bal DC</td>
     <td colspan="2">Cyl & Axis to Bal FC</td>
     <td>SE Diff</td>
     <td>DC</td>
   </tr>
  
-  <tr class="comfort">
-    <td>Bino Test</td>
+<tr class="now-comfort">
+    <td>Bino Error<br>Margin</td>
+<td>Both</td>
     <td><input id="dc-sph-ou" placeholder="0.00"></td>
     <td><input id="c2_ou" placeholder="+0.00"></td>
     <td><input id="a2_ou" placeholder="0"></td>
@@ -216,8 +282,9 @@ input {
     <td id="dc-ou">—</td>
   </tr>
 
-<tr class="comfort">
-  <td>Balance Bino RE</td>
+<tr class="now-comfort">
+  <td rowspan="2">DC & FC<br>Bal Bino</td>
+<td>Right</td>
   <td id="final-sph-ou-re">0.00</td>
   <td id="final-cyl-ou-re">0.00</td>
   <td id="final-axis-ou-re">0</td>
@@ -225,8 +292,9 @@ input {
   <td id="bypass-final-ou">—</td>
   <td id="final-dc-ou-re">BAL</td>
 </tr>
-<tr class="comfort">
-  <td>Balance Bino LE</td>
+<tr class="now-comfort">
+ <td>Left</td>
+
   <td id="final-sph-ou-le">0.00</td>
   <td id="final-cyl-ou-le">0.00</td>
   <td id="final-axis-ou-le">0</td>
@@ -235,8 +303,40 @@ input {
   <td id="final-dc-ou-le">BAL</td>
 </tr>
 
-  <tr class="now-comfort">
-    <td>Prescribed Bino RE</td>
+<tr class="now-comfort">
+  <td>
+Adjustments
+</td>
+<td>Both</td>
+<td colspan="5" style="padding:7px; text-align:left;">
+    <div>
+<!-- Clickable control to apply -0.25 x 180 -->
+    <span class="addMinus025" role="button" 
+          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:5px; margin-left:5px;">
+      Apply -0.25 × 180
+    </span>
+;
+
+<span class="sph-btn" data-group="ou" data-step="-0.25"
+          style="cursor:pointer; text-decoration:none; color:green; margin-right:2px; margin-left:2px;">
+      S-0.25
+   </span>
+<span class="sph-btn" data-group="ou" data-step="0.25"
+          style="cursor:pointer; text-decoration:none; color:red;">
+      S+0.25
+</span>
+</td>
+</div>
+</tr>
+
+</tbody>
+
+
+<tbody class="toggle-section-comfort-rx" style="display:none;">
+<tr class="comfort">
+    <td rowspan="2">Prescribed<br>Bino</td>
+<td>Right</td>
+
     <td id="res-sph-ou-re">0.00</td>
     <td id="res-cyl-ou-re">0.00</td>
     <td id="res-axis-ou-re">0</td>
@@ -244,8 +344,9 @@ input {
     <td id="res-dc-ou-re">BAL</td>
   </tr>
 
-  <tr class="now-comfort">
-    <td>Prescribed Bino LE</td>
+<tr class="comfort">
+ 
+<td>Left</td>
     <td id="res-sph-ou-le">0.00</td>
     <td id="res-cyl-ou-le">0.00</td>
     <td id="res-axis-ou-le">0</td>
@@ -253,61 +354,52 @@ input {
     <td id="res-dc-ou-le">BAL</td>
   </tr>
 
-
-<tr class="now-comfort">
-  <td colspan="1" style="padding:7px; text-align:center;">
-Adjustments
-</td>
-<td colspan="1" style="padding:7px; text-align:center;">
-<div>
-    <!-- SPH Controls -->
-    <span class="sph-btn" data-group="ou" data-step="-0.25"
-          style="cursor:pointer; text-decoration:none; color:green; margin-right:2px; margin-left:2px;">
-      S-0.25
-   </span>
-    <span class="sph-btn" data-group="ou" data-step="0.25"
-          style="cursor:pointer; text-decoration:none; color:red;">
-      S+0.25
-</span>
-</td>
-
-<td colspan="5" style="padding:7px; text-align:left;">
-
- <!-- Clickable control to apply -0.25 x 180 -->
-    <span class="addMinus025" role="button" 
-          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:5px; margin-left:5px;">
-      Apply -0.25 × 180
-    </span>
-
-    </span>
-</div>
-
-</tr>
-
 </tbody>
 
+
+<tr>
+<td colspan="7" style="padding:5px;"></td>
+</tr>
+
+
+
+
 <tr class="table-headernow">
-<td colspan="7" style="padding:15px;"> <span class="toggle-btn" 
-      data-target="toggle-section-sharper" 
-      style="cursor:pointer; color:black; user-select:none;">
- Click to Show/Hide - Sharper Priority Test - See the sharpest ever, requires some adaptation.
+<td colspan="7" style="padding:10px; color: #241D0C; text-align:left;">
+ <span class="toggle-btn" data-target="toggle-section-sharper-rx" 
+      style="cursor:pointer; color: #241D0C; user-select:none; margin-left:10px;">
+<b>The Sharpest Possible RX</b>
 </span>
+
+    <span style="margin-left:15px; text-decoration:none; font-style:italic; cursor:pointer; color:#241D0C; user-select:none;"
+          onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-sharper'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
+      --> Start the Test (show/hide)
+    </span>
+
+ <span class="toggle-btn" data-target="toggle-section-sharper" 
+      style="cursor:pointer; color: #241D0C; user-select:none; margin-left:15px;">
+ <i>--> How to Do (show/hide)</i>
+</span>
+
 </td>
 </tr>
 
-<tbody class="toggle-section-sharper" style="display:table-row-group;">
 
-<tr class="table-headernow">
-  <td colspan="7" style="padding:5px; text-align:left; cursor:pointer;" 
-      onclick="this.querySelector('div').style.display = this.querySelector('div').style.display === 'none' ? 'block' : 'none';">
-    <i>Guide (click to show/hide)</i>
-    <div style="margin-top:8px; display:none;">
+<tbody class="toggle-section-sharper" style="display:none;">
+ <tr class="table-headernow">
+  <td colspan="7" style="padding:10px; text-align:left;>
+    <div style="margin-top:8px; color:#241D0C;">
       <i>
-        Seeing the sharpest requires each eye to be refracted to their own balance.<br>
-        Then they may become binocularly imbalanced.<br>
-        Hence creating new prismatic sensation when looking off of lens centre.<br>
-        SE Diff up to 0.25 may require a week of adaptation.<br>
-        SE diff of more than 0.50 is not recommended and may come at the risk of re-do.
+       1. Test is done ontop of the current prescription.<br>
+       2. Seeing sharpest ever requires each eye to be tested to their own perfection, one eye at a time.<br>
+       3. Binocular may become imbalance because one eye requires more prescription changes than the other.<br>
+4. SE Diff is a metric to track the RX difference between the eyes.<br>
+5. A new SE Diff creates new prismatic effect when looking off from lens centre.<br>
+       6. SE Diff changes of 0.25 may require a week of adaptation.<br>
+       7. Maximum tolerance of SE Diff changes is 0.50 for majority of people.<br>
+      8. More than that will require serious adaptation and may subject to adaptation failure.<br>
+9. However, there is a correlation between SE Diff changes range and accommodation.<br>
+10. That is why younger people have better tolerance.
       </i>
     </div>
   </td>
@@ -327,16 +419,22 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
 
 
 
-  <!-- Deficit Rows -->
-  <tr class="table-headernow">
-    <td>Error Margin & DX</td>
+<!-- Deficit Rows (wrapped in toggle container) -->
+<tbody id="deficit-rows-sharper" style="display:none;">
+
+
+  <tr class="now">
+    <td colspan="2">Error Margin & DX</td>
     <td>Sph to Bal DC</td>
     <td colspan="2">Cyl & Axis to Bal FC</td>
     <td>SE Diff</td>
     <td>DC</td>
   </tr>
-<tr class="table-headernow">
-    <td>Mono RE Test</td>
+
+  <tr class="now">
+    <td rowspan="2">Mono Error<br>Margin</td>
+<td>Right</td>
+
     <td><input id="dc-sph-od" placeholder="0.00"></td>
     <td><input id="c2_od" placeholder="+0.00"></td>
     <td><input id="a2_od" placeholder="0"></td>
@@ -344,8 +442,9 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
     <td id="now-dc-od">—</td> 
   </tr>
 
-<tr class="table-headernow">
-    <td>Mono LE Test</td>
+  <tr class="now">
+<td>Left</td>
+
     <td><input id="dc-sph-os" placeholder="0.00"></td>
     <td><input id="c2_os" placeholder="+0.00"></td>
     <td><input id="a2_os" placeholder="0"></td>
@@ -353,55 +452,43 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
     <td id="now-dc-os">—</td> 
   </tr>
 
-<tr class="table-headernow">
-  <td>Balance Mono RE</td>
-  <td id="final-sph-od">0.00</td>
-  <td id="final-cyl-od">0.00</td>
-  <td id="final-axis-od">0</td>
-  <td id="final-se-od" style="display:none;">—</td>
-  <td id="bypass-final-mono">—</td>
-  <td id="final-dc-od" style="display:none;">BAL </td>
-  <td>-</td>
-</tr>
-
-<tr class="table-headernow">
-  <td>Balance Mono LE</td>
-  <td id="final-sph-os">0.00</td>
-  <td id="final-cyl-os">0.00</td>
-  <td id="final-axis-os">0</td>
-  <td>—</td>
-  <td id="final-se-os"style="display:none;">—</td>
-  <td id="final-dc-os"style="display:none;">BAL </td>
-  <td>-</td>
-</tr>
-
   <tr class="now">
-    <td>Prescribed Mono RE</td>
-    <td id="res-sph-od-2">0.00</td>
-    <td id="res-cyl-od-2">0.00</td>
-    <td id="res-axis-od-2">0</td>
-    <td id="res-se-od-2" style="display:none;">—</td>
-    <td id="bypass">—</td>
-    <td id="res-dc-od-2">BAL</td> 
+    <td rowspan="2">DC & FC<br>Bal Mono</td>
+<td>Right</td>
+
+    <td id="final-sph-od">0.00</td>
+    <td id="final-cyl-od">0.00</td>
+    <td id="final-axis-od">0</td>
+    <td id="final-se-od" style="display:none;">—</td>
+    <td id="bypass-final-mono">—</td>
+    <td id="final-dc-od" style="display:none;">BAL </td>
+    <td>-</td>
   </tr>
   <tr class="now">
-    <td>Prescribed Mono LE</td>
-    <td id="res-sph-os-2">0.00</td>
-    <td id="res-cyl-os-2">0.00</td>
-    <td id="res-axis-os-2">0</td>
-    <td>—</td>    
-    <td id="res-se-os-2" style="display:none;">—</td>
-    <td id="res-dc-os-2">BAL</td> 
+    <td>Left</td>
+    <td id="final-sph-os">0.00</td>
+    <td id="final-cyl-os">0.00</td>
+    <td id="final-axis-os">0</td>
+    <td id="final-se-os" style="display:none;">—</td>
+    <td>—</td>
+    <td id="final-dc-os" style="display:none;">BAL </td>
+    <td>-</td>
   </tr>
 
-
   <tr class="now">
-  <td colspan="1" style="padding:7px; text-align:center;">
+<td>
 Adjustments
 </td>
-<td colspan="1" style="padding:7px; text-align:center;">
-<div>
-    <!-- SPH Controls -->
+<td>Both</td>
+<td colspan="5" style="padding:7px; text-align:left;">
+ <!-- Clickable control to apply -0.25 x 180 -->
+
+    <span class="addMinus025" role="button" 
+          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:5px; margin-left:5px;">
+      Apply -0.25 × 180
+    </span> 
+;
+<!-- SPH Controls -->
     <span class="sph-btn" data-group="mono" data-step="-0.25"
           style="cursor:pointer; text-decoration:none; color:green; margin-right:2px; margin-left:2px;">
       S-0.25
@@ -411,45 +498,36 @@ Adjustments
       S+0.25
 </span>
 </td>
-
-<td colspan="5" style="padding:7px; text-align:left;">
-
- <!-- Clickable control to apply -0.25 x 180 -->
-    <span class="addMinus025" role="button" 
-          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:5px; margin-left:5px;">
-      Apply -0.25 × 180
-    </span>
-
-    </span>
-</div>
-
-</tr>
-
-
-  </td>
-  <td colspan="6" style="padding:15px;">
-</td>
-
 </tr>
 
 </tbody>
-<button onclick="downloadPDF()">Download as PDF</button>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
-<script>
-function downloadPDF() {
-  const element = document.body; // or a specific div with your table
-  html2pdf()
-    .from(element)
-    .set({
-      margin: 0.5,
-      filename: 'EyeExamResults.pdf',
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-    })
-    .save();
-}
-</script>
+
+<tbody class="toggle-section-sharper-rx" style="display:none;">
+
+  <tr class="table-headernow">
+    <td rowspan="2">Prescribed<br>Mono</td>
+<td>Right</td>
+    <td id="res-sph-od-2">0.00</td>
+    <td id="res-cyl-od-2">0.00</td>
+    <td id="res-axis-od-2">0</td>
+    <td id="res-se-od-2" style="display:none;">—</td>
+    <td id="bypass">—</td>
+    <td id="res-dc-od-2">BAL</td> 
+  </tr>
+  <tr class="table-headernow">
+    <td>Left</td>
+    <td id="res-sph-os-2">0.00</td>
+    <td id="res-cyl-os-2">0.00</td>
+    <td id="res-axis-os-2">0</td>
+    <td>—</td>    
+    <td id="res-se-os-2" style="display:none;">—</td>
+    <td id="res-dc-os-2">BAL</td> 
+  </tr>
+
+</tbody>
+
+
 
 </table>
 
@@ -465,7 +543,7 @@ let extraMinus025 = false;
 function updateMinus025Buttons() {
   document.querySelectorAll('.addMinus025').forEach(b => {
     b.style.color = extraMinus025 ? 'red' : 'black';
-    b.textContent = extraMinus025 ? 'Cyl -0.25 × 180 Applied' : 'Cyl -0.25 × 180 Not Applied';
+    b.textContent = extraMinus025 ? 'Cyl -0.25 × 180 Is Applying' : 'Cyl -0.25 × 180 Not Applied';
   });
 }
 
@@ -721,7 +799,6 @@ setIf("final-dc-os","BAL");
 
 
 
-// --- Bypass calculation (rounded to nearest 0.25 D) ---
 // --- Bypass calculation (rounded to nearest 0.25 D) ---
 // Mono (OD/OS)
 const bypassRE = safeParseFloat(document.getElementById("res-se-od-2")?.textContent);
