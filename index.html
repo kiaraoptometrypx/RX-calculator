@@ -40,7 +40,7 @@ table {
 }
 
 th, td { 
-  border:1px solid #999; 
+  border:0.5px solid #999; 
   padding:5px; 
   text-align:center; 
   min-width:40px; 
@@ -180,13 +180,27 @@ input {
 </td>
 </tr>
 
-
-
-
 <tbody class="toggle-section-comfort" style="display:table-row-group;">
+
+<tr class="comfort">
+  <td colspan="7" style="padding:5px; text-align:left; cursor:pointer;" 
+      onclick="this.querySelector('div').style.display = this.querySelector('div').style.display === 'none' ? 'block' : 'none';">
+    <i>Guide (click to show/hide)</i>
+    <div style="margin-top:8px; display:none;">
+      <i>
+        Seeing the sharpest requires each eye to be refracted to their own balance.<br>
+        Then they may become binocularly imbalanced.<br>
+        Hence creating new prismatic sensation when looking off of lens centre.<br>
+        SE Diff up to 0.25 may require a week of adaptation.<br>
+        SE diff of more than 0.50 is not recommended and may come at the risk of re-do.
+      </i>
+    </div>
+  </td>
+</tr>
+
   <!-- Deficit Rows -->
   <tr class="comfort">
-    <td>Error Margin</td>
+    <td>Error Margin & DX</td>
     <td>Sph to Bal DC</td>
     <td colspan="2">Cyl & Axis to Bal FC</td>
     <td>SE Diff</td>
@@ -241,28 +255,33 @@ input {
 
 
 <tr class="now-comfort">
-  <td colspan="1" style="padding:15px;">
-<div>
-    <!-- Clickable control to apply -0.25 x 180 -->
-    <span class="addMinus025" role="button" 
-          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:0px;">
-      Click to Apply -0.25 × 180
-    </span>
-</div>
+  <td colspan="1" style="padding:7px; text-align:center;">
+Adjustments
+</td>
+<td colspan="1" style="padding:7px; text-align:center;">
 <div>
     <!-- SPH Controls -->
     <span class="sph-btn" data-group="ou" data-step="-0.25"
-          style="cursor:pointer; text-decoration:underline; color:black; margin-right:5px;">
-      SPH -0.25
-    </span>
+          style="cursor:pointer; text-decoration:none; color:green; margin-right:2px; margin-left:2px;">
+      S-0.25
+   </span>
     <span class="sph-btn" data-group="ou" data-step="0.25"
-          style="cursor:pointer; text-decoration:underline; color:black;">
-      SPH +0.25
+          style="cursor:pointer; text-decoration:none; color:red;">
+      S+0.25
+</span>
+</td>
+
+<td colspan="5" style="padding:7px; text-align:left;">
+
+ <!-- Clickable control to apply -0.25 x 180 -->
+    <span class="addMinus025" role="button" 
+          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:5px; margin-left:5px;">
+      Apply -0.25 × 180
+    </span>
+
     </span>
 </div>
-  </td>
-  <td colspan="6" style="padding:15px;">
-</td>
+
 </tr>
 
 </tbody>
@@ -276,6 +295,25 @@ input {
 </td>
 </tr>
 
+<tbody class="toggle-section-sharper" style="display:table-row-group;">
+
+<tr class="table-headernow">
+  <td colspan="7" style="padding:5px; text-align:left; cursor:pointer;" 
+      onclick="this.querySelector('div').style.display = this.querySelector('div').style.display === 'none' ? 'block' : 'none';">
+    <i>Guide (click to show/hide)</i>
+    <div style="margin-top:8px; display:none;">
+      <i>
+        Seeing the sharpest requires each eye to be refracted to their own balance.<br>
+        Then they may become binocularly imbalanced.<br>
+        Hence creating new prismatic sensation when looking off of lens centre.<br>
+        SE Diff up to 0.25 may require a week of adaptation.<br>
+        SE diff of more than 0.50 is not recommended and may come at the risk of re-do.
+      </i>
+    </div>
+  </td>
+</tr>
+
+
 <script>
 document.querySelectorAll('.toggle-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -288,11 +326,10 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
 </script>
 
 
-<tbody class="toggle-section-sharper" style="display:table-row-group;">
 
   <!-- Deficit Rows -->
   <tr class="table-headernow">
-    <td>Error Margin</td>
+    <td>Error Margin & DX</td>
     <td>Sph to Bal DC</td>
     <td colspan="2">Cyl & Axis to Bal FC</td>
     <td>SE Diff</td>
@@ -348,7 +385,7 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
     <td id="res-dc-od-2">BAL</td> 
   </tr>
   <tr class="now">
-    <td>Prescribe Mono LE</td>
+    <td>Prescribed Mono LE</td>
     <td id="res-sph-os-2">0.00</td>
     <td id="res-cyl-os-2">0.00</td>
     <td id="res-axis-os-2">0</td>
@@ -359,26 +396,35 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
 
 
   <tr class="now">
-  <td colspan="1" style="padding:15px;">
-    <!-- Clickable control to apply -0.25 x 180 -->
-<div>    
-<span class="addMinus025" role="button" 
-          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:0px;">
-      Click to Apply -0.25 × 180
-    </span>
-</div>
-
+  <td colspan="1" style="padding:7px; text-align:center;">
+Adjustments
+</td>
+<td colspan="1" style="padding:7px; text-align:center;">
 <div>
     <!-- SPH Controls -->
     <span class="sph-btn" data-group="mono" data-step="-0.25"
-          style="cursor:pointer; text-decoration:underline; color:black; margin-right:5px;">
-      SPH -0.25
-    </span>
+          style="cursor:pointer; text-decoration:none; color:green; margin-right:2px; margin-left:2px;">
+      S-0.25
+   </span>
     <span class="sph-btn" data-group="mono" data-step="0.25"
-          style="cursor:pointer; text-decoration:underline; color:black;">
-      SPH +0.25
+          style="cursor:pointer; text-decoration:none; color:red;">
+      S+0.25
+</span>
+</td>
+
+<td colspan="5" style="padding:7px; text-align:left;">
+
+ <!-- Clickable control to apply -0.25 x 180 -->
+    <span class="addMinus025" role="button" 
+          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:5px; margin-left:5px;">
+      Apply -0.25 × 180
+    </span>
+
     </span>
 </div>
+
+</tr>
+
 
   </td>
   <td colspan="6" style="padding:15px;">
@@ -405,26 +451,6 @@ function downloadPDF() {
 }
 </script>
 
-<td colspan="6" style="padding:15px;">
-  <label for="analysisBox"><b>Analysis:</b></label><br>
-  <textarea id="analysisBox" rows="6" style="width:100%; padding:8px; border-radius:8px; border:1px solid #ccc;">
-Patient shows clearer vision with -0.25 × 180 adjustment.
-Comfort is acceptable with current prescription.
-  </textarea>
-  <br><br>
-  <button onclick="sendToGmail()">Send Analysis via Gmail</button>
-</td>
-
-<script>
-function sendToGmail() {
-  const analysisText = document.getElementById("analysisBox").value;
-  const body = encodeURIComponent("Hello,\n\nHere is your analysis:\n\n" + analysisText + "\n\nRegards,\nKiara Optometry");
-  const gmailURL = `https://mail.google.com/mail/?view=cm&fs=1&su=Refraction Analysis&body=${body}`;
-  window.open(gmailURL, "_blank");
-}
-</script>
-
-
 </table>
 
 
@@ -439,7 +465,7 @@ let extraMinus025 = false;
 function updateMinus025Buttons() {
   document.querySelectorAll('.addMinus025').forEach(b => {
     b.style.color = extraMinus025 ? 'red' : 'black';
-    b.textContent = extraMinus025 ? 'Added Cyl -0.25 × 180' : 'Apply Cyl -0.25 × 180';
+    b.textContent = extraMinus025 ? 'Cyl -0.25 × 180 Applied' : 'Cyl -0.25 × 180 Not Applied';
   });
 }
 
