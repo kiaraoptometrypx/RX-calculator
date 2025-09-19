@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kiara Optometry V4 Calculator</title>
+<title>Kiara Optometry Prescription Calculator</title>
 <style>
 * {
   font-size: 11px;
@@ -13,10 +13,10 @@
 body { 
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
   font-size: 12px;
-  line-height: 1.3;
   margin: 0;
   background: #f8f8f5;
   color: black;
+  font-weight: 500;
 }
 
 /* Narrow down the first column (labels like Current RX) */
@@ -77,7 +77,8 @@ table {
   table-layout: fixed;
   width: 95%; /* keep your width */ 
   margin:0 auto; 
-  font-weight: bold; 
+  font-size: 10px; 
+
 }
 
 th, td { 
@@ -100,8 +101,8 @@ input {
   box-sizing: border-box;
 }
 
-.now td { background: #FFF3DA; }
-.now-comfort td { background: #F5FFFB ;}
+.now td { background: #F5F5F5; }
+.now-comfort td { background: #F5F5F5 ;}
 .white td { background: #d9d9d9; }
 .fc-results td { background: #EFF5E6; }
 .dc-bal td { background: #fff; }
@@ -112,7 +113,7 @@ input {
 }
 
 .comfort {
-  background: #D5E8E1;
+  background: #E5F0D1;
   font-weight: bold;  
 }
 
@@ -176,7 +177,7 @@ input {
 
 
 
-<h2><br><br>KIARA OPTOMETRY V4 CALCULATOR<br>--------------<br><span style="cursor:pointer; color:black;" onclick="location.reload();">
+<h2><br>KIARA OPTOMETRY V4 CALCULATOR<br>--------------<br><span style="cursor:pointer; color:black;" onclick="location.reload();">
   Press here to Delete & Reload Page
 </span><br>--------------<br>
  </h2>
@@ -222,21 +223,28 @@ document.getElementById('refresh-btn').addEventListener('click', () => {
 </tr>
 
 <tr class="comfort">
-  <td colspan="7" style="padding:10px; color: #0A2E4A; text-align:left;">
+  <td colspan="7" style="padding:10px; color: #101F01; text-align:left;">
     <span class="toggle-btn" data-target="toggle-section-comfort-rx"
-          style="cursor:pointer; color: #0A2E4A; user-select:none; margin-left:10px;">
-      <b>Comfortably Sharper RX</b>
-    </span>
+          style="cursor:pointer; color: #101F01; user-select:none; margin-left:10px; margin-right:15px;">
+      <b>Comfy Clearer RX..</b>
 
-    <span style="margin-left:15px; text-decoration:none; font-style:italic; cursor:pointer; color:#0A2E4A; user-select:none;"
+    <span style="margin-left:15px; text-decoration:none; cursor:pointer; color:#101F01; user-select:none;"
           onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-comfort'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
-      --> Start the Test (show/hide)
+      Diagnostics..
     </span>
 
     <span class="toggle-btn" data-target="toggle-section-guide-comfort"
-          style="cursor:pointer; color: #0A2E4A; user-select:none; margin-left:15px;">
-      <i>--> How to Do (show/hide)</i>
+          style="cursor:pointer; color: #101F01; user-select:none; margin-left:15px;">
+      Guide..
+</span>
+
     </span>
+Status:
+<span id="testToggle1" style="cursor:pointer; user-select:none; color: #101F01; margin-left:0px;">
+  ✖ N/A..
+</span>
+
+
   </td>
 </tr>
 
@@ -245,8 +253,8 @@ document.getElementById('refresh-btn').addEventListener('click', () => {
 
 <tbody class="toggle-section-guide-comfort" style="display:none;">
 <tr class="comfort">
-  <td colspan="7" style="padding:10px; color:#0A2E4A; text-align:left;">
-      <i>
+  <td colspan="7" style="padding:10px; color:#182E00; text-align:left;">
+      
         1. Test is done ontop of the current prescription.<br>
 	2. Check both eyes simultaneously; to honour binocularity and familiarity.<br>
         3. Lenses change are done symmetrically and equally; no new prismatic effect created.<br>
@@ -254,7 +262,7 @@ document.getElementById('refresh-btn').addEventListener('click', () => {
         5. Find the balance SPH of Duochrome (DC) and Fanchart (FC).<br>
 	6. SE Diff maintains the same as the current pair.<br>
         7. One eye will still have errors when checked indivudally.<br>
-      </i>
+      
   </td>
 </tr>
 
@@ -312,19 +320,25 @@ Adjustments
     <div>
 <!-- Clickable control to apply -0.25 x 180 -->
     <span class="addMinus025" role="button" 
-          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:5px; margin-left:5px;">
+          style="cursor:pointer; user-select:none; margin-right:15px; margin-left:15px;">
       Apply -0.25 × 180
     </span>
-;
+
 
 <span class="sph-btn" data-group="ou" data-step="-0.25"
-          style="cursor:pointer; text-decoration:none; color:green; margin-right:2px; margin-left:2px;">
-      S-0.25
+          style="cursor:pointer; text-decoration:none; color:green; margin-right:2px; margin-left:15px;">
+      S-0.25..
    </span>
 <span class="sph-btn" data-group="ou" data-step="0.25"
-          style="cursor:pointer; text-decoration:none; color:red;">
-      S+0.25
+          style="cursor:pointer; text-decoration:none; color:red; margin-right:15px; margin-left:2px;">
+      S+0.25..
 </span>
+    </span>
+<span class="testStatus" style="cursor:pointer; color: #101F01; user-select:none; text-decoration:none; margin-right:2px; margin-left:15px;">
+  Test ongoing..
+</span>
+
+
 </td>
 </div>
 </tr>
@@ -333,6 +347,17 @@ Adjustments
 
 
 <tbody class="toggle-section-comfort-rx" style="display:none;">
+
+<tr class="comfort">
+<td>Rx Type</td>
+<td>Sides</td>
+<td>Sph</td>
+<td>Cyl</td>
+<td>Axis</td>
+<td>SE Diff</td>
+<td>DC</td>
+
+  </tr>
 <tr class="comfort">
     <td rowspan="2">Prescribed<br>Bino</td>
 <td>Right</td>
@@ -345,8 +370,7 @@ Adjustments
   </tr>
 
 <tr class="comfort">
- 
-<td>Left</td>
+ <td>Left</td>
     <td id="res-sph-ou-le">0.00</td>
     <td id="res-cyl-ou-le">0.00</td>
     <td id="res-axis-ou-le">0</td>
@@ -354,6 +378,12 @@ Adjustments
     <td id="res-dc-ou-le">BAL</td>
   </tr>
 
+<tr class="comfort">
+  <td>Analysis<br>& Plan</td>
+  <td id="analysis-ou" colspan="6" style="text-align:left;">
+    <!-- Combined analysis text for OU will appear here -->
+  </td>
+</tr>
 </tbody>
 
 
@@ -368,17 +398,22 @@ Adjustments
 <td colspan="7" style="padding:10px; color: #241D0C; text-align:left;">
  <span class="toggle-btn" data-target="toggle-section-sharper-rx" 
       style="cursor:pointer; color: #241D0C; user-select:none; margin-left:10px;">
-<b>The Sharpest Possible RX</b>
+<b>Sharpest Ever RX..</b>
 </span>
 
-    <span style="margin-left:15px; text-decoration:none; font-style:italic; cursor:pointer; color:#241D0C; user-select:none;"
+    <span style="margin-left:15px; text-decoration:none; cursor:pointer; color:#241D0C; user-select:none;"
           onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-sharper'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
-      --> Start the Test (show/hide)
+      Diagnostics..
     </span>
 
  <span class="toggle-btn" data-target="toggle-section-sharper" 
-      style="cursor:pointer; color: #241D0C; user-select:none; margin-left:15px;">
- <i>--> How to Do (show/hide)</i>
+      style="cursor:pointer; color: #241D0C; user-select:none; margin-left:15px; margin-right:15px;">
+Guide..
+</span>Status:
+
+
+<span id="testToggle2" style="cursor:pointer; user-select:none; color: #241D0C;">
+  ✖ N/A..
 </span>
 
 </td>
@@ -392,7 +427,7 @@ Adjustments
       <i>
        1. Test is done ontop of the current prescription.<br>
        2. Seeing sharpest ever requires each eye to be tested to their own perfection, one eye at a time.<br>
-       3. Binocular may become imbalance because one eye requires more prescription changes than the other.<br>
+       3. Binocular may become imbalance because one eye's prescription may change more.<br>
 4. SE Diff is a metric to track the RX difference between the eyes.<br>
 5. A new SE Diff creates new prismatic effect when looking off from lens centre.<br>
        6. SE Diff changes of 0.25 may require a week of adaptation.<br>
@@ -416,7 +451,30 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
   });
 });
 </script>
+<script>
+function makeToggle(spanId) {
+  const span = document.getElementById(spanId);
+  let testDone = false; // initial state
 
+  span.addEventListener("click", () => {
+    testDone = !testDone; // toggle state
+
+    if (testDone) {
+      span.textContent = "✔ Completed..";
+      span.style.textDecoration = "none"; // underline when done
+      span.style.fontStyle = "normal";         // normal font
+    } else {
+      span.textContent = "✖ N/A..";
+      span.style.textDecoration = "none";      // remove underline
+      span.style.fontStyle = "normal";         // 
+    }
+  });
+}
+
+// Apply to both spans
+makeToggle("testToggle1");
+makeToggle("testToggle2");
+</script>
 
 
 <!-- Deficit Rows (wrapped in toggle container) -->
@@ -484,19 +542,125 @@ Adjustments
  <!-- Clickable control to apply -0.25 x 180 -->
 
     <span class="addMinus025" role="button" 
-          style="cursor:pointer; text-decoration:underline; user-select:none; margin-right:5px; margin-left:5px;">
+          style="cursor:pointer; user-select:none; margin-right:15px; margin-left:15px;">
       Apply -0.25 × 180
     </span> 
-;
+
 <!-- SPH Controls -->
     <span class="sph-btn" data-group="mono" data-step="-0.25"
-          style="cursor:pointer; text-decoration:none; color:green; margin-right:2px; margin-left:2px;">
-      S-0.25
+          style="cursor:pointer; text-decoration:none; color:green; margin-right:2px; margin-left:15px;">
+      S-0.25..
    </span>
     <span class="sph-btn" data-group="mono" data-step="0.25"
-          style="cursor:pointer; text-decoration:none; color:red;">
-      S+0.25
+          style="cursor:pointer; text-decoration:none; color:red; margin-right:15px; margin-left:2px;">
+      S+0.25..
 </span>
+    </span>
+<span class="testStatus" style="cursor:pointer; color: #101F01; user-select:none; text-decoration:none; margin-right:2px; margin-left:15px;">
+  Test ongoing..
+</span>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Shared state for all mirrors
+  let testDone = false;
+
+  // Function to update all mirrors
+  function updateTestStatusMirrors() {
+    document.querySelectorAll(".testStatus").forEach(el => {
+      el.textContent = testDone ? "Test done" : "Test ongoing..";
+      el.style.color = testDone ? "green" : "black";
+    });
+  }
+
+  // Attach click listener to all current and future mirrors
+  function attachMirrorListeners() {
+    document.querySelectorAll(".testStatus").forEach(el => {
+      if(!el.dataset.listenerAttached){
+        el.addEventListener("click", () => {
+          testDone = !testDone;
+          updateTestStatusMirrors();
+        });
+        el.dataset.listenerAttached = "true";
+      }
+    });
+  }
+
+  // Initial setup
+  attachMirrorListeners();
+  updateTestStatusMirrors();
+
+  // Optional: observe DOM changes to attach listeners to newly added mirrors
+  const observer = new MutationObserver(() => {
+    attachMirrorListeners();
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  let testDone = false; // shared state
+
+  function updateMirrors() {
+  document.querySelectorAll(".testStatus").forEach(el => {
+    if (testDone) {
+      el.textContent = "RX Finalized..";
+      el.style.textDecoration = "none";  // 
+      el.style.fontStyle = "normal";          // normal font
+      el.style.color = "#285C00";
+    } else {
+      el.textContent = "RX Ongoing..";
+      el.style.textDecoration = "none";       // remove underline
+      el.style.fontStyle = "italic";          // italic for ongoing
+      el.style.color = "#6E0900";
+    }
+  });
+}
+
+  // Mirror click behavior: toggle
+  document.querySelectorAll(".testStatus").forEach(el => {
+    el.addEventListener("click", () => {
+      testDone = !testDone; // toggle on click
+      updateMirrors();
+    });
+  });
+
+  // Reset mirrors whenever a calculator input changes
+  const inputIds = [
+    "s1_od","c1_od","a1_od",
+    "s1_os","c1_os","a1_os",
+    "dc-sph-od","c2_od","a2_od",
+    "dc-sph-os","c2_os","a2_os",
+    "dc-sph-ou","c2_ou","a2_ou"
+  ];
+
+  inputIds.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.addEventListener("input", () => {
+      testDone = false; // revert
+      updateMirrors();
+    });
+  });
+
+  // Reset mirrors on adjustment buttons (Cyl -0.25, S -0.25, S +0.25)
+  const adjustmentButtons = document.querySelectorAll(".addMinus025, .sph-btn");
+  adjustmentButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      testDone = false; // revert
+      updateMirrors();
+    });
+  });
+
+  updateMirrors(); // initialize
+});
+</script>
+
+
 </td>
 </tr>
 
@@ -543,7 +707,7 @@ let extraMinus025 = false;
 function updateMinus025Buttons() {
   document.querySelectorAll('.addMinus025').forEach(b => {
     b.style.color = extraMinus025 ? 'red' : 'black';
-    b.textContent = extraMinus025 ? 'Cyl -0.25 × 180 Is Applying' : 'Cyl -0.25 × 180 Not Applied';
+    b.textContent = extraMinus025 ? 'Horizontal Sharpening..' : 'All Angles Even..';
   });
 }
 
@@ -649,9 +813,11 @@ function combineEyeWithout025(S_now, C_now, A_now, DC_S, C2, A2){
 
     if (extraMinus025) {
     // Add cyl-only vector for -0.25 × 180 (J0 = +0.25)
-    M_total -= 0.25;
+    M_total -= 0.0625;
     J0_total += 0.125;
     }
+    
+    
 
     const C_total_raw = -2 * Math.sqrt(J0_total * J0_total + J45_total * J45_total);
     const S_total_raw = M_total - C_total_raw / 2;
@@ -670,6 +836,8 @@ function combineEyeWithout025(S_now, C_now, A_now, DC_S, C2, A2){
   // ---------- Main combine function (updates OU + Mono + SE diffs + DC summaries) ----------
   function combineAll(){
     try {
+
+
       // --- Read Now Rx ---
       const S_RE = safeParseFloat(document.getElementById("s1_od")?.value || 0);
       const C_RE = safeParseFloat(document.getElementById("c1_od")?.value || 0);
@@ -910,6 +1078,24 @@ function getDcLabel(offset) {
       updateDCSummaryForEye("dc-sph-os", "dc-summary", "now-dc-os");
       updateDCSummaryForEye("dc-sph-ou", "dc-summary", "dc-ou");
 
+// --- RESET PRESCRIBED DC STATUS TO BAL ---
+const prescribedDCEyes = [
+  "res-dc-ou-re", "res-dc-ou-le",
+  "res-dc-od-2", "res-dc-os-2"
+];
+
+prescribedDCEyes.forEach(id => {
+  const el = document.getElementById(id);
+  if(el) {
+    el.textContent = "BAL";
+    el.style.color = "black";
+    el.style.fontWeight = "bold";
+  }
+});
+
+
+
+
     } catch (err) {
       console.error("combineAll error:", err);
     }
@@ -969,11 +1155,158 @@ function getDcLabel(offset) {
     });
   });
 
-
   // initial run
   combineAll();
 });
+
 </script>
+
+
+<script>
+// --- Parse DC input (R/G codes, BAL, or numeric like -1.00) ---
+function parseDC(dc) {
+  if (dc === null || dc === undefined) return null;
+  let s = String(dc).trim();
+  if (!s) return null;
+
+  s = s.replace(/−/g, '-').toUpperCase(); // normalize minus sign
+
+  if (s === 'BAL') return { kind: 'BAL', diopter: 0, stepVal: 0, raw: s };
+
+  // R1 / G2 style
+  const codeMatch = s.match(/^([RG])\s*(\d+)$/i);
+  if (codeMatch) {
+    const type = codeMatch[1].toUpperCase();
+    const step = parseInt(codeMatch[2], 10);
+    const diopter = (type === 'R') ? -(step * 0.25) : (step * 0.25);
+    const stepVal = (type === 'R') ? -step : step;
+    return { kind: 'CODE', type, step, stepVal, diopter, raw: s };
+  }
+
+  // Numeric style
+  const numStr = s.replace(/[^\d\.\-+]/g, '');
+  const n = parseFloat(numStr);
+  if (!Number.isNaN(n)) {
+    const stepVal = n / 0.25;
+    return { kind: 'NUMERIC', diopter: n, stepVal, raw: s };
+  }
+
+  return { kind: 'UNKNOWN', raw: s };
+}
+
+// --- Consumer-friendly descriptions (with coloured DC labels) ---
+function describeDC(dc, label = 'Current') {
+  if (!dc) return '';
+  const parsed = parseDC(dc);
+  if (!parsed) return `${label} RX: ${dc}`;
+
+  if (parsed.kind === 'BAL') {
+    return `${label} RX balances far & near vision.`;
+  }
+
+  if (parsed.kind === 'CODE') {
+    const absD = Math.abs(parsed.diopter).toFixed(2);
+    // coloured label for the code itself
+    const colourLabel = `<span style="color:${parsed.type === 'R' ? 'red' : 'green'}; font-weight:bold;">${parsed.raw}</span>`;
+
+    if (parsed.type === 'R') {
+      return `${label} RX under by -${absD} (${colourLabel}). Current prescription is suited for seeing near comfortably but not seeing the furthest possible yet.`;
+    } else {
+      if (parsed.step === 1) {
+        return `${label} RX over by +${absD} (${colourLabel}), perfect prescription for seeing as far you could.`;
+      }
+      // also colour the reference (G1) inside the explanation
+      const g1Label = `<span style="color:green; font-weight:bold;">G1</span>`;
+      return `${label} RX over by +${absD} (${colourLabel}) and is excessive. May cause blurry vision, tiredness and headaches from over stressing the eye muscles.`;
+    }
+  }
+
+  if (parsed.kind === 'NUMERIC') {
+    const d = parsed.diopter.toFixed(2);
+    if (Math.abs(parsed.diopter) < 0.0001) return `${label} RX balances far & near vision.`;
+    if (parsed.diopter < 0) return `${label} RX under by ${d}.`; 
+    if (Math.abs(parsed.diopter - 0.25) < 0.0001) {
+      return `${label} RX over by ${d}; perfect condition for seeing as far you could.`;
+    }
+    return `${label} RX over by ${d}; Limit for healthy vision is 0.25 D; Unnecessary over will cause blurry vision & headaches.`;
+  }
+
+  return `${label} RX: ${dc}`;
+}
+
+
+// --- Deep analysis: compare current vs new ---
+// NOTE: Per request, this version FLIPS the shift logic relative to previous "old" block:
+//      stepDiff < 0  => interpret as SHIFT TOWARD NEARER VISION
+//      stepDiff > 0  => interpret as SHIFT TOWARD FARTHER VISION
+function getDCShiftText(fromDC, toDC) {
+  if (!fromDC || !toDC) return '';
+
+  const f = parseDC(fromDC);
+  const t = parseDC(toDC);
+  if (!f || !t || f.kind === 'UNKNOWN' || t.kind === 'UNKNOWN') return '';
+
+  const fromStepVal = (typeof f.stepVal === 'number') ? f.stepVal : (f.diopter / 0.25);
+  const toStepVal = (typeof t.stepVal === 'number') ? t.stepVal : (t.diopter / 0.25);
+
+  const stepDiff = toStepVal - fromStepVal;
+  const diopterShift = stepDiff * 0.25;
+
+  // Line 1: describe current
+  const line1 = describeDC(fromDC, 'Current');
+
+  // Line 2: SHIFT interpretation (FLIPPED + corrected signs)
+  let line2 = '';
+  if (Math.abs(diopterShift) < 0.0001) {
+    line2 = 'The new RX has not changed depth; no significant shift.';
+  } else if (stepDiff < 0) {
+    // Shift toward nearer vision → show with NEGATIVE sign
+    line2 = `Shift toward nearer vision (+${Math.abs(diopterShift).toFixed(2)} D): improves near comfort while slightly reducing distance clarity.`;
+  } else {
+    // Shift toward farther vision → show with POSITIVE sign
+    line2 = `Shift toward farther vision (-${Math.abs(diopterShift).toFixed(2)} D): improves distance clarity but may slightly strain near tasks.`;
+  }
+
+
+  // Line 3: describe new RX priority (keeps original wording style)
+  let line3 = '';
+  if (t.kind === 'BAL') {
+    line3 = 'New RX balances distance and near vision — good for everyday comfort and general use.';
+  } else {
+    const newD = (typeof t.diopter === 'number') ? t.diopter : (t.stepVal * 0.25);
+    const mag = Math.abs(newD).toFixed(2);
+    const codeLabel = (t.kind === 'CODE') ? `(${t.type}${t.step})` : '';
+    if (newD < 0) {
+      line3 = `New RX prioritizes near tasks ${codeLabel} by ${mag} D; reading and close work will be more comfortable, while distance clarity may be reduced.`;
+    } else {
+      line3 = `New RX prioritizes distance vision ${codeLabel} by ${mag} D; distance clarity is prioritized, while near tasks may be slightly more demanding.`;
+    }
+  }
+
+  return [line1, line2, line3].join('<br>');
+}
+
+// --- Update analysis in real-time ---
+function updateDCAnalysis() {
+  const binoErrorDC = document.getElementById('dc-ou')?.textContent.trim();
+  const prescribedDC = document.getElementById('res-dc-ou-re')?.textContent.trim();
+  if (!binoErrorDC || !prescribedDC) return;
+
+  const analysisEl = document.getElementById('analysis-ou');
+  if (!analysisEl) return;
+
+  const text = getDCShiftText(binoErrorDC, prescribedDC);
+  analysisEl.innerHTML = text;
+  analysisEl.style.textAlign = 'left';
+}
+
+// live update
+setInterval(updateDCAnalysis, 300);
+</script>
+
+
+
+
 
 </body>
 </html>
