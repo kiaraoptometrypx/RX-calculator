@@ -233,8 +233,9 @@ document.getElementById('refresh-btn').addEventListener('click', () => {
 <tr class="comfort">
   <td colspan="7" style="padding:10px; color: #101F01; text-align:left;">
     <span class="toggle-btn" data-target="toggle-section-comfort-rx"
-          style="cursor:pointer; color: #101F01; user-select:none; margin-left:10px; margin-right:15px;">
+          style="cursor:pointer; color: #101F01; user-select:none; margin-left:10px;">
       <b>Comfy Clearer RX..</b>
+    </span>
 
     <span style="margin-left:15px; text-decoration:none; cursor:pointer; color:#101F01; user-select:none;"
           onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-comfort'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
@@ -242,11 +243,10 @@ document.getElementById('refresh-btn').addEventListener('click', () => {
     </span>
 
     <span class="toggle-btn" data-target="toggle-section-guide-comfort"
-          style="cursor:pointer; color: #101F01; user-select:none; margin-left:15px;">
+          style="cursor:pointer; color: #101F01; user-select:none; margin-left:15px; margin-right:15px">
       Guide..
 </span>
 
-    </span>
 Status:
 <span id="testToggle1" style="cursor:pointer; user-select:none; color: #101F01; margin-left:0px;">
   ✖ N/A..
