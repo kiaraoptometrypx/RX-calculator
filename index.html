@@ -233,9 +233,12 @@ document.getElementById('refresh-btn').addEventListener('click', () => {
 
 <tr class="comfort">
   <td colspan="7" style="padding:10px; color: #101F01; text-align:left;">
-    <span class="toggle-btn" data-target="toggle-section-comfort-rx"
-          style="cursor:pointer; color: #101F01; user-select:none; margin-left:10px;">
-      <b>Comfy Clearer RX..</b>
+
+<b>- Comfy Clearer Rx -</b>  
+
+<span class="toggle-btn" data-target="toggle-section-comfort-rx"
+          style="cursor:pointer; color: #101F01; user-select:none; margin-left:15px;">
+      Results..
     </span>
 
     <span style="margin-left:15px; text-decoration:none; cursor:pointer; color:#101F01; user-select:none;"
@@ -407,9 +410,12 @@ Adjustments
 
 <tr class="table-headernow">
 <td colspan="7" style="padding:10px; color: #241D0C; text-align:left;">
+<b>- Sharpest Ever Rx</b>
+
+
  <span class="toggle-btn" data-target="toggle-section-sharper-rx" 
-      style="cursor:pointer; color: #241D0C; user-select:none; margin-left:10px;">
-<b>Sharpest Ever RX..</b>
+      style="cursor:pointer; color: #241D0C; user-select:none; margin-left:15px;">
+Results..
 </span>
 
     <span style="margin-left:15px; text-decoration:none; cursor:pointer; color:#241D0C; user-select:none;"
@@ -1217,12 +1223,12 @@ function describeDC(dc, label = 'Current') {
     const colourLabel = `<span style="color:${parsed.type === 'R' ? 'red' : 'green'}; font-weight:bold;">${parsed.raw}</span>`;
 
     if (parsed.type === 'R') {
-      return `${label} RX under by -${absD} (${colourLabel}). Current prescription comfortable for near and room distance, but not optimum for far.`;
+      return `${label} RX under by -${absD} (${colourLabel}); perfect for near and room distance, but not able to see very far.`;
     } else {
       if (parsed.step === 1) {
-        return `${label} RX over by +${absD} (${colourLabel}), perfect for seeing as far as possible.`;
+        return `${label} RX over by +${absD} (${colourLabel}); perfect for seeing as far as possible.`;
       }
-      return `${label} RX over by +${absD} (${colourLabel}). Prolonged use may cause blurry vision, tiredness and headaches. Healthy limit is +0.25 (<span style="color: green; font-weight:bold;">G1</span>).`;
+      return `${label} RX over by +${absD} (${colourLabel}); over the healthy limit of +0.25 (<span style="color: green; font-weight:bold;">G1</span>). Prolonged use may cause blurry vision, tiredness and headaches.`;
     }
   }
 
@@ -1231,66 +1237,78 @@ function describeDC(dc, label = 'Current') {
     if (Math.abs(parsed.diopter) < 0.0001) return `${label} RX balances far & near vision.`;
     if (parsed.diopter < 0) return `${label} RX under by ${d}.`; 
     if (Math.abs(parsed.diopter - 0.25) < 0.0001) {
-      return `${label} RX over by ${d}; perfect for seeing as far you could.`;
+      return `${label} RX over by ${d}; perfect for seeing as far as possible.`;
     }
-    return `${label} RX over by ${d}; Limit for healthy vision is 0.25 D; Unnecessary over will cause blurry vision & headaches.`;
+    return `${label} RX over by ${d}; Limit for healthy vision is +0.25 (<span style="color: green; font-weight:bold;">G1</span>); Unnecessary over will cause blurry vision & headaches.`;
   }
 
   return `${label} RX: ${dc}`;
 }
 
 // --- NEW: Deeper analysis of DC status based on your 4 rules ---
-function getDeeperAnalysis(fromDC, toDC) {
-  const f = parseDC(fromDC);
-  const t = parseDC(toDC);
+// Accepts optional parsed objects as 3rd/4th args for efficiency (getDCShiftText already passes them)
+function getDeeperAnalysis(fromDC, toDC, prevParsed, toParsed) {
+  const f = (prevParsed && typeof prevParsed === 'object') ? prevParsed : parseDC(fromDC);
+  const t = (toParsed && typeof toParsed === 'object') ? toParsed : parseDC(toDC);
   if (!f || !t || f.kind === 'UNKNOWN' || t.kind === 'UNKNOWN') return '';
 
-  let explanation = '';
+  // Numeric diopters and stepVal (safe fallbacks)
+  const fromDiopter = (typeof f.diopter === 'number') ? f.diopter : ((typeof f.stepVal === 'number') ? f.stepVal * 0.25 : 0);
+  const toDiopter = (typeof t.diopter === 'number') ? t.diopter : ((typeof t.stepVal === 'number') ? t.stepVal * 0.25 : 0);
+  const fromStepVal = (typeof f.stepVal === 'number') ? f.stepVal : (typeof f.diopter === 'number' ? f.diopter / 0.25 : 0);
+  const toStepVal = (typeof t.stepVal === 'number') ? t.stepVal : (typeof t.diopter === 'number' ? t.diopter / 0.25 : 0);
 
-  // --- Rule 1: G → G ---
+  // Collect messages (we may return multiple lines, separated by <br>)
+  const parts = [];
+
+  // ---- Exclusive "no change" cases (return immediately) ----
+  if (f.kind === 'BAL' && t.kind === 'BAL') {
+    return '- No changes in the far and near vision.';
+  }
+  if (f.type === 'R' && t.type === 'R' && typeof f.step === 'number' && typeof t.step === 'number' && f.step === t.step) {
+    return `- No changes in the far and near vision.`;
+  }
+
+  // --- Rule 1: G → G (handle when both are G codes) ---
   if (f.type === 'G' && t.type === 'G') {
-    if (f.step - t.step === 1) {
-      explanation = 'No loss of distance clarity. Near vision comfort improves slightly.';
-    } else if (t.step < f.step) {
-      explanation = 'No loss of distance clarity. Significant improvement in near vision comfort.';
-    } else if (t.step > f.step) {
-      explanation = 'No loss of distance clarity but worsening of near vision comfort. Not recommended to prescribe.';
+    if (typeof f.step === 'number' && typeof t.step === 'number' && (f.step - t.step === 1)) {
+      parts.push('- No loss of distance clarity. Near vision comfort improves slightly.');
+    } else if (typeof f.step === 'number' && typeof t.step === 'number' && t.step < f.step) {
+      parts.push('- No loss of distance clarity. Significant improvement in near vision comfort.');
+    } else if (typeof f.step === 'number' && typeof t.step === 'number' && t.step > f.step) {
+      parts.push('- No loss of distance clarity but worsening of near vision comfort. Not recommended to prescribe.');
     }
+    // continue — other rules below may also apply in borderline cases
   }
 
-  // --- Rule 2: Any → BAL or R ---
-  else if (t.kind === 'BAL' || t.type === 'R') {
-    let lossDist = 20; // default for BAL
-    if (t.type === 'R') {
-      lossDist = 20 / Math.pow(2, t.step - 1); // R1=10, R2=5, R3=2.5...
-    }
-    explanation = `Distance clarity will be reduced. Vision becomes blurry beyond ${lossDist} feet.`;
-  }
 
-  // --- Rule 3: BAL → G or R → BAL ---
-  else if ((f.kind === 'BAL' && t.type === 'G') || (f.type === 'R' && t.kind === 'BAL')) {
-    const steps = Math.abs(t.stepVal - f.stepVal);
-    let stressDist = 30; // base
-    if (steps === 2) stressDist = 34;
-    if (steps === 3) stressDist = 40;
-    if (steps === 4) stressDist = 50;
-    if (steps >= 5) stressDist = 75;
-    explanation = `Near stress may occur when viewing objects closer than ${stressDist} cm.`;
-  }
 
-  // --- Rule 4: Distance improvement ---
-  else if (
+  // --- Rule 4: Distance improvement (cases that increase distance clarity) ---
+  const distanceImprovementCond =
     (f.kind === 'BAL' && t.type === 'G') ||
     (f.type === 'R' && t.kind === 'BAL') ||
-    (f.type === 'R' && t.type === 'R' && t.step < f.step)
-  ) {
-    let gainDist = 20; // default for BAL→G or R1→BAL
+    (f.type === 'R' && t.type === 'R' && typeof t.step === 'number' && typeof f.step === 'number' && t.step < f.step);
+
+  if (distanceImprovementCond) {
+    let gainDist = 20; // default
     if (t.kind === 'BAL') gainDist = 20;
-    if (t.type === 'R') gainDist = 20 / Math.pow(2, t.step - 1); // R1=10, R2=5...
-    explanation = `Distance clarity improves. Objects up to ${gainDist} feet will appear clearer.`;
+    if (t.type === 'R' && typeof t.step === 'number') gainDist = 20 / Math.pow(2, t.step - 1); // R1=10, R2=5, ...
+    parts.push(`- However, distance clarity improves. Objects up to ${gainDist} feet will appear clearer.`);
   }
 
-  return explanation;
+  // --- Rule 2: Any → BAL or R (distance reduction) ---
+  // Only add reduction when we did NOT already decide distance improves (to avoid contradiction)
+  const distanceReductionCond = (t.kind === 'BAL' || t.type === 'R') && !distanceImprovementCond;
+  if (distanceReductionCond) {
+    let lossDist = 20; // default for BAL
+    if (t.type === 'R' && typeof t.step === 'number') {
+      lossDist = 20 / Math.pow(2, t.step - 1); // R1=10, R2=5...
+    }
+    parts.push(`- However, distance clarity will be reduced. Vision becomes blurry beyond ${lossDist} feet.`);
+  }
+
+  // Join lines with <br> for HTML display; or return empty if nothing matched
+  return parts.length ? parts.join('<br>') : '';
 }
 
 // --- Deep analysis wrapper (uses both old shift + new deeper analysis) ---
@@ -1307,51 +1325,58 @@ function getDCShiftText(fromDC, toDC) {
   const stepDiff = toStepVal - fromStepVal;
   const diopterShift = stepDiff * 0.25;
 
-  const line1 = describeDC(fromDC, 'Current');
+  const line1 = describeDC(fromDC, '- Current');
 
-let line2 = '';
-if (Math.abs(diopterShift) < 0.0001) {
-  line2 = 'There is no change of far and near depth for the new RX.';
-} else {
+  let line2 = '';
+  if (Math.abs(diopterShift) < 0.0001) {
+    line2 = '- There is no change of far and near vision.';
+ } else {
   const mag = Math.abs(diopterShift).toFixed(2);
   const direction = (stepDiff < 0) ? '+' : '-';
 
   // Base message
-  line2 = `There is a change of ${direction}${mag} D. `;
+  line2 = `- There is a change of ${direction}${mag}. `;
 
   // Adaptation analysis
   if (Math.abs(diopterShift) <= 0.25 + 0.001) {
-    line2 += 'Adaptation is usually easy and takes less than 1 week.';
+    line2 += 'Adaptation is usually easy and takes less than 1 week. ';
   } else if (Math.abs(diopterShift) <= 0.50 + 0.001) {
-    line2 += 'This is at the maximum tolerance most people can handle comfortably, taking 1–2 weeks to adapt.';
+    line2 += 'Takes 1–2 weeks to adapt. This is the max amount to adjust comfortably. ';
   } else {
-    line2 += 'This is a significant change that may take more than 1 month for full adaptation, with possible discomfort in the meantime.';
+    line2 += 'Takes more than 2 weeks to adapt because it is more than usual limit. ';
+  }
+
+  // Extra near-vision comfort analysis
+  if (diopterShift > 0) {
+    line2 += '<br>- With more minus, near vision comfort and range will reduce.';
+  } else if (diopterShift < 0) {
+    line2 += '<br>- With more plus, near vision comfort and range will improve.';
   }
 }
 
 
-let line3 = '';
-if (t.kind === 'BAL') {
-  line3 = 'New RX is true balance between distance and near vision.';
-} else {
-  const newD = (typeof t.diopter === 'number') ? t.diopter : (t.stepVal * 0.25);
-  const mag = Math.abs(newD).toFixed(2);
-
-  let codeLabel = '';
-  if (t.kind === 'CODE') {
-    const color = (t.type === 'R') ? 'red' : 'green';
-    codeLabel = `(<span style="color:${color}; font-weight:bold;">${t.type}${t.step}</span>)`;
-  }
-
-  if (newD < 0) {
-    line3 = `New RX prioritizes near vision; under  by -${mag} ${codeLabel}.`;
+  let line3 = '';
+  if (t.kind === 'BAL') {
+    line3 = '- New RX is true balance between distance and near vision.';
   } else {
-    line3 = `New RX prioritizes distance vision; over by +${mag}  ${codeLabel} .`;
+    const newD = (typeof t.diopter === 'number') ? t.diopter : (t.stepVal * 0.25);
+    const mag = Math.abs(newD).toFixed(2);
+
+    let codeLabel = '';
+    if (t.kind === 'CODE') {
+      const color = (t.type === 'R') ? 'red' : 'green';
+      codeLabel = `(<span style="color:${color}; font-weight:bold;">${t.type}${t.step}</span>)`;
+    }
+
+    if (newD < 0) {
+      line3 = `- New RX prioritizes near vision; under by -${mag} ${codeLabel}.`;
+    } else {
+      line3 = `- New RX prioritizes distance vision; over by +${mag} ${codeLabel}.`;
+    }
   }
-}
 
-
-  const line4 = getDeeperAnalysis(fromDC, toDC);
+  // pass parsed f/t in to avoid re-parsing internally
+  const line4 = getDeeperAnalysis(fromDC, toDC, f, t);
 
   return [line1, line3, line2, line4].filter(Boolean).join('<br>');
 }
@@ -1377,10 +1402,8 @@ setInterval(updateDCAnalysis, 300);
 
 
 
-
 </body>
 </html>
-
 
 
 
