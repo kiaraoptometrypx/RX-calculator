@@ -1283,18 +1283,32 @@ function getDeeperAnalysis(fromDC, toDC, prevParsed, toParsed) {
 
 
 
-  // --- Rule 4: Distance improvement (cases that increase distance clarity) ---
-  const distanceImprovementCond =
-    (f.kind === 'BAL' && t.type === 'G') ||
-    (f.type === 'R' && t.kind === 'BAL') ||
-    (f.type === 'R' && t.type === 'R' && typeof t.step === 'number' && typeof f.step === 'number' && t.step < f.step);
+// --- Rule 4: Distance improvement (cases that increase distance clarity) ---
+const distanceImprovementCond =
+  (f.kind === 'BAL' && t.type === 'G') ||
+  (f.type === 'R' && t.kind === 'BAL') ||
+  (f.type === 'R' && t.type === 'R' && typeof t.step === 'number' && typeof f.step === 'number' && t.step < f.step) ||
+  (f.type === 'R' && t.type === 'G' && t.step === 1); // NEW: R → G1 improves distance
 
-  if (distanceImprovementCond) {
+
+if (distanceImprovementCond) {
+  // Special case: G1 or higher (G2, G3, ...)
+  if (t.type === 'G' && typeof t.step === 'number' && t.step >= 1) {
+    if (t.step === 1) {
+      parts.push(`- Distance clarity is already maximized at G1; objects are as clear as possible.`);
+    } else {
+      parts.push(`- Distance clarity does not improve further beyond G1 (already maximized).`);
+    }
+  } else {
     let gainDist = 20; // default
     if (t.kind === 'BAL') gainDist = 20;
-    if (t.type === 'R' && typeof t.step === 'number') gainDist = 20 / Math.pow(2, t.step - 1); // R1=10, R2=5, ...
+    if (t.type === 'R' && typeof t.step === 'number') {
+      gainDist = 20 / Math.pow(2, t.step - 1); // R1=10, R2=5, ...
+    }
     parts.push(`- However, distance clarity improves. Objects up to ${gainDist} feet will appear clearer.`);
   }
+}
+
 
   // --- Rule 2: Any → BAL or R (distance reduction) ---
   // Only add reduction when we did NOT already decide distance improves (to avoid contradiction)
