@@ -71,6 +71,12 @@ table th:nth-child(2){
   width: 40px;
 }
 
+td {
+  white-space: normal;   /* allow line wrapping */
+  word-wrap: break-word; /* legacy */
+  overflow-wrap: break-word; /* modern */
+}
+
 h2 { 
   text-align:center; 
   margin-bottom:10px; 
@@ -127,6 +133,12 @@ input {
   -moz-user-select: none;    /* Firefox */
 }
 
+.guides {
+  white-space: normal;   /* allows wrapping */
+  word-wrap: break-word; /* breaks long text if needed */
+  overflow-wrap: break-word; /* modern syntax */
+  line-height: 1.4; /* nicer spacing for guides */
+}
 
 /* 🔒 Overlay for blackout */
 #overlay {
