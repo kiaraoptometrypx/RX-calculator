@@ -71,11 +71,6 @@ table th:nth-child(2){
   width: 40px;
 }
 
-td {
-  white-space: normal;   /* allow line wrapping */
-  word-wrap: break-word; /* legacy */
-  overflow-wrap: break-word; /* modern */
-}
 
 h2 { 
   text-align:center; 
@@ -96,6 +91,9 @@ th, td {
   padding:5px; 
   text-align:center; 
   vertical-align: middle;
+  white-space: normal;   /* allow line wrapping */
+  word-wrap: break-word; /* legacy */
+  overflow-wrap: break-word; /* modern */
 }
 
 th { 
@@ -133,12 +131,6 @@ input {
   -moz-user-select: none;    /* Firefox */
 }
 
-.guides {
-  white-space: normal;   /* allows wrapping */
-  word-wrap: break-word; /* breaks long text if needed */
-  overflow-wrap: break-word; /* modern syntax */
-  line-height: 1.4; /* nicer spacing for guides */
-}
 
 /* 🔒 Overlay for blackout */
 #overlay {
