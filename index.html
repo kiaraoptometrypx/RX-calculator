@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=350, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Kiara Optometry Prescription Calculator</title>
 <style>
 * {
@@ -10,12 +10,7 @@
   letter-spacing: 0.5px;
 }
 
-/* Table wrapper so it doesn't overflow on narrow screens */
-.table-container {
-  max-width: 350px;   /* safe width for iPhones */
-  margin: 0 auto;     /* center horizontally */
-  overflow-x: auto;   /* allow scroll if content is wider */
-}
+
 
 html, body {
   font-size: 11px; /* your base */
@@ -158,9 +153,6 @@ input {
 </style>
 </head>
 <body>
-
-<div class="table-container">
-
 
 <!-- 🔒 Locked screen -->
 <div id="overlay">🔒 Entering password...</div>
@@ -1387,6 +1379,5 @@ setInterval(updateDCAnalysis, 300);
 
 
 
-</div>
 </body>
 </html>
