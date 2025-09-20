@@ -10,6 +10,13 @@
   letter-spacing: 0.5px;
 }
 
+/* Table wrapper so it doesn't overflow on narrow screens */
+.table-container {
+  max-width: 350px;   /* safe width for iPhones */
+  margin: 0 auto;     /* center horizontally */
+  overflow-x: auto;   /* allow scroll if content is wider */
+}
+
 html, body {
   font-size: 11px; /* your base */
   -webkit-text-size-adjust: none; /* prevents Safari scaling */
@@ -151,6 +158,9 @@ input {
 </style>
 </head>
 <body>
+
+<div class="table-container">
+
 
 <!-- 🔒 Locked screen -->
 <div id="overlay">🔒 Entering password...</div>
@@ -1377,5 +1387,6 @@ setInterval(updateDCAnalysis, 300);
 
 
 
+</div>
 </body>
 </html>
