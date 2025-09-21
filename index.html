@@ -180,18 +180,51 @@ input {
 </script>
 
 
+<div style="height:20px;"></div>
 
-<h2><br>KIARA OPTOMETRY V4 CALCULATOR<br>--------------<br><span style="cursor:pointer; color:black;" onclick="location.reload();">
-  Press here to Delete & Reload Page
-</span><br>--------------<br>
+<h2>
+KIARA OPTOMETRY V4 CALCULATOR<br>
+
+    <span class="toggle-btn" data-target="toggle-section-guide-comfort"
+          style="cursor:pointer; color: #101F01; user-select:none; margin-left:15px; margin-right:15px">
+      Click here for Guide..
+</span>
  </h2>
-<script>
-document.getElementById('refresh-btn').addEventListener('click', () => {
-  location.reload();
-});
-</script>
+
 
 <table>
+<tbody class="toggle-section-guide-comfort" style="display:none;">
+<tr class="comfort">
+<td colspan="7" style="padding:10px; color:#182E00; text-align:middle;">
+      <img src="https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/axischart1.png"
+alt="Axis Chart 1" style="max-width:250px; margin-bottom:10px;">
+</td>
+</tr>
+
+<tr class="comfort">
+  <td colspan="7" style="padding:10px; color:#182E00; text-align:left;">
+
+        1. Test is done ontop of the current prescription.<br>
+	2. Check both eyes simultaneously; to honour binocularity and familiarity.<br>
+        3. Lenses change are done symmetrically and equally; no new prismatic effect created.<br>
+	4. This is to maintain equal prismatic effect in all directions even if there is new prescription.<br>
+        5. Find the balance SPH of Duochrome (DC) and Fanchart (FC).<br>
+	6. SE Diff maintains the same as the current pair.<br>
+        7. One eye will still have errors when checked indivudally.<br>
+      
+  </td>
+</tr>
+
+</tbody>
+
+
+
+
+
+
+<div style="height:20px;"></div>
+
+
   <tr class="white">
     <th>Rx Type</th>
     <th>Sides</th>
@@ -254,28 +287,6 @@ Status:
 
   </td>
 </tr>
-
-
-
-
-<tbody class="toggle-section-guide-comfort" style="display:none;">
-<tr class="comfort">
-  <td colspan="7" style="padding:10px; color:#182E00; text-align:left;">
-      <img src="https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/axischart1.png"
-alt="Axis Chart 1" style="max-width:300px; display:block; margin-bottom:10px;"<br>
-
-        1. Test is done ontop of the current prescription.<br>
-	2. Check both eyes simultaneously; to honour binocularity and familiarity.<br>
-        3. Lenses change are done symmetrically and equally; no new prismatic effect created.<br>
-	4. This is to maintain equal prismatic effect in all directions even if there is new prescription.<br>
-        5. Find the balance SPH of Duochrome (DC) and Fanchart (FC).<br>
-	6. SE Diff maintains the same as the current pair.<br>
-        7. One eye will still have errors when checked indivudally.<br>
-      
-  </td>
-</tr>
-
-</tbody>
 
 
   <tbody id="deficit-rows-comfort" style="display:none;">
@@ -1409,7 +1420,7 @@ setInterval(updateDCAnalysis, 300);
 
 
 <!-- Spacer at the bottom for scrolling -->
-<div style="height:200px;"></div>
+<div style="height:100px;"></div>
 
 
 </body>
