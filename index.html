@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=160, initial-scale=0.6, maximum-scale=0.6, user-scalable=yes">
+<meta name="viewport" content="width=160, initial-scale=0.6, maximum-scale=1, user-scalable=yes">
 <title>Kiara Optometry Prescription Calculator</title>
 <style>
 * {
@@ -27,7 +27,6 @@ body {
 table td:first-child,
 table th:first-child {
   width: 80px;
-  white-space: nowrap; /* prevents text from wrapping */
 }
 
 table td:nth-child(2),
@@ -183,11 +182,11 @@ KIARA OPTOMETRY V4 CALCULATOR
 
 <table>
 <tr class="offwhite">
-<td colspan="1" style="color:#182E00; text-align:center; padding:5px;">
+<td colspan="1" style="color:#182E00; text-align:left; padding:15px;">
 
     <span class="toggle-btn" data-target="toggle-section-guide-comfort"
           style="cursor:pointer; color: #101F01; user-select:none;">
-      <b>- How to do -</B>
+      <b>- How to perform the exam and use the RX Calculator - <i>click to show/hide</i></B>
 </span>
 </td>
 </tr>
@@ -197,27 +196,52 @@ KIARA OPTOMETRY V4 CALCULATOR
 
 <tbody class="toggle-section-guide-comfort" style="display:none;">
 <tr class="offwhite">
-  <td colspan="7" style="padding:10px; border:none; color:#182E00; text-align:left;">
+  <td colspan="1" style="padding:10px; border:none; color:#182E00; text-align:left;">
+<b>- Steps to do Comfy Clearer -</B><br><br>
+        1. Test is done with the current glasses or prescription.<br>
+	2. Both eyes are opened and checked simultaneously; to ensure binocular vision intact.<br>
+        3. Lenses change are done symmetrically and equally to both eye.<br>
+	4. This maintains equal prismatic effect even if there is a new prescription.<br>
+        5. Find the additional sphere power to balance DC, then input into calculator.<br>
+        6. Find the additional cyl and axis power to balance FC, then input into calculator.<br>
+        7. Calculator will produce Balance RX which is the true and full RX.<br>
+	8. Apply horizontal sharpening function.<br>
+	9. Make sphere adjustments if there are visual needs by the wearer; (e.g. want to see far clearer, want to see near clearer, etc).<br>
+	10. If no visual needs, then maintain the same DC status as previously.<br><br>
 
-        1. Test is done ontop of the current prescription.<br>
-	2. Check both eyes simultaneously; to honour binocularity and familiarity.<br>
-        3. Lenses change are done symmetrically and equally; no new prismatic effect created.<br>
-	4. This is to maintain equal prismatic effect in all directions even if there is new prescription.<br>
-        5. Find the balance SPH of Duochrome (DC) and Fanchart (FC).<br>
-	6. SE Diff maintains the same as the current pair.<br>
-        7. One eye will still have errors when checked indivudally.<br>
-      
-  </td>
+        ** One of the eye still have errors when checked individually because the test corrects binocularly, not monocularly. The error of the other eye does not pose any issues.<br><br>----
+        </td>
 </tr>
+<tr>
+  <td colspan="1" style="padding:10px; border:none; color:#182E00; text-align:left;">
+<b>- Steps to do Sharpest Ever -</B><br><br>
 
-<tr class="offwhite">
-<td colspan="7" style="color:#182E00; border:none; text-align:center;">
-  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/axischart1.png"
-       alt="Axis Chart 1" style="max-width:30%;">
-  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/axischart1.png"
-       alt="Axis Chart 1" style="max-width:30%;">
+
+       1. Test is done ontop of the current prescription.<br>
+       2. Seeing sharpest ever requires each eye to be tested to their own perfection, one eye at a time.<br>
+       3. Binocular may become imbalance because one eye's prescription may change more.<br>
+       4. SE Diff is a metric to track the RX difference between the eyes.<br>
+       5. A new SE Diff creates new prismatic effect when looking off from lens centre.<br>
+       6. SE Diff changes of 0.25 may require a week of adaptation.<br>
+       7. Maximum tolerance of SE Diff changes is 0.50 for majority of people.<br>
+       8. More than that will require serious adaptation and may subject to adaptation failure.<br>
+       9. However, there is a correlation between SE Diff changes range and accommodation.<br>
+       10. That is why younger people have better tolerance.<br><br>----
+     
 </td>
 </tr>
+<tr>
+<td colspan="1" style="border:none;">- Fan Chart (FC) and DuoChrome Chart (DC) -
+</tr>
+
+<tr>
+<td colspan="1" style="color:#182E00; border:none; text-align:center;">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/FCDCchart1.png"
+       alt="Fc Dc Chart 1" style="max-width:90%;">
+
+</td>
+</tr>
+
 </tbody>
 </table>
 
@@ -271,7 +295,7 @@ KIARA OPTOMETRY V4 CALCULATOR
       Results..
     </span>
 
-    <span style="margin-left:15px; text-decoration:none; cursor:pointer; color:#101F01; user-select:none;"
+    <span style="margin-left:15px;  margin-right:15px; text-decoration:none; cursor:pointer; color:#101F01; user-select:none;"
           onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-comfort'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
       Diagnostics..
     </span>
@@ -413,7 +437,7 @@ Adjustments
 
 <tr class="table-headernow">
 <td colspan="7" style="padding:10px; color: #241D0C; text-align:left;">
-<b>- Sharpest Ever Rx</b>
+<b>- Sharpest Ever Rx -</b>
 
 
  <span class="toggle-btn" data-target="toggle-section-sharper-rx" 
@@ -421,15 +445,12 @@ Adjustments
 Results..
 </span>
 
-    <span style="margin-left:15px; text-decoration:none; cursor:pointer; color:#241D0C; user-select:none;"
+    <span style="margin-left:15px; margin-right:15px; text-decoration:none; cursor:pointer; color:#241D0C; user-select:none;"
           onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-sharper'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
       Diagnostics..
     </span>
 
- <span class="toggle-btn" data-target="toggle-section-sharper" 
-      style="cursor:pointer; color: #241D0C; user-select:none; margin-left:15px; margin-right:15px;">
-Guide..
-</span>Status:
+Status:
 
 
 <span id="testToggle2" style="cursor:pointer; user-select:none; color: #241D0C;">
@@ -1417,13 +1438,11 @@ setInterval(updateDCAnalysis, 300);
 
 
 <!-- Spacer at the bottom for scrolling -->
-<div style="height:100px;"></div>
+<div style="height:700px;"></div>
 
 
 </body>
 </html>
-
-
 
 
 
