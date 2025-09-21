@@ -95,17 +95,13 @@ th, td {
   overflow-wrap: break-word; /* modern */
 }
 
-th { 
-  background:#d9d9d9; 
-  color: black;
-}
+th {   background:#d9d9d9; 
+  color: black;}
 
-input { 
-  width:80px; 
+input {   width:80px; 
   padding:2px; 
   text-align:center; 
-  box-sizing: border-box;
-}
+  box-sizing: border-box;}
 
 .now td { background: #F5F5F5; }
 .now-comfort td { background: #F5F5F5 ;}
@@ -113,13 +109,10 @@ input {
 .fc-results td { background: #EFF5E6; }
 .dc-bal td { background: #fff; }
 
-.table-headernow {
-  background: #E8D1A0;
-}
+.table-headernow {  background: #E8D1A0;}
 
-.comfort {
-  background: #E5F0D1;
-}
+.comfort {  background: #E5F0D1;}
+.offwhite { background: #f8f8f5; }
 
 .sph-btn, .addMinus025 {
   user-select: none;      /* prevent text highlight */
@@ -183,26 +176,27 @@ input {
 <div style="height:20px;"></div>
 
 <h2>
-KIARA OPTOMETRY V4 CALCULATOR<br>
+KIARA OPTOMETRY V4 CALCULATOR
 
-    <span class="toggle-btn" data-target="toggle-section-guide-comfort"
-          style="cursor:pointer; color: #101F01; user-select:none; margin-left:15px; margin-right:15px">
-      Click here for Guide..
-</span>
- </h2>
-
+</h2>
 
 <table>
-<tbody class="toggle-section-guide-comfort" style="display:none;">
-<tr class="comfort">
-<td colspan="7" style="padding:10px; color:#182E00; text-align:middle;">
-      <img src="https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/axischart1.png"
-alt="Axis Chart 1" style="max-width:250px; margin-bottom:10px;">
+<tr class="offwhite">
+<td colspan="7" style="color:#182E00; border:none; text-align:center;">
+
+    <span class="toggle-btn" data-target="toggle-section-guide-comfort"
+          style="cursor:pointer; color: #101F01; user-select:none;">
+      <b>- How to do -</B>
+</span>
 </td>
 </tr>
+</table>
 
-<tr class="comfort">
-  <td colspan="7" style="padding:10px; color:#182E00; text-align:left;">
+<table>
+
+<tbody class="toggle-section-guide-comfort" style="display:none;">
+<tr class="offwhite">
+  <td colspan="7" style="padding:10px; border:none; color:#182E00; text-align:left;">
 
         1. Test is done ontop of the current prescription.<br>
 	2. Check both eyes simultaneously; to honour binocularity and familiarity.<br>
@@ -215,14 +209,21 @@ alt="Axis Chart 1" style="max-width:250px; margin-bottom:10px;">
   </td>
 </tr>
 
+<tr class="offwhite">
+<td colspan="7" style="color:#182E00; border:none; text-align:center;">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/axischart1.png"
+       alt="Axis Chart 1" style="max-width:30%;">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/axischart1.png"
+       alt="Axis Chart 1" style="max-width:30%;">
+</td>
+</tr>
 </tbody>
+</table>
+
+<div style="height:10px;"></div>
 
 
-
-
-
-
-<div style="height:20px;"></div>
+<table>
 
 
   <tr class="white">
@@ -256,7 +257,7 @@ alt="Axis Chart 1" style="max-width:250px; margin-bottom:10px;">
   </tr>
 
 <tr>
-<td colspan="7" style="padding:5px;"></td>
+<td colspan="7" style="padding:5px; border:none;"></td>
 </tr>
 
 <tr class="comfort">
@@ -273,11 +274,6 @@ alt="Axis Chart 1" style="max-width:250px; margin-bottom:10px;">
           onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-comfort'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
       Diagnostics..
     </span>
-
-    <span class="toggle-btn" data-target="toggle-section-guide-comfort"
-          style="cursor:pointer; color: #101F01; user-select:none; margin-left:15px; margin-right:15px">
-      Guide..
-</span>
 
 Status:
 <span id="testToggle1" style="cursor:pointer; user-select:none; color: #101F01; margin-left:0px;">
@@ -408,7 +404,7 @@ Adjustments
 
 
 <tr>
-<td colspan="7" style="padding:5px;"></td>
+<td colspan="7" style="padding:5px; border:none;"></td>
 </tr>
 
 
