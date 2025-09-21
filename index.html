@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=160, initial-scale=0.6, maximum-scale=0.6, user-scalable=no">
+<meta name="viewport" content="width=160, initial-scale=0.6, maximum-scale=0.6, user-scalable=yes">
 <title>Kiara Optometry Prescription Calculator</title>
 <style>
 * {
@@ -24,11 +24,16 @@ body {
   color: black;
 }
 
-/* Narrow down the first column (labels like Current RX) */
 table td:first-child,
 table th:first-child {
   width: 80px;
   white-space: nowrap; /* prevents text from wrapping */
+}
+
+table td:nth-child(2),
+table th:nth-child(2){
+  max-width: 40px;
+  width: 40px;
 }
 
 table td:nth-child(3),
@@ -66,13 +71,6 @@ table th:nth-child(7) {
   white-space: nowrap;
 }
 
-table td:nth-child(2),
-table th:nth-child(2){
-  max-width: 40px;
-  width: 40px;
-}
-
-
 h2 { 
   text-align:center; 
   margin-bottom:10px; 
@@ -106,7 +104,6 @@ input {
   width:80px; 
   padding:2px; 
   text-align:center; 
-  font-weight: bold; 
   box-sizing: border-box;
 }
 
@@ -118,12 +115,10 @@ input {
 
 .table-headernow {
   background: #E8D1A0;
-  font-weight: bold;  
 }
 
 .comfort {
   background: #E5F0D1;
-  font-weight: bold;  
 }
 
 .sph-btn, .addMinus025 {
@@ -1074,12 +1069,12 @@ leftCell.textContent  = formatSigned(newLeft);
   if (dcRight) {
     dcRight.textContent = label.text;
     dcRight.style.color = label.color;
-    dcRight.style.fontWeight = "bold";
+    dcRight.style.fontWeight = "none";
   }
   if (dcLeft) {
     dcLeft.textContent = label.text;
     dcLeft.style.color = label.color;
-    dcLeft.style.fontWeight = "bold";
+    dcLeft.style.fontWeight = "none";
   }
 }
 
@@ -1106,7 +1101,7 @@ prescribedDCEyes.forEach(id => {
   if(el) {
     el.textContent = "BAL";
     el.style.color = "black";
-    el.style.fontWeight = "bold";
+    el.style.fontWeight = "none";
   }
 });
 
@@ -1220,7 +1215,7 @@ function describeDC(dc, label = 'Current') {
 
   if (parsed.kind === 'CODE') {
     const absD = Math.abs(parsed.diopter).toFixed(2);
-    const colourLabel = `<span style="color:${parsed.type === 'R' ? 'red' : 'green'}; font-weight:bold;">${parsed.raw}</span>`;
+    const colourLabel = `<span style="color:${parsed.type === 'R' ? 'red' : 'green'}; font-weight:normal;">${parsed.raw}</span>`;
 
     if (parsed.type === 'R') {
       return `${label} RX under by -${absD} (${colourLabel}); perfect for near and room distance, but not able to see very far.`;
@@ -1228,7 +1223,7 @@ function describeDC(dc, label = 'Current') {
       if (parsed.step === 1) {
         return `${label} RX over by +${absD} (${colourLabel}); perfect for seeing as far as possible.`;
       }
-      return `${label} RX over by +${absD} (${colourLabel}); over the healthy limit of +0.25 (<span style="color: green; font-weight:bold;">G1</span>). Prolonged use may cause blurry vision, tiredness and headaches.`;
+      return `${label} RX over by +${absD} (${colourLabel}); over the healthy limit of +0.25 (<span style="color: green; font-weight:normal;">G1</span>). Prolonged use may cause blurry vision, tiredness and headaches.`;
     }
   }
 
@@ -1239,7 +1234,7 @@ function describeDC(dc, label = 'Current') {
     if (Math.abs(parsed.diopter - 0.25) < 0.0001) {
       return `${label} RX over by ${d}; perfect for seeing as far as possible.`;
     }
-    return `${label} RX over by ${d}; Limit for healthy vision is +0.25 (<span style="color: green; font-weight:bold;">G1</span>); Unnecessary over will cause blurry vision & headaches.`;
+    return `${label} RX over by ${d}; Limit for healthy vision is +0.25 (<span style="color: green; font-weight:normal;">G1</span>); Unnecessary over will cause blurry vision & headaches.`;
   }
 
   return `${label} RX: ${dc}`;
@@ -1379,7 +1374,7 @@ function getDCShiftText(fromDC, toDC) {
     let codeLabel = '';
     if (t.kind === 'CODE') {
       const color = (t.type === 'R') ? 'red' : 'green';
-      codeLabel = `(<span style="color:${color}; font-weight:bold;">${t.type}${t.step}</span>)`;
+      codeLabel = `(<span style="color:${color}; font-weight:normal;">${t.type}${t.step}</span>)`;
     }
 
     if (newD < 0) {
@@ -1413,7 +1408,8 @@ setInterval(updateDCAnalysis, 300);
 </script>
 
 
-
+<!-- Spacer at the bottom for scrolling -->
+<div style="height:200px;"></div>
 
 
 </body>
