@@ -136,6 +136,15 @@ input {   width:80px;
 
 #apply-controls { text-align:left; margin-bottom:10px; margin-top:10px; margin-left:10px }
 #addMinus025 { cursor:pointer; color:black; text-decoration:underline; user-select:none; }
+
+.custom-link {
+  color: #101F01;       /* text color */
+  font-weight: bold;    /* normal | bold | lighter | 100-900 */
+  font-style: normal;   /* normal | italic | oblique */
+  text-decoration: none; /* none | underline | overline | line-through */
+}
+
+
 </style>
 </head>
 <body>
@@ -179,45 +188,91 @@ KIARA OPTOMETRY V4 CALCULATOR
 
 </h2>
 <div style="height:10px;"></div>
-  <a href="htd_fcdc_error_margin.html">Go to Page 2</a>
+
 <table>
 <tr class="offwhite">
 <td colspan="1" style="color:#182E00; text-align:left; padding:15px;">
 
+ <span class="toggle-btn" data-target="toggle-section-fcdc-errormargin"
+          style="cursor:pointer; color: #101F01; user-select:none;">
+      <b>- How to Do FCDC Error Margin test - <i>click to show/hide</i></B><br>
+</span>
+
     <span class="toggle-btn" data-target="toggle-section-guide-comfort"
           style="cursor:pointer; color: #101F01; user-select:none;">
-      <b>- How to perform the exam and use the RX Calculator - <i>click to show/hide</i></B>
+      <b>- How to perform the exam and use the RX Calculator - <i>click to show/hide</i></B><BR>
 </span>
+
 </td>
 </tr>
 </table>
 
-<table>
 
+
+<table>
+<tbody class="toggle-section-fcdc-errormargin" style="display:none;">
+<tr class="offwhite">
+  <td colspan="1" style="padding:10px; border:none; color:#182E00; text-align:left;">
+<b>Purpose:</b><br>
+FC–DC Error Margin Test maps how far the visual system is from a true <b>balanced prescription</b>. Using a series of trial lenses (usually 5–10 steps) we locate areas of over- and under-correction, then calculate the balanced RX. The test can be done binocularly or monocularly and works with glasses or contacts.<br><br>
+
+<b>Important concept:</b><br>
+Fan Chart (FC) and Duochrome (DC) are <b>inter-related</b>. The FC reveals astigmatic/line errors; if FC is not balanced, DC results will be unreliable. Correct the FC first — this usually requires a slight under-correction (a little less minus / a little more plus). When FC is corrected correctly, the DC should show clearer <b>red</b> during the balancing step.<br><br>
+
+<b>Materials:</b><br>
+1. Fan Chart (FC) and Duochrome (DC) charts.<br>
+2. Trial lenses (5–10 steps; e.g. +1.00, +0.50, 0, -0.50, -1.00).<br>
+3. Calculator to enter FC/DC balance values.<br><br>
+
+<b>Steps — Practical workflow</b><br><br>
+
+1. <b>Explain & position:</b> Ask the patient to view the FC/DC chart and tell them you’ll try several lenses. Encourage quick, instinctive answers.<br><br>
+
+2. <b>Balance the Fan Chart (FC) first:</b> Always center the FC before using DC. If parts of the fan look darker or blurred, place plus cylinder (or the appropriate cylinder) on the darker region to bring the fan into balance. Do not proceed to DC until the FC looks centered and even.<br><br>
+
+<img src="https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/FCDCchart1.png"
+         alt="Fc Dc Chart 1" style="max-width:80%;">
+<br><br>
+
+3. <b>Perform the Duochrome (DC) sequence:</b> Present lens steps around the current RX (example: +1.00, +0.50, 0, -0.50, -1.00). For each step ask: “Which side is clearer — red or green?” Record quick responses.<br><br>
+
+4. <b>Interpret results:</b> Identify the lens position where balance or smallest difference occurs. That lens value is the <b>sphere to balance DC</b> — enter it into the calculator along with the FC adjustments.<br>
+   <i>Example:</i> +1.00 red clearer, +0.50 both same, 0 green clearer, -0.50 green clearer, -1.00 both blur → here +0.50 is the SPH to balance DC.<br><br>
+
+5. <b>Map & record:</b> Log the FC (cyl/axis) and DC (sphere to balance). Use the calculator to compute the Balanced RX.<br><br>
+
+6. <b>Confirm binocularly:</b> If you performed monocular checks, confirm the balanced prescription with both eyes open and ask about comfort and clarity.<br><br>
+
+<b>Tips & troubleshooting:</b><br>
+- Always balance FC before DC — FC errors will invalidate DC readings.<br>
+- Aim for a slight under-correction when fixing FC (less minus / more plus). When done correctly, DC should lean clearer to <b>red</b> during balancing — this indicates the FC adjustment moved the eye into the correct region for DC testing.<br>
+- Ask for quick answers. Long, uncertain replies reduce test reliability. Repeat if responses are inconsistent.<br>
+- Keep step sizes consistent (0.25 or 0.50 D) and record which steps were used.<br><br>
+
+<b>Note:</b> This test measures the additional power needed to reach balance — clinical judgment and binocular confirmation are essential before finalising any prescription.<br><br>
+----
+
+
+</td>
+</tr>
+</tbody>
+</table>
+
+
+
+<table>
 <tbody class="toggle-section-guide-comfort" style="display:none;">
 <tr class="offwhite">
   <td colspan="1" style="padding:10px; border:none; color:#182E00; text-align:left;">
+
 <b>- Steps for Comfy Clearer Test -</b><br><br>
 
 1. Begin with the patient <b>wearing their current glasses or prescription</b>.<br>
 2. Keep <b>both eyes open</b> during the test (to maintain natural binocular vision).<br>
 3. <b>Change lenses equally</b> for both eyes at the same time.<br>
 4. This keeps the <b>prismatic effect balanced</b>, even if the prescription changes.<br>
-5. Use the <b>Duochrome (DC)</b> test to find the <b> sph to bal </b> power, then enter it into the calculator.<br>
+5. Perform the <B>FC DC Error Margin test</b>.<br>
 6. Use the <b>Fan Chart (FC)</b> to find the <b> cyl and axis to bal </b> values, then enter those into the calculator.<br>
-<!-- 🔽 Insert toggle image here -->
-<div style="text-align:center; margin:10px 0;">
-  <span onclick="toggleSection('fc-dc-chart')" 
-        style="cursor:pointer; color:#182E00; font-weight:bold; user-select:none;">
-    [ Show / Hide FC DC Chart ]
-  </span>
-
-  <div id="fc-dc-chart" style="display:none; margin-top:8px;">
-    <img src="https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/FCDCchart1.png"
-         alt="Fc Dc Chart 1" style="max-width:90%;">
-  </div>
-</div>
-<!-- 🔼 End toggle image -->
 7. The calculator will give you the <b>Balance RX</b> (the true and full prescription).<br>
 8. Apply the <b>Horizontal Sharpening</b> function.<br>
 9. If the wearer has special needs (e.g. wants sharper distance or near vision), make slight <b>sphere adjustments</b>.<br>
@@ -233,7 +288,7 @@ The small error in one eye <b>does not affect daily vision</b>.<br><br><i> End o
 <b>- Steps for Sharpest Ever Test -</b><br><br>
 
 1. Begin with the patient’s <b>current prescription</b>.<br>
-2. For the <b>sharpest possible vision</b>, test <b>each eye separately</b> (monocular testing).<br>
+2. For the sharpest possible vision,<b>perform FC DC Error Margin test on each eye separately</b> (monocular testing).<br>
 3. This may cause the two eyes to become <b>imbalanced</b>, since one eye’s prescription can change more than the other.<br>
 4. Use <b>SE Diff</b> (Spherical Equivalent Difference) to track the difference in prescription strength between the two eyes.<br>
 5. A new SE Diff introduces a <b>prismatic effect</b> when looking away from the lens center.<br>
@@ -1458,7 +1513,6 @@ setInterval(updateDCAnalysis, 300);
 
 </body>
 </html>
-
 
 
 
