@@ -205,6 +205,19 @@ KIARA OPTOMETRY V4 CALCULATOR
 4. This keeps the <b>prismatic effect balanced</b>, even if the prescription changes.<br>
 5. Use the <b>Duochrome (DC)</b> test to find the <b> sph to bal </b> power, then enter it into the calculator.<br>
 6. Use the <b>Fan Chart (FC)</b> to find the <b> cyl and axis to bal </b> values, then enter those into the calculator.<br>
+<!-- 🔽 Insert toggle image here -->
+<div style="text-align:center; margin:10px 0;">
+  <span onclick="toggleSection('fc-dc-chart')" 
+        style="cursor:pointer; color:#182E00; font-weight:bold; user-select:none;">
+    [ Show / Hide FC DC Chart ]
+  </span>
+
+  <div id="fc-dc-chart" style="display:none; margin-top:8px;">
+    <img src="https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/FCDCchart1.png"
+         alt="Fc Dc Chart 1" style="max-width:90%;">
+  </div>
+</div>
+<!-- 🔼 End toggle image -->
 7. The calculator will give you the <b>Balance RX</b> (the true and full prescription).<br>
 8. Apply the <b>Horizontal Sharpening</b> function.<br>
 9. If the wearer has special needs (e.g. wants sharper distance or near vision), make slight <b>sphere adjustments</b>.<br>
@@ -234,20 +247,18 @@ The small error in one eye <b>does not affect daily vision</b>.<br><br><i> End o
      
 </td>
 </tr>
-<tr>
-<td colspan="1" style="border:none;">- Fan Chart (FC) and DuoChrome Chart (DC) -
-</tr>
-
-<tr>
-<td colspan="1" style="color:#182E00; border:none; text-align:center;">
-  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/FCDCchart1.png"
-       alt="Fc Dc Chart 1" style="max-width:90%;">
-
-</td>
-</tr>
-
 </tbody>
 </table>
+
+
+<!-- Toggle function -->
+<script>
+function toggleSection(id) {
+  const section = document.getElementById(id);
+  section.style.display = (section.style.display === "none") ? "table-row" : "none";
+}
+</script>
+
 
 <div style="height:10px;"></div>
 
