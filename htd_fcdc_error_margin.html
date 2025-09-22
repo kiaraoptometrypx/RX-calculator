@@ -1,11 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>How To Do Fc DC error margin</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=160, initial-scale=0.6, maximum-scale=1, user-scalable=yes">
+<title>Kiara Optometry Prescription Calculator</title>
+<style>
+* {
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+html, body {
+  font-size: 20px; /* your base */
+	  -webkit-text-size-adjust: none; /* prevents Safari scaling */
+
+}
+
+body { 
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+  font-size: 20px;
+  margin: 0;
+  background: #f8f8f5;
+  color: black;
+}
+
+table td:first-child,
+table th:first-child {
+  width: 80px;
+}
+
+table td:nth-child(2),
+table th:nth-child(2){
+  max-width: 40px;
+  width: 40px;
+}
+
+table td:nth-child(3),
+table th:nth-child(3) {
+  min-width: 90px;
+  width: 90px;
+  white-space: nowrap;
+}
+
+table td:nth-child(4),
+table th:nth-child(4) {
+  min-width: 90px;
+  width: 90px;
+  white-space: nowrap;
+}
+
+table td:nth-child(5),
+table th:nth-child(5) {
+  min-width: 90px;
+  width: 90px;
+  white-space: nowrap;
+}
+
+table td:nth-child(6),
+table th:nth-child(6) {
+  min-width: 50px;
+  width: 50px;
+  white-space: nowrap;
+}
+
+table td:nth-child(7),
+table th:nth-child(7) {
+  min-width: 50px;
+  width: 50px;
+  white-space: nowrap;
+}
+
+h2 { 
+  text-align:center; 
+  margin-bottom:10px; 
+}
+
+table { 
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 95%; /* keep your width */ 
+  margin:0 auto; 
+  font-size: 20px; 
+
+}
+
+th, td { 
+  border:0.5px solid #999; 
+  padding:5px; 
+  text-align:center; 
+  vertical-align: middle;
+  white-space: normal;   /* allow line wrapping */
+  word-wrap: break-word; /* legacy */
+  overflow-wrap: break-word; /* modern */
+}
+
+th {   background:#d9d9d9; 
+  color: black;}
+
+input {   width:80px; 
+  padding:2px; 
+  text-align:center; 
+  box-sizing: border-box;}
+
+.now td { background: #F5F5F5; }
+.now-comfort td { background: #F5F5F5 ;}
+.white td { background: #d9d9d9; }
+.fc-results td { background: #EFF5E6; }
+.dc-bal td { background: #fff; }
+
+.table-headernow {  background: #E8D1A0;}
+
+.comfort {  background: #E5F0D1;}
+.offwhite { background: #f8f8f5; }
+
+.sph-btn, .addMinus025 {
+  user-select: none;      /* prevent text highlight */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none;    /* Firefox */
+}
+
+
+/* 🔒 Overlay for blackout */
+#overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: #EDEADF;
+  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  z-index: 9999;
+}
+
+#apply-controls { text-align:left; margin-bottom:10px; margin-top:10px; margin-left:10px }
+#addMinus025 { cursor:pointer; color:black; text-decoration:underline; user-select:none; }
+</style>
 </head>
 <body>
-  <h1>How to do fcdc error margin</h1>
-  <a href="index.html">Back to Page 1</a>
+
+<table>
+<tr class="offwhite">
+  <td colspan="1" style="padding:10px; border:none; color:#182E00; text-align:left;">
+
+
+
+<h2>The FC–DC Error Margin Test</h2><br><br>
+
+<b>Purpose:</b><br>
+FC–DC Error Margin Test maps how far the visual system is from a true <b>balanced prescription</b>. Using a series of trial lenses (usually 5–10 steps) we locate areas of over- and under-correction, then calculate the balanced RX. The test can be done binocularly or monocularly and works with glasses or contacts.<br><br>
+
+<b>Important concept:</b><br>
+Fan Chart (FC) and Duochrome (DC) are <b>inter-related</b>. The FC reveals astigmatic/line errors; if FC is not balanced, DC results will be unreliable. Correct the FC first — this usually requires a slight under-correction (a little less minus / a little more plus). When FC is corrected correctly, the DC should show clearer <b>red</b> during the balancing step.<br><br>
+
+<b>Materials:</b><br>
+1. Fan Chart (FC) and Duochrome (DC) charts.<br>
+2. Trial lenses (5–10 steps; e.g. +1.00, +0.50, 0, -0.50, -1.00).<br>
+3. Calculator to enter FC/DC balance values.<br><br>
+
+<b>Steps — Practical workflow</b><br><br>
+
+1. <b>Explain & position:</b> Ask the patient to view the FC/DC chart and tell them you’ll try several lenses. Encourage quick, instinctive answers.<br><br>
+
+2. <b>Balance the Fan Chart (FC) first:</b> Always center the FC before using DC. If parts of the fan look darker or blurred, place plus cylinder (or the appropriate cylinder) on the darker region to bring the fan into balance. Do not proceed to DC until the FC looks centered and even.<br><br>
+
+3. <b>Insert FC/DC chart here (click to show/hide):</b><br>
+<span onclick="toggleSection('fc-dc-chart')" style="cursor:pointer; user-select:none; color:#182E00; font-weight:bold;">
+  [ Show / Hide FC–DC Chart ]
+</span>
+<div id="fc-dc-chart" style="display:none; text-align:center; margin:8px 0;">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/FCDCchart1.png"
+       alt="FC DC Chart" style="max-width:90%;">
+</div><br>
+
+4. <b>Perform the Duochrome (DC) sequence:</b> Present lens steps around the current RX (example: +1.00, +0.50, 0, -0.50, -1.00). For each step ask: “Which side is clearer — red or green?” Record quick responses.<br><br>
+
+5. <b>Interpret results:</b> Identify the lens position where balance or smallest difference occurs. That lens value is the <b>sphere to balance DC</b> — enter it into the calculator along with the FC adjustments.<br>
+   <i>Example:</i> +1.00 red clearer, +0.50 both same, 0 green clearer, -0.50 green clearer, -1.00 both blur → here +0.50 is the SPH to balance DC.<br><br>
+
+6. <b>Map & record:</b> Log the FC (cyl/axis) and DC (sphere to balance). Use the calculator to compute the Balanced RX.<br><br>
+
+7. <b>Confirm binocularly:</b> If you performed monocular checks, confirm the balanced prescription with both eyes open and ask about comfort and clarity.<br><br>
+
+<b>Tips & troubleshooting:</b><br>
+- Always balance FC before DC — FC errors will invalidate DC readings.<br>
+- Aim for a slight under-correction when fixing FC (less minus / more plus). When done correctly, DC should lean clearer to <b>red</b> during balancing — this indicates the FC adjustment moved the eye into the correct region for DC testing.<br>
+- Ask for quick answers. Long, uncertain replies reduce test reliability. Repeat if responses are inconsistent.<br>
+- Keep step sizes consistent (0.25 or 0.50 D) and record which steps were used.<br><br>
+
+<b>Note:</b> This test measures the additional power needed to reach balance — clinical judgment and binocular confirmation are essential before finalising any prescription.<br><br>
+----
+
+
+
+</td>
+</tr>
+</table>
 </body>
 </html>
