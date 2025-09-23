@@ -188,18 +188,16 @@ input {   width:80px;
 <table>
 <tr class="offwhite">
 	
-<td colspan="1" style="color:#182E00; border:none; text-align:left; padding:0px;">
-<b><i>● 1. Guide for FC DC Error Margin test</i></b><br>
+<td colspan="2" style="color:#182E00; border:none; text-align:left; padding:0px;">
  <span class="toggle-btn" data-target="toggle-section-fcdc-errormargin"
           style="cursor:pointer; color: #101F01; user-select:none;">
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <i>▼▲ toggle</i>
-</span>
-</td></tr>
-<td colspan="1" style="color:#182E00; border:none; text-align:left; padding:0px;">
-        <b><i>● 2. How to use the Algorithm Refraction</i></b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      <b><i>● Guide for FC DC Error Margin test</i></b>
+&nbsp;<i>▼▲ toggle</i>
+</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       
  <span class="toggle-btn" data-target="toggle-section-guide-comfort"
           style="cursor:pointer; color: #101F01; user-select:none;">
-<i>▼▲ toggle</i>
+ <b><i>● How to use the Algorithm Refraction</i></b>&nbsp; <i>▼▲ toggle</i>
 </span>
 </td>
 </tr>
@@ -213,10 +211,10 @@ input {   width:80px;
 <tbody class="toggle-section-fcdc-errormargin" style="display:none;">
 
 <tr class="offwhite">
-  <td colspan="1" style="padding:5px; border:none; color:#182E00; text-align:left;"></td></tr>
+  <td colspan="2" style="padding:5px; border:none; color:#182E00; text-align:left;"></td></tr>
 
-<tr><td colspan="1" style="padding:10px; border:1px solid lightgrey; color:#182E00; text-align:left;">
-<b>● 1. Guide for FC DC Error Margin test</b><br><br>
+<tr><td colspan="2" style="padding:10px; border:1px solid lightgrey; color:#182E00; text-align:left;">
+<b>● Guide for FC DC Error Margin test</b><br><br>
 <b>Glossary:</b><br>
   -<b>Fan Chart (FC):</b> Detects astigmatism and line orientation errors. Must be balanced first.<br>
   -<b>Duochrome (DC):</b> Red/green balance test to refine spherical power.<br>
@@ -281,15 +279,15 @@ Fan Chart (FC) and Duochrome (DC) are <b>inter-related</b>. The FC reveals astig
 
 </tbody>
 <tr>
-<td colspan="1" style="color:#182E00; border:none; text-align:left; padding:5px;">
+<td colspan="2" style="color:#182E00; border:none; text-align:left; padding:5px;">
 </tr>
 
 
 <tbody class="toggle-section-guide-comfort" style="display:none;">
 <tr class="offwhite">
 
-<td colspan="1" style="padding:10px; border:1px solid lightgrey; color:#182E00; text-align:left;">
-<b>● 2. How to use the Algorithm Refraction</B><br><br>
+<td colspan="2" style="padding:10px; border:1px solid lightgrey; color:#182E00; text-align:left;">
+<b>● How to use the Algorithm Refraction</B><br><br>
 First, <b>chooose the type of test</b> based on their needs:<br>
     <b>- Comfy Clearer Test</b><br>
     Keeps both eyes working together comfortably while still making things clearer. 
@@ -456,7 +454,7 @@ function toggleSection(id) {
   <td id="final-axis-ou-re">0</td>
   <td id="final-se-ou-re" style="display:none;">—</td>
   <td id="bypass-final-ou">—</td>
-  <td id="final-dc-ou-re">BAL</td>
+  <td id="final-dc-ou-re">—</td>
 </tr>
 <tr class="now-comfort">
  <td>Left</td>
@@ -466,7 +464,7 @@ function toggleSection(id) {
   <td id="final-axis-ou-le">0</td>
   <td id="final-se-ou-le" style="display:none;">—</td>
   <td>—</td>
-  <td id="final-dc-ou-le">BAL</td>
+  <td id="final-dc-ou-le">—</td>
 </tr>
 
 <tr class="now-comfort">
@@ -630,7 +628,7 @@ makeToggle("testToggle2");
   </tr>
 
   <tr class="now">
-    <td rowspan="2">Mono Error<br>Margin</td>
+    <td rowspan="2">FC DC Error<br>Margin</td>
 <td>Right</td>
 
     <td><input id="dc-sph-od" placeholder="0.00"></td>
@@ -651,7 +649,7 @@ makeToggle("testToggle2");
   </tr>
 
   <tr class="now">
-    <td rowspan="2">DC & FC<br>Bal Mono</td>
+    <td rowspan="2">FC DC<br>Balance</td>
 <td>Right</td>
 
     <td id="final-sph-od">0.00</td>
@@ -659,8 +657,8 @@ makeToggle("testToggle2");
     <td id="final-axis-od">0</td>
     <td id="final-se-od" style="display:none;">—</td>
     <td id="bypass-final-mono">—</td>
-    <td id="final-dc-od" style="display:none;">BAL </td>
-    <td>-</td>
+    <td id="final-dc-od">BAL </td>
+  
   </tr>
   <tr class="now">
     <td>Left</td>
@@ -669,16 +667,16 @@ makeToggle("testToggle2");
     <td id="final-axis-os">0</td>
     <td id="final-se-os" style="display:none;">—</td>
     <td>—</td>
-    <td id="final-dc-os" style="display:none;">BAL </td>
-    <td>-</td>
+    <td id="final-dc-os">BAL </td>
+    
   </tr>
 
   <tr class="now">
-<td>
+<td rowspan="3">
 Adjustments
 </td>
-<td>Both</td>
-<td colspan="5" style="padding:7px; text-align:left;">
+<td style="display:none;">Both</td>
+<td colspan="5" style="padding:7px; text-align:left; display:none;">
  <!-- Clickable control to apply -0.25 x 180 -->
 
     <span class="addMinus025" role="button" 
@@ -700,6 +698,85 @@ Adjustments
 <span class="testStatus" style="cursor:pointer; color: #101F01; user-select:none; text-decoration:none; margin-right:2px; margin-left:0px;">
   Test ongoing..
 </span>
+
+
+
+</td>
+</tr>
+<tr><td>Right</td>
+<td colspan="5" style="padding:7px; text-align:left;">
+    <span class="addMinus025" role="button" 
+          style="cursor:pointer; user-select:none; margin-right:30px; margin-left:30px;">
+      Apply -0.25 × 180
+    </span> 
+●
+<span class="sph-btn-mono" data-eye="od" data-step="-0.25"
+          style="cursor:pointer; user-select:none; text-decoration:none; color:green; margin-right:5px; margin-left:0px;">
+     S-0.25
+   </span>
+<span class="sph-btn-mono" data-eye="od" data-step="0.25"
+          style="cursor:pointer; user-select:none; text-decoration:none; color:red; margin-right:30px; margin-left:0px;">
+     S+0.25
+</span>
+●
+<span class="testStatus" style="cursor:pointer; color: #101F01; user-select:none; text-decoration:none; margin-right:2px; margin-left:0px;">
+  Test ongoing..
+</span>
+</td></tr>
+
+
+<tr><td>Left</td>
+<td colspan="5" style="padding:7px; text-align:left;">
+    <span class="addMinus025" role="button" 
+          style="cursor:pointer; user-select:none; margin-right:30px; margin-left:30px;">
+      Apply -0.25 × 180
+    </span> 
+●
+<span class="sph-btn-mono" data-eye="os" data-step="-0.25"
+          style="cursor:pointer; user-select:none; text-decoration:none; color:green; margin-right:5px; margin-left:0px;">
+     S-0.25
+   </span>
+<span class="sph-btn-mono" data-eye="os" data-step="0.25"
+          style="cursor:pointer; user-select:none; text-decoration:none; color:red; margin-right:30px; margin-left:0px;">
+     S+0.25
+</span>
+●
+<span class="testStatus" style="cursor:pointer; color: #101F01; user-select:none; text-decoration:none; margin-right:2px; margin-left:0px;">
+  Test ongoing..
+</span>
+</td></tr>
+
+</tbody>
+
+
+<tbody class="toggle-section-sharper-rx" style="display:none;">
+
+  <tr class="table-headernow">
+    <td rowspan="2">Prescribed<br>Mono</td>
+<td>Right</td>
+    <td id="res-sph-od-2">0.00</td>
+    <td id="res-cyl-od-2">0.00</td>
+    <td id="res-axis-od-2">0</td>
+    <td id="res-se-od-2" style="display:none;">—</td>
+    <td id="bypass">—</td>
+    <td id="res-dc-od-2">BAL</td> 
+  </tr>
+  <tr class="table-headernow">
+    <td>Left</td>
+    <td id="res-sph-os-2">0.00</td>
+    <td id="res-cyl-os-2">0.00</td>
+    <td id="res-axis-os-2">0</td>
+    <td>—</td>    
+    <td id="res-se-os-2" style="display:none;">—</td>
+    <td id="res-dc-os-2">BAL</td> 
+  </tr>
+
+</tbody>
+
+
+
+</table>
+
 
 
 
@@ -742,6 +819,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -789,7 +867,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Reset mirrors on adjustment buttons (Cyl -0.25, S -0.25, S +0.25)
-  const adjustmentButtons = document.querySelectorAll(".addMinus025, .sph-btn");
+  const adjustmentButtons = document.querySelectorAll(".addMinus025, .sph-btn, .sph-btn-mono");
   adjustmentButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       testDone = false; // revert
@@ -800,41 +878,6 @@ document.addEventListener("DOMContentLoaded", () => {
   updateMirrors(); // initialize
 });
 </script>
-
-
-</td>
-</tr>
-
-</tbody>
-
-
-<tbody class="toggle-section-sharper-rx" style="display:none;">
-
-  <tr class="table-headernow">
-    <td rowspan="2">Prescribed<br>Mono</td>
-<td>Right</td>
-    <td id="res-sph-od-2">0.00</td>
-    <td id="res-cyl-od-2">0.00</td>
-    <td id="res-axis-od-2">0</td>
-    <td id="res-se-od-2" style="display:none;">—</td>
-    <td id="bypass">—</td>
-    <td id="res-dc-od-2">BAL</td> 
-  </tr>
-  <tr class="table-headernow">
-    <td>Left</td>
-    <td id="res-sph-os-2">0.00</td>
-    <td id="res-cyl-os-2">0.00</td>
-    <td id="res-axis-os-2">0</td>
-    <td>—</td>    
-    <td id="res-se-os-2" style="display:none;">—</td>
-    <td id="res-dc-os-2">BAL</td> 
-  </tr>
-
-</tbody>
-
-
-
-</table>
 
 
 
@@ -1303,6 +1346,84 @@ prescribedDCEyes.forEach(id => {
 </script>
 
 <script>
+// ---------------- Monocular Adjustments (per eye, live adjust) ----------------
+
+// Attach listeners to monocular sph adjustment buttons
+document.querySelectorAll('.sph-btn-mono').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const eye = btn.dataset.eye;        // "od" or "os"
+    const step = parseFloat(btn.dataset.step); // -0.25 or +0.25
+    applySphOffsetMonoLive(eye, step);
+  });
+});
+
+function applySphOffsetMonoLive(eye, step) {
+  const ids = (eye === "od")
+    ? { sph: "res-sph-od-2", dc: "res-dc-od-2" }
+    : { sph: "res-sph-os-2", dc: "res-dc-os-2" };
+
+  const sphCell = document.getElementById(ids.sph);
+  const dcCell  = document.getElementById(ids.dc);
+  if (!sphCell || !dcCell) return;
+
+  // --- Adjust SPH directly from what's currently shown ---
+  const currentVal = parseFloat(sphCell.textContent) || 0;
+  const newVal = currentVal + step;
+  sphCell.textContent = formatSigned(newVal);
+
+  // --- Adjust DC purely by observing current label and nudging by 1 step ---
+  const currentLabel = (dcCell.textContent || "").trim();
+  const newLabel = getNextDcLabelByNudge(currentLabel, step);
+  dcCell.textContent = newLabel.text;
+  dcCell.style.color = newLabel.color;
+  dcCell.style.fontWeight = "none";
+}
+
+// Format numbers with sign
+function formatSigned(value) {
+  // ensure standard +/− two-decimal format
+  const num = Number(value);
+  if (Number.isNaN(num)) return "+0.00";
+  const s = num.toFixed(2);
+  return (num >= 0 ? "+" : "") + s;
+}
+
+// Parse DC string into a numeric offset: BAL -> 0, Rn -> +n, Gn -> -n
+function parseDcToNumber(current) {
+  const s = String(current || "").toUpperCase().trim();
+  if (s === "BAL") return 0;
+
+  // find first R or G and the following number (e.g. "R2", "G10", or "R 1")
+  const m = s.match(/([RG])\s*([-]?\d+)/i);
+  if (!m) return 0;
+
+  const dir = m[1].toUpperCase();
+  const num = parseInt(m[2], 10) || 0;
+  return dir === "R" ? num : -num;
+}
+
+// Convert numeric offset back to label object
+function numberToDcLabel(n) {
+  if (!n) return { text: "BAL", color: "black" };
+  if (n > 0) return { text: "R" + n, color: "red" };
+  return { text: "G" + Math.abs(n), color: "green" };
+}
+
+// Nudge the DC label by one step in the direction of `step`
+// (step > 0 increments numeric by +1; step < 0 decrements numeric by 1)
+function getNextDcLabelByNudge(current, step) {
+  const n = parseDcToNumber(current);
+  const delta = (step > 0) ? 1 : -1;
+  const next = n + delta;
+
+  return numberToDcLabel(next);
+}
+</script>
+
+
+
+<script>
+// --- COMFY CLEARER RX ANALYSIS & PLAN STARTING
 // --- Parse DC input (same as before) ---
 function parseDC(dc) {
   if (dc === null || dc === undefined) return null;
@@ -1419,7 +1540,7 @@ if (distanceImprovementCond) {
   // Special case: G1 or higher (G2, G3, ...)
   if (t.type === 'G' && typeof t.step === 'number' && t.step >= 1) {
     if (t.step === 1) {
-      parts.push(`- Distance clarity is already maximized at G1; objects are as clear as possible.`);
+      parts.push(`- Distance clarity is  maximum; see as far as possible.`);
     } else {
       parts.push(`- Distance clarity does not improve further beyond G1 (already maximized).`);
     }
@@ -1481,14 +1602,14 @@ function getDCShiftText(fromDC, toDC) {
   } else if (Math.abs(diopterShift) <= 0.50 + 0.001) {
     line2 += 'Takes below 2 weeks to adapt; max amount to adapt comfortably. ';
   } else {
-    line2 += 'Takes above 2 weeks to adapt; above common tolerant limit (0.50) ';
+    line2 += 'Takes above 2 weeks to adapt; above common tolerant shift 0.50 ';
   }
 
   // Extra near-vision comfort analysis
   if (diopterShift > 0) {
-    line2 += '<br>- With more minus, near vision comfort and range will reduce.';
+    line2 += '<br>- More minus reduces near vision comfort and range.';
   } else if (diopterShift < 0) {
-    line2 += '<br>- With more plus, near vision comfort and range will improve.';
+    line2 += '<br>- More plus improves near vision comfort and range.';
   }
 }
 
@@ -1537,7 +1658,80 @@ function updateDCAnalysis() {
 }
 
 setInterval(updateDCAnalysis, 300);
+// --- COMFY CLEARER RX ANALYSIS & PLAN ENDING
 </script>
+
+<script>
+function updateSEDiffLive() {
+  const seOD = parseFloat(document.getElementById("res-se-od-2")?.textContent) || 0;
+  const seOS = parseFloat(document.getElementById("res-se-os-2")?.textContent) || 0;
+  const diff = seOD - seOS;
+
+  // Update all relevant SE diff displays
+  ["res-se-diff-2", "res-se-diff-od-2", "res-se-diff-os-2"].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = formatSEDiffForDisplay(diff);
+  });
+}
+
+// Patch your existing monocular SPH adjustment function
+function applySphOffsetMonoLive(eye, step) {
+  const ids = (eye === "od")
+    ? { sph: "res-sph-od-2", dc: "res-dc-od-2" }
+    : { sph: "res-sph-os-2", dc: "res-dc-os-2" };
+
+  const sphCell = document.getElementById(ids.sph);
+  const dcCell  = document.getElementById(ids.dc);
+  if (!sphCell || !dcCell) return;
+
+  const currentVal = parseFloat(sphCell.textContent) || 0;
+  const newVal = currentVal + step;
+  sphCell.textContent = formatSigned(newVal);
+
+  const currentLabel = (dcCell.textContent || "").trim();
+  const newLabel = getNextDcLabelByNudge(currentLabel, step);
+  dcCell.textContent = newLabel.text;
+  dcCell.style.color = newLabel.color;
+  dcCell.style.fontWeight = "none";
+
+  // --- NEW: update SE DIFF live ---
+  updateSEDiffLive();
+}
+
+// Optional: if you also allow typing directly in the SPH input, attach a listener
+document.querySelectorAll("#res-sph-od-2, #res-sph-os-2").forEach(el => {
+  el.addEventListener("input", updateSEDiffLive);
+});
+</script>
+
+<script>
+function updateBypass(eye, step) {
+    const bypassCell = document.getElementById('bypass');
+    if (!bypassCell) return;
+
+    // Get current value
+    let current = parseFloat(bypassCell.textContent) || 0;
+
+    // Determine the change based on eye and step
+    let delta = 0;
+    if (eye === 'od') delta = step;   // Right eye: normal
+    if (eye === 'os') delta = -step;  // Left eye: reverse
+
+    const newVal = current + delta;
+    bypassCell.textContent = (newVal >= 0 ? "+" : "") + newVal.toFixed(2);
+}
+
+// Attach observer to the existing monocular buttons
+document.querySelectorAll('.sph-btn-mono').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const eye = btn.dataset.eye;        
+        const step = parseFloat(btn.dataset.step); 
+        updateBypass(eye, step);
+    });
+});
+</script>
+
+
 
 
 <!-- Spacer at the bottom for scrolling -->
