@@ -134,6 +134,35 @@ input {   width:80px;
   z-index: 9999;
 }
 
+.choice-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.choice-group input[type="radio"] {
+  display: none; /* hide the default bullet */
+}
+
+.choice-group label {
+  padding: 1px 1px;
+  border: 1px solid #888;
+  cursor: pointer;
+  user-select: none;
+  background: #f9f9f9;
+}
+
+.choice-group input[type="radio"]:not(:checked) + label {
+  text-decoration: line-through;
+  color: grey;
+}
+
+.choice-group input[type="radio"]:checked + label {
+  background: darkgrey;   /* active color */
+  color: black;
+  border-color: #285C00;
+}
+
 #apply-controls { text-align:left; margin-bottom:10px; margin-top:10px; margin-left:10px }
 #addMinus025 { cursor:pointer; color:black; text-decoration:underline; user-select:none; }
 
@@ -262,7 +291,7 @@ Fan Chart (FC) and Duochrome (DC) are <b>inter-related</b>. The FC reveals astig
 
 <b>6. Map & record:</b> Log the FC results (cyl and axis to balance) and DC (sphere to balance). Use the calculator to compute the Balanced RX.<br>
 
-<b>7. Always use Horizontal Sharpening:</b> This applies cyl and axis power along the horizontal meridian to enhance clarity.<br>
+<b>7. Always use Horizon Enhance:</b> This applies cyl and axis power along the horizontal meridian to enhance clarity.<br>
 
 <b>8. Lastly, adjust S value:</b> Adjust the sphere values to match the current DC status of the glasses if you want to ensure seamless comfort. Otherwise, adjust it according to the visual needs such as needing to see further or nearer than the current prescription.<br><br>
 
@@ -318,7 +347,7 @@ First, <b>chooose the type of test</b> based on their needs:<br>
 5. Perform the <B>FC DC Error Margin test</b>.<br>
 6. Use the <b>Fan Chart (FC)</b> to find the <b> cyl and axis to bal </b> values, then enter those into the calculator.<br>
 7. The calculator will give you the <b>Balance RX</b> (the true and full prescription).<br>
-8. Apply the ○ <b>Horizontal Sharpening</b> function.<br>
+8. Apply the ○ <b>Horizon Enhance</b> function.<br>
 9. If the wearer has special needs (e.g. wants sharper distance or near vision), make slight <b>sphere adjustments</b>.<br>
 10. If no special needs, keep the same <b>DC status</b> as before.<br><br>
 
@@ -350,7 +379,7 @@ The small error in one eye <b>does not affect daily vision</b>.<br><br><i><b>- E
 </td>
 </tr>
 </tbody>
-</tbody><tr>
+<tr>
 <td colspan="1" style="color:#182E00; border:none; text-align:left; padding:5px;">
 </tr>
 </table>
@@ -379,7 +408,7 @@ function toggleSection(id) {
 <div style="height:10px;"></div>
 
   <tr class="white">
-    <th>Rx Type</th>
+    <th>Current RX</th>
     <th>Sides</th>
     <th>Sph</th>
     <th>Cyl</th>
@@ -390,7 +419,15 @@ function toggleSection(id) {
 
   <!-- Now RX -->
   <tr class="white">
-  <td rowspan="2">Current RX</td>
+<td rowspan="2">
+  <div class="choice-group">
+    <input type="radio" id="wear-glasses" name="wearType" value="glasses">
+    <label for="wear-glasses">Glasses</label>
+
+    <input type="radio" id="wear-contacts" name="wearType" value="contacts">
+    <label for="wear-contacts">Contact Lens</label>
+  </div>
+</td>
     <td>Right</td>
     <td><input id="s1_od" placeholder="+0.00"></td>
     <td><input id="c1_od" placeholder="+0.00"></td>
@@ -440,7 +477,7 @@ function toggleSection(id) {
 <td colspan="7" style="padding:5px; border:none;"></td>
 </tr>
   <!-- Deficit Rows -->
-<tr class="now-comfort">
+<tr class="white">
     <td colspan="1"><b>Test</b></td>
     <td>Sides</td>
     <td>Sph</td>
@@ -450,10 +487,10 @@ function toggleSection(id) {
     <td>DC</td>
   </tr>
  
-<tr class="now-comfort">
+<tr class="white">
     <td>FC DC Error<br>Margin</td>
 <td>Both</td>
-    <td><input id="dc-sph-ou" placeholder="0.00"></td>
+    <td><input id="dc-sph-ou" placeholder="+0.00"></td>
     <td><input id="c2_ou" placeholder="+0.00"></td>
     <td><input id="a2_ou" placeholder="0"></td>
     <td id="def-se-diff-ou">—</td>
@@ -490,7 +527,7 @@ Adjustments
     <div>
 <!-- Clickable control to apply -0.25 x 180 -->
     <span class="addMinus025" role="button" 
-          style="cursor:pointer; user-select:none; margin-right:30px; margin-left:30px;">
+          style="cursor:pointer; user-select:none; margin-right:30px; margin-left:20px;">
       Apply -0.25 × 180
     </span>
 
@@ -632,8 +669,8 @@ makeToggle("testToggle2");
 <tbody id="deficit-rows-sharper" style="display:none;">
 
 
-  <tr class="now">
-    <td colspan="1">RX Type</td>
+  <tr class="white">
+    <td colspan="1"><b>Test</b></td>
     <td>Sides</td>
     <td>Sph to Bal DC</td>
     <td colspan="2">Cyl & Axis to Bal FC</td>
@@ -641,21 +678,88 @@ makeToggle("testToggle2");
     <td>DC</td>
   </tr>
 
-  <tr class="now">
+  <tr class="white">
     <td rowspan="2">FC DC Error<br>Margin</td>
 <td>Right</td>
 
-    <td><input id="dc-sph-od" placeholder="0.00"></td>
+    <td><input id="dc-sph-od-notes" placeholder="+0.00"></td>
+    <td><input id="c2_od_notes" placeholder="+0.00"></td>
+    <td><input id="a2_od_notes" placeholder="0"></td>
+    <td id="def-se-diff-od-notes">—</td>
+    <td id="now-dc-od-notes">—</td> 
+  </tr>
+
+  <tr class="white">
+<td>Left</td>
+
+    <td><input id="dc-sph-os-notes" placeholder="+0.00"></td>
+    <td><input id="c2_os_notes" placeholder="+0.00"></td>
+    <td><input id="a2_os_notes" placeholder="0"></td>
+    <td id="def-se-diff-os-notes">—</td>
+    <td id="now-dc-os-notes">—</td> 
+  </tr>
+
+<script>
+function formatToNearestQuarter(value) {
+  let num = parseFloat(value);
+  if (isNaN(num)) return "+0.00";
+  // round to nearest 0.25
+  let rounded = Math.round(num / 0.25) * 0.25;
+  return (rounded >= 0 ? "+" : "") + rounded.toFixed(2);
+}
+
+function formatAxis(value) {
+  let num = parseInt(value, 10);
+  if (isNaN(num)) return "180";
+  if (num <= 0) return "180";
+  if (num > 180) return "180";
+  return String(num);
+}
+
+function attachNoteHandlers() {
+  const ids = [
+    "dc-sph-od-notes", "c2_od_notes", "a2_od_notes",
+    "dc-sph-os-notes", "c2_os_notes", "a2_os_notes"
+  ];
+
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.addEventListener("blur", () => {
+      let val = el.value.trim();
+
+      if (id.includes("a2_")) {
+        // axis formatting
+        el.value = formatAxis(val);
+      } else {
+        // sph/cyl formatting
+        el.value = formatToNearestQuarter(val);
+      }
+    });
+  });
+}
+
+// Run after DOM is ready
+document.addEventListener("DOMContentLoaded", attachNoteHandlers);
+</script>
+
+
+  <tr class="white">
+    <td rowspan="2"><B>Adjusted<br>FC DC For RX</b></td>
+<td>Right</td>
+
+    <td><input id="dc-sph-od" placeholder="+0.00"></td>
     <td><input id="c2_od" placeholder="+0.00"></td>
     <td><input id="a2_od" placeholder="0"></td>
     <td id="def-se-diff-od">—</td>
     <td id="now-dc-od">—</td> 
   </tr>
 
-  <tr class="now">
+  <tr class="white">
 <td>Left</td>
 
-    <td><input id="dc-sph-os" placeholder="0.00"></td>
+    <td><input id="dc-sph-os" placeholder="+0.00"></td>
     <td><input id="c2_os" placeholder="+0.00"></td>
     <td><input id="a2_os" placeholder="0"></td>
     <td id="def-se-diff-os">—</td>
@@ -694,7 +798,7 @@ Adjustments
  <!-- Clickable control to apply -0.25 x 180 -->
 
     <span class="addMinus025" role="button" 
-          style="cursor:pointer; user-select:none; margin-right:30px; margin-left:30px;">
+          style="cursor:pointer; user-select:none; margin-right:30px; margin-left:20px;">
       Apply -0.25 × 180
     </span> 
 ●
@@ -720,7 +824,7 @@ Adjustments
 <tr><td>Right</td>
 <td colspan="5" style="padding:7px; text-align:left;">
     <span class="addMinus025" role="button" 
-          style="cursor:pointer; user-select:none; margin-right:30px; margin-left:30px;">
+          style="cursor:pointer; user-select:none; margin-right:30px; margin-left:20px;">
       Apply -0.25 × 180
     </span> 
 ●
@@ -742,7 +846,7 @@ Adjustments
 <tr><td>Left</td>
 <td colspan="5" style="padding:7px; text-align:left;">
     <span class="addMinus025" role="button" 
-          style="cursor:pointer; user-select:none; margin-right:30px; margin-left:30px;">
+          style="cursor:pointer; user-select:none; margin-right:30px; margin-left:20px;">
       Apply -0.25 × 180
     </span> 
 ●
@@ -905,7 +1009,7 @@ let extraMinus025 = false;
 function updateMinus025Buttons() {
   document.querySelectorAll('.addMinus025').forEach(b => {
     b.style.color = extraMinus025 ? 'red' : 'black';
-    b.textContent = extraMinus025 ? '● Horizontal Sharpening' : '● All Angles Even';
+    b.textContent = extraMinus025 ? '● Horizon Enhance' : '● All Angles Even';
   });
 }
 
