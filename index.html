@@ -976,9 +976,9 @@ Adjustments
     <td id="res-se-os-2" style="display:none;">—</td>
     <td id="res-dc-os-2">BAL</td> 
   </tr>
-<tr class="comfort">
-    <td id="analysis-ou" colspan="7" style="text-align:left; padding-left:20px;">
-    <!-- Combined analysis text for OU will appear here -->'
+<tr class="table-headernow">
+    <td id="analysis-od-os" colspan="7" style="text-align:left; padding-left:20px;">
+    <!-- Combined analysis text for OD OS will appear here -->'
 </td>
 </tr>
 <tr>
@@ -1853,6 +1853,8 @@ let linePlan = '<b>Plan</b>';
 
     if (newD < 0) {
       line3 = `- New RX prioritizes near vision; under by -${mag} ${codeLabel}.`;
+    } else if (newD === 0) {
+      line3 = `- New RX prioritizes balance vision; at -${mag} ${codeLabel}.`;
     } else {
       line3 = `- New RX prioritizes distance vision; over by +${mag} ${codeLabel}.`;
     }
@@ -1957,6 +1959,144 @@ document.querySelectorAll('.sph-btn-mono').forEach(btn => {
     });
 });
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// --- parse DC (same as before) ---
+function parseDC(dc) {
+  if (!dc) return null;
+  let s = String(dc).trim().toUpperCase();
+  if (!s) return null;
+
+  if (s === 'BAL') return { diopter: 0, raw: s };
+
+  const codeMatch = s.match(/^([RG])\s*(\d+)$/i);
+  if (codeMatch) {
+    const type = codeMatch[1].toUpperCase();
+    const step = parseInt(codeMatch[2], 10);
+    const diopter = (type === 'R') ? -(step * 0.25) : (step * 0.25);
+    return { diopter, raw: s };
+  }
+
+  const num = parseFloat(s.replace(/[^\d\.\-+]/g, ''));
+  if (!isNaN(num)) return { diopter: num, raw: s };
+
+  return { diopter: 0, raw: s };
+}
+
+// --- helper to copy text + rendered colour ---
+function copyTextWithColor(el) {
+  if (!el) return "";
+  const text = el.textContent.trim();
+  if (!text) return "";
+  const style = window.getComputedStyle(el);
+  const color = style.color || "inherit";
+  return `<span style="color:${color}">${text}</span>`;
+}
+
+// --- build Sharpest Ever DC analysis ---
+function trialSharpestAnalysis() {
+  const oldDCRel = document.getElementById('now-dc-od');
+  const newDCRel = document.getElementById('res-dc-od-2');
+  const oldDCLEl = document.getElementById('now-dc-os');
+  const newDCLEl = document.getElementById('res-dc-os-2');
+
+  const oldDCR = copyTextWithColor(oldDCRel);
+  const newDCR = copyTextWithColor(newDCRel);
+  const oldDCL = copyTextWithColor(oldDCLEl);
+  const newDCL = copyTextWithColor(newDCLEl);
+
+  // numerical shift
+  const oldRVal = parseDC(oldDCRel?.textContent)?.diopter || 0;
+  const newRVal = parseDC(newDCRel?.textContent)?.diopter || 0;
+  const diffR = -(newRVal - oldRVal);
+  const diffRStr = (diffR >= 0 ? "+" : "") + diffR.toFixed(2);
+
+  const oldLVal = parseDC(oldDCLEl?.textContent)?.diopter || 0;
+  const newLVal = parseDC(newDCLEl?.textContent)?.diopter || 0;
+  const diffL = -(newLVal - oldLVal);
+  const diffLStr = (diffL >= 0 ? "+" : "") + diffL.toFixed(2);
+
+  // binocular imbalance change
+  const binoChange = diffR - diffL;
+  const binoStr = (binoChange >= 0 ? "+" : "") + binoChange.toFixed(2);
+
+  const output = `
+    <b>Sharpest Ever Test Trial</b><br><br>
+    <b>Right Eye:</b> Old DC = ${oldDCR}, New DC = ${newDCR} 
+      <i>(${diffRStr} change)</i><br>
+    <b>Left Eye:</b> Old DC = ${oldDCL}, New DC = ${newDCL} 
+      <i>(${diffLStr} change)</i><br>
+    <b>Binocular imbalance change:</b> ${binoStr}<br><br>
+
+//------ Analysis sentence to tidy up
+
+    <div id="sharpest-analysis-notes" style="display:none; color:#666; font-style:italic;">
+      <b>Analysis Notes:</b><br>
+      • Right eye: priority → Distance Vision if new DC moves stronger.<br>
+      • Left eye: priority → Balance Vision if new DC weakens.<br>
+      • If binocular imbalance increases, adaptation may be harder.<br>
+      • If imbalance decreases, adaptation is easier.<br>
+    </div>
+  `;
+//------ Analysis sentence to tidy up
+
+  document.getElementById("analysis-od-os").innerHTML = output;
+}
+
+// --- inputs that can change values ---
+const sharpInputIds = [
+  "dc-sph-od", "c2_od", "a2_od",
+  "dc-sph-os", "c2_os", "a2_os"
+];
+
+sharpInputIds.forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener("input", trialSharpestAnalysis);
+  el.addEventListener("blur", (e) => { autoFormatInput(e.target); trialSharpestAnalysis(); });
+  el.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); autoFormatInput(e.target); trialSharpestAnalysis(); }
+  });
+});
+
+// --- watch for DC status changes ---
+["now-dc-od", "now-dc-os", "res-dc-od-2", "res-dc-os-2"].forEach(id => {
+  const target = document.getElementById(id);
+  if (!target) return;
+  const observer = new MutationObserver(trialSharpestAnalysis);
+  observer.observe(target, { childList: true, characterData: true, subtree: true });
+});
+
+// --- run once on load ---
+window.addEventListener("DOMContentLoaded", trialSharpestAnalysis);
+</script>
+
+
+
+
+
+
+
+
+
+
 
 
 
