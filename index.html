@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=160, initial-scale=0.6, maximum-scale=1, user-scalable=yes">
+<meta name="viewport" content="width=160, initial-scale=0.9, maximum-scale=1, user-scalable=yes">
 <title>Kiara Optometry Prescription Calculator</title>
 <style>
 * {
@@ -226,7 +226,7 @@ input {   width:80px;
 <td colspan="2" style="color:#182E00; border:none; text-align:left; padding:0px;">
  <span class="toggle-btn" data-target="toggle-section-fcdc-errormargin"
           style="cursor:pointer; color: grey; user-select:none;">
-      <i>▼▲ How-to FC DC Error Margin </i>
+      <i>▼▲ How-to FC DC Error </i>
 
 </span>
 
@@ -254,14 +254,14 @@ input {   width:80px;
   <td colspan="2" style="padding:5px; border:none; color:#182E00; text-align:left;"></td></tr>
 
 <tr><td colspan="2" style="padding:10px; border:1px solid lightgrey; color:#182E00; text-align:left;">
-<b>● Guide for FC DC Error Margin test</b><br><br>
+<b>● Guide for FC DC Error test</b><br><br>
 <b>Glossary:</b><br>
   -<b>Fan Chart (FC):</b> Detects astigmatism and line orientation errors. Must be balanced first.<br>
   -<b>Duochrome (DC):</b> Red/green balance test to refine spherical power.<br>
   -<b>Over-Refraction (OR):</b> Trial lenses added on top of the patient’s current correction to test residual error.<br><br>
 
 <b>Purpose:</b><br>
-FC–DC Error Margin Test maps how far the visual system is from a true <b>balanced prescription</b>. Using a series of trial lenses (usually 5–10 steps) we locate areas of over- and under-correction, then calculate the balanced RX. The test can be done binocularly or monocularly and works with glasses or contacts.<br><br>
+FC–DC Error Test maps how far the visual system is from a true <b>balanced prescription</b>. Using a series of trial lenses (usually 5–10 steps) we locate areas of over- and under-correction, then calculate the balanced RX. The test can be done binocularly or monocularly and works with glasses or contacts.<br><br>
 
 <b>Important concept:</b><br>
 Fan Chart (FC) and Duochrome (DC) are <b>inter-related</b>. The FC reveals astigmatic/line errors; if FC is not balanced, DC results will be unreliable. Correct the FC grossly first — this usually requires a slight under-correction; letters in red should be clearer, or make vision blurry by using Over-Refraction (OR) +1.00 lenses. When FC is somewhat corrected, the DC test will function more efficiently <b>red</b> during the balancing step.<br><br> 
@@ -306,7 +306,7 @@ Fan Chart (FC) and Duochrome (DC) are <b>inter-related</b>. The FC reveals astig
 
 <b>Note:</b> This test measures the additional power needed to reach balance — discuss the visual needs with the person before finalising any prescription.<br><br>
 
-<br><i><b>- End of FC DC Error Margin Test -</b></i><br><br>--- --- --- --- ---<br><br>
+<br><i><b>- End of FC DC Error Test -</b></i><br><br>--- --- --- --- ---<br><br>
 &nbsp;&nbsp;
  <span class="toggle-btn" data-target="toggle-section-fcdc-errormargin"
           style="cursor:pointer; color: #101F01; user-select:none;">
@@ -347,7 +347,7 @@ First, <b>chooose the type of test</b> based on their needs:<br>
 2. Keep <b>both eyes open</b> during the test (to maintain natural binocular vision).<br>
 3. <b>Change lenses equally</b> for both eyes at the same time.<br>
 4. This keeps the <b>prismatic effect balanced</b>, even if the prescription changes.<br>
-5. Perform the <B>FC DC Error Margin test</b>.<br>
+5. Perform the <B>FC DC Error test</b>.<br>
 6. Use the <b>Fan Chart (FC)</b> to find the <b> cyl and axis to bal </b> values, then enter those into the calculator.<br>
 7. The calculator will give you the <b>Balance RX</b> (the true and full prescription).<br>
 8. Apply the ○ <b>Horizon Enhance</b> function.<br>
@@ -363,7 +363,7 @@ The small error in one eye <b>does not affect daily vision</b>.<br><br><i><b>- E
 <b>Purpose:</b>Prioritizes maximum possible clarity by pushing the prescription closer to the eye’s sharpest potential. It is suitable for people who want the crispest vision possible, even if it comes with a slight trade-off in comfort or adaptation time.<br><br>
 <b>How to do</b><br>
 1. Begin with the patient’s <b>current prescription</b>.<br>
-2. For the sharpest possible vision,<b>perform FC DC Error Margin test on each eye separately</b> (monocular testing).<br>
+2. For the sharpest possible vision,<b>perform FC DC Error test on each eye separately</b> (monocular testing).<br>
 3. This may cause the two eyes to become <b>imbalanced</b>, since one eye’s prescription can change more than the other.<br>
 4. Use <b>SE Diff</b> (Spherical Equivalent Difference) to track the difference in prescription strength between the two eyes.<br>
 5. A new SE Diff introduces a <b>prismatic effect</b> when looking away from the lens center.<br>
@@ -454,8 +454,19 @@ function toggleSection(id) {
 
 <tr class="comfort">
   <td colspan="7" style="padding:10px; color: #101F01; text-align:left;">
-
+<span class="toggle-btn" data-target="toggle-section-comfort"
+          style="cursor:pointer; color: #101F01; user-select:none; margin-right:15px;">
 <b>Comfy Clearer Rx</b> 
+</span>
+
+<span id="testToggle1" style="cursor:pointer; user-select:none; color: #101F01; margin-left:px;">
+  ● Test Not Done
+</span>
+</td>
+
+<tbody class="toggle-section-comfort" style="display:none;">
+<tr class="comfort">
+ <td colspan="7" style="padding:5px; color: #101F01; text-align:left;">
     <span style="margin-left:15px;  margin-right:15px; text-decoration:none; cursor:pointer; color:#101F01; user-select:none;"
           onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-comfort'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
      ▼▲ Test
@@ -465,19 +476,12 @@ function toggleSection(id) {
           style="cursor:pointer; color: #101F01; user-select:none; margin-right:15px;">
       ▼▲ Results 
     </span>
-
-<span id="testToggle1" style="cursor:pointer; user-select:none; color: #101F01; margin-left:0px;">
-  ● Test Not Done
-</span>
-
-
   </td>
 </tr>
+</tbody>
 
   <tbody id="deficit-rows-comfort" style="display:none;">
-<tr>
-<td colspan="7" style="padding:1px; border:none;"></td>
-</tr>
+
   <!-- Deficit Rows -->
 <tr class="white">
 <th colspan="1">Test</th>
@@ -489,8 +493,64 @@ function toggleSection(id) {
 <th>DC</th>
   </tr>
  
+<tr class="white">
+    <td rowspan="1">FC DC Error<br>Notes</td>
+<td>Both</td>
+
+    <td><input id="dc-sph-ou-notes" placeholder="+0.00"></td>
+    <td><input id="c2_ou_notes" placeholder="+0.00"></td>
+    <td><input id="a2_ou_notes" placeholder="0"></td>
+    <td id="def-se-diff-ou-notes">—</td>
+    <td id="now-dc-ou-notes">BAL</td> 
+  </tr>
+<script>
+function formatToNearestQuarter(value) {
+  let num = parseFloat(value);
+  if (isNaN(num)) return "+0.00";
+  // round to nearest 0.25
+  let rounded = Math.round(num / 0.25) * 0.25;
+  return (rounded >= 0 ? "+" : "") + rounded.toFixed(2);
+}
+
+function formatAxis(value) {
+  let num = parseInt(value, 10);
+  if (isNaN(num)) return "180";
+  if (num <= 0) return "180";
+  if (num > 180) return "180";
+  return String(num);
+}
+
+function attachNoteHandlers() {
+  const ids = [
+    "dc-sph-ou-notes", "c2_ou_notes", "a2_ou_notes"
+  ];
+
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+
+    el.addEventListener("blur", () => {
+      let val = el.value.trim();
+
+      if (id.includes("a2_")) {
+        // axis formatting
+        el.value = formatAxis(val);
+      } else {
+        // sph/cyl formatting
+        el.value = formatToNearestQuarter(val);
+      }
+    });
+  });
+}
+
+// Run after DOM is ready
+document.addEventListener("DOMContentLoaded", attachNoteHandlers);
+</script>
+
+
+
 <tr class="paleviolet">
-    <td>FC DC Error<br>Margin</td>
+    <td><b>Adjusted<br>FC DC Error<b></td>
 <td>Both</td>
     <td><input id="dc-sph-ou" placeholder="+0.00"></td>
     <td><input id="c2_ou" placeholder="+0.00"></td>
@@ -499,7 +559,7 @@ function toggleSection(id) {
     <td id="dc-ou">—</td>
   </tr>
 
-<tr class="now-comfort">
+<tr class="now">
   <td rowspan="2">FC DC<br>Balance</td>
 <td>Right</td>
   <td id="final-sph-ou-re">0.00</td>
@@ -569,9 +629,8 @@ Adjustments
 <td><b>Axis</b></td>
 <td><b>SE Diff</b></td>
 <td><b>DC</b></td>
-
-
   </tr>
+
 <tr class="comfort">
     <td rowspan="2">Final RX</td>
 <td>Right</td>
@@ -673,23 +732,24 @@ makeToggle("testToggle2");
 
 
   <tr class="white">
-    <td colspan="1"><b>Test</b></td>
-    <td>Sides</td>
-    <td>Sph to Bal DC</td>
-    <td colspan="2">Cyl & Axis to Bal FC</td>
-    <td>SE Diff</td>
-    <td>DC</td>
+<td colspan="1"><b>Test</b></td>
+<td><b>Sides</b></td>
+<td><b>Sph to Bal DC</b></td>
+<td colspan="2"><b>Cyl & Axis to Bal FC</b></td>
+<td><b>SE Diff</b></td>
+<td><b>DC</b></td>
+
   </tr>
 
   <tr class="white">
-    <td rowspan="2">FC DC Error<br>Margin</td>
+    <td rowspan="2">FC DC Error<br>Notes</td>
 <td>Right</td>
 
     <td><input id="dc-sph-od-notes" placeholder="+0.00"></td>
     <td><input id="c2_od_notes" placeholder="+0.00"></td>
     <td><input id="a2_od_notes" placeholder="0"></td>
     <td id="def-se-diff-od-notes">—</td>
-    <td id="now-dc-od-notes">—</td> 
+    <td id="now-dc-od-notes">BAL</td> 
   </tr>
 
   <tr class="white">
@@ -699,7 +759,7 @@ makeToggle("testToggle2");
     <td><input id="c2_os_notes" placeholder="+0.00"></td>
     <td><input id="a2_os_notes" placeholder="0"></td>
     <td id="def-se-diff-os-notes">—</td>
-    <td id="now-dc-os-notes">—</td> 
+    <td id="now-dc-os-notes">BAL</td> 
   </tr>
 
 <script>
@@ -749,7 +809,7 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 
 
   <tr class="paleviolet">
-    <td rowspan="2"><B>Adjusted<br>FC DC Error<br>Margin</b></td>
+    <td rowspan="2"><B>Adjusted<br>FC DC Error</b></td>
 <td>Right</td>
 
     <td><input id="dc-sph-od" placeholder="+0.00"></td>
@@ -871,9 +931,21 @@ Adjustments
 
 
 <tbody class="toggle-section-sharper-rx" style="display:none;">
+<tr>
+<td colspan="7" style="padding:1px; border:none;"></td>
+</tr>
+<tr class="table-headernow">
+<td><b>Results</b></td>
+<td><b>Sides</b></td>
+<td><b>Sph</b></td>
+<td><b>Cyl</b></td>
+<td><b>Axis</b></td>
+<td><b>SE Diff</b></td>
+<td><b>DC</b></td>
+  </tr>
 
   <tr class="table-headernow">
-    <td rowspan="2">Prescribed<br>Mono</td>
+    <td rowspan="2">Final RX</td>
 <td>Right</td>
     <td id="res-sph-od-2">0.00</td>
     <td id="res-cyl-od-2">0.00</td>
