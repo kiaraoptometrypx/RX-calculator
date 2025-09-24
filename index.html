@@ -107,6 +107,7 @@ input {   width:80px;
 .white td { background: #d9d9d9; }
 .fc-results td { background: #EFF5E6; }
 .dc-bal td { background: #fff; }
+.paleviolet td { background: #D0C5DB }
 
 .table-headernow {  background: #E8D1A0;}
 
@@ -219,11 +220,13 @@ input {   width:80px;
 
 <table>
 <tr class="offwhite">
-	
+	<td colspan="2" style="color:#182E00; border:none; text-align:left; padding:10px;">
+</td></tr>
+</tr>
 <td colspan="2" style="color:#182E00; border:none; text-align:left; padding:0px;">
  <span class="toggle-btn" data-target="toggle-section-fcdc-errormargin"
           style="cursor:pointer; color: grey; user-select:none;">
-      <i>▼ How-to FC DC Error Margin ▲</i>
+      <i>▼▲ How-to FC DC Error Margin </i>
 
 </span>
 
@@ -233,7 +236,7 @@ input {   width:80px;
        
  <span class="toggle-btn" data-target="toggle-section-guide-comfort"
           style="cursor:pointer; color: grey; user-select:none;">
- <i>▼ How-to Algorithm Refraction ▲</i>
+ <i>▼▲ How-to Algorithm Refraction </i>
 
 </span>
 </td>
@@ -402,7 +405,7 @@ function toggleSection(id) {
 </table>
 <div style="height:20px;"></div>
 
-<h2>Welcome to Kiara Optometry's Algorithm Refraction! Refraction on steroids!</h2>
+<h2>Welcome to Kiara Optometry's Algorithm Refraction.</h2>
 <table>
 
 <div style="height:10px;"></div>
@@ -455,13 +458,12 @@ function toggleSection(id) {
 <b>Comfy Clearer Rx</b> 
     <span style="margin-left:15px;  margin-right:15px; text-decoration:none; cursor:pointer; color:#101F01; user-select:none;"
           onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-comfort'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
-     ● Test
+     ▼▲ Test
     </span>
-
 
 <span class="toggle-btn" data-target="toggle-section-comfort-rx"
           style="cursor:pointer; color: #101F01; user-select:none; margin-right:15px;">
-      ● Results
+      ▼▲ Results 
     </span>
 
 <span id="testToggle1" style="cursor:pointer; user-select:none; color: #101F01; margin-left:0px;">
@@ -474,20 +476,20 @@ function toggleSection(id) {
 
   <tbody id="deficit-rows-comfort" style="display:none;">
 <tr>
-<td colspan="7" style="padding:5px; border:none;"></td>
+<td colspan="7" style="padding:1px; border:none;"></td>
 </tr>
   <!-- Deficit Rows -->
 <tr class="white">
-    <td colspan="1"><b>Test</b></td>
-    <td>Sides</td>
-    <td>Sph</td>
-    <td colspan="1">Cyl</td>
-    <td>Axis</td>
-    <td>SE Diff</td>
-    <td>DC</td>
+<th colspan="1">Test</th>
+<th>Sides</th>
+<th>Sph</th>
+<th colspan="1">Cyl</th>
+<th>Axis</th>
+<th>SE Diff</th>
+<th>DC</th>
   </tr>
  
-<tr class="white">
+<tr class="paleviolet">
     <td>FC DC Error<br>Margin</td>
 <td>Both</td>
     <td><input id="dc-sph-ou" placeholder="+0.00"></td>
@@ -523,7 +525,7 @@ function toggleSection(id) {
 Adjustments
 </td>
 <td>Both</td>
-<td colspan="5" style="padding:7px; text-align:left;">
+<td colspan="5" style="padding:1px; text-align:left;">
     <div>
 <!-- Clickable control to apply -0.25 x 180 -->
     <span class="addMinus025" role="button" 
@@ -557,16 +559,17 @@ Adjustments
 
 <tbody class="toggle-section-comfort-rx" style="display:none;">
 <tr>
-<td colspan="7" style="padding:5px; border:none;"></td>
+<td colspan="7" style="padding:1px; border:none;"></td>
 </tr>
 <tr class="comfort">
-<td><b>Results<b/></td>
-<td>Sides</td>
-<td>Sph</td>
-<td>Cyl</td>
-<td>Axis</td>
-<td>SE Diff</td>
-<td>DC</td>
+<td><b>Results</b></td>
+<td><b>Sides</b></td>
+<td><b>Sph</b></td>
+<td><b>Cyl</b></td>
+<td><b>Axis</b></td>
+<td><b>SE Diff</b></td>
+<td><b>DC</b></td>
+
 
   </tr>
 <tr class="comfort">
@@ -610,12 +613,12 @@ Adjustments
     
 <span style="margin-left:15px; margin-right:15px; text-decoration:none; cursor:pointer; color:#241D0C; user-select:none;"
           onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-sharper'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
-     ● Test
+      ▼▲ Test
     </span>
 
  <span class="toggle-btn" data-target="toggle-section-sharper-rx" 
       style="margin-left:0px; margin-right:15px; cursor:pointer; color: #241D0C; user-select:none;">
-● Results
+▼▲ Results
 </span>
 
 <span id="testToggle2" style="cursor:pointer; user-select:none; color: #241D0C;">
@@ -745,8 +748,8 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 </script>
 
 
-  <tr class="white">
-    <td rowspan="2"><B>Adjusted<br>FC DC For RX</b></td>
+  <tr class="paleviolet">
+    <td rowspan="2"><B>Adjusted<br>FC DC Error<br>Margin</b></td>
 <td>Right</td>
 
     <td><input id="dc-sph-od" placeholder="+0.00"></td>
@@ -756,7 +759,7 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
     <td id="now-dc-od">—</td> 
   </tr>
 
-  <tr class="white">
+  <tr class="paleviolet">
 <td>Left</td>
 
     <td><input id="dc-sph-os" placeholder="+0.00"></td>
