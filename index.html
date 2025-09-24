@@ -454,19 +454,13 @@ function toggleSection(id) {
 
 <tr class="comfort">
   <td colspan="7" style="padding:10px; color: #101F01; text-align:left;">
-<span class="toggle-btn" data-target="toggle-section-comfort"
-          style="cursor:pointer; color: #101F01; user-select:none; margin-right:15px;">
-<b>Comfy Clearer Rx</b> 
-</span>
+
+<b>Comfy Clearer Rx</b> &nbsp;&nbsp;
 
 <span id="testToggle1" style="cursor:pointer; user-select:none; color: #101F01; margin-left:px;">
-  ● Test Not Done
-</span>
-</td>
+  <b>● Test Not Done</B>
+</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-<tbody class="toggle-section-comfort" style="display:none;">
-<tr class="comfort">
- <td colspan="7" style="padding:5px; color: #101F01; text-align:left;">
     <span style="margin-left:15px;  margin-right:15px; text-decoration:none; cursor:pointer; color:#101F01; user-select:none;"
           onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-comfort'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
      ▼▲ Test
@@ -476,12 +470,17 @@ function toggleSection(id) {
           style="cursor:pointer; color: #101F01; user-select:none; margin-right:15px;">
       ▼▲ Results 
     </span>
+
+
+</td>
+
   </td>
 </tr>
-</tbody>
+
+
+
 
   <tbody id="deficit-rows-comfort" style="display:none;">
-
   <!-- Deficit Rows -->
 <tr class="white">
 <th colspan="1">Test</th>
@@ -653,9 +652,19 @@ Adjustments
 
 <tr class="comfort">
     <td id="analysis-ou" colspan="7" style="text-align:left; padding-left:20px;">
-    <!-- Combined analysis text for OU will appear here -->
-  </td>
+    <!-- Combined analysis text for OU will appear here -->'
+</td>
 </tr>
+<tr>
+<td colspan="7" style="border:none; padding:0px">
+<span class="toggle-btn" data-target="toggle-section-comfort-rx"
+          style="cursor:pointer; color: #101F01; user-select:none;">
+     - ▲ Close -
+    </span></td>
+</tr>
+
+
+</td></tr>
 </tbody>
 
 
@@ -668,7 +677,13 @@ Adjustments
 
 <tr class="table-headernow">
 <td colspan="7" style="padding:10px; color: #241D0C; text-align:left;">
-<b>Sharpest Ever Rx</b>
+<b>Sharpest Ever Rx</b>&nbsp;&nbsp;&nbsp;&nbsp;
+
+<span id="testToggle2" style="cursor:pointer; user-select:none; color: #241D0C;">
+  <b>● Test Not Done</b>
+</span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
     
 <span style="margin-left:15px; margin-right:15px; text-decoration:none; cursor:pointer; color:#241D0C; user-select:none;"
           onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-sharper'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
@@ -680,9 +695,6 @@ Adjustments
 ▼▲ Results
 </span>
 
-<span id="testToggle2" style="cursor:pointer; user-select:none; color: #241D0C;">
-  ● Test Not Done
-</span>
 
 </td>
 </tr>
@@ -712,11 +724,11 @@ function makeToggle(spanId) {
     if (testDone) {
       span.textContent = "● Test Completed ✔";
       span.style.textDecoration = "none"; // underline when done
-      span.style.fontStyle = "normal";         // normal font
+      span.style.fontWeight = "bold";         // normal font
     } else {
-      span.textContent = "  ● Test Not Done";
+      span.textContent = "● Test Not Done";
       span.style.textDecoration = "none";      // remove underline
-      span.style.fontStyle = "normal";         // 
+      span.style.fontWeight = "bold";         // 
     }
   });
 }
@@ -734,8 +746,9 @@ makeToggle("testToggle2");
   <tr class="white">
 <td colspan="1"><b>Test</b></td>
 <td><b>Sides</b></td>
-<td><b>Sph to Bal DC</b></td>
-<td colspan="2"><b>Cyl & Axis to Bal FC</b></td>
+<td><b>Sph</b></td>
+<td colspan="1"><b>Cyl</b></td>
+<td colspan="1"><b>Axis</b></td>
 <td><b>SE Diff</b></td>
 <td><b>DC</b></td>
 
@@ -963,7 +976,21 @@ Adjustments
     <td id="res-se-os-2" style="display:none;">—</td>
     <td id="res-dc-os-2">BAL</td> 
   </tr>
+<tr class="comfort">
+    <td id="analysis-ou" colspan="7" style="text-align:left; padding-left:20px;">
+    <!-- Combined analysis text for OU will appear here -->'
+</td>
+</tr>
+<tr>
+<td colspan="7" style="border:none; padding:0px">
+<span class="toggle-btn" data-target="toggle-section-comfort-rx"
+          style="cursor:pointer; color: #101F01; user-select:none;">
+     - ▲ Close -
+    </span></td>
+</tr>
 
+
+</td></tr>
 </tbody>
 
 
@@ -1810,6 +1837,7 @@ let lineDash = '<b>---------------------</b>';
 let lineAnalysis = '<b>Analysis:</b>';
 let linePlan = '<b>Plan</b>';
 
+
   let line3 = '';
   if (t.kind === 'BAL') {
     line3 = '- New RX is true balance between distance and near vision.';
@@ -1853,6 +1881,12 @@ function updateDCAnalysis() {
 setInterval(updateDCAnalysis, 300);
 // --- COMFY CLEARER RX ANALYSIS & PLAN ENDING
 </script>
+
+
+
+
+
+
 
 <script>
 function updateSEDiffLive() {
