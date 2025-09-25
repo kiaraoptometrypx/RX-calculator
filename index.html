@@ -6,7 +6,7 @@
 <title>Kiara Optometry Algorithm Refraction</title>
 <style>
 * {
-  font-size: 12px;
+  font-size: 10px;
   letter-spacing: 1px;
 }
 
@@ -108,6 +108,7 @@ input {   width:80px;
 .fc-results td { background: #EFF5E6; }
 .dc-bal td { background: #fff; }
 .paleviolet td { background: #D0C5DB }
+.paleblue td { background: #BECEE8 }
 
 .table-headernow {  background: #E8D1A0;}
 
@@ -469,8 +470,12 @@ function toggleSection(id) {
 <span class="toggle-btn" data-target="toggle-section-comfort-rx"
           style="cursor:pointer; color: #101F01; user-select:none; margin-right:15px;">
       ▼▲ Results 
-    </span>
 
+    </span>
+<span onclick="toggleRow('adjustments-row-1')" 
+   style="cursor:pointer; color:black; user-select:none; margin:5px 0;">
+  ▼▲ Adjustments
+</span>
 
 </td>
 
@@ -548,7 +553,7 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 
 
 
-<tr class="paleviolet">
+<tr class="now">
     <td><b>Adjusted<br>FC DC Error<b></td>
 <td>Both</td>
     <td><input id="dc-sph-ou" placeholder="+0.00"></td>
@@ -568,7 +573,7 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
   <td id="bypass-final-ou">—</td>
   <td id="final-dc-ou-re">—</td>
 </tr>
-<tr class="now-comfort">
+<tr class="now">
  <td>Left</td>
 
   <td id="final-sph-ou-le">0.00</td>
@@ -578,45 +583,24 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
   <td>—</td>
   <td id="final-dc-ou-le">—</td>
 </tr>
-
-<tr class="now-comfort">
-  <td>
-Adjustments
-</td>
-<td>Both</td>
-<td colspan="5" style="padding:1px; text-align:left;">
-    <div>
-<!-- Clickable control to apply -0.25 x 180 -->
-    <span class="addMinus025" role="button" 
-          style="cursor:pointer; user-select:none; margin-right:30px; margin-left:20px;">
-      Apply -0.25 × 180
+<tr>
+<td colspan="7" style="border:none; padding:0px">
+    <span style="margin-left:15px;  margin-right:15px; text-decoration:none; cursor:pointer; color:#101F01; user-select:none;"
+          onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-comfort'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
+     - - - - - - - - ▲ Close - - - - - - - -
     </span>
-
-●
-<span class="sph-btn" data-group="ou" data-step="-0.25"
-          style="cursor:pointer; text-decoration:none; color:green; margin-right:5px; margin-left:0x;">
-     S-0.25
-   </span>
-
-<span class="sph-btn" data-group="ou" data-step="0.25"
-          style="cursor:pointer; text-decoration:none; color:red; margin-right:30px; margin-left:0px;">
-     S+0.25
-</span>
-
-●
-<span class="testStatus" style="cursor:pointer; color: #101F01; user-select:none; text-decoration:none; margin-right:2px; margin-left:0px;">
-  Test ongoing
-</span>
+</td>
+</tr>
 
 
 </td>
-</div>
 </tr>
 
 </tbody>
 
 
 <tbody class="toggle-section-comfort-rx" style="display:none;">
+
 <tr>
 <td colspan="7" style="padding:1px; border:none;"></td>
 </tr>
@@ -632,6 +616,7 @@ Adjustments
 
 <tr class="comfort">
     <td rowspan="2">Final RX</td>
+
 <td>Right</td>
 
     <td id="res-sph-ou-re">0.00</td>
@@ -650,6 +635,39 @@ Adjustments
     <td id="res-dc-ou-le">BAL</td>
   </tr>
 
+<tr id="adjustments-row-1" class="now-comfort" style="display:none;">
+  <td>Adjustments</td>
+  <td>Both</td>
+  <td colspan="5" style="padding:1px; text-align:left;">
+    <div>
+      <!-- Clickable control to apply -0.25 x 180 -->
+      <span class="addMinus025" role="button" 
+            style="cursor:pointer; user-select:none; margin-right:30px; margin-left:20px;">
+        Apply -0.25 × 180
+      </span>
+
+      ●
+      <span class="sph-btn" data-group="ou" data-step="-0.25"
+            style="cursor:pointer; text-decoration:none; color:green; margin-right:5px;">
+        S-0.25
+      </span>
+
+      <span class="sph-btn" data-group="ou" data-step="0.25"
+            style="cursor:pointer; text-decoration:none; color:red; margin-right:30px;">
+        S+0.25
+      </span>
+
+      ●
+      <span class="testStatus" 
+            style="cursor:pointer; color:#101F01; user-select:none; text-decoration:none; margin-right:2px;">
+        Test ongoing
+      </span>
+    </div>
+  </td>
+</tr>
+
+
+
 <tr class="comfort">
     <td id="analysis-ou" colspan="7" style="text-align:left; padding-left:20px;">
     <!-- Combined analysis text for OU will appear here -->'
@@ -659,12 +677,13 @@ Adjustments
 <td colspan="7" style="border:none; padding:0px">
 <span class="toggle-btn" data-target="toggle-section-comfort-rx"
           style="cursor:pointer; color: #101F01; user-select:none;">
-     - ▲ Close -
+     - - - - - - - - ▲ Close - - - - - - - -
     </span></td>
 </tr>
 
 
-</td></tr>
+</td>
+</tr>
 </tbody>
 
 
@@ -675,7 +694,7 @@ Adjustments
 
 
 
-<tr class="table-headernow">
+<tr class="paleviolet">
 <td colspan="7" style="padding:10px; color: #241D0C; text-align:left;">
 <b>Sharpest Ever Rx</b>&nbsp;&nbsp;&nbsp;&nbsp;
 
@@ -691,10 +710,24 @@ Adjustments
     </span>
 
  <span class="toggle-btn" data-target="toggle-section-sharper-rx" 
-      style="margin-left:0px; margin-right:15px; cursor:pointer; color: #241D0C; user-select:none;">
+      style="margin-left:0px; margin-right:15px; user-select:none; cursor:pointer; color: #241D0C; user-select:none;">
 ▼▲ Results
 </span>
 
+<span id="toggleAdjustments2" 
+      style="cursor:pointer; user-select:none; color: #241D0C;">
+  ▼▲ Adjustments
+</span>
+
+<script>
+document.getElementById("toggleAdjustments2").addEventListener("click", function() {
+  document.querySelectorAll(".adj2").forEach(row => {
+    row.style.display = (row.style.display === "none" || row.style.display === "") 
+      ? "table-row" 
+      : "none";
+  });
+});
+</script>
 
 </td>
 </tr>
@@ -865,10 +898,10 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
     
   </tr>
 
-  <tr class="now">
-<td rowspan="3">
-Adjustments
-</td>
+<tr class="paleviolet adj2">
+
+<td rowspan="3">Adjustments</td>
+
 <td style="display:none;">Both</td>
 <td colspan="5" style="padding:7px; text-align:left; display:none;">
  <!-- Clickable control to apply -0.25 x 180 -->
@@ -897,7 +930,9 @@ Adjustments
 
 </td>
 </tr>
-<tr><td>Right</td>
+
+<tr class="paleviolet adj2">
+<td>Right</td>
 <td colspan="5" style="padding:7px; text-align:left;">
     <span class="addMinus025" role="button" 
           style="cursor:pointer; user-select:none; margin-right:30px; margin-left:20px;">
@@ -919,7 +954,8 @@ Adjustments
 </td></tr>
 
 
-<tr><td>Left</td>
+<tr class="paleviolet adj2">
+<td>Left</td>
 <td colspan="5" style="padding:7px; text-align:left;">
     <span class="addMinus025" role="button" 
           style="cursor:pointer; user-select:none; margin-right:30px; margin-left:20px;">
@@ -997,6 +1033,15 @@ Adjustments
 
 </table>
 
+<!-- Reusable script -->
+<script>
+function toggleRow(rowId) {
+  const row = document.getElementById(rowId);
+  row.style.display = (row.style.display === "none" || row.style.display === "")
+    ? "table-row"
+    : "none";
+}
+</script>
 
 
 
