@@ -110,6 +110,7 @@ input {   width:80px;
 .paleviolet td { background: #D0C5DB }
 .paleblue td { background: #BECEE8 }
 
+
 .table-headernow {  background: #E8D1A0;}
 
 .comfort {  background: #E5F0D1;}
@@ -454,14 +455,16 @@ function toggleSection(id) {
 </tr>
 
 <tr class="comfort">
-  <td colspan="7" style="padding:10px; color: #101F01; text-align:left;">
+  <td colspan="4" style="padding:10px; color: #101F01; text-align:left;">
 
 <b>Comfy Clearer Rx</b> &nbsp;&nbsp;
 
 <span id="testToggle1" style="cursor:pointer; user-select:none; color: #101F01; margin-left:px;">
-  <b>● Test Not Done</B>
-</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b><i>● Status?</i></B>
 
+
+</td>
+<td colspan="3" style="padding:10px; color: #241D0C; text-align:left;">
     <span style="margin-left:15px;  margin-right:15px; text-decoration:none; cursor:pointer; color:#101F01; user-select:none;"
           onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-comfort'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
      ▼▲ Test
@@ -470,11 +473,11 @@ function toggleSection(id) {
 <span class="toggle-btn" data-target="toggle-section-comfort-rx"
           style="cursor:pointer; color: #101F01; user-select:none; margin-right:15px;">
       ▼▲ Results 
-
     </span>
+
 <span onclick="toggleRow('adjustments-row-1')" 
    style="cursor:pointer; color:black; user-select:none; margin:5px 0;">
-  ▼▲ Adjustments
+  ▼▲ Adjust
 </span>
 
 </td>
@@ -486,6 +489,9 @@ function toggleSection(id) {
 
 
   <tbody id="deficit-rows-comfort" style="display:none;">
+<tr>
+<td colspan="7" style="padding:1px; border:none;"></td>
+</tr>
   <!-- Deficit Rows -->
 <tr class="white">
 <th colspan="1">Test</th>
@@ -583,18 +589,13 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
   <td>—</td>
   <td id="final-dc-ou-le">—</td>
 </tr>
+
+
 <tr>
-<td colspan="7" style="border:none; padding:0px">
-    <span style="margin-left:15px;  margin-right:15px; text-decoration:none; cursor:pointer; color:#101F01; user-select:none;"
-          onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-comfort'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
-     - - - - - - - - ▲ Close - - - - - - - -
-    </span>
-</td>
+<td colspan="7" style="padding:0px; border:none;"></td>
 </tr>
 
 
-</td>
-</tr>
 
 </tbody>
 
@@ -657,11 +658,8 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
         S+0.25
       </span>
 
-      ●
-      <span class="testStatus" 
-            style="cursor:pointer; color:#101F01; user-select:none; text-decoration:none; margin-right:2px;">
-        Test ongoing
-      </span>
+      
+
     </div>
   </td>
 </tr>
@@ -673,14 +671,6 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
     <!-- Combined analysis text for OU will appear here -->'
 </td>
 </tr>
-<tr>
-<td colspan="7" style="border:none; padding:0px">
-<span class="toggle-btn" data-target="toggle-section-comfort-rx"
-          style="cursor:pointer; color: #101F01; user-select:none;">
-     - - - - - - - - ▲ Close - - - - - - - -
-    </span></td>
-</tr>
-
 
 </td>
 </tr>
@@ -695,15 +685,15 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 
 
 <tr class="paleviolet">
-<td colspan="7" style="padding:10px; color: #241D0C; text-align:left;">
+<td colspan="4" style="padding:10px; color: #241D0C; text-align:left;">
 <b>Sharpest Ever Rx</b>&nbsp;&nbsp;&nbsp;&nbsp;
 
 <span id="testToggle2" style="cursor:pointer; user-select:none; color: #241D0C;">
-  <b>● Test Not Done</b>
-</span>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <b><i>● Status?</i></B>
+</span>&nbsp;&nbsp;&nbsp;
 
-    
+</td>
+<td colspan="3" style="padding:10px; color: #241D0C; text-align:left;">
 <span style="margin-left:15px; margin-right:15px; text-decoration:none; cursor:pointer; color:#241D0C; user-select:none;"
           onclick="event.stopPropagation(); let t=document.getElementById('deficit-rows-sharper'); t.style.display=t.style.display==='none'?'table-row-group':'none';">
       ▼▲ Test
@@ -716,18 +706,8 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 
 <span id="toggleAdjustments2" 
       style="cursor:pointer; user-select:none; color: #241D0C;">
-  ▼▲ Adjustments
+  ▼▲ Adjust
 </span>
-
-<script>
-document.getElementById("toggleAdjustments2").addEventListener("click", function() {
-  document.querySelectorAll(".adj2").forEach(row => {
-    row.style.display = (row.style.display === "none" || row.style.display === "") 
-      ? "table-row" 
-      : "none";
-  });
-});
-</script>
 
 </td>
 </tr>
@@ -746,8 +726,9 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
   });
 });
 </script>
+
 <script>
-function makeToggle(spanId) {
+function makeToggle(spanId, hideClass) {
   const span = document.getElementById(spanId);
   let testDone = false; // initial state
 
@@ -755,26 +736,37 @@ function makeToggle(spanId) {
     testDone = !testDone; // toggle state
 
     if (testDone) {
-      span.textContent = "● Test Completed ✔";
-      span.style.textDecoration = "none"; // underline when done
-      span.style.fontWeight = "bold";         // normal font
+      span.textContent = "● ✅ Selected";
+      span.style.fontWeight = "bold";
+
+      // hide all spans with this class
+      document.querySelectorAll("." + hideClass).forEach(el => {
+        el.style.display = "inline";
+      });
+
     } else {
-      span.textContent = "● Test Not Done";
-      span.style.textDecoration = "none";      // remove underline
-      span.style.fontWeight = "bold";         // 
+      span.textContent = "● ❌ Unselected";
+      span.style.fontWeight = "bold";
+
+      // show all spans again
+      document.querySelectorAll("." + hideClass).forEach(el => {
+        el.style.display = "none";
+      });
     }
   });
 }
 
-// Apply to both spans
-makeToggle("testToggle1");
-makeToggle("testToggle2");
+// usage
+makeToggle("testToggle1", "testStatus");
+makeToggle("testToggle2",);
 </script>
 
 
 <!-- Deficit Rows (wrapped in toggle container) -->
 <tbody id="deficit-rows-sharper" style="display:none;">
-
+<tr>
+<td colspan="7" style="padding:1px; border:none;"></td>
+</tr>
 
   <tr class="white">
 <td colspan="1"><b>Test</b></td>
@@ -854,7 +846,7 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 </script>
 
 
-  <tr class="paleviolet">
+  <tr class="now">
     <td rowspan="2"><B>Adjusted<br>FC DC Error</b></td>
 <td>Right</td>
 
@@ -865,7 +857,7 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
     <td id="now-dc-od">—</td> 
   </tr>
 
-  <tr class="paleviolet">
+  <tr class="now">
 <td>Left</td>
 
     <td><input id="dc-sph-os" placeholder="+0.00"></td>
@@ -897,11 +889,46 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
     <td id="final-dc-os">BAL </td>
     
   </tr>
+</tbody>
 
-<tr class="paleviolet adj2">
+
+<tbody class="toggle-section-sharper-rx" style="display:none;">
+<tr>
+<td colspan="7" style="padding:1px; border:none;"></td>
+</tr>
+  <tr class="paleviolet">
+<td><b>Results</b></td>
+<td><b>Sides</b></td>
+<td><b>Sph</b></td>
+<td><b>Cyl</b></td>
+<td><b>Axis</b></td>
+<td><b>SE Diff</b></td>
+<td><b>DC</b></td>
+  </tr>
+
+  <tr class="paleviolet">
+    <td rowspan="2">Final RX</td>
+<td>Right</td>
+    <td id="res-sph-od-2">0.00</td>
+    <td id="res-cyl-od-2">0.00</td>
+    <td id="res-axis-od-2">0</td>
+    <td id="res-se-od-2" style="display:none;">—</td>
+    <td id="bypass">—</td>
+    <td id="res-dc-od-2">BAL</td> 
+  </tr>
+  <tr class="paleviolet">
+    <td>Left</td>
+    <td id="res-sph-os-2">0.00</td>
+    <td id="res-cyl-os-2">0.00</td>
+    <td id="res-axis-os-2">0</td>
+    <td>—</td>    
+    <td id="res-se-os-2" style="display:none;">—</td>
+    <td id="res-dc-os-2">BAL</td> 
+  </tr>
+
+<tr class="now-comfort adj2" style="display:none;">
 
 <td rowspan="3">Adjustments</td>
-
 <td style="display:none;">Both</td>
 <td colspan="5" style="padding:7px; text-align:left; display:none;">
  <!-- Clickable control to apply -0.25 x 180 -->
@@ -921,17 +948,10 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
      S+0.25
 </span>
 
-●
-<span class="testStatus" style="cursor:pointer; color: #101F01; user-select:none; text-decoration:none; margin-right:2px; margin-left:0px;">
-  Test ongoing..
-</span>
-
-
-
 </td>
 </tr>
 
-<tr class="paleviolet adj2">
+<tr class="now-comfort adj2" style="display:none;">
 <td>Right</td>
 <td colspan="5" style="padding:7px; text-align:left;">
     <span class="addMinus025" role="button" 
@@ -947,14 +967,9 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
           style="cursor:pointer; user-select:none; text-decoration:none; color:red; margin-right:30px; margin-left:0px;">
      S+0.25
 </span>
-●
-<span class="testStatus" style="cursor:pointer; color: #101F01; user-select:none; text-decoration:none; margin-right:2px; margin-left:0px;">
-  Test ongoing..
-</span>
-</td></tr>
 
 
-<tr class="paleviolet adj2">
+<tr class="now-comfort adj2" style="display:none;">
 <td>Left</td>
 <td colspan="5" style="padding:7px; text-align:left;">
     <span class="addMinus025" role="button" 
@@ -970,68 +985,49 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
           style="cursor:pointer; user-select:none; text-decoration:none; color:red; margin-right:30px; margin-left:0px;">
      S+0.25
 </span>
-●
-<span class="testStatus" style="cursor:pointer; color: #101F01; user-select:none; text-decoration:none; margin-right:2px; margin-left:0px;">
-  Test ongoing..
-</span>
+
 </td></tr>
 
-</tbody>
 
 
-<tbody class="toggle-section-sharper-rx" style="display:none;">
-<tr>
-<td colspan="7" style="padding:1px; border:none;"></td>
-</tr>
-<tr class="table-headernow">
-<td><b>Results</b></td>
-<td><b>Sides</b></td>
-<td><b>Sph</b></td>
-<td><b>Cyl</b></td>
-<td><b>Axis</b></td>
-<td><b>SE Diff</b></td>
-<td><b>DC</b></td>
-  </tr>
-
-  <tr class="table-headernow">
-    <td rowspan="2">Final RX</td>
-<td>Right</td>
-    <td id="res-sph-od-2">0.00</td>
-    <td id="res-cyl-od-2">0.00</td>
-    <td id="res-axis-od-2">0</td>
-    <td id="res-se-od-2" style="display:none;">—</td>
-    <td id="bypass">—</td>
-    <td id="res-dc-od-2">BAL</td> 
-  </tr>
-  <tr class="table-headernow">
-    <td>Left</td>
-    <td id="res-sph-os-2">0.00</td>
-    <td id="res-cyl-os-2">0.00</td>
-    <td id="res-axis-os-2">0</td>
-    <td>—</td>    
-    <td id="res-se-os-2" style="display:none;">—</td>
-    <td id="res-dc-os-2">BAL</td> 
-  </tr>
-<tr class="table-headernow">
+  <tr class="paleviolet">
     <td id="analysis-od-os" colspan="7" style="text-align:left; padding-left:20px;">
     <!-- Combined analysis text for OD OS will appear here -->'
 </td>
 </tr>
-<tr>
-<td colspan="7" style="border:none; padding:0px">
-<span class="toggle-btn" data-target="toggle-section-comfort-rx"
-          style="cursor:pointer; color: #101F01; user-select:none;">
-     - ▲ Close -
-    </span></td>
-</tr>
 
 
 </td></tr>
 </tbody>
-
-
-
 </table>
+
+
+
+
+
+
+
+<!---- MATHS LOGIC STARTS HERE -----!>
+<!---- MATHS LOGIC STARTS HERE -----!>
+<!---- MATHS LOGIC STARTS HERE -----!>
+<!---- MATHS LOGIC STARTS HERE -----!>
+<!---- MATHS LOGIC STARTS HERE -----!>
+<!---- MATHS LOGIC STARTS HERE -----!>
+
+
+
+
+<script>
+document.getElementById("toggleAdjustments2").addEventListener("click", function() {
+  document.querySelectorAll(".adj2").forEach(row => {
+    row.style.display = (row.style.display === "none" || row.style.display === "") 
+      ? "table-row" 
+      : "none";
+  });
+});
+</script>
+
+
 
 <!-- Reusable script -->
 <script>
@@ -1055,7 +1051,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateTestStatusMirrors() {
     document.querySelectorAll(".testStatus").forEach(el => {
       el.textContent = testDone ? "Test done" : "Test ongoing..";
-      el.style.color = testDone ? "green" : "black";
+      el.style.color = testDone ? "black" : "black";
     });
   }
 
@@ -1088,28 +1084,27 @@ document.addEventListener("DOMContentLoaded", () => {
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  let testDone = false; // shared state
+  let testDone = false; // existing shared state
 
   function updateMirrors() {
-  document.querySelectorAll(".testStatus").forEach(el => {
-    if (testDone) {
-      el.textContent = "RX Finalized";
-      el.style.textDecoration = "none";  // 
-      el.style.fontStyle = "normal";          // normal font
-      el.style.color = "#285C00";
-    } else {
-      el.textContent = "RX Not Final";
-      el.style.textDecoration = "none";       // remove underline
-      el.style.fontStyle = "italic";          // italic for ongoing
-      el.style.color = "#6E0900";
-    }
-  });
-}
+    document.querySelectorAll(".testStatus").forEach(el => {
+      if (testDone) {
+        el.textContent = "● RX Finalized";
+        el.style.textDecoration = "none";  
+        el.style.fontStyle = "normal";          
+        el.style.fontWeight = "bold";
+      } else {
+        el.textContent = "● RX Not Final";
+        el.style.textDecoration = "none";       
+        el.style.fontWeight = "normal";
+      }
+    });
+
 
   // Mirror click behavior: toggle
   document.querySelectorAll(".testStatus").forEach(el => {
     el.addEventListener("click", () => {
-      testDone = !testDone; // toggle on click
+      testDone = !testDone;
       updateMirrors();
     });
   });
@@ -1126,16 +1121,16 @@ document.addEventListener("DOMContentLoaded", () => {
   inputIds.forEach(id => {
     const el = document.getElementById(id);
     if(el) el.addEventListener("input", () => {
-      testDone = false; // revert
+      testDone = false;
       updateMirrors();
     });
   });
 
-  // Reset mirrors on adjustment buttons (Cyl -0.25, S -0.25, S +0.25)
+  // Reset mirrors on adjustment buttons
   const adjustmentButtons = document.querySelectorAll(".addMinus025, .sph-btn, .sph-btn-mono");
   adjustmentButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-      testDone = false; // revert
+      testDone = false;
       updateMirrors();
     });
   });
@@ -1143,6 +1138,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updateMirrors(); // initialize
 });
 </script>
+
 
 
 
@@ -1685,256 +1681,6 @@ function getNextDcLabelByNudge(current, step) {
 }
 </script>
 
-
-
-<script>
-// --- COMFY CLEARER RX ANALYSIS & PLAN STARTING
-// --- Parse DC input (same as before) ---
-function parseDC(dc) {
-  if (dc === null || dc === undefined) return null;
-  let s = String(dc).trim();
-  if (!s) return null;
-
-  s = s.replace(/−/g, '-').toUpperCase(); // normalize minus sign
-
-  if (s === 'BAL') return { kind: 'BAL', diopter: 0, stepVal: 0, raw: s };
-
-  const codeMatch = s.match(/^([RG])\s*(\d+)$/i);
-  if (codeMatch) {
-    const type = codeMatch[1].toUpperCase();
-    const step = parseInt(codeMatch[2], 10);
-    const diopter = (type === 'R') ? -(step * 0.25) : (step * 0.25);
-    const stepVal = (type === 'R') ? -step : step;
-    return { kind: 'CODE', type, step, stepVal, diopter, raw: s };
-  }
-
-  const numStr = s.replace(/[^\d\.\-+]/g, '');
-  const n = parseFloat(numStr);
-  if (!Number.isNaN(n)) {
-    const stepVal = n / 0.25;
-    return { kind: 'NUMERIC', diopter: n, stepVal, raw: s };
-  }
-
-  return { kind: 'UNKNOWN', raw: s };
-}
-
-// --- Consumer-friendly descriptions (unchanged except colour labels) ---
-function describeDC(dc, label = 'Current') {
-  if (!dc) return '';
-  const parsed = parseDC(dc);
-  if (!parsed) return `${label} RX: ${dc}`;
-
-  if (parsed.kind === 'BAL') {
-    return `${label} RX is true balance between far and near vision.`;
-  }
-
-  if (parsed.kind === 'CODE') {
-    const absD = Math.abs(parsed.diopter).toFixed(2);
-    const colourLabel = `<span style="color:${parsed.type === 'R' ? 'red' : 'green'}; font-weight:normal;">${parsed.raw}</span>`;
-
-    if (parsed.type === 'R') {
-      return `${label} RX under by -${absD} (${colourLabel}); perfect for near and room distance, but not able to see very far.`;
-    } else {
-      if (parsed.step === 1) {
-        return `${label} RX over by +${absD} (${colourLabel}); perfect for seeing as far as possible.`;
-      }
-      return `${label} RX over by +${absD} (${colourLabel}); over the healthy limit of +0.25 (<span style="color: green; font-weight:normal;">G1</span>). Prolonged use may cause blurry vision, tiredness and headaches.`;
-    }
-  }
-
-  if (parsed.kind === 'NUMERIC') {
-    const d = parsed.diopter.toFixed(2);
-    if (Math.abs(parsed.diopter) < 0.0001) return `${label} RX balances far & near vision.`;
-    if (parsed.diopter < 0) return `${label} RX under by ${d}.`; 
-    if (Math.abs(parsed.diopter - 0.25) < 0.0001) {
-      return `${label} RX over by ${d}; perfect for seeing as far as possible.`;
-    }
-    return `${label} RX over by ${d}; Limit for healthy vision is +0.25 (<span style="color: green; font-weight:normal;">G1</span>); Unnecessary over will cause blurry vision & headaches.`;
-  }
-
-  return `${label} RX: ${dc}`;
-}
-
-// --- NEW: Deeper analysis of DC status based on your 4 rules ---
-// Accepts optional parsed objects as 3rd/4th args for efficiency (getDCShiftText already passes them)
-function getDeeperAnalysis(fromDC, toDC, prevParsed, toParsed) {
-  const f = (prevParsed && typeof prevParsed === 'object') ? prevParsed : parseDC(fromDC);
-  const t = (toParsed && typeof toParsed === 'object') ? toParsed : parseDC(toDC);
-  if (!f || !t || f.kind === 'UNKNOWN' || t.kind === 'UNKNOWN') return '';
-
-  // Numeric diopters and stepVal (safe fallbacks)
-  const fromDiopter = (typeof f.diopter === 'number') ? f.diopter : ((typeof f.stepVal === 'number') ? f.stepVal * 0.25 : 0);
-  const toDiopter = (typeof t.diopter === 'number') ? t.diopter : ((typeof t.stepVal === 'number') ? t.stepVal * 0.25 : 0);
-  const fromStepVal = (typeof f.stepVal === 'number') ? f.stepVal : (typeof f.diopter === 'number' ? f.diopter / 0.25 : 0);
-  const toStepVal = (typeof t.stepVal === 'number') ? t.stepVal : (typeof t.diopter === 'number' ? t.diopter / 0.25 : 0);
-
-  // Collect messages (we may return multiple lines, separated by <br>)
-  const parts = [];
-
-  // ---- Exclusive "no change" cases (return immediately) ----
-  if (f.kind === 'BAL' && t.kind === 'BAL') {
-    return '- No changes in the far and near vision.';
-  }
-  if (f.type === 'R' && t.type === 'R' && typeof f.step === 'number' && typeof t.step === 'number' && f.step === t.step) {
-    return `- No changes in the far and near vision.`;
-  }
-
-  // --- Rule 1: G → G (handle when both are G codes) ---
-  if (f.type === 'G' && t.type === 'G') {
-    if (typeof f.step === 'number' && typeof t.step === 'number' && (f.step - t.step === 1)) {
-      parts.push('- No loss of distance clarity. Near vision comfort improves slightly.');
-    } else if (typeof f.step === 'number' && typeof t.step === 'number' && t.step < f.step) {
-      parts.push('- No loss of distance clarity. Significant improvement in near vision comfort.');
-    } else if (typeof f.step === 'number' && typeof t.step === 'number' && t.step > f.step) {
-      parts.push('- No loss of distance clarity but worsening of near vision comfort. Not recommended to prescribe.');
-    }
-    // continue — other rules below may also apply in borderline cases
-  }
-
-
-
-// --- Rule 4: Distance improvement (cases that increase distance clarity) ---
-const distanceImprovementCond =
-  (f.kind === 'BAL' && t.type === 'G') ||
-  (f.type === 'R' && t.kind === 'BAL') ||
-  (f.type === 'R' && t.type === 'R' && typeof t.step === 'number' && typeof f.step === 'number' && t.step < f.step) ||
-  (f.type === 'R' && t.type === 'G' && t.step === 1); // NEW: R → G1 improves distance
-
-
-if (distanceImprovementCond) {
-  // Special case: G1 or higher (G2, G3, ...)
-  if (t.type === 'G' && typeof t.step === 'number' && t.step >= 1) {
-    if (t.step === 1) {
-      parts.push(`- Distance clarity is  maximum; see as far as possible.`);
-    } else {
-      parts.push(`- Distance clarity does not improve further beyond G1 (already maximized).`);
-    }
-  } else {
-    let gainDist = 20; // default
-    if (t.kind === 'BAL') gainDist = 20;
-    if (t.type === 'R' && typeof t.step === 'number') {
-      gainDist = 20 / Math.pow(2, t.step - 1); // R1=10, R2=5, ...
-    }
-    parts.push(`- However, distance clarity improves. Objects up to ${gainDist} feet will appear clearer.`);
-  }
-}
-
-
-  // --- Rule 2: Any → BAL or R (distance reduction) ---
-  // Only add reduction when we did NOT already decide distance improves (to avoid contradiction)
-  const distanceReductionCond = (t.kind === 'BAL' || t.type === 'R') && !distanceImprovementCond;
-  if (distanceReductionCond) {
-    let lossDist = 20; // default for BAL
-    if (t.type === 'R' && typeof t.step === 'number') {
-      lossDist = 20 / Math.pow(2, t.step - 1); // R1=10, R2=5...
-    }
-    parts.push(`- However, distance clarity will be reduced. Vision becomes blurry beyond ${lossDist} feet.`);
-  }
-
-  // Join lines with <br> for HTML display; or return empty if nothing matched
-  return parts.length ? parts.join('<br>') : '';
-}
-
-// --- Deep analysis wrapper (uses both old shift + new deeper analysis) ---
-function getDCShiftText(fromDC, toDC) {
-  if (!fromDC || !toDC) return '';
-
-  const f = parseDC(fromDC);
-  const t = parseDC(toDC);
-  if (!f || !t || f.kind === 'UNKNOWN' || t.kind === 'UNKNOWN') return '';
-
-  const fromStepVal = (typeof f.stepVal === 'number') ? f.stepVal : (f.diopter / 0.25);
-  const toStepVal = (typeof t.stepVal === 'number') ? t.stepVal : (t.diopter / 0.25);
-
-  const stepDiff = toStepVal - fromStepVal;
-  const diopterShift = stepDiff * 0.25;
-
-  const line1 = describeDC(fromDC, '- Current');
-
-  let line2 = '';
-  if (Math.abs(diopterShift) < 0.0001) {
-    line2 = '- No changes of far and near vision.';
- } else {
-  const mag = Math.abs(diopterShift).toFixed(2);
-  const direction = (stepDiff < 0) ? '+' : '-';
-
-  // Base message
-  line2 = `- A change of ${direction}${mag}. `;
-
-  // Adaptation analysis
-  if (Math.abs(diopterShift) <= 0.25 + 0.001) {
-    line2 += 'Easy adaptation and takes less than 1 week. ';
-  } else if (Math.abs(diopterShift) <= 0.50 + 0.001) {
-    line2 += 'Takes below 2 weeks to adapt; max amount to adapt comfortably. ';
-  } else {
-    line2 += 'Takes above 2 weeks to adapt; above common tolerant shift 0.50 ';
-  }
-
-  // Extra near-vision comfort analysis
-  if (diopterShift > 0) {
-    line2 += '<br>- More minus reduces near vision comfort and range.';
-  } else if (diopterShift < 0) {
-    line2 += '<br>- More plus improves near vision comfort and range.';
-  }
-}
-
-let lineDash = '<b>---------------------</b>';
-let lineAnalysis = '<b>Analysis:</b>';
-let linePlan = '<b>Plan</b>';
-
-
-  let line3 = '';
-  if (t.kind === 'BAL') {
-    line3 = '- New RX is true balance between distance and near vision.';
-  } else {
-    const newD = (typeof t.diopter === 'number') ? t.diopter : (t.stepVal * 0.25);
-    const mag = Math.abs(newD).toFixed(2);
-
-    let codeLabel = '';
-    if (t.kind === 'CODE') {
-      const color = (t.type === 'R') ? 'red' : 'green';
-      codeLabel = `(<span style="color:${color}; font-weight:normal;">${t.type}${t.step}</span>)`;
-    }
-
-    if (newD < 0) {
-      line3 = `- New RX prioritizes near vision; under by -${mag} ${codeLabel}.`;
-    } else if (newD === 0) {
-      line3 = `- New RX prioritizes balance vision; at -${mag} ${codeLabel}.`;
-    } else {
-      line3 = `- New RX prioritizes distance vision; over by +${mag} ${codeLabel}.`;
-    }
-  }
-
-  // pass parsed f/t in to avoid re-parsing internally
-  const line4 = getDeeperAnalysis(fromDC, toDC, f, t);
-
-  return [lineAnalysis, line1, line3, lineDash, linePlan, line2, line4].filter(Boolean).join('<br>');
-}
-
-// --- Update analysis in real-time ---
-function updateDCAnalysis() {
-  const binoErrorDC = document.getElementById('dc-ou')?.textContent.trim();
-  const prescribedDC = document.getElementById('res-dc-ou-re')?.textContent.trim();
-  if (!binoErrorDC || !prescribedDC) return;
-
-  const analysisEl = document.getElementById('analysis-ou');
-  if (!analysisEl) return;
-
-  const text = getDCShiftText(binoErrorDC, prescribedDC);
-  analysisEl.innerHTML = text;
-  analysisEl.style.textAlign = 'left';
-}
-
-setInterval(updateDCAnalysis, 300);
-// --- COMFY CLEARER RX ANALYSIS & PLAN ENDING
-</script>
-
-
-
-
-
-
-
 <script>
 function updateSEDiffLive() {
   const seOD = parseFloat(document.getElementById("res-se-od-2")?.textContent) || 0;
@@ -2022,120 +1768,220 @@ document.querySelectorAll('.sph-btn-mono').forEach(btn => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
-// --- parse DC (same as before) ---
+// --- Shared DC Analysis Functions (COMFY CLEARER) ---
 function parseDC(dc) {
-  if (!dc) return null;
-  let s = String(dc).trim().toUpperCase();
-  if (!s) return null;
-
-  if (s === 'BAL') return { diopter: 0, raw: s };
-
-  const codeMatch = s.match(/^([RG])\s*(\d+)$/i);
-  if (codeMatch) {
-    const type = codeMatch[1].toUpperCase();
-    const step = parseInt(codeMatch[2], 10);
-    const diopter = (type === 'R') ? -(step * 0.25) : (step * 0.25);
-    return { diopter, raw: s };
-  }
-
-  const num = parseFloat(s.replace(/[^\d\.\-+]/g, ''));
-  if (!isNaN(num)) return { diopter: num, raw: s };
-
-  return { diopter: 0, raw: s };
+    if (dc === null || dc === undefined) return null;
+    let s = String(dc).trim();
+    if (!s) return null;
+    s = s.replace(/−/g, '-').toUpperCase();
+    if (s === 'BAL') return { kind: 'BAL', diopter: 0, stepVal: 0, raw: s };
+    const codeMatch = s.match(/^([RG])\s*(\d+)$/i);
+    if (codeMatch) {
+        const type = codeMatch[1].toUpperCase();
+        const step = parseInt(codeMatch[2], 10);
+        const diopter = (type === 'R') ? -(step * 0.25) : (step * 0.25);
+        const stepVal = (type === 'R') ? -step : step;
+        return { kind: 'CODE', type, step, stepVal, diopter, raw: s };
+    }
+    const numStr = s.replace(/[^\d\.\-+]/g, '');
+    const n = parseFloat(numStr);
+    if (!Number.isNaN(n)) {
+        const stepVal = n / 0.25;
+        return { kind: 'NUMERIC', diopter: n, stepVal, raw: s };
+    }
+    return { kind: 'UNKNOWN', raw: s };
 }
 
-// --- helper to copy text + rendered colour ---
-function copyTextWithColor(el) {
-  if (!el) return "";
-  const text = el.textContent.trim();
-  if (!text) return "";
-  const style = window.getComputedStyle(el);
-  const color = style.color || "inherit";
-  return `<span style="color:${color}">${text}</span>`;
+function describeDC(dc, label = 'Current') {
+    if (!dc) return '';
+    const parsed = parseDC(dc);
+    if (!parsed) return `${label} RX: ${dc}`;
+    if (parsed.kind === 'BAL') return `${label} Well balance between distance and near vision.`;
+    if (parsed.kind === 'CODE') {
+        const absD = Math.abs(parsed.diopter).toFixed(2);
+        const colourLabel = `<span style="color:${parsed.type === 'R' ? 'red' : 'green'}; font-weight:normal;">${parsed.raw}</span>`;
+        if (parsed.type === 'R') {
+            return `${label} RX under by -${absD} (${colourLabel}); perfect for near and room distance, but not able to see very far.`;
+        } else {
+            if (parsed.step === 1) return `${label} RX over by +${absD} (${colourLabel}); perfect for seeing as far as possible.`;
+            return `${label} RX over by +${absD} (${colourLabel}); over the healthy limit of +0.25 (<span style="color: green; font-weight:normal;">G1</span>). Prolonged use may cause blurry vision, tiredness and headaches.`;
+        }
+    }
+    if (parsed.kind === 'NUMERIC') {
+        const d = parsed.diopter.toFixed(2);
+        if (Math.abs(parsed.diopter) < 0.0001) return `${label} RX balances far & near vision.`;
+        if (parsed.diopter < 0) return `${label} RX under by ${d}.`;
+        if (Math.abs(parsed.diopter - 0.25) < 0.0001) return `${label} RX over by ${d}; perfect for seeing as far as possible.`;
+        return `${label} RX over by ${d}; Limit for healthy vision is +0.25 (<span style="color: green; font-weight:normal;">G1</span>); Unnecessary over will cause blurry vision & headaches.`;
+    }
+    return `${label} ${dc}`;
 }
 
-// --- build Sharpest Ever DC analysis ---
-function trialSharpestAnalysis() {
-  const oldDCRel = document.getElementById('now-dc-od');
-  const newDCRel = document.getElementById('res-dc-od-2');
-  const oldDCLEl = document.getElementById('now-dc-os');
-  const newDCLEl = document.getElementById('res-dc-os-2');
-
-  const oldDCR = copyTextWithColor(oldDCRel);
-  const newDCR = copyTextWithColor(newDCRel);
-  const oldDCL = copyTextWithColor(oldDCLEl);
-  const newDCL = copyTextWithColor(newDCLEl);
-
-  // numerical shift
-  const oldRVal = parseDC(oldDCRel?.textContent)?.diopter || 0;
-  const newRVal = parseDC(newDCRel?.textContent)?.diopter || 0;
-  const diffR = -(newRVal - oldRVal);
-  const diffRStr = (diffR >= 0 ? "+" : "") + diffR.toFixed(2);
-
-  const oldLVal = parseDC(oldDCLEl?.textContent)?.diopter || 0;
-  const newLVal = parseDC(newDCLEl?.textContent)?.diopter || 0;
-  const diffL = -(newLVal - oldLVal);
-  const diffLStr = (diffL >= 0 ? "+" : "") + diffL.toFixed(2);
-
-  // binocular imbalance change
-  const binoChange = diffR - diffL;
-  const binoStr = (binoChange >= 0 ? "+" : "") + binoChange.toFixed(2);
-
-  const output = `
-    <b>Sharpest Ever Test Trial</b><br><br>
-    <b>Right Eye:</b> Old DC = ${oldDCR}, New DC = ${newDCR} 
-      <i>(${diffRStr} change)</i><br>
-    <b>Left Eye:</b> Old DC = ${oldDCL}, New DC = ${newDCL} 
-      <i>(${diffLStr} change)</i><br>
-    <b>Binocular imbalance change:</b> ${binoStr}<br><br>
-
-//------ Analysis sentence to tidy up
-
-    <div id="sharpest-analysis-notes" style="display:none; color:#666; font-style:italic;">
-      <b>Analysis Notes:</b><br>
-      • Right eye: priority → Distance Vision if new DC moves stronger.<br>
-      • Left eye: priority → Balance Vision if new DC weakens.<br>
-      • If binocular imbalance increases, adaptation may be harder.<br>
-      • If imbalance decreases, adaptation is easier.<br>
-    </div>
-  `;
-//------ Analysis sentence to tidy up
-
-  document.getElementById("analysis-od-os").innerHTML = output;
+function getDeeperAnalysis(fromDC, toDC, prevParsed, toParsed) {
+    const f = prevParsed && typeof prevParsed === 'object' ? prevParsed : parseDC(fromDC);
+    const t = toParsed && typeof toParsed === 'object' ? toParsed : parseDC(toDC);
+    if (!f || !t || f.kind === 'UNKNOWN' || t.kind === 'UNKNOWN') return '';
+    const parts = [];
+    if (f.kind === 'BAL' && t.kind === 'BAL') return '- No changes in the far and near vision.';
+    if (f.type === 'R' && t.type === 'R' && f.step === t.step) return '- No changes in the far and near vision.';
+    // Rule 1: G → G
+    if (f.type === 'G' && t.type === 'G') {
+        if (t.step < f.step) parts.push('- No loss of distance clarity. Significant improvement in near vision comfort.');
+        else if (t.step > f.step) parts.push('- No loss of distance clarity but worsening of near vision comfort. Not recommended to prescribe.');
+        else parts.push('- No loss of distance clarity. Near vision comfort improves slightly.');
+    }
+    // Rule 4: Distance improvement
+    const distanceImprovementCond =
+        (f.kind === 'BAL' && t.type === 'G') ||
+        (f.type === 'R' && t.kind === 'BAL') ||
+        (f.type === 'R' && t.type === 'R' && t.step < f.step) ||
+        (f.type === 'R' && t.type === 'G' && t.step === 1);
+    if (distanceImprovementCond) {
+        if (t.type === 'G' && t.step >= 1) {
+            if (t.step === 1) parts.push('- Distance clarity is maximum; see as far as possible.');
+            else parts.push('- Distance clarity does not improve further beyond G1 (already maximized).');
+        } else {
+            let gainDist = t.kind === 'BAL' ? 20 : 20 / Math.pow(2, t.step - 1);
+            parts.push(`- However, distance clarity improves. Objects up to ${gainDist} feet will appear clearer.`);
+        }
+    }
+    // Rule 2: Distance reduction
+    const distanceReductionCond = (t.kind === 'BAL' || t.type === 'R') && !distanceImprovementCond;
+    if (distanceReductionCond) {
+        let lossDist = t.kind === 'BAL' ? 20 : 20 / Math.pow(2, t.step - 1);
+        parts.push(`- However, distance clarity will be reduced. Vision becomes blurry beyond ${lossDist} feet.`);
+    }
+    return parts.length ? parts.join('<br>') : '';
 }
 
-// --- inputs that can change values ---
-const sharpInputIds = [
-  "dc-sph-od", "c2_od", "a2_od",
-  "dc-sph-os", "c2_os", "a2_os"
-];
+function getDCShiftText(fromDC, toDC) {
+    if (!fromDC || !toDC) return '';
+    const f = parseDC(fromDC);
+    const t = parseDC(toDC);
+    if (!f || !t || f.kind === 'UNKNOWN' || t.kind === 'UNKNOWN') return '';
+    const stepDiff = (t.stepVal || t.diopter/0.25) - (f.stepVal || f.diopter/0.25);
+    const diopterShift = stepDiff * 0.25;
+    const line1 = describeDC(fromDC, '- <b>Current RX:</b>');
+    let line2 = '';
+    if (Math.abs(diopterShift) < 0.0001) line2 = '- No changes of far and near vision.';
+    else {
+        const mag = Math.abs(diopterShift).toFixed(2);
+        const direction = stepDiff < 0 ? '+' : '-';
+        line2 = `- A change of ${direction}${mag}. `;
+        if (Math.abs(diopterShift) <= 0.25 + 0.001) line2 += 'Easy adaptation and takes less than 1 week. ';
+        else if (Math.abs(diopterShift) <= 0.50 + 0.001) line2 += 'Takes below 2 weeks to adapt; max amount to adapt comfortably. ';
+        else line2 += 'Takes above 2 weeks to adapt; above common tolerant shift 0.50 ';
+        if (diopterShift > 0) line2 += '<br>- More minus reduces near vision comfort and range.';
+        else if (diopterShift < 0) line2 += '<br>- More plus improves near vision comfort and range.';
+    }
+    let line3 = '';
+    if (t.kind === 'BAL') line3 = '- <b>New Rx:</b> Well balance between distance and near vision.';
+    else {
+        const newD = t.diopter || t.stepVal*0.25;
+        const mag = Math.abs(newD).toFixed(2);
+        let codeLabel = '';
+        if (t.kind === 'CODE') codeLabel = `(<span style="color:${t.type==='R'?'red':'green'}; font-weight:normal;">${t.type}${t.step}</span>)`;
+        if (newD < 0) line3 = `- <b>New RX</b>: Prioritizes near vision; under by -${mag} ${codeLabel}.`;
+        else if (newD === 0) line3 = `- <b>New RX</b>: Prioritizes balance vision; at -${mag} ${codeLabel}.`;
+        else line3 = `- <b>New RX</b>: Prioritizes distance vision; over by +${mag} ${codeLabel}.`;
+    }
+    const line4 = getDeeperAnalysis(fromDC, toDC, f, t);
+    return [line1, line3, '<b>---------------------</b>', '<b>Plan:</b>', line2, line4].filter(Boolean).join('<br>');
+}
 
-sharpInputIds.forEach(id => {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.addEventListener("input", trialSharpestAnalysis);
-  el.addEventListener("blur", (e) => { autoFormatInput(e.target); trialSharpestAnalysis(); });
-  el.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") { e.preventDefault(); autoFormatInput(e.target); trialSharpestAnalysis(); }
-  });
+// --- OD/OS Analysis ---
+function updateODOSAnalysis() {
+    const oldDCR = document.getElementById('now-dc-od')?.textContent.trim() || '';
+    const newDCR = document.getElementById('res-dc-od-2')?.textContent.trim() || '';
+    const oldDCL = document.getElementById('now-dc-os')?.textContent.trim() || '';
+    const newDCL = document.getElementById('res-dc-os-2')?.textContent.trim() || '';
+    const diffRStr = (parseDC(newDCR)?.diopter || 0) - (parseDC(oldDCR)?.diopter || 0);
+    const diffLStr = (parseDC(newDCL)?.diopter || 0) - (parseDC(oldDCL)?.diopter || 0);
+    const output = `
+<br><b><u>Right Vision Status</U></b><br>
+${getDCShiftText(oldDCR,newDCR)}<br><br>
+~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  <br>
+<b><u>Left Vision Status</u></b><br>
+${getDCShiftText(oldDCL,newDCL)}<br><br>
+`;
+    document.getElementById('analysis-od-os').innerHTML = output;
+}
+
+// --- OU Analysis ---
+function updateOUAnalysis() {
+    const oldDC = document.getElementById('dc-ou')?.textContent.trim() || '';
+    const newDC = document.getElementById('res-dc-ou-re')?.textContent.trim() || '';
+    const diff = (parseDC(newDC)?.diopter || 0) - (parseDC(oldDC)?.diopter || 0);
+    const output = `
+<br><b><u>Binocular Vision Status</u></b><br>
+${getDCShiftText(oldDC,newDC)}<br><br>
+`;
+    document.getElementById('analysis-ou').innerHTML = output;
+}
+
+// --- Input Triggers and Mutation Observers ---
+// OD/OS inputs
+['dc-sph-od','c2_od','a2_od','dc-sph-os','c2_os','a2_os'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    el.addEventListener('input',updateODOSAnalysis);
+    el.addEventListener('blur',()=>updateODOSAnalysis());
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();updateODOSAnalysis();}});
+});
+// OD/OS mutation observers
+['now-dc-od','res-dc-od-2','now-dc-os','res-dc-os-2'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    new MutationObserver(updateODOSAnalysis).observe(el,{childList:true,characterData:true,subtree:true});
 });
 
-// --- watch for DC status changes ---
-["now-dc-od", "now-dc-os", "res-dc-od-2", "res-dc-os-2"].forEach(id => {
-  const target = document.getElementById(id);
-  if (!target) return;
-  const observer = new MutationObserver(trialSharpestAnalysis);
-  observer.observe(target, { childList: true, characterData: true, subtree: true });
+// OU inputs
+['dc-sph-od','c2_od','a2_od','dc-sph-os','c2_os','a2_os'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    el.addEventListener('input',updateOUAnalysis);
+    el.addEventListener('blur',()=>updateOUAnalysis());
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();updateOUAnalysis();}});
+});
+// OU mutation observers
+['dc-ou','res-dc-ou-re'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    new MutationObserver(updateOUAnalysis).observe(el,{childList:true,characterData:true,subtree:true});
 });
 
-// --- run once on load ---
-window.addEventListener("DOMContentLoaded", trialSharpestAnalysis);
+// --- Run once on load ---
+window.addEventListener('DOMContentLoaded',()=>{
+    updateODOSAnalysis();
+    updateOUAnalysis();
+});
 </script>
-
-
-
-
 
 
 
