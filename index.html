@@ -16,6 +16,18 @@ html, body {
 
 }
 
+/* Remove number input spinners for Chrome, Safari, Edge */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Remove for Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 body { 
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
   font-size: 20px;
@@ -412,18 +424,19 @@ function toggleSection(id) {
 
 <div style="height:10px;"></div>
 
-  <tr class="white">
-    <th>Current RX</th>
-    <th>Sides</th>
-    <th>Sph</th>
-    <th>Cyl</th>
-    <th>Axis</th>
-    <th>SE Diff</th>
-    <th>DC</th>
-  </tr>
+<tr class="white">
+    <td><b>Current RX</b></td>
+    <td><b>Sides</b></td>
+    <td><b>Sph</b></td>
+    <td><b>Cyl</b></td>
+    <td><b>Axis</b></td>
+    <td><b>SE Diff</b></td>
+    <td><b>DC</b></td>
+</tr>
+
 
   <!-- Now RX -->
-  <tr class="white">
+  <tr>
 <td rowspan="2">
   <div class="choice-group">
     <input type="radio" id="wear-glasses" name="wearType" value="glasses">
@@ -441,7 +454,7 @@ function toggleSection(id) {
     <td>—</td>
   </tr>
 
-  <tr class="white">
+  <tr>
     <td>Left</td>
     <td><input id="s1_os" placeholder="+0.00"></td>
     <td><input id="c1_os" placeholder="+0.00"></td>
@@ -449,6 +462,202 @@ function toggleSection(id) {
     <td>—</td>
     <td>—</td>
   </tr>
+
+<tr>
+<td colspan="7" style="padding:5px; border:none;"></td>
+</tr>
+
+<tr class="white">
+    <td colspan="1"><b>Current Age</b></td>
+    <td colspan="3"><b>Near Distance & Add Power Needed</b></td>
+    <td style="display:none;"><b>AA</b></td>
+    <td style="display:none;"><b>AA Dist</b></td>
+</tr>
+
+<tr>
+  <td colspan="1"><input type="number" id="ageInput" min="1" max="120" oninput="calcAA()" placeholder="Years"></td>
+
+<td colspan="3">
+  Current Eye Strength : <span id="aaOutput">–</span><br><br>
+
+  <div style="display:flex; align-items:center; gap:10px;">
+    <label for="targetDistInput">Book:</label>
+    <input type="number" id="targetDistInput" min="0" placeholder="33 cm">
+    <span id="addOutput">–</span>
+  </div>
+
+  <div style="display:flex; align-items:center; gap:10px; margin-top:5px;">
+    <label for="targetDistInput2">Screen:</label>
+    <input type="number" id="targetDistInput2" min="0" placeholder="50 cm">
+    <span id="addOutput2">–</span>
+  </div>
+</td>
+
+
+  <td style="display:none;"></td>
+  <td style="display:none;"><span id="distOutput">–</span></td>
+  <td style="display:none;"colspan="1" id="healthyDistOutput">–</td>
+
+  <td style="display:none;" id="toleranceOutput">–</td>
+</tr>
+
+
+
+
+
+
+
+<!-- script for AA calculator & change tolerance (keep this below the row) -->
+
+<script>
+function roundDownToQuarter(value) {
+  return Math.floor(value / 0.25) * 0.25;
+}
+
+// Convert diopters into distance in cm
+function diopterToDistanceCm(D) {
+  if (D <= 0) return "∞";
+  let meters = 1 / D;
+  return (meters * 100).toFixed(0) + " cm";
+}
+
+// Healthy distance = (AA + 0.00 D) → convert to distance
+function healthyDistance(D) {
+  let healthyD = D + 0.00;
+  if (healthyD <= 0) return "None";
+
+  let cm = parseInt(diopterToDistanceCm(healthyD), 10); // convert to number
+  let displayCm = cm > 100 ? 100 : cm;                   // cap display only
+
+  return displayCm + " cm";
+}
+
+// Curved AA formula
+function calculateAA(age) {
+  const AA_young = 18.5; // Peak AA
+  const AA_min = 0.33;   // Minimum AA
+  const k = 0.1;         // Decay rate
+  const age0 = 20;       // Reference age
+
+  let aa = AA_min + (AA_young - AA_min) * Math.exp(-k * (age - age0));
+  if (aa < AA_min) aa = AA_min;
+  return aa;
+}
+
+// Calculate Add Needed (numeric value)
+function addNeeded(aa, workingCm) {
+  if (workingCm <= 0) return "–";
+  let targetD = 100 / workingCm;        // convert cm to diopters
+  let gap = targetD - aa;               // difference
+  let add = gap + 0.50;                 // add 0.50 D buffer
+  if (add < 0) add = 0;                 // limit to 0 if negative
+  return parseFloat(add.toFixed(2));
+}
+
+// Format Add Needed as range
+function addNeededRange(add) {
+  if (add === "–") return "–";
+
+  // Round UP to nearest 0.25
+  let upper = Math.ceil(add / 0.25) * 0.25;
+
+  // Lower bound is 0.50 D less
+  let lower = upper - 0.50;
+  if (lower < 0) lower = 0;
+
+  return lower.toFixed(2) + " to " + upper.toFixed(2) + " D";
+}
+
+// Calculate change tolerance = 10% of AA
+function changeTolerance(aa) {
+  if (typeof aa !== 'number' || aa <= 0) return 0;
+  return parseFloat((aa * 0.10 +0.25).toFixed(2));
+}
+
+// Main calculation function
+function calcAA() {
+  const ageEl = document.getElementById('ageInput');
+  const aaEl = document.getElementById('aaOutput');
+  const distEl = document.getElementById('distOutput');
+  const healthyEl = document.getElementById('healthyDistOutput');
+
+  const tdInputEl = document.getElementById('targetDistInput');   // target distance (cm)
+  const addEl = document.getElementById('addOutput');             // Add Needed
+  const toleranceEl = document.getElementById('toleranceOutput'); // Change Tolerance
+
+  const age = parseFloat(ageEl.value);
+  const tdCm = parseFloat(tdInputEl.value);
+
+  if (isNaN(age) || age <= 0) {
+    aaEl.textContent = '–';
+    distEl.textContent = '–';
+    healthyEl.textContent = '–';
+    addEl.textContent = '–';
+    toleranceEl.textContent = '–';
+    return;
+  }
+
+  // Calculate AA (curved)
+  let aa = calculateAA(age);
+
+  // Bracket AA
+  let bracket = roundDownToQuarter(aa);
+  if (bracket < 0) bracket = 0;
+
+  // Display AA and distances
+  aaEl.textContent = aa.toFixed(2) + ' D (' + bracket.toFixed(2) + ' D)';
+  distEl.textContent = diopterToDistanceCm(bracket);
+  healthyEl.textContent = healthyDistance(bracket);
+
+function calcAA2() {
+  const tdInputEl2 = document.getElementById('targetDistInput2');
+  const addEl2 = document.getElementById('addOutput2');
+
+  const ageEl = document.getElementById('ageInput'); // same age used
+  const age = parseFloat(ageEl.value);
+  const tdCm2 = parseFloat(tdInputEl2.value);
+
+  if (isNaN(age) || age <= 0 || isNaN(tdCm2) || tdCm2 <= 0) {
+    addEl2.textContent = '–';
+    return;
+  }
+
+  let aa = calculateAA(age);          // reuse same AA function
+  let addVal = addNeeded(aa, tdCm2);  // reuse same Add Needed function
+  addEl2.textContent = addNeededRange(addVal);
+}
+
+// Live update for second calculator
+document.getElementById('targetDistInput2').addEventListener('input', calcAA2);
+document.getElementById('ageInput').addEventListener('input', calcAA2);
+
+
+  // Calculate Add Needed and display as range
+  if (!isNaN(tdCm) && tdCm > 0) {
+    let addVal = addNeeded(aa, tdCm);
+    addEl.textContent = addNeededRange(addVal);
+  } else {
+    addEl.textContent = '–';
+  }
+
+  // Display change tolerance (10% of AA)
+  let tolerance = changeTolerance(aa);
+  toleranceEl.textContent = tolerance;
+}
+
+// Live update
+document.getElementById('ageInput').addEventListener('input', calcAA);
+document.getElementById('targetDistInput').addEventListener('input', calcAA);
+</script>
+
+
+
+
+
+<!-- script for AA calculator -->
+
+
+
 
 <tr>
 <td colspan="7" style="padding:5px; border:none;"></td>
@@ -474,11 +683,6 @@ function toggleSection(id) {
           style="cursor:pointer; color: #101F01; user-select:none; margin-right:15px;">
       ▼▲ Results 
     </span>
-
-<span onclick="toggleRow('adjustments-row-1')" 
-   style="cursor:pointer; color:black; user-select:none; margin:5px 0;">
-  ▼▲ Adjust
-</span>
 
 </td>
 
@@ -616,7 +820,11 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
   </tr>
 
 <tr class="comfort">
-    <td rowspan="2">Final RX</td>
+    <td rowspan="2">Final RX<br>-----<br>
+<span onclick="toggleRow('adjustments-row-1')" 
+   style="cursor:pointer; color:black; user-select:none; margin:5px 0;">
+  ▼▲ Adjust
+</span></td>
 
 <td>Right</td>
 
@@ -702,11 +910,6 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
  <span class="toggle-btn" data-target="toggle-section-sharper-rx" 
       style="margin-left:0px; margin-right:15px; user-select:none; cursor:pointer; color: #241D0C; user-select:none;">
 ▼▲ Results
-</span>
-
-<span id="toggleAdjustments2" 
-      style="cursor:pointer; user-select:none; color: #241D0C;">
-  ▼▲ Adjust
 </span>
 
 </td>
@@ -907,7 +1110,11 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
   </tr>
 
   <tr class="paleviolet">
-    <td rowspan="2">Final RX</td>
+    <td rowspan="2">Final RX<br>-----<br>
+<span id="toggleAdjustments2" 
+      style="cursor:pointer; user-select:none; color: #241D0C;">
+  ▼▲ Adjust
+</span></td>
 <td>Right</td>
     <td id="res-sph-od-2">0.00</td>
     <td id="res-cyl-od-2">0.00</td>
@@ -1827,17 +2034,17 @@ function describeDC(dc, label = 'Current') {
         const absD = Math.abs(parsed.diopter).toFixed(2);
         const colourLabel = `<span style="color:${parsed.type === 'R' ? 'red' : 'green'}; font-weight:normal;">${parsed.raw}</span>`;
         if (parsed.type === 'R') {
-            return `${label} RX under by -${absD} (${colourLabel}); perfect for near and room distance, but not able to see very far.`;
+            return `${label} RX under by -${absD} (${colourLabel}). Perfect for near and room distance, but not able to see very far.`;
         } else {
-            if (parsed.step === 1) return `${label} RX over by +${absD} (${colourLabel}); perfect for seeing as far as possible.`;
-            return `${label} RX over by +${absD} (${colourLabel}); over the healthy limit of +0.25 (<span style="color: green; font-weight:normal;">G1</span>). Prolonged use may cause blurry vision, tiredness and headaches.`;
+            if (parsed.step === 1) return `${label} RX over by +${absD} (${colourLabel}). Perfect for seeing as far as possible.`;
+            return `${label} RX over by +${absD} (${colourLabel}); This can lead to eye strains.`;
         }
     }
     if (parsed.kind === 'NUMERIC') {
         const d = parsed.diopter.toFixed(2);
         if (Math.abs(parsed.diopter) < 0.0001) return `${label} RX balances far & near vision.`;
         if (parsed.diopter < 0) return `${label} RX under by ${d}.`;
-        if (Math.abs(parsed.diopter - 0.25) < 0.0001) return `${label} RX over by ${d}; perfect for seeing as far as possible.`;
+        if (Math.abs(parsed.diopter - 0.25) < 0.0001) return `${label} RX over by ${d}. Perfect for seeing as far as possible.`;
         return `${label} RX over by ${d}; Limit for healthy vision is +0.25 (<span style="color: green; font-weight:normal;">G1</span>); Unnecessary over will cause blurry vision & headaches.`;
     }
     return `${label} ${dc}`;
@@ -1848,13 +2055,13 @@ function getDeeperAnalysis(fromDC, toDC, prevParsed, toParsed) {
     const t = toParsed && typeof toParsed === 'object' ? toParsed : parseDC(toDC);
     if (!f || !t || f.kind === 'UNKNOWN' || t.kind === 'UNKNOWN') return '';
     const parts = [];
-    if (f.kind === 'BAL' && t.kind === 'BAL') return '- No changes in the far and near vision.';
-    if (f.type === 'R' && t.type === 'R' && f.step === t.step) return '- No changes in the far and near vision.';
+    if (f.kind === 'BAL' && t.kind === 'BAL') return '- No changes of far and near vision quality.';
+    if (f.type === 'R' && t.type === 'R' && f.step === t.step) return '- No changes of far and near vision quality.';
     // Rule 1: G → G
     if (f.type === 'G' && t.type === 'G') {
         if (t.step < f.step) parts.push('- No loss of distance clarity. Significant improvement in near vision comfort.');
-        else if (t.step > f.step) parts.push('- No loss of distance clarity but worsening of near vision comfort. Not recommended to prescribe.');
-        else parts.push('- No loss of distance clarity. Near vision comfort improves slightly.');
+        else if (t.step > f.step) parts.push('- Distance clarity remains but near vision worsening . Not recommended as this is over-correction.');
+        else parts.push('- No changes of far and near vision quality.');
     }
     // Rule 4: Distance improvement
     const distanceImprovementCond =
@@ -1864,8 +2071,8 @@ function getDeeperAnalysis(fromDC, toDC, prevParsed, toParsed) {
         (f.type === 'R' && t.type === 'G' && t.step === 1);
     if (distanceImprovementCond) {
         if (t.type === 'G' && t.step >= 1) {
-            if (t.step === 1) parts.push('- Distance clarity is maximum; see as far as possible.');
-            else parts.push('- Distance clarity does not improve further beyond G1 (already maximized).');
+            if (t.step === 1) parts.push('- Distance clarity is maximum. See as far as possible.');
+            else parts.push('- Distance clarity does not improve further beyond (<span style="color:green;">G1</span>). Already maximized.');
         } else {
             let gainDist = t.kind === 'BAL' ? 20 : 20 / Math.pow(2, t.step - 1);
             parts.push(`- However, distance clarity improves. Objects up to ${gainDist} feet will appear clearer.`);
@@ -1889,30 +2096,65 @@ function getDCShiftText(fromDC, toDC) {
     const diopterShift = stepDiff * 0.25;
     const line1 = describeDC(fromDC, '- <b>Current RX:</b>');
     let line2 = '';
-    if (Math.abs(diopterShift) < 0.0001) line2 = '- No changes of far and near vision.';
+    if (Math.abs(diopterShift) < 0.0001) line2 = '- No changes in prescription.';
     else {
         const mag = Math.abs(diopterShift).toFixed(2);
         const direction = stepDiff < 0 ? '+' : '-';
-        line2 = `- A change of ${direction}${mag}. `;
-        if (Math.abs(diopterShift) <= 0.25 + 0.001) line2 += 'Easy adaptation and takes less than 1 week. ';
-        else if (Math.abs(diopterShift) <= 0.50 + 0.001) line2 += 'Takes below 2 weeks to adapt; max amount to adapt comfortably. ';
-        else line2 += 'Takes above 2 weeks to adapt; above common tolerant shift 0.50 ';
-        if (diopterShift > 0) line2 += '<br>- More minus reduces near vision comfort and range.';
-        else if (diopterShift < 0) line2 += '<br>- More plus improves near vision comfort and range.';
+        line2 = `- A change of <b>${direction}${mag}</b>. `;
+        if (Math.abs(diopterShift) <= 0.25 + 0.001) line2 += 'Slight swim effect.<br>&nbsp;&nbsp;&nbsp;<b>Recommended Limit for Changes by Age. Older eyes are weaker to adapt.</b>'
++ '<br>&nbsp;&nbsp;&nbsp; Below 20 years: ~1.75-1.50'
++ '<br>&nbsp;&nbsp;&nbsp; 20–30 years: ~1.25 to 1.00'
++ '<br>&nbsp;&nbsp;&nbsp; 30–40 years: ~1.00 to 0.50'
++ '<br>&nbsp;&nbsp;&nbsp; 40–50 years: ~0.50 to 0.25'
++ '<br>&nbsp;&nbsp;&nbsp; Above 50 years: ~0.25 to 0.00<br>';
+        else if (Math.abs(diopterShift) <= 0.50 + 0.001) line2 += 'Moderate swim effect.<br>&nbsp;&nbsp;&nbsp;<b>Recommended Limit for Changes by Age. Older eyes are weaker to adapt.</b>'
++ '<br>&nbsp;&nbsp;&nbsp; Below 20 years: ~1.75-1.50'
++ '<br>&nbsp;&nbsp;&nbsp; 20–30 years: ~1.25 to 1.00'
++ '<br>&nbsp;&nbsp;&nbsp; 30–40 years: ~1.00 to 0.50'
++ '<br>&nbsp;&nbsp;&nbsp; 40–50 years: ~0.50 to 0.25'
++ '<br>&nbsp;&nbsp;&nbsp; Above 50 years: ~0.25 to 0.00<br>';
+else line2 += 'Huge swim effect.<br>&nbsp;&nbsp;&nbsp;<b>Recommended Limit for Changes by Age. Older eyes are weaker to adapt.</b>'
++ '<br>&nbsp;&nbsp;&nbsp; Below 20 years: ~1.75-1.50'
++ '<br>&nbsp;&nbsp;&nbsp; 20–30 years: ~1.25 to 1.00'
++ '<br>&nbsp;&nbsp;&nbsp; 30–40 years: ~1.00 to 0.50'
++ '<br>&nbsp;&nbsp;&nbsp; 40–50 years: ~0.50 to 0.25'
++ '<br>&nbsp;&nbsp;&nbsp; Above 50 years: ~0.25 to 0.00<br>';
+        if (diopterShift > 0) line2 += '<br>- Minus shift reduces near vision comfort and range.<br>- Minification: Objects will look further and smaller.<br>- Dynamic vision: Objects will look like they move faster.';
+        else if (diopterShift < 0) line2 += '<br>- Plus shift improves near vision comfort and range.<br>- Magnification: Objects will look nearer and bigger.<br>- Dynamic vision: Objects will look like they move slower.';
     }
-    let line3 = '';
-    if (t.kind === 'BAL') line3 = '- <b>New Rx:</b> Well balance between distance and near vision.';
-    else {
-        const newD = t.diopter || t.stepVal*0.25;
+       let line3 = '';
+    if (t.kind === 'BAL') {
+        line3 = '- <b>New Rx:</b> Well balance between distance and near vision.';
+    } else {
+        const newD = t.diopter || t.stepVal * 0.25;
         const mag = Math.abs(newD).toFixed(2);
         let codeLabel = '';
-        if (t.kind === 'CODE') codeLabel = `(<span style="color:${t.type==='R'?'red':'green'}; font-weight:normal;">${t.type}${t.step}</span>)`;
-        if (newD < 0) line3 = `- <b>New RX</b>: Prioritizes near vision; under by -${mag} ${codeLabel}.`;
-        else if (newD === 0) line3 = `- <b>New RX</b>: Prioritizes balance vision; at -${mag} ${codeLabel}.`;
-        else line3 = `- <b>New RX</b>: Prioritizes distance vision; over by +${mag} ${codeLabel}.`;
+        if (t.kind === 'CODE') {
+            codeLabel = `(<span style="color:${t.type==='R'?'red':'green'}; font-weight:normal;">${t.type}${t.step}</span>)`;
+        }
+
+        if (newD < 0) {
+            line3 = `- <b>New RX</b>: Prioritizes near vision; under by -${mag} ${codeLabel}.`;
+        } else if (newD === 0) {
+            line3 = `- <b>New RX</b>: Prioritizes balance vision; at -${mag} ${codeLabel}.`;
+        } else {
+            line3 = `- <b>New RX</b>: Prioritizes distance vision; over by +${mag} ${codeLabel}.`;
+        }
+
+        // --- Add G rules here ---
+        if (t.kind === 'CODE' && t.type === 'G') {
+            if (t.step === 1) {
+                line3 += ' Perfect for seeing as far as possible.';
+            } else if (t.step >= 2) {
+                line3 += ' This can lead to eye strains.';
+            }
+        }
     }
     const line4 = getDeeperAnalysis(fromDC, toDC, f, t);
-    return [line1, line3, '<b>---------------------</b>', '<b>Plan:</b>', line2, line4].filter(Boolean).join('<br>');
+    return [line1, line3, '<b>---------------------</b>', '<b>Plan:</b>', line2, line4]
+        .filter(Boolean)
+        .join('<br>');
+
 }
 
 // --- OD/OS Analysis ---
@@ -1981,6 +2223,94 @@ window.addEventListener('DOMContentLoaded',()=>{
     updateODOSAnalysis();
     updateOUAnalysis();
 });
+</script>
+<script>
+// --- Binocular Merged Plan Add-On ---
+function updateMergedPlan() {
+  const oldDCR = document.getElementById('now-dc-od')?.textContent.trim() || '';
+  const newDCR = document.getElementById('res-dc-od-2')?.textContent.trim() || '';
+  const oldDCL = document.getElementById('now-dc-os')?.textContent.trim() || '';
+  const newDCL = document.getElementById('res-dc-os-2')?.textContent.trim() || '';
+
+  const fR = parseDC(oldDCR), tR = parseDC(newDCR);
+  const fL = parseDC(oldDCL), tL = parseDC(newDCL);
+
+  if (!fR || !tR || !fL || !tL) return;
+
+  // --- Compute total change ---
+  const diffR = (tR.diopter || 0) - (fR.diopter || 0);
+  const diffL = (tL.diopter || 0) - (fL.diopter || 0);
+
+  // --- SE Diff ---
+  const seDiff = Math.abs(diffR - diffL);
+
+  // Adaptation time rule
+  let adaptText = "";
+  if (seDiff <= 0.25) adaptText = "Likely mild binocular imbalance; adaptation 1–2 weeks.";
+  else if (seDiff <= 0.50) adaptText = "Moderate imbalance; adaptation 2–4 weeks.";
+  else adaptText = "High imbalance (>0.50); possible adaptation failure, especially in older patients.";
+
+  // --- Distance blur merge ---
+  function getBlurDist(parsed) {
+    if (parsed.kind === "BAL") return 20;
+    if (parsed.type === "R") return 20 / Math.pow(2, parsed.step - 1);
+    if (parsed.type === "G" && parsed.step > 1) return 20; // over G1 = max distance
+    return 20;
+  }
+  const blurR = getBlurDist(tR);
+  const blurL = getBlurDist(tL);
+  const minBlur = Math.min(blurR, blurL); // stricter
+  const maxBlur = Math.max(blurR, blurL); // looser
+  const blurText = (blurR !== blurL)
+    ? `Distance vision: semi-blur beyond ${minBlur}ft, noticeable blur beyond ${maxBlur}ft.`
+    : `Distance vision: blur beyond ${minBlur}ft.`;
+
+  // --- Near vision comfort merge ---
+  let nearText = "";
+  const nearR = diffR < 0 ? "improve" : (diffR > 0 ? "reduce" : "same");
+  const nearL = diffL < 0 ? "improve" : (diffL > 0 ? "reduce" : "same");
+  if (nearR === "improve" && nearL === "improve") {
+    nearText = "Near vision comfort improved.";
+  } else if (nearR === "reduce" && nearL === "reduce") {
+    nearText = "Near vision comfort reduced.";
+  } else if ((nearR === "improve" && nearL === "reduce") ||
+             (nearR === "reduce" && nearL === "improve")) {
+    nearText = "Mixed binocular comfort — may cause headaches or double vision due to conflicting focal points.";
+  } else {
+    nearText = "Near vision comfort unchanged.";
+  }
+
+  // --- Output ---
+  const mergedOutput = `
+  <br><b><u>Binocular (Merged) Plan</u></b><br>
+  - Total change: Right eye ${diffR.toFixed(2)}, Left eye ${diffL.toFixed(2)}<br>
+  - SE Diff: ${seDiff.toFixed(2)}<br>
+  - ${adaptText}<br>
+  - ${blurText}<br>
+  - ${nearText}<br><br>
+  `;
+
+  // Inject after OD/OS analysis
+  const target = document.getElementById("analysis-od-os");
+  if (target) {
+    if (!document.getElementById("merged-plan")) {
+      const div = document.createElement("div");
+      div.id = "merged-plan";
+      target.appendChild(div);
+    }
+    document.getElementById("merged-plan").innerHTML = mergedOutput;
+  }
+}
+
+// Hook into existing updateODOSAnalysis
+const oldUpdateODOS = updateODOSAnalysis;
+updateODOSAnalysis = function() {
+  oldUpdateODOS();
+  updateMergedPlan();
+};
+
+// Run on load
+window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </script>
 
 
