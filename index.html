@@ -467,26 +467,27 @@ function toggleSection(id) {
 <td colspan="7" style="padding:5px; border:none;"></td>
 </tr>
 
+
 <tr class="white">
-    <td colspan="1"><b>Current Age</b></td>
-    <td colspan="3"><b>Near Distance & Add Power Needed</b></td>
-    <td style="display:none;"><b>AA</b></td>
+    <td colspan="3"><b>Current Age & Far Rx Change Limit</b></td>
+    <td colspan="4"><b>Near Distance & Add Power Needed</b></td>
     <td style="display:none;"><b>AA Dist</b></td>
 </tr>
 
 <tr>
   <td colspan="1"><input type="number" id="ageInput" min="1" max="120" oninput="calcAA()" placeholder="Years"></td>
+  <td colspan="2" id="toleranceOutput">–</td>
 
-<td colspan="3">
-  Current Eye Strength : <span id="aaOutput">–</span><br><br>
 
-  <div style="display:flex; align-items:center; gap:10px;">
-    <label for="targetDistInput">Book:</label>
+<td colspan="4" style="text-align:left;">
+
+  <div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
+    <label for="targetDistInput">Book: &nbsp;</label>
     <input type="number" id="targetDistInput" min="0" placeholder="33 cm">
     <span id="addOutput">–</span>
   </div>
 
-  <div style="display:flex; align-items:center; gap:10px; margin-top:5px;">
+  <div style="display:flex; align-items:center; gap:10px;">
     <label for="targetDistInput2">Screen:</label>
     <input type="number" id="targetDistInput2" min="0" placeholder="50 cm">
     <span id="addOutput2">–</span>
@@ -497,8 +498,12 @@ function toggleSection(id) {
   <td style="display:none;"></td>
   <td style="display:none;"><span id="distOutput">–</span></td>
   <td style="display:none;"colspan="1" id="healthyDistOutput">–</td>
+  <td style="display:none;">
 
-  <td style="display:none;" id="toleranceOutput">–</td>
+<div style="margin-bottom:8px;">
+    Current Eye Strength: <span id="aaOutput">–</span>
+  </div>
+</td>
 </tr>
 
 
@@ -568,11 +573,34 @@ function addNeededRange(add) {
   return lower.toFixed(2) + " to " + upper.toFixed(2) + " D";
 }
 
-// Calculate change tolerance = 10% of AA
-function changeTolerance(aa) {
-  if (typeof aa !== 'number' || aa <= 0) return 0;
-  return parseFloat((aa * 0.10 +0.25).toFixed(2));
+// Calculate change tolerance with age-based limiter
+function changeTolerance(aa, age) {
+  if (typeof aa !== 'number' || aa <= 0) return "0 (0.00 D)";
+  if (typeof age !== 'number' || age <= 0) age = 99; // fallback
+
+  // Original formula
+  let original = aa * 0.10 + 0.15;
+
+  // Age-based multiplier limiter
+  let multiplier = 1; // default no limit
+  if (age >= 18 && age <= 25) multiplier = 0.3;
+  else if (age >= 14 && age <= 17) multiplier = 0.25;
+  else if (age >= 9 && age <= 13) multiplier = 0.2;
+  else if (age <= 8) multiplier = 0.15;
+
+  let ageLimited = ((original - 1.75) * multiplier) + 1.75;
+
+  // Apply limiter
+  if (original > ageLimited) original = ageLimited;
+
+  // Round to nearest 0.25 for display
+  let rounded = Math.round(original / 0.25) * 0.25;
+
+  return original.toFixed(2) + ' (' + rounded.toFixed(2) + ' D)';
 }
+
+
+
 
 // Main calculation function
 function calcAA() {
@@ -640,14 +668,21 @@ document.getElementById('ageInput').addEventListener('input', calcAA2);
     addEl.textContent = '–';
   }
 
-  // Display change tolerance (10% of AA)
-  let tolerance = changeTolerance(aa);
-  toleranceEl.textContent = tolerance;
+  // Display change tolerance (12% of AA)
+let tolerance = changeTolerance(aa, age);
+toleranceEl.textContent = tolerance;
+
 }
 
 // Live update
 document.getElementById('ageInput').addEventListener('input', calcAA);
 document.getElementById('targetDistInput').addEventListener('input', calcAA);
+document.getElementById('ageInput').addEventListener('input', () => {
+    updateODOSAnalysis();
+    updateOUAnalysis();
+});
+
+
 </script>
 
 
@@ -662,6 +697,8 @@ document.getElementById('targetDistInput').addEventListener('input', calcAA);
 <tr>
 <td colspan="7" style="padding:5px; border:none;"></td>
 </tr>
+
+
 
 <tr class="comfort">
   <td colspan="4" style="padding:10px; color: #101F01; text-align:left;">
@@ -2087,41 +2124,77 @@ function getDeeperAnalysis(fromDC, toDC, prevParsed, toParsed) {
     return parts.length ? parts.join('<br>') : '';
 }
 
+
+
+
+
 function getDCShiftText(fromDC, toDC) {
     if (!fromDC || !toDC) return '';
     const f = parseDC(fromDC);
     const t = parseDC(toDC);
     if (!f || !t || f.kind === 'UNKNOWN' || t.kind === 'UNKNOWN') return '';
+
     const stepDiff = (t.stepVal || t.diopter/0.25) - (f.stepVal || f.diopter/0.25);
     const diopterShift = stepDiff * 0.25;
+
     const line1 = describeDC(fromDC, '- <b>Current RX:</b>');
     let line2 = '';
-    if (Math.abs(diopterShift) < 0.0001) line2 = '- No changes in prescription.';
-    else {
-        const mag = Math.abs(diopterShift).toFixed(2);
-        const direction = stepDiff < 0 ? '+' : '-';
-        line2 = `- A change of <b>${direction}${mag}</b>. `;
-        if (Math.abs(diopterShift) <= 0.25 + 0.001) line2 += 'Slight swim effect.<br>&nbsp;&nbsp;&nbsp;<b>Recommended Limit for Changes by Age. Older eyes are weaker to adapt.</b>'
-+ '<br>&nbsp;&nbsp;&nbsp; Below 20 years: ~1.75-1.50'
-+ '<br>&nbsp;&nbsp;&nbsp; 20–30 years: ~1.25 to 1.00'
-+ '<br>&nbsp;&nbsp;&nbsp; 30–40 years: ~1.00 to 0.50'
-+ '<br>&nbsp;&nbsp;&nbsp; 40–50 years: ~0.50 to 0.25'
-+ '<br>&nbsp;&nbsp;&nbsp; Above 50 years: ~0.25 to 0.00<br>';
-        else if (Math.abs(diopterShift) <= 0.50 + 0.001) line2 += 'Moderate swim effect.<br>&nbsp;&nbsp;&nbsp;<b>Recommended Limit for Changes by Age. Older eyes are weaker to adapt.</b>'
-+ '<br>&nbsp;&nbsp;&nbsp; Below 20 years: ~1.75-1.50'
-+ '<br>&nbsp;&nbsp;&nbsp; 20–30 years: ~1.25 to 1.00'
-+ '<br>&nbsp;&nbsp;&nbsp; 30–40 years: ~1.00 to 0.50'
-+ '<br>&nbsp;&nbsp;&nbsp; 40–50 years: ~0.50 to 0.25'
-+ '<br>&nbsp;&nbsp;&nbsp; Above 50 years: ~0.25 to 0.00<br>';
-else line2 += 'Huge swim effect.<br>&nbsp;&nbsp;&nbsp;<b>Recommended Limit for Changes by Age. Older eyes are weaker to adapt.</b>'
-+ '<br>&nbsp;&nbsp;&nbsp; Below 20 years: ~1.75-1.50'
-+ '<br>&nbsp;&nbsp;&nbsp; 20–30 years: ~1.25 to 1.00'
-+ '<br>&nbsp;&nbsp;&nbsp; 30–40 years: ~1.00 to 0.50'
-+ '<br>&nbsp;&nbsp;&nbsp; 40–50 years: ~0.50 to 0.25'
-+ '<br>&nbsp;&nbsp;&nbsp; Above 50 years: ~0.25 to 0.00<br>';
-        if (diopterShift > 0) line2 += '<br>- Minus shift reduces near vision comfort and range.<br>- Minification: Objects will look further and smaller.<br>- Dynamic vision: Objects will look like they move faster.';
-        else if (diopterShift < 0) line2 += '<br>- Plus shift improves near vision comfort and range.<br>- Magnification: Objects will look nearer and bigger.<br>- Dynamic vision: Objects will look like they move slower.';
-    }
+
+   if (Math.abs(diopterShift) < 0.0001) {
+    line2 = '- No changes in prescription.';
+} else {
+    const mag = Math.abs(diopterShift).toFixed(2);
+    const direction = stepDiff < 0 ? '+' : '-';
+    
+    // First line: Change + swim effect
+    line2 = `- A change of <b>${direction}${mag}</b>. `;
+    if (Math.abs(diopterShift) <= 0.25 + 0.001) 
+        line2 += 'Slight swim effect.';
+    else if (Math.abs(diopterShift) <= 0.50 + 0.001) 
+        line2 += 'Moderate swim effect.';
+    else 
+        line2 += 'Huge swim effect.';
+
+    // --- Second line: Tolerance Analysis ---
+    try {
+        const ageEl = document.getElementById('ageInput');
+        const age = parseFloat(ageEl.value);
+
+        if (!ageEl.value || isNaN(age) || age <= 0) {
+            line2 += '<br>- <b>Tolerance Analysis:</b> Key in age to generate analysis.';
+        } else {
+            const aaEl = document.getElementById('aaOutput');
+            const aa = parseFloat(aaEl?.textContent) || 0;
+            const toleranceText = changeTolerance(aa, age);
+            const roundedMatch = toleranceText.match(/\(([\d.]+)\s*D\)/);
+            const tolVal = roundedMatch ? parseFloat(roundedMatch[1]) : null;
+
+            if (tolVal !== null && !isNaN(tolVal)) {
+                const absShift = Math.abs(diopterShift);
+                const EPS = 0.01;
+
+                line2 += '<br>- <b>Tolerance Analysis:</b> ';
+                if (Math.abs(absShift - tolVal) <= EPS) {
+                    line2 += 'Change is at maximum tolerance.';
+                } else if (absShift > tolVal + EPS) {
+                    line2 += 'Change is over the limit and may cause difficulty in adjusting.';
+                } else if (absShift > tolVal / 2 + EPS) {
+                    line2 += 'Change can be tolerated and adapt within 2 weeks.';
+                } else {
+                    line2 += 'Change easily tolerated and adapt almost instantly.';
+                }
+            }
+        }
+    } catch (e) { /* silent fail */ }
+
+    // Dynamic / minification / magnification lines AFTER
+    if (diopterShift > 0) line2 += '<br>- Minus shift reduces near vision comfort and range.<br>- Minification: Objects will look further and smaller.<br>- Dynamic vision: Objects will look like they move faster.';
+    else if (diopterShift < 0) line2 += '<br>- Plus shift improves near vision comfort and range.<br>- Magnification: Objects will look nearer and bigger.<br>- Dynamic vision: Objects will look like they move slower.';
+}
+
+
+
+
        let line3 = '';
     if (t.kind === 'BAL') {
         line3 = '- <b>New Rx:</b> Well balance between distance and near vision.';
