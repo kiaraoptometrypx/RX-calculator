@@ -504,13 +504,59 @@ function toggleSection(id) {
 </td>
 </tr>
 </table>
+
+
+
 <div style="height:20px;"></div>
 
 <h2>Welcome to Kiara Optometry's Algorithm Refraction.</h2>
-<table>
 
 <div style="height:10px;"></div>
 
+<table>
+<tr class="white">
+  <td colspan="1"><b>Suffix</b></td>
+
+  <td colspan="1"><b>Age</b></td>
+  <td colspan="1"><b>Name</b></td>
+  <td colspan="1"><b>Whatsapp</b></td>
+  <td colspan="1"><b>Email</b></td>
+
+</tr>
+
+<tr>
+  <!-- Suffix input -->
+  <td colspan="1">
+    <input type="text" id="Suffix" placeholder="Mr, Mrs">
+  </td>
+
+    <!-- Age -->
+  <td colspan="1"><input type="number" id="ageInput" min="1" max="120" oninput="calcAA()" placeholder="Years"></td>
+
+  <!-- Name input -->
+  <td colspan="1">
+    <input type="text" id="nameInput" placeholder="Aaron B. Carlson">
+  </td>
+<!-- Contact number input -->
+  <td colspan="1">
+    <input type="text" id="contactInput" placeholder="Contact Number">
+  </td>
+
+  <!-- Email -->
+  <td colspan="1">
+    <input type="text" id="Email" placeholder="Address">
+  </td>
+</tr>
+
+
+<tr>
+<td colspan="5" style="padding:5px; border:none;"></td>
+</tr>
+</table>
+
+
+
+<table>
 <tr class="white">
     <td><b>Current RX</b></td>
     <td><b>Sides</b></td>
@@ -518,7 +564,7 @@ function toggleSection(id) {
     <td><b>Cyl</b></td>
     <td><b>Axis</b></td>
     <td><b>SE Diff</b></td>
-    <td><b>DC</b></td>
+    <td><b>ADD</b></td>
 </tr>
 
 
@@ -538,7 +584,7 @@ function toggleSection(id) {
     <td><input id="c1_od" placeholder="+0.00"></td>
     <td><input id="a1_od" placeholder="0"></td>
     <td id="now-se-diff-od">—</td>
-    <td>—</td>
+    <td><input id="add-od" placeholder="+0.00"></td>
   </tr>
 
   <tr>
@@ -547,49 +593,39 @@ function toggleSection(id) {
     <td><input id="c1_os" placeholder="+0.00"></td>
     <td><input id="a1_os" placeholder="0"></td>
     <td>—</td>
-    <td>—</td>
+    <td><input id="add-os" placeholder="+0.00"></td>
   </tr>
 
 <tr>
-<td colspan="7" style="padding:5px; border:none;"></td>
+<td colspan="7" style="padding:1px; border:none;"></td>
 </tr>
 
 
-<tr class="white">
-    <td colspan="3"><b>Current Age & Far Rx Change Limit</b></td>
-    <td colspan="4"><b>Near Distance & Add Power Needed</b></td>
-    <td style="display:none;"><b>AA Dist</b></td>
+<tr>
+    
+    <td colspan="4" style="background-color: #d9d9d9;"><b>Distance for Books, Phones (Near) and Add Needed</b></td>
+    <td colspan="1"><label for="targetDistInput" style="display:none;">Book</label>
+    <input type="number" id="targetDistInput" min="0" placeholder="33 cm"></td>
+    <td colspan="2"><span id="addOutput">–</span></td>
+
+
 </tr>
 
 <tr>
-  <td colspan="1"><input type="number" id="ageInput" min="1" max="120" oninput="calcAA()" placeholder="Years"></td>
-  <td colspan="2" id="toleranceOutput">–</td>
-
-
-<td colspan="4" style="text-align:left;">
-
-  <div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;">
-    <label for="targetDistInput">Book: &nbsp;</label>
-    <input type="number" id="targetDistInput" min="0" placeholder="33 cm">
-    <span id="addOutput">–</span>
-  </div>
-
-  <div style="display:flex; align-items:center; gap:10px;">
-    <label for="targetDistInput2">Screen:</label>
+    <td colspan="4" style="background-color: #d9d9d9;"><b>Distance for Screen (Intermediate) and Add Needed</b></td>
+    <td colspan="1"><label for="targetDistInput2" style="display:none;">Screen:</label>
     <input type="number" id="targetDistInput2" min="0" placeholder="50 cm">
-    <span id="addOutput2">–</span>
-  </div>
-</td>
+    <td colspan="2"><span id="addOutput2">–</span></td>
 
+</tr>
+<tr>
 
+  <td colspan="1" id="toleranceOutput" style="display:none;">–</td>
+  <td style="display:none;"><b>AA Dist</b></td>
   <td style="display:none;"></td>
   <td style="display:none;"><span id="distOutput">–</span></td>
   <td style="display:none;"colspan="1" id="healthyDistOutput">–</td>
-  <td style="display:none;">
-
-<div style="margin-bottom:8px;">
-    Current Eye Strength: <span id="aaOutput">–</span>
-  </div>
+  <td style="display:none;">Current Eye Strength: <span id="aaOutput">–</span>
 </td>
 </tr>
 
