@@ -188,6 +188,12 @@ input {   width:80px;
   text-decoration: none; /* none | underline | overline | line-through */
 }
 
+  /* Font size classes */
+  .font-small * { font-size: 10px !important; }
+  .font-medium * { font-size: 14px !important; }
+  .font-large * { font-size: 18px !important; }
+  .font-xlarge * { font-size: 20px !important; }
+
 
 </style>
 </head>
@@ -224,6 +230,37 @@ input {   width:80px;
   };
 </script>
 <div style="height:20px;"></div>
+
+
+
+
+
+
+
+
+
+<div style="margin:10px;">
+  <button onclick="setFontSize('small')">Small</button>
+  <button onclick="setFontSize('medium')">Medium</button>
+  <button onclick="setFontSize('large')">Large</button>
+  <button onclick="setFontSize('xlarge')">Extra Large</button>
+</div>
+
+<script>
+function setFontSize(size) {
+  // Remove existing font size classes
+  document.body.classList.remove('font-small','font-medium','font-large','font-xlarge');
+  
+  // Add the selected one
+  document.body.classList.add('font-' + size);
+}
+</script>
+
+
+
+
+
+
 
 <table>
 <tr>
@@ -884,26 +921,28 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 <tr id="adjustments-row-1" class="now-comfort" style="display:none;">
   <td>Adjustments</td>
   <td>Both</td>
-  <td colspan="5" style="padding:1px; text-align:left;">
+  <td colspan="5" style="padding:0px; text-align:left;">
     <div>
       <!-- Clickable control to apply -0.25 x 180 -->
       <span class="addMinus025" role="button" 
-            style="cursor:pointer; user-select:none; margin-right:30px; margin-left:20px;">
+            style="cursor:pointer; user-select:none; margin-right:10px; margin-left:20px;">
         Apply -0.25 × 180
       </span>
 
-      ●
-      <span class="sph-btn" data-group="ou" data-step="-0.25"
+      ● 
+     <span class="sph-btn" data-group="ou" data-step="-0.25"
             style="cursor:pointer; text-decoration:none; color:green; margin-right:5px;">
         S-0.25
       </span>
 
       <span class="sph-btn" data-group="ou" data-step="0.25"
-            style="cursor:pointer; text-decoration:none; color:red; margin-right:30px;">
+            style="cursor:pointer; text-decoration:none; color:red; margin-right:10px;">
         S+0.25
-      </span>
+      </span>= <span id="dc-advice" style=" font-weight:normal; color:black;">
+  <!-- DC advice will show here -->
+</span>
 
-      
+
 
     </div>
   </td>
@@ -2010,6 +2049,163 @@ document.querySelectorAll('.sph-btn-mono').forEach(btn => {
 
 
 
+<script>
+(function(){
+  // isolated namespace
+  const _ID = '__dcAdvice_isolated_v1';
+
+  // small helper: robustly convert a label like "G2", "G 2", "R1", "BAL", or "G1 Over -0.25" into step integer
+  // returns: 0 for BAL, positive integer for R (e.g. R2 -> 2), negative integer for G (G2 -> -2)
+  function _labelToStep(raw) {
+    if (!raw) return 0;
+    const s = String(raw).trim().toUpperCase();
+    if (s === 'BAL' || s === '—' || s === '—' ) return 0;
+
+    // look for first occurrence of G or R followed by a number
+    const m = s.match(/([GR])\s*([+-]?\d+)/i);
+    if (m) {
+      const dir = m[1].toUpperCase();
+      const n = Math.abs(parseInt(m[2], 10) || 0);
+      return dir === 'G' ? -n : n;
+    }
+
+    // fallback: if contains 'G' but no number, treat as G1; same for R
+    if (/G\b/.test(s)) return -1;
+    if (/R\b/.test(s)) return 1;
+    return 0;
+  }
+
+// just return numbers as string
+function _numToWord(n) {
+  return String(n);
+}
+
+
+  // build the advice HTML exactly as requested
+  function _buildAdviceHtml(diffSteps) {
+    // diffSteps = targetStep - resultStep
+    if (diffSteps === 0) return 'DC Matched.';
+
+    const presses = Math.min(Math.abs(diffSteps), 99); // cap for safety
+    const word = _numToWord(presses);
+    const plural = (presses === 1) ? 'time' : 'times';
+
+    if (diffSteps < 0) {
+      // need MORE minus -> press S-0.25 (red)
+      return `Click <span style="color:green;">S-0.25</span> ${word} ${plural} match DC.`;
+    } else {
+      // need MORE plus -> press S+0.25 (green)
+      return `Click <span style="color:red;">S+0.25</span> ${word} ${plural} match DC.`;
+    }
+  }
+
+  // main update function (safe, idempotent)
+  function _updateAdvice() {
+    try {
+      const elTarget = document.getElementById('dc-ou');
+      const elResult = document.getElementById('res-dc-ou-re');
+      const elAdvice = document.getElementById('dc-advice');
+      if (!elAdvice) return; // nothing to update
+
+      // read texts (use textContent to avoid layout reflow issues)
+      const targetText = elTarget ? elTarget.textContent.trim() : '';
+      const resultText = elResult ? elResult.textContent.trim() : '';
+
+      const targetStep = _labelToStep(targetText);
+      const resultStep = _labelToStep(resultText);
+
+      const diffSteps = targetStep - resultStep;
+      elAdvice.innerHTML = _buildAdviceHtml(diffSteps);
+    } catch (err) {
+      // swallow errors so we don't interfere with other scripts; log with unique prefix if console available
+      if (window && window.console && typeof window.console.error === 'function') {
+        console.error(_ID + ' updateAdvice error:', err);
+      }
+    }
+  }
+
+  // debounce wrapper so rapid DOM edits don't produce race conditions
+  let _debounceTimer = null;
+  function _scheduleUpdate() {
+    if (_debounceTimer) clearTimeout(_debounceTimer);
+    _debounceTimer = setTimeout(() => { _debounceTimer = null; _updateAdvice(); }, 80);
+  }
+
+  // attach MutationObserver to the two elements (if available). If not, fallback to interval poll.
+  function _attachObservers() {
+    const elTarget = document.getElementById('dc-ou');
+    const elResult = document.getElementById('res-dc-ou-re');
+
+    // if neither exists yet, still schedule initial run and retry later
+    if (!elTarget && !elResult) {
+      // try again after small delay
+      setTimeout(_attachObservers, 200);
+      return;
+    }
+
+    // observe function
+    const observeNode = (node) => {
+      if (!node) return;
+      try {
+        if (window.MutationObserver) {
+          const obs = new MutationObserver(_scheduleUpdate);
+          obs.observe(node, { childList: true, characterData: true, subtree: true });
+        } else {
+          // fallback: simple polling (rare)
+          setInterval(_scheduleUpdate, 350);
+        }
+      } catch (e) {
+        // ignore
+      }
+    };
+
+    observeNode(elTarget);
+    observeNode(elResult);
+
+    // initial update once observers set
+    _scheduleUpdate();
+  }
+
+  // run after DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _attachObservers);
+  } else {
+    // already ready
+    _attachObservers();
+  }
+
+  // expose nothing to global scope
+})();
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2071,20 +2267,13 @@ function describeDC(dc, label = 'Current') {
         const absD = Math.abs(parsed.diopter).toFixed(2);
         const colourLabel = `<span style="color:${parsed.type === 'R' ? 'red' : 'green'}; font-weight:normal;">${parsed.raw}</span>`;
         if (parsed.type === 'R') {
-            return `${label} RX under by -${absD} (${colourLabel}). Perfect for near and room distance, but not able to see very far.`;
+            return `${label} Under by -${absD} (${colourLabel}). Good for seeing near.`;
         } else {
-            if (parsed.step === 1) return `${label} RX over by +${absD} (${colourLabel}). Perfect for seeing as far as possible.`;
-            return `${label} RX over by +${absD} (${colourLabel}); This can lead to eye strains.`;
+            if (parsed.step === 1) return `${label} Over by +${absD} (${colourLabel}). Good for seeing far.`;
+            return `${label} Over by +${absD} (${colourLabel}); Good for seeing far but over-corrected prescription.`;
         }
     }
-    if (parsed.kind === 'NUMERIC') {
-        const d = parsed.diopter.toFixed(2);
-        if (Math.abs(parsed.diopter) < 0.0001) return `${label} RX balances far & near vision.`;
-        if (parsed.diopter < 0) return `${label} RX under by ${d}.`;
-        if (Math.abs(parsed.diopter - 0.25) < 0.0001) return `${label} RX over by ${d}. Perfect for seeing as far as possible.`;
-        return `${label} RX over by ${d}; Limit for healthy vision is +0.25 (<span style="color: green; font-weight:normal;">G1</span>); Unnecessary over will cause blurry vision & headaches.`;
-    }
-    return `${label} ${dc}`;
+     return `${label} ${dc}`;
 }
 
 function getDeeperAnalysis(fromDC, toDC, prevParsed, toParsed) {
@@ -2092,34 +2281,54 @@ function getDeeperAnalysis(fromDC, toDC, prevParsed, toParsed) {
     const t = toParsed && typeof toParsed === 'object' ? toParsed : parseDC(toDC);
     if (!f || !t || f.kind === 'UNKNOWN' || t.kind === 'UNKNOWN') return '';
     const parts = [];
-    if (f.kind === 'BAL' && t.kind === 'BAL') return '- No changes of far and near vision quality.';
-    if (f.type === 'R' && t.type === 'R' && f.step === t.step) return '- No changes of far and near vision quality.';
+    if (f.kind === 'BAL' && t.kind === 'BAL') return '- <b>Distance Vision Changes</b>: No changes.<br>- <b>Near Vision Changes</b>: No changes.';
+    if (f.type === 'R' && t.type === 'R' && f.step === t.step) return '- <b>Distance Vision Changes</b>: No changes.<br>- <b>Near Vision Changes</b>: No changes.';
     // Rule 1: G → G
-    if (f.type === 'G' && t.type === 'G') {
-        if (t.step < f.step) parts.push('- No loss of distance clarity. Significant improvement in near vision comfort.');
-        else if (t.step > f.step) parts.push('- Distance clarity remains but near vision worsening . Not recommended as this is over-correction.');
-        else parts.push('- No changes of far and near vision quality.');
+if (f.type === 'G' && t.type === 'G') {
+    if (t.step === 1) {
+        parts.push('- <b>Distance Vision Changes:</b> No changes.<br>- <b>Near Vision Changes</b>: Improvement in near vision comfort and clarity range.<br>- <b>Purpose of change</b>: To prescribe proper distance preferred prescription.');
+    } else if (t.step < f.step) {
+        parts.push('- <b>Distance Vision Changes:</b> No changes.<br>- <b>Near Vision Changes</b>: Improvement in near vision comfort and clarity range.<br>- <b>Purpose of change</b>: To resolve the over-correction in stages.');
+    } else if (t.step > f.step) {
+        parts.push('- <b>Distance Vision Changes:</b> No changes.<br>- <b>Near Vision Changes</b>: Over-correction leads to eye strains fatigue at near vision.<br>- <b>Not advisable to prescribe.</b> Reduce to (<span style="color: green;">G1</span>).');
+    } else {
+        parts.push('- <b>Distance Vision Changes</b>: No changes.<br>- <b>Near Vision Changes</b>: No changes.');
     }
-    // Rule 4: Distance improvement
-    const distanceImprovementCond =
-        (f.kind === 'BAL' && t.type === 'G') ||
-        (f.type === 'R' && t.kind === 'BAL') ||
-        (f.type === 'R' && t.type === 'R' && t.step < f.step) ||
-        (f.type === 'R' && t.type === 'G' && t.step === 1);
-    if (distanceImprovementCond) {
-        if (t.type === 'G' && t.step >= 1) {
-            if (t.step === 1) parts.push('- Distance clarity is maximum. See as far as possible.');
-            else parts.push('- Distance clarity does not improve further beyond (<span style="color:green;">G1</span>). Already maximized.');
+}
+
+
+// Rule 4: Distance improvement
+const distanceImprovementCond =
+    (f.kind === 'BAL' && t.type === 'G') ||
+    (f.type === 'R' && t.kind === 'BAL') ||
+    (f.type === 'R' && t.type === 'R' && t.step < f.step) ||
+    (f.type === 'R' && t.type === 'G' && t.step >= 1); // changed === 1 → >= 1
+
+if (distanceImprovementCond) {
+    if (t.type === 'G' && t.step >= 1) {
+        if (t.step === 1) {
+            parts.push(
+                '- <b>Distance Vision Changes</b>: Distance clarity will improve. See as far as possible.<br>- <b>Near Vision Changes</b>: Expect slight stress when looking at near during adaptation.<br>- <b>Purpose of Changes</b>: To improve distance clarity.'
+            );
         } else {
-            let gainDist = t.kind === 'BAL' ? 20 : 20 / Math.pow(2, t.step - 1);
-            parts.push(`- However, distance clarity improves. Objects up to ${gainDist} feet will appear clearer.`);
+            parts.push(
+                `- <b>Distance Vision Changes</b>: Distance clarity will improve. See as far as possible but over-correction.<br>- <b>Near Vision Changes</b>: Over-correction leads to eye strains fatigue at near vision.<br>- <b>Not advisable to prescribe.</b> Reduce to (<span style="color: green;">G1</span>).`
+            );
         }
+    } else {
+let gainDist = t.kind === 'BAL' ? 20 : Math.round(((1 / (t.step * 0.25)) * 3.281) * 10) / 10;
+        parts.push(
+            `- <b>Distance Vision Changes</b>: Distance clarity will improve to ${gainDist} feet. <br>- <b>Near Vision Changes</b>: Expect slight stress when looking at near during adaptation.<br>- <b>Purpose of Changes</b>: To improve distance clarity.`
+        );
     }
+}
+
+
     // Rule 2: Distance reduction
     const distanceReductionCond = (t.kind === 'BAL' || t.type === 'R') && !distanceImprovementCond;
     if (distanceReductionCond) {
-        let lossDist = t.kind === 'BAL' ? 20 : 20 / Math.pow(2, t.step - 1);
-        parts.push(`- However, distance clarity will be reduced. Vision becomes blurry beyond ${lossDist} feet.`);
+let lossDist = t.kind === 'BAL' ? 20 : Math.round(((1 / (t.step * 0.25)) * 3.281) * 10) / 10;
+        parts.push(`- <b>Distance Vision Changes</b>: Distance clarity will be reduced; blurry beyond ${lossDist} feet.<br>- <b>Near Vision Changes</b>: Near vision comfort and clarity range will improve.<br>- <b>Purpose of Changes</b>: To improve near vision comfort and clarity range.`);
     }
     return parts.length ? parts.join('<br>') : '';
 }
@@ -2147,13 +2356,13 @@ function getDCShiftText(fromDC, toDC) {
     const direction = stepDiff < 0 ? '+' : '-';
     
     // First line: Change + swim effect
-    line2 = `- A change of <b>${direction}${mag}</b>. `;
+    line2 = `- <b>Swim Effect</b>: Change of <b>${direction}${mag}</b> will cause `;
     if (Math.abs(diopterShift) <= 0.25 + 0.001) 
-        line2 += 'Slight swim effect.';
+        line2 += 'slight swim effect.';
     else if (Math.abs(diopterShift) <= 0.50 + 0.001) 
-        line2 += 'Moderate swim effect.';
+        line2 += 'moderate swim effect.';
     else 
-        line2 += 'Huge swim effect.';
+        line2 += 'obvious swim effect.';
 
     // --- Second line: Tolerance Analysis ---
     try {
@@ -2161,7 +2370,7 @@ function getDCShiftText(fromDC, toDC) {
         const age = parseFloat(ageEl.value);
 
         if (!ageEl.value || isNaN(age) || age <= 0) {
-            line2 += '<br>- <b>Tolerance Analysis:</b> Key in age to generate analysis.';
+            line2 += '<br>- <b>Adaptation Capability</b>: <b>*Key in age*</b> to generate analysis.';
         } else {
             const aaEl = document.getElementById('aaOutput');
             const aa = parseFloat(aaEl?.textContent) || 0;
@@ -2173,23 +2382,23 @@ function getDCShiftText(fromDC, toDC) {
                 const absShift = Math.abs(diopterShift);
                 const EPS = 0.01;
 
-                line2 += '<br>- <b>Tolerance Analysis:</b> ';
+                line2 += '<br>- <b>Adaptation Capability</b>: ';
                 if (Math.abs(absShift - tolVal) <= EPS) {
-                    line2 += 'Change is at maximum tolerance.';
+                    line2 += 'Noticeable changes, adapt within 2 to 4 weeks.';
                 } else if (absShift > tolVal + EPS) {
-                    line2 += 'Change is over the limit and may cause difficulty in adjusting.';
+                    line2 += 'Challenging to adapt. <b>Reduce amount of changes</b>.';
                 } else if (absShift > tolVal / 2 + EPS) {
-                    line2 += 'Change can be tolerated and adapt within 2 weeks.';
+                    line2 += 'Noticeable changes, adapt within 2 weeks.';
                 } else {
-                    line2 += 'Change easily tolerated and adapt almost instantly.';
+                    line2 += 'Small changes, easily adapt almost instantly.';
                 }
             }
         }
     } catch (e) { /* silent fail */ }
 
     // Dynamic / minification / magnification lines AFTER
-    if (diopterShift > 0) line2 += '<br>- Minus shift reduces near vision comfort and range.<br>- Minification: Objects will look further and smaller.<br>- Dynamic vision: Objects will look like they move faster.';
-    else if (diopterShift < 0) line2 += '<br>- Plus shift improves near vision comfort and range.<br>- Magnification: Objects will look nearer and bigger.<br>- Dynamic vision: Objects will look like they move slower.';
+    if (diopterShift > 0) line2 += '<br>- <b>Spatial Shift</b>: Environment will look further (floor and steps become farther).<br>- <b>Size Shift</b>: Objects will look smaller (reading prints become smaller).<br>- <b>Motion perception</b>: Feels like everything moves slower.';
+    else if (diopterShift < 0) line2 += '<br>- <b>Spatial Shift</b>: Environment will look nearer (floor and steps become nearer).<br>- <b>Size Shift</b>: Objects will look bigger (reading prints become bigger).<br>- <b>Motion perception</b>: Feels like everything moves faster.';
 }
 
 
@@ -2207,24 +2416,24 @@ function getDCShiftText(fromDC, toDC) {
         }
 
         if (newD < 0) {
-            line3 = `- <b>New RX</b>: Prioritizes near vision; under by -${mag} ${codeLabel}.`;
+            line3 = `- <b>New RX</b>: Under by -${mag} ${codeLabel}. Good for seeing near.`;
         } else if (newD === 0) {
-            line3 = `- <b>New RX</b>: Prioritizes balance vision; at -${mag} ${codeLabel}.`;
+            line3 = `- <b>New RX</b>: At -${mag} ${codeLabel}.`;
         } else {
-            line3 = `- <b>New RX</b>: Prioritizes distance vision; over by +${mag} ${codeLabel}.`;
+            line3 = `- <b>New RX</b>: Over by +${mag} ${codeLabel}.`;
         }
 
         // --- Add G rules here ---
         if (t.kind === 'CODE' && t.type === 'G') {
             if (t.step === 1) {
-                line3 += ' Perfect for seeing as far as possible.';
+                line3 += ' Good for seeing far.';
             } else if (t.step >= 2) {
-                line3 += ' This can lead to eye strains.';
+                line3 += ' Over-corrected prescription.';
             }
         }
     }
     const line4 = getDeeperAnalysis(fromDC, toDC, f, t);
-    return [line1, line3, '<b>---------------------</b>', '<b>Plan:</b>', line2, line4]
+    return [line1, line3, '<b>---------------------</b>', '<b><u>Changes</u></b>:', line4, '<b>---------------------</b>', '<b><u>Expectations</u></b>:', line2]
         .filter(Boolean)
         .join('<br>');
 
@@ -2254,7 +2463,7 @@ function updateOUAnalysis() {
     const newDC = document.getElementById('res-dc-ou-re')?.textContent.trim() || '';
     const diff = (parseDC(newDC)?.diopter || 0) - (parseDC(oldDC)?.diopter || 0);
     const output = `
-<br><b><u>Binocular Vision Status</u></b><br>
+<br><b><u>Vision Status</u></b><br>
 ${getDCShiftText(oldDC,newDC)}<br><br>
 `;
     document.getElementById('analysis-ou').innerHTML = output;
@@ -2395,6 +2604,26 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- Spacer at the bottom for scrolling -->
 <div style="height:300px;"></div>
 
@@ -2402,7 +2631,6 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 </body>
 </html>
-
 
 
 
