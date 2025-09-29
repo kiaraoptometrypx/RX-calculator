@@ -188,12 +188,30 @@ input {   width:80px;
   text-decoration: none; /* none | underline | overline | line-through */
 }
 
-  /* Font size classes */
-  .font-10 * { font-size: 10px !important; }
-  .font-15 * { font-size: 15px !important; }
-  .font-20 * { font-size: 20px !important; }
-  .font-30 * { font-size: 30px !important; }
-  .font-40 * { font-size: 40px !important; }
+/* Font size classes */
+.font-10 * { font-size: 10px !important; }
+.font-15 * { font-size: 15px !important; }
+.font-20 * { font-size: 20px !important; }
+.font-25 * { font-size: 25px !important; }
+.font-30 * { font-size: 30px !important; }
+.font-35 * { font-size: 35px !important; }
+.font-40 * { font-size: 40px !important; }
+
+/* Buttons */
+.font-btn {
+  padding: 0px 16px;
+  margin: 4px;
+  background: #eee;
+  cursor: pointer;
+  font-size: 15px !important; /* stays fixed */
+
+}
+
+.font-btn.active {
+  background: #444;
+  color: #fff;
+  border-color: #222;
+}
 
 table input {
   width: 100%;
@@ -248,22 +266,27 @@ table input {
 
 
 
-<div style="margin:10px;">
-  <button onclick="setFontSize('10')">10</button>
-  <button onclick="setFontSize('15')">15</button>
-  <button onclick="setFontSize('20')">20</button>
-  <button onclick="setFontSize('30')">30</button>
-  <button onclick="setFontSize('40')">40</button>
-
+<div style="margin:15px;">
+  <button class="font-btn" onclick="setFontSize('10', this)">10</button>
+  <button class="font-btn" onclick="setFontSize('15', this)">15</button>
+  <button class="font-btn" onclick="setFontSize('20', this)">20</button>
+  <button class="font-btn" onclick="setFontSize('25', this)">25</button>
+  <button class="font-btn" onclick="setFontSize('30', this)">30</button>
+  <button class="font-btn" onclick="setFontSize('35', this)">35</button>
+  <button class="font-btn" onclick="setFontSize('40', this)">40</button>
 </div>
 
 <script>
-function setFontSize(size) {
-  // Remove existing font size classes
-  document.body.classList.remove('font-10','font-15','font-20','font-30','font-40');
-  
-  // Add the selected one
+function setFontSize(size, btn) {
+  document.body.classList.remove(
+    'font-10','font-15','font-20','font-25','font-30','font-35','font-40'
+  );
   document.body.classList.add('font-' + size);
+
+  // remove active from all buttons
+  document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('active'));
+  // set active to clicked one
+  btn.classList.add('active');
 }
 </script>
 
