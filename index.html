@@ -1037,13 +1037,14 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 
 
 <tr class="comfort">
-    <td id="analysis-ou" colspan="7" style="text-align:left; padding-left:20px;">
-    <!-- Combined analysis text for OU will appear here -->'
+<td id="analysis-ou" colspan="7" style="text-align:left; padding-left:20px;"></td>
 </td>
+</tr><td id="analysis-ou-sph" colspan="7" style="text-align:left; padding-left:20px; border-bottom:none;"></td>
 </tr>
+<tr><td colspan="7" style="text-align:left; padding-left:20px; border-top:none;">
+<span id="analysis-ou-cylax"></span></td></tr>
 
-</td>
-</tr>
+
 </tbody>
 
 
@@ -1495,6 +1496,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+
+
   // Reset mirrors on adjustment buttons
   const adjustmentButtons = document.querySelectorAll(".addMinus025, .sph-btn, .sph-btn-mono");
   adjustmentButtons.forEach(btn => {
@@ -1512,10 +1515,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 <script>
+
+window.extraMinus025 = window.extraMinus025 ?? false;
+
 document.addEventListener("DOMContentLoaded", () => {
 
 // ---------- Toggle for extra -0.25 @ 180 (mirror buttons) ----------
-let extraMinus025 = false;
 
 // helper to update all mirror buttons' label + color so they stay in sync
 function updateMinus025Buttons() {
@@ -1528,21 +1533,22 @@ function updateMinus025Buttons() {
 // attach listener to every mirror button
 document.querySelectorAll('.addMinus025').forEach(btn => {
   btn.addEventListener('click', () => {
-    extraMinus025 = !extraMinus025;
+    window.extraMinus025 = !window.extraMinus025;
     updateMinus025Buttons();
     combineAll();
+updateAnalysisOuCylAx();
   });
 });
 
-// set initial text/color for any buttons (in case they exist on load)
+// set initial text/color
 updateMinus025Buttons();
 
-  // ---------- Helpers ----------
+// ---------- Helpers ----------
 function combineEyeWithout025(S_now, C_now, A_now, DC_S, C2, A2){
-  const savedExtra = extraMinus025;       // save current state
-  extraMinus025 = false;                  // temporarily disable -0.25
+  const savedExtra = window.extraMinus025; // 🔴 read GLOBAL
+  window.extraMinus025 = false;            // 🔴 temporarily disable globally
   const result = combineEyeWithDeficit(S_now, C_now, A_now, DC_S, C2, A2);
-  extraMinus025 = savedExtra;             // restore state
+  window.extraMinus025 = savedExtra;       // 🔴 restore
   return result;
 }
 
@@ -2290,6 +2296,143 @@ function _numToWord(n) {
 
 
 
+<script>
+// ---------- Cylinder vector math (for combining with -0.25 × 180) ----------
+function cylAxisToJ(cyl, axis) {
+  const rad = (Math.PI/180) * (axis * 2);
+  const J0 = -(cyl/2) * Math.cos(rad);
+  const J45 = -(cyl/2) * Math.sin(rad);
+  return { J0, J45 };
+}
+function jToCylAxis(J0, J45) {
+  const cyl = -2 * Math.sqrt(J0*J0 + J45*J45);
+  let axis = 0.5 * Math.atan2(J45, J0) * (180/Math.PI);
+  if (axis < 0) axis += 180;
+  if (axis === 0) axis = 180; // normalize 0→180
+  return { cyl: parseFloat(cyl.toFixed(2)), axis: Math.round(axis) };
+}
+function combineCylAxis(c1, a1, c2, a2) {
+  const A = cylAxisToJ(c1, a1);
+  const B = cylAxisToJ(c2, a2);
+  return jToCylAxis(A.J0 + B.J0, A.J45 + B.J45);
+}
+
+// ---------- Effects (text) ----------
+function getCylStretchEffect(cylVal) {
+  const c = Math.abs(Number(cylVal) || 0);
+  if (c < 0.01) return null;
+  const mag = `+${c.toFixed(2)}`;
+  if (c <= 0.25) return `Change of ${mag} cyl is negligible, no noticeable stretch.`;
+  if (c <= 0.50) return `Change of ${mag} cyl will cause mild stretch of objects, easily adapted.`;
+  if (c <= 0.75) return `Change of ${mag} cyl will cause moderate stretch of objects, adaptation needed.`;
+  if (c <= 1.00) return `Change of ${mag} cyl will cause strong stretch, at the usual limit for most people.`;
+  return `Change of ${mag} cyl will cause very strong stretch, risky and requires long adaptation.`;
+}
+function nearestPrimeDist(axis) {
+  // axis in 1..180, treat 0 as 180
+  let a = Math.round(Number(axis) || 0);
+  if (a <= 0) a = 180;
+  const d90 = Math.abs(a - 90);
+  const d180 = Math.min(Math.abs(a - 180), Math.abs(a - 0));
+  const nearest = (d90 <= d180) ? 90 : 180;
+  const dist = (nearest === 90) ? d90 : d180;
+  return { dist, nearest, norm: a };
+}
+function getAxisTiltEffect(axis) {
+  const { dist, nearest, norm } = nearestPrimeDist(axis);
+  if (dist === 0) return null;
+  if (dist <= 10) return `Axis ${norm}° is near prime, minimal tilt.`;
+  return `Axis ${norm}° is a shift of ${dist}° from prime (${nearest}°), tilt noticeable.`;
+}
+
+// ---------- Difficulty scoring (your mapping) ----------
+function cylDifficulty(cyl, age) {
+  const c = Math.abs(Number(cyl) || 0);
+  const over40 = (Number(age) || 0) >= 40;
+  if (c <= 0.25) return 0;
+  if (c <= 0.50) return over40 ? 1 : 0;
+  if (c <= 0.75) return over40 ? 2 : 1;
+  if (c <= 1.00) return over40 ? 3 : 2;
+  if (c <= 1.25) return over40 ? 4 : 3;
+  return over40 ? 4 : 4;
+}
+function axisDifficulty(axis, age) {
+  const over40 = (Number(age) || 0) >= 40;
+  const { dist } = nearestPrimeDist(axis);
+  if (dist === 0) return 0;
+  if (dist <= 10) return over40 ? 1 : 0;    // outer prime
+  if (dist <= 20) return over40 ? 2 : 1;    // ±10 from outer prime
+  if (dist <= 30) return over40 ? 3 : 2;    // ±20 from prime
+  return over40 ? 4 : 3;                    // >20 from prime
+}
+function adaptLabel(total) {
+  if (total <= 0) return "No adaptation needed.";
+  if (total === 1) return "Low difficulty, adapt in 1–3 days.";
+  if (total === 2) return "Mild difficulty, adapt in 3–7 days.";
+  if (total === 3) return "Moderate difficulty, adapt in 1–2 weeks.";
+  if (total === 4) return "Upper limit, adapt in ~2 weeks.";
+  if (total === 5) return "High difficulty, adapt in 2–4 weeks.";
+  if (total === 6) return "Very high difficulty, may take 3–4+ weeks.";
+  return "Risky change, adaptation may fail or take >4 weeks.";
+}
+
+// ---------- Main analyzer ----------
+function updateAnalysisOuCylAx() {
+  let cyl = parseFloat(document.getElementById("c2_ou")?.value || "0");
+  let axis = parseFloat(document.getElementById("a2_ou")?.value || "0");
+  const age = parseFloat(document.getElementById("ageInput")?.value || "0");
+
+  // If toggle is ON, combine input with -0.25 × 180
+  if (window.extraMinus025) {
+    const combo = combineCylAxis(cyl, axis, -0.25, 180);
+    cyl = combo.cyl;
+    axis = combo.axis;
+  }
+
+  // Build output
+  let html = `<b><u>Astigmatism Changes Effect:</u></b><br>`;
+
+  // "No change" == no stretch AND axis at prime
+  const stretchText = getCylStretchEffect(cyl);
+  const { dist: dPrime } = nearestPrimeDist(axis);
+  const noChange = (!stretchText && dPrime === 0);
+
+  if (noChange) {
+    html += "- No changes in prescription.";
+    document.getElementById("analysis-ou-cylax").innerHTML = html;
+    return;
+  }
+
+  const tiltText = getAxisTiltEffect(axis);
+
+  // Adaptation capability
+  let adaptText = "<b>*Key in age*</b> to generate analysis.";
+  if (age > 0) {
+    const score = cylDifficulty(cyl, age) + axisDifficulty(axis, age);
+    adaptText = adaptLabel(score);
+  }
+
+  html += `
+    - <b>Stretched Effect</b>: ${stretchText || "None"}<br>
+    - <b>Tilt Effect</b>: ${tiltText || "None"}<br>
+    - <b>Adaptation Capability</b>: ${adaptText}
+  `;
+
+  document.getElementById("analysis-ou-cylax").innerHTML = html;
+}
+
+// ---------- Auto-update from inputs ----------
+document.addEventListener("DOMContentLoaded", () => {
+  ["c2_ou","a2_ou","ageInput"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("input", updateAnalysisOuCylAx);
+  });
+  updateAnalysisOuCylAx(); // initial render
+});
+</script>
+
+
+
 
 
 
@@ -2519,11 +2662,97 @@ function getDCShiftText(fromDC, toDC) {
         }
     }
     const line4 = getDeeperAnalysis(fromDC, toDC, f, t);
-    return [line1, line3, '<b>---------------------</b>', '<b><u>Changes</u></b>:', line4, '<b>---------------------</b>', '<b><u>Expectations</u></b>:', line2]
-        .filter(Boolean)
-        .join('<br>');
 
+
+
+  // Write separately
+  document.getElementById("analysis-ou").innerHTML = [
+    line1,
+    line3,
+    '<b>---------------------</b>',
+    '<b>Changes</u></b>:',
+    line4
+  ].filter(Boolean).join('<br>');
+
+  document.getElementById("analysis-ou-sph").innerHTML = [
+    '<b><u>Sphere Changes Effect</u></b>:',
+    line2
+  ].filter(Boolean).join('<br>');
+
+  // Only return the "Changes" part (no Expectations here anymore)
+  return [
+    line1,
+    line3,
+    '<br><b><u>Changes</u></b>:',
+    line4
+  ].filter(Boolean).join('<br>');
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // --- OD/OS Analysis ---
 function updateODOSAnalysis() {
@@ -2534,8 +2763,8 @@ function updateODOSAnalysis() {
     const diffRStr = (parseDC(newDCR)?.diopter || 0) - (parseDC(oldDCR)?.diopter || 0);
     const diffLStr = (parseDC(newDCL)?.diopter || 0) - (parseDC(oldDCL)?.diopter || 0);
     const output = `
-<br><b><u>Right Vision Status</U></b><br>
-${getDCShiftText(oldDCR,newDCR)}<br><br>
+<b><u>Right Vision Status</U></b><br>
+${getDCShiftText(oldDCR,newDCR)}<br>
 ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  ~  <br>
 <b><u>Left Vision Status</u></b><br>
 ${getDCShiftText(oldDCL,newDCL)}<br><br>
@@ -2549,8 +2778,8 @@ function updateOUAnalysis() {
     const newDC = document.getElementById('res-dc-ou-re')?.textContent.trim() || '';
     const diff = (parseDC(newDC)?.diopter || 0) - (parseDC(oldDC)?.diopter || 0);
     const output = `
-<br><b><u>Vision Status</u></b><br>
-${getDCShiftText(oldDC,newDC)}<br><br>
+<b><u>Vision Status</u></b><br>
+${getDCShiftText(oldDC,newDC)}<br>
 `;
     document.getElementById('analysis-ou').innerHTML = output;
 }
