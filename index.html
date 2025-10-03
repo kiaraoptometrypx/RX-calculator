@@ -230,6 +230,7 @@ table input {
   font-weight: 600;
 }
 
+
 </style>
 </head>
 <body>
@@ -266,20 +267,26 @@ table input {
 </script>
 <div style="height:20px;"></div>
 
+<div style="display:flex; justify-content:space-between; align-items:center; width:95%; margin:5px auto;">
+  
+  <!-- Left side: Settings -->
+  <span class="toggle-btn" onclick="toggleSection('settings-block')" 
+        style="cursor:pointer; color: grey; user-select:none; font-weight:bold;">
+    <i>▼▲ Settings & Guide</i>
+  </span>
 
+  <!-- Right side: Font controls -->
+  <div style="text-align:right;">
+    <span class="fixed-label" style="cursor:pointer; color: grey; user-select:none; margin-right:10px; font-weight:bold;">
+      Font:
+    </span>
+    <button class="font-btn" onclick="setFontSize('8', this)">S</button>
+    <button class="font-btn" onclick="setFontSize('10', this)">M</button>
+    <button class="font-btn" onclick="setFontSize('15', this)">L</button>
+    <button class="font-btn" onclick="setFontSize('20', this)">XL</button>
+  </div>
 
-
-
-
-
-
-
-
-
-<span class="toggle-btn" onclick="toggleSection('settings-block')" 
-      style="cursor:pointer; color: grey; user-select:none; margin-left:20px; font-weight:bold;">
-  <i>▼▲ Settings & Guide</i>
-</span>
+</div>
 
 
 
@@ -295,13 +302,7 @@ table input {
 </tr>
 <tr class="offwhite">
 	<td colspan="2" style="color: grey; border:none; text-align:right; padding:0px;">
-    <div>
-      <span class="fixed-label">Font:</span><br>
-      <button class="font-btn" onclick="setFontSize('8', this)">S</button>
-      <button class="font-btn" onclick="setFontSize('10', this)">M</button>
-      <button class="font-btn" onclick="setFontSize('15', this)">L</button>
-      <button class="font-btn" onclick="setFontSize('20', this)">XL</button>
-    </div>
+
 
 <script>
 function setFontSize(size, btn) {
@@ -317,6 +318,9 @@ function setFontSize(size, btn) {
 }
 </script>
 </td></tr>
+
+
+
 <tr>
 <td colspan="2" style="color:#182E00; border:none; text-align:left; padding:4px;">
 </tr>
@@ -2964,7 +2968,6 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 </body>
 </html>
-
 
 
 
