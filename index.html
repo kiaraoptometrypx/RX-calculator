@@ -523,7 +523,7 @@ function toggleSection(id) {
 
 <h2>Welcome to Kiara Optometry's Algorithm Refraction.</h2>
 
-<div style="height:10px;"></div>
+<div style="height:0px;"></div>
 
 <table>
 <tr class="calibrator">
@@ -535,7 +535,9 @@ function toggleSection(id) {
   <td style="border:none;"></td>
   <td style="border:none;"></td>
 </tr>
-
+<tr class="white">
+<td colspan="7"><b>Customer Details and Current Prescription</b>
+</td></tr>
 <tr class="white">
   <td colspan="1"><b>Suffix</b></td>
 
@@ -581,7 +583,7 @@ function toggleSection(id) {
     <td><b>Cyl</b></td>
     <td><b>Axis</b></td>
     <td><b>SE Diff</b></td>
-    <td><b>Vision Type</b></td>
+    <td><b>Add</b></td>
 </tr>
 
 
@@ -598,10 +600,11 @@ function toggleSection(id) {
     <td><input id="c1_od" placeholder="+0.00"></td>
     <td><input id="a1_od" placeholder="0"></td>
     <td id="now-se-diff-od">—</td>
-<td style="border-bottom:none;">
-  <div class="choice-group">
-    <input type="radio" id="current-sv" name="current-lensType" value="Single">
-    <label for="current-sv">Single</label>
+<td rowspan="2">
+<span class="toggle-btn" data-target="toggle-section-near-rx"
+          style="cursor:pointer; color: #101F01; user-select:none; text-align:middle;">
+    Near Vision<br>Details<br> ▼▲
+    </span>
 </div></td>
   </tr>
 
@@ -616,35 +619,13 @@ function toggleSection(id) {
     <td><input id="c1_os" placeholder="+0.00"></td>
     <td><input id="a1_os" placeholder="0"></td>
     <td>—</td>
-<td style="border-top:none;">
-  <div class="choice-group">
-    <input type="radio" id="current-mf" name="current-lensType" value="Multi">
-    <label for="current-mf">Multi</label>
-</div></td>
-  </tr>
-
-<tr>
-</tr>
-<tr><td colspan="7" style="border:none;">
-<span class="toggle-btn" data-target="toggle-section-near-rx"
-          style="cursor:pointer; color: #101F01; user-select:none; text-align:middle;">
-     --- ▼▲ Near Vision ---
-    </span>
-</td></tr>
-</table>
 
 
-<table>
+<tr><td colspan="7" style="padding:1px; border:none;"></td></tr>
+
+
   <tbody class="toggle-section-near-rx" style="display:none;">
-<tr class="calibrator">
-  <td style="border:none;"></td>
-  <td style="border:none;"></td>
-  <td style="border:none;"></td>
-  <td style="border:none;"></td>
-  <td style="border:none;"></td>
-  <td style="border:none;"></td>
-  <td style="border:none;"></td>
-</tr>
+
 <tr class="white">
     <td><b>Current Add</b></td>
     <td colspan="3"><b>Phone Length & Add Needed</b></td>
@@ -871,6 +852,68 @@ document.getElementById('ageInput').addEventListener('input', () => {
   <td style="border:none;"></td>
   <td style="border:none;"></td>
 </tr>
+<tr>
+<td colspan="7" style="padding:8px; border:none;"><b>Choice of Exam</b><span class="toggle-btn" data-target="toggle-section-manual-comfort-rx"
+          style="cursor:pointer; color: #101F01; user-select:none;">
+     ▼▲
+    </span></td>
+</tr>
+<tbody class="toggle-section-manual-comfort-rx" style="display:none;">
+
+<tr style="background: #D8EFF8;">
+  <td><b>Manual Input</b></td>
+  <td><b>Sides</b></td>
+  <td><b>Sph</b></td>
+  <td><b>Cyl</b></td>
+  <td><b>Axis</b></td>
+  <td><b>SE Diff</b></td>
+  <td><b>DC</b></td>
+</tr>
+
+<!-- Right Eye -->
+<tr>
+  <td style="border-bottom:none;">
+    <div class="choice-group">
+      <input type="radio" id="manual-ou-wear-glasses" name="manual-ou-wear" value="glasses">
+      <label for="manual-ou-wear-glasses">Glasses</label>
+    </div>
+  </td>
+  <td>Right</td>
+  <td><input type="number" id="manual-sph-ou-od" placeholder="+0.00" step="0.25" autocomplete="off"></td>
+  <td><input type="number" id="manual-cyl-ou-od" placeholder="+0.00" step="0.25" autocomplete="off"></td>
+  <td><input type="number" id="manual-axis-ou-od" placeholder="0" step="1" min="0" max="180" autocomplete="off"></td>
+  <td id="manual-se-ou-od">—</td>
+  <td>
+    <input type="text" id="manual-dc-ou-od" placeholder="BAL" maxlength="6" autocomplete="off">
+  </td>
+</tr>
+
+<!-- Left Eye -->
+<tr>
+  <td style="border-top:none;">
+    <div class="choice-group">
+      <input type="radio" id="manual-ou-wear-contacts" name="manual-ou-wear" value="contacts">
+      <label for="manual-ou-wear-contacts">Contacts</label>
+    </div>
+  </td>
+  <td>Left</td>
+  <td><input type="number" id="manual-sph-ou-os" placeholder="+0.00" step="0.25" autocomplete="off"></td>
+  <td><input type="number" id="manual-cyl-ou-os" placeholder="+0.00" step="0.25" autocomplete="off"></td>
+  <td><input type="number" id="manual-axis-ou-os" placeholder="0" step="1" min="0" max="180" autocomplete="off"></td>
+  <td id="manual-se-ou-os">—</td>
+  <td>
+    <input type="text" id="manual-dc-ou-os" placeholder="BAL" maxlength="6" autocomplete="off">
+  </td>
+</tr>
+
+<tr>
+<td colspan="7" style="padding:8px; border:none;"></td>
+</tr>
+</tbody>
+
+
+
+
 
 
 
@@ -1110,7 +1153,9 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 
 </tbody>
 
-
+<tr>
+<td colspan="7" style="padding:1px; border:none;"></td>
+</tr>
 <tbody class="toggle-section-comfort-analysis" style="display:none;">
 
 <tr class="comfort">
@@ -1123,18 +1168,26 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 <tr class="comfort">
 <td colspan="7" style="text-align:left; padding-left:20px; border-top:none;">
 <span id="analysis-ou-cylax"></span><br><br></td></tr>
-
+</table>
 </tbody>
 
 
-<tr>
-<td colspan="7" style="padding:5px; border:none;"></td>
-</tr>
+
+
 
 
 <!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!>
 
-
+<table>
+<tr class="calibrator">
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+</tr>
 <tr class="paleviolet">
 <td colspan="4" style="padding:10px; color: #241D0C; text-align:left;">
 <b>Sharpest Ever Rx</b>&nbsp;&nbsp;&nbsp;&nbsp;
