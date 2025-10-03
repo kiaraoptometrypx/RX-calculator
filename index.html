@@ -38,7 +38,6 @@ body {
 
 table td:first-child,
 table th:first-child {
-  width: 80px;
 }
 
 table td:nth-child(2),
@@ -49,36 +48,27 @@ table th:nth-child(2){
 
 table td:nth-child(3),
 table th:nth-child(3) {
-  min-width: 90px;
-  width: 90px;
   white-space: nowrap;
 }
 
 table td:nth-child(4),
 table th:nth-child(4) {
-  min-width: 90px;
-  width: 90px;
   white-space: nowrap;
 }
 
 table td:nth-child(5),
 table th:nth-child(5) {
-  min-width: 90px;
-  width: 90px;
   white-space: nowrap;
 }
 
 table td:nth-child(6),
 table th:nth-child(6) {
-  min-width: 50px;
-  width: 50px;
-  white-space: nowrap;
+  max-width: 40px;
+  width: 40px;
 }
 
 table td:nth-child(7),
 table th:nth-child(7) {
-  min-width: 50px;
-  width: 50px;
   white-space: nowrap;
 }
 
@@ -97,7 +87,7 @@ table {
 }
 
 th, td { 
-  border:0.5px solid #999; 
+  border:1px solid #999; 
   padding:5px; 
   text-align:center; 
   vertical-align: middle;
@@ -113,6 +103,11 @@ input {   width:80px;
   padding:2px; 
   text-align:center; 
   box-sizing: border-box;}
+
+.calibrator tr {background: #F5F5F5; border:none;}
+.calibrator td,
+.calibrator th {
+  border: none !important;}
 
 .now td { background: #F5F5F5; }
 .now-comfort td { background: #F5F5F5 ;}
@@ -160,11 +155,17 @@ input {   width:80px;
 }
 
 .choice-group label {
-  padding: 1px 1px;
+  display: block;           /* makes width effective */
+  width: 80%;               /* fixed width */
+  margin: 1px auto;         /* centers horizontally */
+  padding: 3px 3px;         /* slightly bigger padding for readability */
   border: 1px solid #888;
   cursor: pointer;
   user-select: none;
   background: #f9f9f9;
+  text-align: center;       /* center text inside */
+  border-radius: 4px;
+
 }
 
 .choice-group input[type="radio"]:not(:checked) + label {
@@ -197,11 +198,12 @@ input {   width:80px;
 
 /* Buttons */
 .font-btn {
-  padding: 4px 16px;
+  padding: 2px 20px 2px 20px;
   margin: 4px;
   background: #eee;
+  border-radius: 4px;
   cursor: pointer;
-  font-size: 15px !important; /* stays fixed */
+  font-size: 12px !important; /* stays fixed */
   color: black;
   border: 1px solid #999;   /* 🔹 border thickness + colour */
 
@@ -214,12 +216,18 @@ input {   width:80px;
 }
 
 table input {
-  width: 100%;
+  width: 80%;
   box-sizing: border-box;
-  padding: 4px 6px;
+  padding: 5px 5px;
   font-size: 10px;
+  border-radius: 4px;
   border: 1px solid #999;
   text-align: center;
+}
+
+.fixed-label {
+  font-size: 12px !important;   /* stays fixed regardless */
+  font-weight: 600;
 }
 
 </style>
@@ -286,15 +294,14 @@ table input {
 </td>
 </tr>
 <tr class="offwhite">
-	<td colspan="2" style="color: grey; border:none; text-align:left; padding:0px;">
-<div>
-  Change Font Size Here :
-  <button class="font-btn" onclick="setFontSize('8', this)">8</button>
-  <button class="font-btn" onclick="setFontSize('10', this)">10</button>
-  <button class="font-btn" onclick="setFontSize('15', this)">15</button>
-  <button class="font-btn" onclick="setFontSize('20', this)">20</button>
-
-</div>
+	<td colspan="2" style="color: grey; border:none; text-align:right; padding:0px;">
+    <div>
+      <span class="fixed-label">Font:</span><br>
+      <button class="font-btn" onclick="setFontSize('8', this)">S</button>
+      <button class="font-btn" onclick="setFontSize('10', this)">M</button>
+      <button class="font-btn" onclick="setFontSize('15', this)">L</button>
+      <button class="font-btn" onclick="setFontSize('20', this)">XL</button>
+    </div>
 
 <script>
 function setFontSize(size, btn) {
@@ -514,14 +521,23 @@ function toggleSection(id) {
 <div style="height:10px;"></div>
 
 <table>
+<tr class="calibrator">
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+</tr>
+
 <tr class="white">
   <td colspan="1"><b>Suffix</b></td>
 
   <td colspan="1"><b>Age</b></td>
-  <td colspan="1"><b>Name</b></td>
-  <td colspan="1"><b>Whatsapp</b></td>
+  <td colspan="2"><b>Name</b></td>
+  <td colspan="2"><b>Whatsapp</b></td>
   <td colspan="1"><b>Email</b></td>
-
 </tr>
 
 <tr>
@@ -534,11 +550,11 @@ function toggleSection(id) {
   <td colspan="1"><input type="number" id="ageInput" min="1" max="120" oninput="calcAA()" placeholder="Years"></td>
 
   <!-- Name input -->
-  <td colspan="1">
+  <td colspan="2">
     <input type="text" id="nameInput" placeholder="Aaron B. Carlson">
   </td>
 <!-- Contact number input -->
-  <td colspan="1">
+  <td colspan="2">
     <input type="text" id="contactInput" placeholder="Contact Number">
   </td>
 
@@ -570,14 +586,11 @@ function toggleSection(id) {
 
   <!-- Now RX -->
   <tr>
-<td rowspan="2">
+<td style="border-bottom:none;">
   <div class="choice-group">
     <input type="radio" id="wear-glasses" name="wearType" value="glasses">
     <label for="wear-glasses">Glasses</label>
-
-    <input type="radio" id="wear-contacts" name="wearType" value="contacts">
-    <label for="wear-contacts">Contact Lens</label>
-  </div>
+</div>
 </td>
     <td>Right</td>
     <td><input id="s1_od" placeholder="+0.00"></td>
@@ -588,6 +601,11 @@ function toggleSection(id) {
   </tr>
 
   <tr>
+<td style="border-top:none;">
+  <div class="choice-group">
+    <input type="radio" id="wear-contacts" name="wearType" value="contacts">
+    <label for="wear-contacts">Con Lens</label>
+  </div>
     <td>Left</td>
     <td><input id="s1_os" placeholder="+0.00"></td>
     <td><input id="c1_os" placeholder="+0.00"></td>
@@ -2946,7 +2964,6 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 </body>
 </html>
-
 
 
 
