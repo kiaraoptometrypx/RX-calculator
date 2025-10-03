@@ -158,7 +158,7 @@ input {   width:80px;
   display: block;           /* makes width effective */
   width: 80%;               /* fixed width */
   margin: 1px auto;         /* centers horizontally */
-  padding: 3px 3px;         /* slightly bigger padding for readability */
+  padding: 1px 1px;         /* slightly bigger padding for readability */
   border: 1px solid #888;
   cursor: pointer;
   user-select: none;
@@ -174,8 +174,9 @@ input {   width:80px;
 }
 
 .choice-group input[type="radio"]:checked + label {
-  background: darkgrey;   /* active color */
+  background: LIGHTGREY;   /* active color */
   color: black;
+  font-weight: 700;
   border-color: #285C00;
 }
 
@@ -190,10 +191,10 @@ input {   width:80px;
 }
 
 /* Font size classes */
-.font-8 * { font-size: 8px !important; }
-.font-10 * { font-size: 10px !important; }
-.font-15 * { font-size: 15px !important; }
-.font-20 * { font-size: 20px !important; }
+.font-S * { font-size: 10px !important; }
+.font-M * { font-size: 13px !important; }
+.font-L * { font-size: 18px !important; }
+.font-XL * { font-size: 23px !important; }
 
 
 /* Buttons */
@@ -280,10 +281,10 @@ table input {
     <span class="fixed-label" style="cursor:pointer; color: grey; user-select:none; margin-right:10px; font-weight:bold;">
       Font:
     </span>
-    <button class="font-btn" onclick="setFontSize('8', this)">S</button>
-    <button class="font-btn" onclick="setFontSize('10', this)">M</button>
-    <button class="font-btn" onclick="setFontSize('15', this)">L</button>
-    <button class="font-btn" onclick="setFontSize('20', this)">XL</button>
+    <button class="font-btn" onclick="setFontSize('S', this)">S</button>
+    <button class="font-btn" onclick="setFontSize('M', this)">M</button>
+    <button class="font-btn" onclick="setFontSize('L', this)">L</button>
+    <button class="font-btn" onclick="setFontSize('XL', this)">XL</button>
   </div>
 
 </div>
@@ -307,7 +308,7 @@ table input {
 <script>
 function setFontSize(size, btn) {
   document.body.classList.remove(
-    'font-8','font-10','font-15','font-20'
+    'font-S','font-M','font-L','font-XL'
   );
   document.body.classList.add('font-' + size);
 
@@ -538,10 +539,9 @@ function toggleSection(id) {
 <tr class="white">
   <td colspan="1"><b>Suffix</b></td>
 
-  <td colspan="1"><b>Age</b></td>
-  <td colspan="2"><b>Name</b></td>
+  <td colspan="3"><b>Name</b></td>
   <td colspan="2"><b>Whatsapp</b></td>
-  <td colspan="1"><b>Email</b></td>
+  <td><b>Age</b></td>
 </tr>
 
 <tr>
@@ -550,11 +550,9 @@ function toggleSection(id) {
     <input type="text" id="Suffix" placeholder="Mr, Mrs">
   </td>
 
-    <!-- Age -->
-  <td colspan="1"><input type="number" id="ageInput" min="1" max="120" oninput="calcAA()" placeholder="Years"></td>
 
   <!-- Name input -->
-  <td colspan="2">
+  <td colspan="3">
     <input type="text" id="nameInput" placeholder="Aaron B. Carlson">
   </td>
 <!-- Contact number input -->
@@ -562,10 +560,9 @@ function toggleSection(id) {
     <input type="text" id="contactInput" placeholder="Contact Number">
   </td>
 
-  <!-- Email -->
-  <td colspan="1">
-    <input type="text" id="Email" placeholder="Address">
-  </td>
+    <!-- Age -->
+  <td colspan="1"><input type="number" id="ageInput" min="1" max="120" oninput="calcAA()" placeholder="Years"></td>
+
 </tr>
 
 
@@ -584,7 +581,7 @@ function toggleSection(id) {
     <td><b>Cyl</b></td>
     <td><b>Axis</b></td>
     <td><b>SE Diff</b></td>
-    <td><b>ADD</b></td>
+    <td><b>Vision Type</b></td>
 </tr>
 
 
@@ -592,8 +589,8 @@ function toggleSection(id) {
   <tr>
 <td style="border-bottom:none;">
   <div class="choice-group">
-    <input type="radio" id="wear-glasses" name="wearType" value="glasses">
-    <label for="wear-glasses">Glasses</label>
+    <input type="radio" id="current-wear-glasses" name="current-wearType" value="glasses">
+    <label for="current-wear-glasses">Glasses</label>
 </div>
 </td>
     <td>Right</td>
@@ -601,46 +598,73 @@ function toggleSection(id) {
     <td><input id="c1_od" placeholder="+0.00"></td>
     <td><input id="a1_od" placeholder="0"></td>
     <td id="now-se-diff-od">—</td>
-    <td><input id="add-od" placeholder="+0.00"></td>
+<td style="border-bottom:none;">
+  <div class="choice-group">
+    <input type="radio" id="current-sv" name="current-lensType" value="Single">
+    <label for="current-sv">Single</label>
+</div></td>
   </tr>
 
   <tr>
 <td style="border-top:none;">
   <div class="choice-group">
-    <input type="radio" id="wear-contacts" name="wearType" value="contacts">
-    <label for="wear-contacts">Con Lens</label>
+    <input type="radio" id="current-wear-contacts" name="current-wearType" value="contacts">
+    <label for="current-wear-contacts">Contacts</label>
   </div>
     <td>Left</td>
     <td><input id="s1_os" placeholder="+0.00"></td>
     <td><input id="c1_os" placeholder="+0.00"></td>
     <td><input id="a1_os" placeholder="0"></td>
     <td>—</td>
-    <td><input id="add-os" placeholder="+0.00"></td>
+<td style="border-top:none;">
+  <div class="choice-group">
+    <input type="radio" id="current-mf" name="current-lensType" value="Multi">
+    <label for="current-mf">Multi</label>
+</div></td>
   </tr>
 
 <tr>
-<td colspan="7" style="padding:1px; border:none;"></td>
 </tr>
+<tr><td colspan="7" style="border:none;">
+<span class="toggle-btn" data-target="toggle-section-near-rx"
+          style="cursor:pointer; color: #101F01; user-select:none; text-align:middle;">
+     --- ▼▲ Near Vision ---
+    </span>
+</td></tr>
+</table>
 
 
-<tr>
-    
-    <td colspan="4" style="background-color: #d9d9d9;"><b>Distance for Books, Phones (Near) and Add Needed</b></td>
-    <td colspan="1"><label for="targetDistInput" style="display:none;">Book</label>
-    <input type="number" id="targetDistInput" min="0" placeholder="33 cm"></td>
-    <td colspan="2"><span id="addOutput">–</span></td>
-
-
+<table>
+  <tbody class="toggle-section-near-rx" style="display:none;">
+<tr class="calibrator">
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
 </tr>
-
-<tr>
-    <td colspan="4" style="background-color: #d9d9d9;"><b>Distance for Screen (Intermediate) and Add Needed</b></td>
-    <td colspan="1"><label for="targetDistInput2" style="display:none;">Screen:</label>
-    <input type="number" id="targetDistInput2" min="0" placeholder="50 cm">
-    <td colspan="2"><span id="addOutput2">–</span></td>
-
+<tr class="white">
+    <td><b>Current Add</b></td>
+    <td colspan="3"><b>Phone Length & Add Needed</b></td>
+    <td colspan="3"><b>Screen Length & Add Needed</b></td>
 </tr>
 <tr>
+
+    <td><input id="add-ou" placeholder="+0.00"></td>
+
+    <td colspan="3" style="text-align:left;">
+    <label for="targetDistInput" style="display:none;">Book</label>
+    <input type="number" id="targetDistInput" min="0" placeholder="33 cm" style="max-width:70px; margin: 0px 0px 0px 10px">
+    &nbsp;&nbsp;&nbsp;<span id="addOutput">–</span>
+    </td>
+    <td colspan="3" style="text-align:left;">
+    <label for="targetDistInput2" style="display:none;">Screen:</label>
+    <input type="number" id="targetDistInput2" min="0" placeholder="50 cm" style="max-width:70px; margin: 0px 0px 0px 10px">
+    &nbsp;&nbsp;&nbsp;<span id="addOutput2">–</span>
+    </td>
+</tr>
 
   <td colspan="1" id="toleranceOutput" style="display:none;">–</td>
   <td style="display:none;"><b>AA Dist</b></td>
@@ -715,7 +739,7 @@ function addNeededRange(add) {
   let lower = upper - 0.50;
   if (lower < 0) lower = 0;
 
-  return lower.toFixed(2) + " to " + upper.toFixed(2) + " D";
+  return "From +" + lower.toFixed(2) + "  to +" + upper.toFixed(2);
 }
 
 // Calculate change tolerance with age-based limiter
@@ -830,17 +854,22 @@ document.getElementById('ageInput').addEventListener('input', () => {
 
 </script>
 
-
-
-
-
 <!-- script for AA calculator -->
 
+</table>
+</tbody>
 
 
 
-<tr>
-<td colspan="7" style="padding:5px; border:none;"></td>
+<table>
+<tr class="calibrator">
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
 </tr>
 
 
@@ -992,7 +1021,7 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 <td colspan="7" style="padding:1px; border:none;"></td>
 </tr>
 <tr class="comfort">
-<td><b>Results</b></td>
+<td><b>Final RX</b></td>
 <td><b>Sides</b></td>
 <td><b>Sph</b></td>
 <td><b>Cyl</b></td>
@@ -1002,11 +1031,12 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
   </tr>
 
 <tr class="comfort">
-    <td rowspan="2">Final RX<br>-----<br>
-<span onclick="toggleRow('adjustments-row-1')" 
-   style="cursor:pointer; color:black; user-select:none; margin:5px 0;">
-  ▼▲ Adjust
-</span></td>
+<td style="border-bottom:none;">
+  <div class="choice-group">
+    <input type="radio" id="wear-glasses" name="wearType" value="glasses">
+    <label for="wear-glasses">Glasses</label>
+</div>
+</td>
 
 <td>Right</td>
 
@@ -1018,6 +1048,12 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
   </tr>
 
 <tr class="comfort">
+<td style="border-top:none;">
+  <div class="choice-group">
+    <input type="radio" id="wear-contacts" name="wearType" value="contacts">
+    <label for="wear-contacts">Contacts</label>
+  </div>
+</td>
  <td>Left</td>
     <td id="res-sph-ou-le">0.00</td>
     <td id="res-cyl-ou-le">0.00</td>
@@ -1025,6 +1061,22 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
     <td >—</td>
     <td id="res-dc-ou-le">BAL</td>
   </tr>
+<tr>
+<td colspan="7">
+<span onclick="toggleRow('adjustments-row-1')" 
+   style="cursor:pointer; color:black; user-select:none; margin:0px 30px;">
+  ▼▲ Adjustments
+</span>
+
+ <span class="toggle-btn" data-target="toggle-section-comfort-analysis" 
+      style="margin-left:0px; margin-right:15px; user-select:none; cursor:pointer; color: #241D0C; user-select:none;">
+▼▲ Analysis
+</span>
+
+
+
+</td>
+</tr>
 
 <tr id="adjustments-row-1" class="now-comfort" style="display:none;">
   <td>Adjustments</td>
@@ -1056,16 +1108,21 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
   </td>
 </tr>
 
+</tbody>
 
+
+<tbody class="toggle-section-comfort-analysis" style="display:none;">
 
 <tr class="comfort">
-<td id="analysis-ou" colspan="7" style="text-align:left; padding-left:20px;"></td>
+<td id="analysis-ou" colspan="7" style="text-align:left; padding-left:20px; border-bottom:none;"></td>
 </td>
-</tr><td id="analysis-ou-sph" colspan="7" style="text-align:left; padding-left:20px; border-bottom:none;"></td>
 </tr>
-<tr><td colspan="7" style="text-align:left; padding-left:20px; border-top:none;">
-<span id="analysis-ou-cylax"></span></td></tr>
-
+<tr class="comfort">
+<td id="analysis-ou-sph" colspan="7" style="text-align:left; padding-left:20px; border-bottom:none; border-top:none;"></td>
+</tr>
+<tr class="comfort">
+<td colspan="7" style="text-align:left; padding-left:20px; border-top:none;">
+<span id="analysis-ou-cylax"></span><br><br></td></tr>
 
 </tbody>
 
@@ -1075,6 +1132,7 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 </tr>
 
 
+<!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!>
 
 
 <tr class="paleviolet">
@@ -1399,12 +1457,8 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 
 
 
-<!---- MATHS LOGIC STARTS HERE -----!>
-<!---- MATHS LOGIC STARTS HERE -----!>
-<!---- MATHS LOGIC STARTS HERE -----!>
-<!---- MATHS LOGIC STARTS HERE -----!>
-<!---- MATHS LOGIC STARTS HERE -----!>
-<!---- MATHS LOGIC STARTS HERE -----!>
+<!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!>
+
 
 
 
@@ -1724,6 +1778,43 @@ setIf("res-se-ou-re", formatSEforDisplay(RE_ou.SE));
 const axisLE_OU = (Math.abs(LE_ou.C) < 0.001) ? "—" : (LE_ou.A === 0 ? "180" : String(LE_ou.A));
 setIf("res-axis-ou-le", axisLE_OU);
 setIf("res-se-ou-le", formatSEforDisplay(LE_ou.SE));
+
+// --- Glasses vs Contact Lens Conversion ---
+const currentWear = document.querySelector('input[name="current-wearType"]:checked')?.value; // "glasses" or "contacts"
+const targetWear  = document.querySelector('input[name="wearType"]:checked')?.value;        // "glasses" or "contacts"
+
+// Conversion functions
+function glassesToCL(sph) {
+  const d = 0.012; // 12mm vertex distance
+  const s = parseFloat(sph) || 0;
+  return s / (1 - d * s);
+}
+function clToGlasses(sph) {
+  const d = 0.012;
+  const s = parseFloat(sph) || 0;
+  return s / (1 + d * s);
+}
+
+// Apply conversion only if current and target differ
+if (currentWear && targetWear && currentWear !== targetWear) {
+  ["res-sph-ou-re", "res-sph-ou-le"].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const sph = parseFloat(el.textContent) || 0;
+
+    const newSph = (currentWear === "glasses" && targetWear === "contacts")
+      ? glassesToCL(sph)
+      : clToGlasses(sph);
+
+    el.textContent = formatValueForDisplay(newSph);
+  });
+}
+
+document.querySelectorAll('input[name="current-wearType"], input[name="wearType"]').forEach(radio => {
+  radio.addEventListener("change", combineAll);
+});
+
+
 
 // persist OU baseline sph so SPH buttons always reference the true base
 const elResSphOuRe = document.getElementById("res-sph-ou-re");
@@ -2931,6 +3022,28 @@ updateODOSAnalysis = function() {
 // Run on load
 window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
