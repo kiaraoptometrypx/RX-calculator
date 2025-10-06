@@ -8,6 +8,7 @@
 * {
   font-size: 10px;
   letter-spacing: 1px;
+  color: #241D0C;
 }
 
 html, body {
@@ -63,8 +64,7 @@ table th:nth-child(5) {
 
 table td:nth-child(6),
 table th:nth-child(6) {
-  max-width: 60px;
-  width: 60px;
+  white-space: nowrap;
 }
 
 table td:nth-child(7),
@@ -109,14 +109,14 @@ input {   width:80px;
 .calibrator th {
   border: none !important;}
 
+.wrap{width:90%;max-width:900px;margin:0 auto;padding:12px;}
 .now td { background: #F5F5F5; }
 .now-comfort td { background: #F5F5F5 ;}
 .white td { background: #d9d9d9; }
 .fc-results td { background: #EFF5E6; }
 .dc-bal td { background: #fff; }
 .paleviolet td { background: #D0C5DB }
-.paleblue td { background: #BECEE8 }
-
+.paleblue td { background: #D8EFF8 }
 
 .table-headernow {  background: #E8D1A0;}
 
@@ -219,7 +219,7 @@ input {   width:80px;
 table input {
   width: 80%;
   box-sizing: border-box;
-  padding: 5px 5px;
+  padding: 3px 3px;
   font-size: 10px;
   border-radius: 4px;
   border: 1px solid #999;
@@ -234,12 +234,40 @@ table input {
 .dc-select {
   width: 80%;
   box-sizing: border-box;
-  padding: 5px 5px;
+  padding: 3px 3px;
   font-size: 10px;
   border-radius: 4px;
   border: 1px solid #999;
   text-align: center;
 }
+
+  :root{
+    --green:#0b3d2e;
+    --pale:#ffffe0;
+    --off:#f8f8f5;
+    --line:#d7d7cf;
+    --warn:#B42318;
+    --barOD:#b0a2d9;
+    --barOS:#d0c9eb;
+    --frame:#a9a9a9;
+    --btn-bg:#0b3d2e;
+    --btn-text:#ffffe0;
+    --btn-border:#ffffff;
+  }
+
+  /* Pane boxes (white interior) */
+  .pane{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:5px;
+  }
+  .pane h4{margin:0 0 8px;font-size:12px}
+
+  .section{background:var(--pale);border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0;}
+  .wrap{width:90%;max-width:2000px;margin:0 auto;padding:12px;}
+
+
 
 /* Colorize each option individually */
 .dc-select option[value^="R"] { color: red; }
@@ -281,9 +309,22 @@ table input {
     }
   };
 </script>
+
+
 <div style="height:20px;"></div>
 
-<div style="display:flex; justify-content:space-between; align-items:center; width:95%; margin:5px auto;">
+<div class="wrap">
+<div class="section" style="text-align:center;">
+  <span class="fixed-label"
+        style="cursor:pointer; user-select:none; font-weight:bold; display:inline-block;">
+    Welcome to Kiara Optometry's Algorithm Refraction
+  </span>
+</div>
+
+
+
+<div class="section" >
+<div style="display:flex; justify-content:space-between; align-items:center; width:95%; margin:0px auto;">
   
   <!-- Left side: Settings -->
   <span class="toggle-btn" onclick="toggleSection('settings-block')" 
@@ -293,7 +334,7 @@ table input {
 
   <!-- Right side: Font controls -->
   <div style="text-align:right;">
-    <span class="fixed-label" style="cursor:pointer; color: grey; user-select:none; margin-right:10px; font-weight:bold;">
+    <span class="fixed-label" style="cursor:pointer;user-select:none; margin-right:10px; font-weight:bold;">
       Font:
     </span>
     <button class="font-btn" onclick="setFontSize('S', this)">S</button>
@@ -307,8 +348,7 @@ table input {
 
 
 
-<div id="settings-block" style="display:none; margin-top:10px;">
-
+<div id="settings-block" style="display:none; margin-top:10px; max-width:95%; text-align:center;">
 
 
 <table>
@@ -338,12 +378,12 @@ function setFontSize(size, btn) {
 
 
 <tr>
-<td colspan="2" style="color:#182E00; border:none; text-align:left; padding:4px;">
+<td colspan="2" style="color:#182E00; border:none; text-align:left; padding:8px;">
 </tr>
 <td colspan="2" style="color:#182E00; border:none; text-align:left; padding:0px;">
  <span class="toggle-btn" data-target="toggle-section-fcdc-errormargin"
           style="cursor:pointer; color: grey; user-select:none;">
-      <i>▼▲ How-to FC DC Error </i>
+      <i><b>▼▲ ● 1. Guide for FC DC Error Test</b> </i>
 
 </span>
 
@@ -353,7 +393,7 @@ function setFontSize(size, btn) {
        
  <span class="toggle-btn" data-target="toggle-section-guide-comfort"
           style="cursor:pointer; color: grey; user-select:none;">
- <i>▼▲ How-to Algorithm Refraction </i>
+ <i><b>▼▲ ● 2. How to use the Algorithm Refraction</b> </i>
 
 </span>
 </td>
@@ -367,11 +407,16 @@ function setFontSize(size, btn) {
 
 <tbody class="toggle-section-fcdc-errormargin" style="display:none;">
 
-<tr class="offwhite">
-  <td colspan="2" style="padding:5px; border:none; color:#182E00; text-align:left;"></td></tr>
+<tr>
+<td colspan="2" style="color:#182E00; border:none; text-align:left; padding:5px;">
+</tr>
 
-<tr><td colspan="2" style="padding:10px; border:1px solid lightgrey; color:#182E00; text-align:left;">
-<b>● Guide for FC DC Error test</b><br><br>
+
+<tr class="offwhite">
+
+<td colspan="2" style="padding:10px; border:1px solid lightgrey; color:#182E00; text-align:left;">
+<b>● 1. Guide for FC DC Error test</b><br><br>
+
 <b>Glossary:</b><br>
   -<b>Fan Chart (FC):</b> Detects astigmatism and line orientation errors. Must be balanced first.<br>
   -<b>Duochrome (DC):</b> Red/green balance test to refine spherical power.<br>
@@ -430,7 +475,6 @@ Fan Chart (FC) and Duochrome (DC) are <b>inter-related</b>. The FC reveals astig
       <i>▼▲ toggle</i>
 </span>
 
-
 </td>
 </tr>
 
@@ -444,7 +488,7 @@ Fan Chart (FC) and Duochrome (DC) are <b>inter-related</b>. The FC reveals astig
 <tr class="offwhite">
 
 <td colspan="2" style="padding:10px; border:1px solid lightgrey; color:#182E00; text-align:left;">
-<b>● How to use the Algorithm Refraction</B><br><br>
+<b>● 2. How to use the Algorithm Refraction</B><br><br>
 First, <b>chooose the type of test</b> based on their needs:<br>
     <b>- Comfy Clearer Test</b><br>
     Keeps both eyes working together comfortably while still making things clearer. 
@@ -499,11 +543,8 @@ The small error in one eye <b>does not affect daily vision</b>.<br><br><i><b>- E
 </td>
 </tr>
 </tbody>
-<tr>
-<td colspan="1" style="color:#182E00; border:none; text-align:left; padding:5px;">
-</tr>
-</table>
 
+</table>
 
 
 
@@ -516,7 +557,6 @@ function toggleSection(id) {
 </script>
 
 
-</div>
 <script>
 function toggleSection(id) {
   const section = document.getElementById(id);
@@ -525,20 +565,21 @@ function toggleSection(id) {
 </script>
 
 
+
+</div>
+</div>
+
+
+<div class="section">
+<div class="pane">
 <table>
-<tr>
-  <td colspan="1" style="padding:0px; border:1px solid lightgrey; color: #101F01; text-align:left;">
-</td>
+<tr class="calibrator">
+  <td style="border:none;"></td>
+</tr>
+<tr class="white">
+<td><b>Customer Details & Current Prescription</b></td>
 </tr>
 </table>
-
-
-
-<div style="height:20px;"></div>
-
-<h2>Welcome to Kiara Optometry's Algorithm Refraction.</h2>
-
-<div style="height:0px;"></div>
 
 <table>
 <tr class="calibrator">
@@ -550,9 +591,6 @@ function toggleSection(id) {
   <td style="border:none;"></td>
   <td style="border:none;"></td>
 </tr>
-<tr class="white">
-<td colspan="7"><b>Customer Details and Current Prescription</b>
-</td></tr>
 <tr class="white">
   <td colspan="1"><b>Suffix</b></td>
 
@@ -636,8 +674,8 @@ function toggleSection(id) {
     <td>—</td>
 
 
-<tr><td colspan="7" style="padding:1px; border:none;"></td></tr>
 
+<tr><td colspan="7" style="padding:5px; border:none;"></td></tr>
 
   <tbody class="toggle-section-near-rx" style="display:none;">
 
@@ -670,6 +708,7 @@ function toggleSection(id) {
   <td style="display:none;">Current Eye Strength: <span id="aaOutput">–</span>
 </td>
 </tr>
+<tr><td colspan="7" style="padding:5px; border:none;"></td></tr>
 
 
 
@@ -854,6 +893,21 @@ document.getElementById('ageInput').addEventListener('input', () => {
 
 </table>
 </tbody>
+</div>
+
+<div style="height:20px;"></div>
+
+    <div class="pane">
+
+<table>
+<tr class="calibrator">
+  <td style="border:none;"></td>
+</tr>
+<tr class="white">
+<td><b>Eye Exam Types</b>
+</td>
+</tr>
+</table>
 
 
 
@@ -867,28 +921,27 @@ document.getElementById('ageInput').addEventListener('input', () => {
   <td style="border:none;"></td>
   <td style="border:none;"></td>
 </tr>
-<tr>
-<td colspan="7" style="padding:8px; border:none;"><b>Choice of Exam</b><span class="toggle-btn" data-target="toggle-section-manual-comfort-rx"
-          style="cursor:pointer; color: #101F01; user-select:none;">
-     ▼▲
-    </span></td>
-</tr>
-<tbody class="toggle-section-manual-comfort-rx" style="display:none;">
-
-  <td colspan="7" style="padding:10px; color: #101F01; background: #D8EFF8;; text-align:left;">
-
-<b>Manual Input Rx</b> &nbsp;&nbsp;
-
-<span id="testToggle3" style="cursor:pointer; user-select:none; color: #101F01; margin-left:px;">
+<tr class="paleblue">
+  <td colspan="2" style="padding:10px; color: #241D0C; text-align:left; border-right:none;">
+<b>1. Manual Input Rx</b></td>
+<td colspan="2" style="text-align:left; border-left:none;">
+<span id="testToggle3" style="cursor:pointer; user-select:none; color: #101F01;">
   <b><i>● Status?</i></B>
-
-
 </td>
+<td colspan="3" style="padding:10px; color: #241D0C; text-align:left;">
+<span style="margin-left:21px;">- - - -</span>
+<span class="toggle-btn" data-target="toggle-section-manual-rx"
+          style="cursor:pointer; color: #101F01; user-select:none; margin-left:21px;">
+      ▼▲ Results 
+    </span>
+</td>
+</tr>
 
 
 
+<tbody class="toggle-section-manual-rx" style="display:none;">
 
-<tr style="background: #D8EFF8;">
+<tr class="paleblue">
   <td><b>Final Rx</b></td>
   <td><b>Sides</b></td>
   <td><b>Sph</b></td>
@@ -899,7 +952,7 @@ document.getElementById('ageInput').addEventListener('input', () => {
 </tr>
 
 <!-- Right Eye -->
-<tr>
+<tr class="paleblue">
   <td style="border-bottom:none;">
     <div class="choice-group">
       <input type="radio" id="manual-ou-wear-glasses" name="manual-ou-wear" value="glasses">
@@ -911,7 +964,7 @@ document.getElementById('ageInput').addEventListener('input', () => {
   <td><input type="text" id="manual-sph-ou-od" placeholder="+0.00" inputmode="decimal" pattern="^[+\-]?\d*\.?\d*$"></td>
   <td><input type="text" id="manual-cyl-ou-od" placeholder="+0.00" inputmode="decimal" pattern="^[+\-]?\d*\.?\d*$"></td>
   <td><input type="number" id="manual-axis-ou-od" placeholder="0" step="1" min="0" max="180"></td>
-  <td id="manual-se-diff-ou">—</td>
+  <td id="manual-se-diff-ou">+0.00</td>
   <td>
 <select id="manual-dc-ou-od" class="dc-select">
   <option value="BAL">BAL</option>
@@ -930,7 +983,7 @@ document.getElementById('ageInput').addEventListener('input', () => {
 </tr>
 
 <!-- Left Eye -->
-<tr>
+<tr class="paleblue">
   <td style="border-top:none;">
     <div class="choice-group">
       <input type="radio" id="manual-ou-wear-contacts" name="manual-ou-wear" value="contacts">
@@ -959,19 +1012,23 @@ document.getElementById('ageInput').addEventListener('input', () => {
 </select>
   </td>
 </tr>
-<tr>
+<tr class="paleblue">
   <!-- This cell spans 2 rows -->
   <td rowspan="2" colspan="1"><b>Extra Notes:</b></td>
   <td colspan="6" rowspan="2">
-    <input id="extra-notes" rows="2" style="width:95%; height:40px; box-sizing:border-box;"></textarea>
+    <textarea id="extra-notes" rows="2" placeholder="Type anything here..." 
+  style="width:95%; height:40px; box-sizing:border-box;"></textarea>
+
   </td>
 </tr>
 <tr></tr>
 
-<tr>
-  <td colspan="7" style="padding:8px; border:none;"></td>
+
+<tr class="paleblue">
+  <td colspan="7" style="padding:2px;"><i>~ End ~</i></td>
 </tr>
-</tbody>
+
+
 
 <script>
 function formatQuarter(val) {
@@ -1024,16 +1081,16 @@ function updateManualOU() {
   const seOsEl = document.getElementById("manual-se-ou-os");
   if (seOsEl) seOsEl.textContent = isNaN(SEos) ? "—" : formatQuarter(SEos);
 
-  // SE Diff
-  const diffEl = document.getElementById("manual-se-diff-ou");
-  if (diffEl) {
-    if (isNaN(SEod) && isNaN(SEos)) {
-      diffEl.textContent = "—";
-    } else {
-      const diff = Math.abs((isNaN(SEod) ? 0 : SEod) - (isNaN(SEos) ? 0 : SEos));
-      diffEl.textContent = formatQuarter(diff);
-    }
+// SE Diff
+const diffEl = document.getElementById("manual-se-diff-ou");
+if (diffEl) {
+  if (isNaN(SEod) && isNaN(SEos)) {
+    diffEl.textContent = "—";
+  } else {
+    const diff = Math.abs((isNaN(SEod) ? 0 : SEod) - (isNaN(SEos) ? 0 : SEos));
+    diffEl.textContent = (diff >= 0 ? "+" : "") + diff.toFixed(2);
   }
+}
 }
 
 // --- Event bindings ---
@@ -1080,17 +1137,24 @@ document.querySelectorAll("select.dc-select").forEach(sel => {
   updateDCcolor(sel); // initial
 });
 </script>
+</tbody>
 
 
 
-
-
-
+<table>
+<tr class="calibrator">
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+</tr>
 <tr class="comfort">
-  <td colspan="4" style="padding:10px; color: #101F01; text-align:left;">
-
-<b>Comfy Clearer Rx</b> &nbsp;&nbsp;
-
+    <td colspan="2" style="padding:10px; color: #241D0C; text-align:left; border-right:none;">
+<b>2. Comfy Clearer Rx</b></td>
+<td colspan="2" style="text-align:left; border-left:none;">
 <span id="testToggle1" style="cursor:pointer; user-select:none; color: #101F01; margin-left:px;">
   <b><i>● Status?</i></B>
 
@@ -1116,9 +1180,7 @@ document.querySelectorAll("select.dc-select").forEach(sel => {
 
 
   <tbody id="deficit-rows-comfort" style="display:none;">
-<tr>
-<td colspan="7" style="padding:1px; border:none;"></td>
-</tr>
+
   <!-- Deficit Rows -->
 <tr class="white">
 <th colspan="1">Test</th>
@@ -1218,10 +1280,6 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 </tr>
 
 
-<tr>
-<td colspan="7" style="padding:0px; border:none;"></td>
-</tr>
-
 
 
 </tbody>
@@ -1229,9 +1287,7 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 
 <tbody class="toggle-section-comfort-rx" style="display:none;">
 
-<tr>
-<td colspan="7" style="padding:1px; border:none;"></td>
-</tr>
+
 <tr class="comfort">
 <td><b>Final RX</b></td>
 <td><b>Sides</b></td>
@@ -1285,12 +1341,12 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 ▼▲ Analysis
 </span>
 
-
-
 </td>
 </tr>
 
-<tr id="adjustments-row-1" class="now-comfort" style="display:none;">
+
+
+<tr id="adjustments-row-1" style="display:none;">
   <td>Adjustments</td>
   <td>Both</td>
   <td colspan="5" style="padding:0px; text-align:left;">
@@ -1313,18 +1369,25 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
       </span>= <span id="dc-advice" style=" font-weight:normal; color:black;">
   <!-- DC advice will show here -->
 </span>
-
-
-
     </div>
+
   </td>
 </tr>
+<tr class="comfort">
+  <td rowspan="2" colspan="1"><b>Extra Notes:</b></td>
+  <td colspan="6" rowspan="2">
+    <textarea id="extra-notes" rows="2" placeholder="Type anything here..." 
+  style="width:95%; height:40px; box-sizing:border-box;"></textarea>
 
+  </td>
+</tr>
+<tr></tr>
+
+<tr class="comfort">
+  <td colspan="7" style="padding:2px;"><i>~ End ~</i></td>
+</tr>
 </tbody>
 
-<tr>
-<td colspan="7" style="padding:1px; border:none;"></td>
-</tr>
 <tbody class="toggle-section-comfort-analysis" style="display:none;">
 
 <tr class="comfort">
@@ -1336,9 +1399,20 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 </tr>
 <tr class="comfort">
 <td colspan="7" style="text-align:left; padding-left:20px; border-top:none;">
-<span id="analysis-ou-cylax"></span><br><br></td></tr>
-</table>
+<span id="analysis-ou-cylax"></span><br><br>
+</td>
+</tr>
+
+
 </tbody>
+
+</table>
+
+
+
+
+
+
 
 
 
@@ -1358,9 +1432,9 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
   <td style="border:none;"></td>
 </tr>
 <tr class="paleviolet">
-<td colspan="4" style="padding:10px; color: #241D0C; text-align:left;">
-<b>Sharpest Ever Rx</b>&nbsp;&nbsp;&nbsp;&nbsp;
-
+  <td colspan="2" style="padding:10px; color: #241D0C; text-align:left; border-right:none;">
+<b>3. Sharpest Ever Rx</b></td>
+<td colspan="2" style="text-align:left; border-left:none;">
 <span id="testToggle2" style="cursor:pointer; user-select:none; color: #241D0C;">
   <b><i>● Status?</i></B>
 </span>&nbsp;&nbsp;&nbsp;
@@ -1379,58 +1453,6 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 
 </td>
 </tr>
-
-
-
-
-
-<script>
-document.querySelectorAll('.toggle-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const target = btn.getAttribute('data-target');
-    document.querySelectorAll(`.${target}`).forEach(el => {
-      el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'table-row-group' : 'none';
-    });
-  });
-});
-</script>
-
-<script>
-function makeToggle(spanId, hideClass) {
-  const span = document.getElementById(spanId);
-  let testDone = false; // initial state
-
-  span.addEventListener("click", () => {
-    testDone = !testDone; // toggle state
-
-    if (testDone) {
-      span.textContent = "● ✅ Selected";
-      span.style.fontWeight = "bold";
-
-      if (hideClass) {
-        document.querySelectorAll("." + hideClass).forEach(el => {
-          el.style.display = "inline";
-        });
-      }
-    } else {
-      span.textContent = "● ❌ Unselected";
-      span.style.fontWeight = "bold";
-
-      if (hideClass) {
-        document.querySelectorAll("." + hideClass).forEach(el => {
-          el.style.display = "none";
-        });
-      }
-    }
-  });
-}
-
-// usage examples
-makeToggle("testToggle1", "testStatus"); // this one toggles other spans
-makeToggle("testToggle2");               // standalone
-makeToggle("testToggle3");               // standalone
-</script>
-
 
 <!-- Deficit Rows (wrapped in toggle container) -->
 <tbody id="deficit-rows-sharper" style="display:none;">
@@ -1559,6 +1581,7 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
     <td id="final-dc-os">BAL </td>
     
   </tr>
+
 </tbody>
 
 
@@ -1661,21 +1684,39 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 </span>
 
 </td></tr>
+<tr><td colspan="7">
+<span class="toggle-btn" data-target="toggle-section-sharper-analysis"
+          style="cursor:pointer; color: #101F01; user-select:none; text-align:middle;">
+    ▼▲ Analysis
+    </span>
+</td></tr>
 
 
+  <tr class="paleviolet">
+<tr class="paleviolet">
+  <td rowspan="2" colspan="1"><b>Extra Notes:</b></td>
+  <td colspan="6" rowspan="2">
+    <textarea id="extra-notes" rows="2" placeholder="Type anything here..." 
+  style="width:95%; height:40px; box-sizing:border-box;"></textarea>
 
+  </td>
+</tr>
+<tr></tr>
+<tr class="paleviolet">
+  <td colspan="7" style="padding:2px;"><i>~ End ~</i></td>
+</tr>
+</tbody>
+
+
+<tbody class="toggle-section-sharper-analysis" style="display:none;">
   <tr class="paleviolet">
     <td id="analysis-od-os" colspan="7" style="text-align:left; padding-left:20px;">
     <!-- Combined analysis text for OD OS will appear here -->'
 </td>
 </tr>
 
-
-</td></tr>
 </tbody>
 </table>
-
-
 
 
 
@@ -1684,7 +1725,52 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 <!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!>
 
 
+<script>
+document.querySelectorAll('.toggle-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const target = btn.getAttribute('data-target');
+    document.querySelectorAll(`.${target}`).forEach(el => {
+      el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'table-row-group' : 'none';
+    });
+  });
+});
+</script>
 
+<script>
+function makeToggle(spanId, hideClass) {
+  const span = document.getElementById(spanId);
+  let testDone = false; // initial state
+
+  span.addEventListener("click", () => {
+    testDone = !testDone; // toggle state
+
+    if (testDone) {
+      span.textContent = "● ✅ Selected";
+      span.style.fontWeight = "bold";
+
+      if (hideClass) {
+        document.querySelectorAll("." + hideClass).forEach(el => {
+          el.style.display = "inline";
+        });
+      }
+    } else {
+      span.textContent = "● ❌ Unselected";
+      span.style.fontWeight = "bold";
+
+      if (hideClass) {
+        document.querySelectorAll("." + hideClass).forEach(el => {
+          el.style.display = "none";
+        });
+      }
+    }
+  });
+}
+
+// usage examples
+makeToggle("testToggle1", "testStatus"); // this one toggles other spans
+makeToggle("testToggle2");               // standalone
+makeToggle("testToggle3");               // standalone
+</script>
 
 
 <script>
@@ -3249,62 +3335,622 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 
+</div>
+
+<!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!>
 
 
-<!-- Span button -->
-<span id="sendEmail" style="color:blue; text-decoration:underline; cursor:pointer;">
-  📧 Send to Email
-</span>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Lens Selector (Geometry & Fitting V12)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root{
+    --green:#0b3d2e;
+    --pale:#ffffe0;
+    --off:#f8f8f5;
+    --line:#d7d7cf;
+    --warn:#B42318;
+    --barOD:#b0a2d9;
+    --barOS:#d0c9eb;
+    --frame:#a9a9a9;
+    --btn-bg:#0b3d2e;
+    --btn-text:#ffffe0;
+    --btn-border:#ffffff;
+  }
+
+  html,body{
+    background:var(--off);
+    color:var(--green);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+    font-size:10px;
+  }
+  h1{font-size:10px;text-align:center;margin:12px 0 10px;}
+  h3{font-size:10px;margin:0 0 8px;}
+  table{width:100%;border-collapse:collapse;}
+  th,td{padding:6px;text-align:center;}
+  th{background:#e8e8dd;}
+
+
+  }
+  label{font-weight:600}
+  .row{align-items:center}
+  .field{gap:0px}
+  .field.w90{width:90px}
+  .tiny{font-size:10px;opacity:1}
+  .muted{opacity:1}
+
+  /* Buttons with white inner border */
+  button{
+    padding: 4px 10px;
+  border: 1px solid;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:10px;
+  }
+  button:focus{outline:2px solid #fff4; outline-offset:2px;}
+  button:hover{filter:brightness(1.05);}
+  button:active{transform:translateY(1px);}
+
+  /* Pane boxes (white interior) */
+  .pane{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px;
+  }
+  .pane h4{margin:0 0 8px;font-size:10px}
+
+  /* Bars */
+  .bar-row{display:flex;align-items:flex-start;gap:10px;margin:6px 0;flex-wrap:wrap}
+  .bar-label{width:40px;text-align:right;font-weight:bold}
+  .bar-pair{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap} /* visual gap between OD & OS */
+  .bar-block{display:flex;flex-direction:column;gap:3px;min-width:220px}
+  .bar{height:12px;border-radius:2px}
+  .bar-frame{height:6px;border-radius:2px;background:var(--frame)}
+  .bar-text{font-size:10px;opacity:1}
+
+  /* Filters inside panes */
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 2px}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border:1px solid var(--line);border-radius:12px;background:#fff}
+
+  @media(max-width:1200px){
+    .row{flex-direction:column;align-items:flex-start}
+    .bar-block{min-width:180px}
+  }
+</style>
+</head>
+<body>
+</div>
+
+<div class="section">
+
+  <div class="pane">
+   <table><tr class="white"><td><b>Prescription & Frame Details</b></td></tr></table>
+
+    <table>
+<tr class="calibrator">
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+  <td style="border:none;"></td>
+</tr>
+<tr class="white">
+<td><b>Sides</b></td>
+<td><b>PD</b></td>
+<td><b>SPH</b></td>
+<td><b>Cyl</b></td>
+<td><b>Axis</b></td>
+<td colspan="2"><B>Frame Size </b><i>(e.g 50-20)</i></td>
+
+  </tr>
+
+<td colspan="1"><b>Right</b></td>
+<td>      <div><input id="monoPD_OD" type="number" placeholder="31"></div></td>
+          <td><input type="text" id="sphOD" placeholder="+0.00"></td>
+          <td><input type="text" id="cylOD" placeholder="+0.00"></td>
+          <td><input type="number" id="axisOD" step="1" placeholder="180"></td>
+    <td rowspan="2"><b>Lens Width</b><br><i>(A Size)</i><br><br><div><input id="frameA" type="number" placeholder="52"></div></td>
+    <td rowspan="2"><b>Bridge Size</b><br><i>(DBL size)</i><br><br><div> <input id="frameDBL" type="number" placeholder="17"></div></td>
+
+        </tr>
+        <tr>
+<td colspan="1"><b>Left</b></td>
+<td>      <div><input id="monoPD_OS" type="number" placeholder="31"></div></td>
+          <td><input type="text" id="sphOS" placeholder="+0.00"></td>
+          <td><input type="text" id="cylOS" placeholder="+0.00"></td>
+          <td><input type="number" id="axisOS" step="1" placeholder="180"></td>
+
+
+<td style="display:none;">    <input id="safety" type="number" placeholder="2" value="2"></td>
+
+        </tr>
+    </table>
+</div>
+<div style="height:10px;"></div>
+
+
+  <!-- Stacked panes: 1) Thickness calc, 2) Price cap, 3) Fetch -->
+    <div class="pane" style="margin-bottom:10px;">
+      <h4>Thickness Calculation </h4>
+      <div class="row" style="gap:10px;">
+Choose either
+        <button id="btnCalc">Calculate by Frame Details</button> or 
+        <button id="btnLength">Calculate by Length (mm)</button>
+   
+          <label for="lengthInput" style="Display:none;">Length (mm)</label>
+          <input id="lengthInput" type="number" value="30" step="1" style="width:40px;">
+      </div>
+    </div>
+
+   
+
+
+
+  <!-- Thickness -->
+    <div class="pane" style="margin-bottom:10px;">
+    <h3>Minimum Blank Size & Thickness Preview</h3>
+    <div id="thicknessBars" style="margin-top:10px;"></div>
+    <div id="thickNote" class="tiny muted" style="margin-top:4px;"></div>
+    <div id="mbsLine" class="tiny"></div>
+  </div>
+
+  <!-- Lens Options with Filters in white panes -->
+    <div class="pane" style="margin-bottom:10px;">
+    <h3>Lens Options</h3>
+ Fetch Lenses Needs Thickness Calculation First <button id="btnFetch">Fetch Lenses</button>
+    <span id="status" class="tiny muted"></span>
+    <button id="btnClearFilters">Clear All Filters</button>
+
+<div class="pane" style="margin:10px 0px 10px 0px;">
+      <h4>Price (RM)</h4>
+      <div class="row" style="gap:8px;align-items:center;">
+        Max Price <input id="priceCap" type="number" placeholder="e.g. 1000" style="width:110px;">
+        <button id="capMinus">– RM100</button>
+        <button id="capPlus">+ RM100</button>
+</div>
+</div>
+
+    <div class="pane" style="margin-bottom:10px;">
+      <h4>Appearance</h4>
+      <div class="filters">
+        <label class="chip"><input type="checkbox" class="fl-appear" value="Clear" checked> Clear</label>
+        <label class="chip"><input type="checkbox" class="fl-appear" value="Photochromic" checked> Photochromic</label>
+        <label class="chip"><input type="checkbox" class="fl-appear" value="Tinted" checked> Tinted</label>
+        <label class="chip"><input type="checkbox" class="fl-appear" value="Polarized" checked> Polarized</label>
+      </div>
+    </div>
+
+    <div class="pane" style="margin-bottom:10px;">
+      <h4>Index Group</h4>
+      <div class="filters">
+        <label class="chip"><input type="checkbox" class="fl-index" value="1.5" checked> 1.5 group</label>
+        <label class="chip"><input type="checkbox" class="fl-index" value="Safety" checked> Safety (1.53/1.59)</label>
+        <label class="chip"><input type="checkbox" class="fl-index" value="1.6" checked> 1.6 group</label>
+        <label class="chip"><input type="checkbox" class="fl-index" value="1.67" checked> 1.67 group</label>
+        <label class="chip"><input type="checkbox" class="fl-index" value="1.74" checked> 1.74 group</label>
+      </div>
+    </div>
+
+    <div class="pane" style="margin-bottom:10px;">
+      <h4>Function</h4>
+      <div class="filters">
+        <label class="chip"><input type="checkbox" class="fl-func" value="SV" checked> SV</label>
+        <label class="chip"><input type="checkbox" class="fl-func" value="Multifocal" checked> Multifocal</label>
+        <label class="chip"><input type="checkbox" class="fl-func" value="Office" checked> Office</label>
+        <label class="chip"><input type="checkbox" class="fl-func" value="Anti-fatigue" checked> Anti-Fatigue</label>
+      </div>
+    </div>
+
+    <table id="resultsTable" style="margin-top:8px;">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Index</th>
+          <th>Type</th>
+          <th>Price (UV420)</th>
+          <th>High-Clarity +RM</th>
+          <th>Stock/RX</th>
+        </tr>
+      </thead>
+      <tbody id="resultsBody">
+        <tr><td colspan="6" class="muted">Calculate thickness first, then click “Fetch Lenses”.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 <script>
-document.getElementById("sendEmail").addEventListener("click", function() {
-  // Collect inputs (adjust IDs to match your actual fields)
-  let name = document.getElementById("nameInput")?.value || "Unknown";
-  let contact = document.getElementById("contactInput")?.value || "—";
+/* =========================
+   CONFIG
+========================= */
+const CSV_URL = "https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/lens%20selector.csv";
+const INDICES = [1.56, 1.60, 1.67, 1.74];
+const CENTER_MINUS = 1.3;   // minus lens min center thickness
+const EDGE_PLUS    = 1.3;   // plus lens min center thickness
+const BASE_PX      = 50 * 0.6; // px per mm before scale radios
 
-  // Right Eye
-  let sphOD = document.getElementById("manual-sph-ou-od")?.value || "—";
-  let cylOD = document.getElementById("manual-cyl-ou-od")?.value || "—";
-  let axisOD = document.getElementById("manual-axis-ou-od")?.value || "—";
-  let dcOD = document.getElementById("manual-dc-ou-od")?.value || "—";
+function minusCorr(n){ if(n===1.56) return 1.075; if(n===1.60) return 1.025; return 1; }
+function plusCorr(n){  if(n===1.56) return 1.10;  if(n===1.60) return 1.05;  if(n===1.67) return 1.025; if(n===1.74) return 1.0125; return 1; }
 
-  // Left Eye
-  let sphOS = document.getElementById("manual-sph-ou-os")?.value || "—";
-  let cylOS = document.getElementById("manual-cyl-ou-os")?.value || "—";
-  let axisOS = document.getElementById("manual-axis-ou-os")?.value || "—";
-  let dcOS = document.getElementById("manual-dc-ou-os")?.value || "—";
+/* =========================
+   STATE
+========================= */
+let PRODUCTS = [];
+let LAST_GEOM = null;   // {semiOD, semiOS, MBS}
+let LAST_MODE = null;   // "frame" | "length"
 
-  // SE Diff
-  let seDiff = document.getElementById("manual-se-diff-ou")?.textContent || "—";
-
-  // Subject: Name + Contact
-  let subject = encodeURIComponent(`RX Results for ${name} (${contact})`);
-
-  // Body: nicely formatted
-  let body = `
-Name: ${name}
-Contact: ${contact}
-
---- Prescription Results ---
-OD: Sph ${sphOD}, Cyl ${cylOD}, Axis ${axisOD}, DC ${dcOD}
-OS: Sph ${sphOS}, Cyl ${cylOS}, Axis ${axisOS}, DC ${dcOS}
-
-SE Difference: ${seDiff}
-`;
-
-  // Encode body for URL
-  let bodyEnc = encodeURIComponent(body);
-
-  // Open Gmail compose window
-  window.open(
-    `https://mail.google.com/mail/?view=cm&fs=1&su=${subject}&body=${bodyEnc}`,
-    '_blank'
-  );
+/* =========================
+   INPUT ROUNDING (text inputs keep + sign)
+========================= */
+function parseToNumber(str){
+  if(!str) return 0;
+  const v = parseFloat(String(str).replace(/\s+/g,'').replace('+',''));
+  return isNaN(v) ? 0 : v;
+}
+function round025number(x){
+  const s = x >= 0 ? 1 : -1;
+  const a = Math.abs(x);
+  const r = Math.round(a / 0.25) * 0.25;
+  return s * r;
+}
+function formatSigned025(x){
+  const v = round025number(x);
+  return (v > 0 ? "+" : "") + v.toFixed(2);
+}
+function onSignedBlur(el){
+  const v = parseToNumber(el.value);
+  el.value = formatSigned025(v);
+}
+function roundAxis(el){
+  let v = parseFloat(el.value);
+  if(isNaN(v)) return;
+  v = Math.round(v);
+  if(v < 0) v += 180;
+  if(v > 180) v = v % 180;
+  el.value = v;
+}
+document.addEventListener("DOMContentLoaded", ()=>{
+  ['sphOD','cylOD','sphOS','cylOS'].forEach(id=>{
+    const el = document.getElementById(id);
+    el.addEventListener('blur', ()=> onSignedBlur(el));
+  });
+  ['axisOD','axisOS'].forEach(id=>{
+    const el = document.getElementById(id);
+    el.addEventListener('blur', ()=> roundAxis(el));
+  });
 });
+
+/* =========================
+   OPTICS
+========================= */
+function effectivePower(S,C,axisDeg){
+  const a = ((axisDeg % 180) + 180) % 180;
+  const s = Math.sin(a * Math.PI / 180);
+  return S + C * s * s; // horizontal meridian power
+}
+function minusThickness(S,C,A,n,y){
+  const Fh = Math.abs(effectivePower(S,C,A));
+  let t = CENTER_MINUS + (y*y*Fh)/(2000*(n-1));
+  t *= minusCorr(n);
+  return t;
+}
+function plusThickness(S,C,A,n,y){
+  const Fh = effectivePower(S,C,A);
+  let t = EDGE_PLUS + (y*y*Fh)/(2000*(n-1)); // center thickness from rim sag
+  t = Math.max(t, 1.3);
+  t *= plusCorr(n);
+  return t;
+}
+
+/* =========================
+   GEOMETRY
+========================= */
+function computeSemi(A, DBL, monoPD, safety=2){
+  const framePDhalf = (A + DBL) / 2;
+  const dec = Math.abs(framePDhalf - monoPD);
+  return (A/2) + dec + safety;
+}
+function computeMBS(A, DBL, pdOD, pdOS, safety=2){
+  const semiOD = computeSemi(A, DBL, pdOD, safety);
+  const semiOS = computeSemi(A, DBL, pdOS, safety);
+  return { semiOD, semiOS, MBS: 2 * Math.max(semiOD, semiOS) };
+}
+
+/* =========================
+   HELPERS
+========================= */
+function getVal(id){ return parseFloat(document.getElementById(id)?.value) || 0; }
+function parseRx(){
+  const SOD = parseToNumber(document.getElementById("sphOD")?.value);
+  const COD = parseToNumber(document.getElementById("cylOD")?.value);
+  const SOS = parseToNumber(document.getElementById("sphOS")?.value);
+  const COS = parseToNumber(document.getElementById("cylOS")?.value);
+  return {
+    OD:{ S:SOD, C:COD, Ax:getVal("axisOD") },
+    OS:{ S:SOS, C:COS, Ax:getVal("axisOS") }
+  };
+}
+
+/* =========================
+   CSV LOADING (DOM-safe)
+========================= */
+async function loadCSV(url){
+  const res = await fetch(url, { cache:"no-store" });
+  if(!res.ok) throw new Error("HTTP "+res.status);
+  const text = await res.text();
+  const rows = text.trim().split(/\r?\n/).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
+  const headers = rows[0].map(h => h.replace(/^"|"$/g,'').trim());
+  return rows.slice(1).map(r=>{
+    const obj={};
+    r.forEach((val,i)=> obj[headers[i]] = (val||"").replace(/^"|"$/g,'').trim() );
+    return obj;
+  });
+}
+async function init(){
+  const statusEl = document.getElementById("status");
+  if(statusEl) statusEl.textContent = "Loading CSV…";
+  try{
+    PRODUCTS = await loadCSV(CSV_URL);
+    if(statusEl) statusEl.textContent = ""; // blank on success
+  }catch(e){
+    if(statusEl) statusEl.textContent = "CSV load failed.";
+    console.error("CSV load error:", e);
+  }
+}
+document.addEventListener("DOMContentLoaded", init);
+
+/* =========================
+   FILTER GROUPING HELPERS
+========================= */
+function getAppearance(val=""){
+  const s = val.toLowerCase();
+  if(s.includes("polar")) return "Polarized";
+  if(s.includes("tint"))  return "Tinted";
+  if(s.includes("chang") || s.includes("photo")) return "Photochromic";
+  return "Clear";
+}
+function getIndexGroup(val=""){
+  const n = parseFloat(val)||0;
+  if(n===1.53 || n===1.59) return "Safety";
+  if(n>=1.49 && n<1.59)    return "1.5";
+  if(n>=1.59 && n<1.65)    return "1.6";
+  if(n>=1.65 && n<1.71)    return "1.67";
+  if(n>=1.73 && n<1.76)    return "1.74";
+  if(Math.abs(n-1.67)<0.02) return "1.67";
+  if(Math.abs(n-1.60)<0.02) return "1.6";
+  if(Math.abs(n-1.74)<0.02) return "1.74";
+  return "1.5";
+}
+function getFunctionCat(val=""){
+  const s = val.toLowerCase();
+  if(s.includes("anti")) return "Anti-fatigue";
+  if(s.includes("office") || s.includes("room")) return "Office";
+  if(s.includes("pal") || s.includes("progress") || s.includes("multi")) return "Multifocal";
+  return "SV";
+}
+function checkedValues(selector){
+  return Array.from(document.querySelectorAll(selector)).filter(i=>i.checked).map(i=>i.value);
+}
+
+/* =========================
+   RESULTS TABLE
+========================= */
+function withinCap(price, cap){ if(!cap) return true; return Number(price) <= cap * 1.10; } // buffer kept silently
+function buildResults(geom, rx){
+  const body = document.getElementById("resultsBody");
+  body.innerHTML = "";
+
+  if(!geom){
+    body.innerHTML = `<tr><td colspan="6" class="muted">Calculate thickness first, then click “Fetch Lenses”.</td></tr>`;
+    return;
+  }
+
+  const appearSet = checkedValues(".fl-appear");
+  const indexSet  = checkedValues(".fl-index");
+  const funcSet   = checkedValues(".fl-func");
+
+  const cap = parseFloat(document.getElementById("priceCap").value)||0;
+  const FhOD = effectivePower(rx.OD.S, rx.OD.C, rx.OD.Ax);
+
+  let count = 0;
+  PRODUCTS.forEach(row=>{
+    const price = parseFloat(row["UV_420_BL_PRICE_RM"]||"0");
+    if(!withinCap(price, cap)) return;
+
+    const app = getAppearance(row["CLEAR_CHANGING_TINT"]||"");
+    const idxGroup = getIndexGroup(row["INDEX"]||"");
+    const func = getFunctionCat(row["FUNCTION"]||"");
+
+    if(appearSet.length && !appearSet.includes(app)) return;
+    if(indexSet.length  && !indexSet.includes(idxGroup)) return;
+    if(funcSet.length   && !funcSet.includes(func)) return;
+
+    const dia = parseFloat(row["DIA"]||"0");
+    let stockMsg = "Stock OK";
+    if(dia < geom.MBS){
+      const shortfall = +(geom.MBS - dia).toFixed(1);
+      const prism = Math.abs(((shortfall/2)/10) * FhOD).toFixed(1); // Prentice
+      const isStock = /stock/i.test(row["LENS_DESIGN"]||"") || /stock/i.test(row["PRODUCT_NAME"]||"");
+      stockMsg = isStock
+        ? `<span style="color:var(--warn);font-weight:700;">⚠ Lens too small – ${prism}Δ prism risk.</span>`
+        : `Custom diameter +RM100 (larger lens).`;
+    }
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${row["PRODUCT_NAME"]||""}</td>
+      <td>${row["INDEX"]||""}</td>
+      <td>${app} / ${func}</td>
+      <td>${price ? "RM"+price : "—"}</td>
+      <td>${row["HIGH_CLARITY_COATING_PRICE_RM"] ? "+RM"+row["HIGH_CLARITY_COATING_PRICE_RM"] : "—"}</td>
+      <td>${stockMsg}</td>
+    `;
+    body.appendChild(tr);
+    count++;
+  });
+
+  if(!count){
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td colspan="6" class="muted">No items match filters or price cap.</td>`;
+    body.appendChild(tr);
+  }
+}
+
+/* =========================
+   BARS / THICKNESS
+========================= */
+function renderBars(rx, geom, mode, lenOverride){
+  const container = document.getElementById("thicknessBars");
+  container.innerHTML = `
+    <div style="margin-bottom:8px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;">
+      <label>Frame Thickness (mm):
+        <input type="number" id="frameThickness" value="3.5" step="0.5" style="width:45px;">
+      </label>
+      <span style="font-weight:600;">------- &nbsp;&nbsp;&nbspChange Bar Scale:</span>
+      <label><input type="radio" name="barScale" value="1"> 100%</label>
+      <label><input type="radio" name="barScale" value="0.66" checked> 66%</label>
+      <label><input type="radio" name="barScale" value="0.33"> 33%</label>
+    </div>
+  `;
+
+  const frameInput = container.querySelector("#frameThickness");
+  let scale = 0.66;
+
+  container.querySelectorAll('input[name="barScale"]').forEach(r=>{
+    r.addEventListener("change", ()=>{ scale=parseFloat(r.value); draw(); });
+  });
+  frameInput.addEventListener("input", ()=>draw());
+
+  function eyeLabel(isPlus){ return isPlus ? "(center)" : "(edge)"; }
+
+  function draw(){
+    container.querySelectorAll(".bar-row").forEach(e=>e.remove());
+    const frameT = parseFloat(frameInput.value)||0;
+
+    INDICES.forEach(n=>{
+      const yOD = (mode==="length") ? lenOverride : geom.semiOD;
+      const yOS = (mode==="length") ? lenOverride : geom.semiOS;
+
+      const FhOD = effectivePower(rx.OD.S,rx.OD.C,rx.OD.Ax);
+      const FhOS = effectivePower(rx.OS.S,rx.OS.C,rx.OS.Ax);
+      const isPlusOD = FhOD >= 0;
+      const isPlusOS = FhOS >= 0;
+
+      const tOD = isPlusOD ? plusThickness(rx.OD.S,rx.OD.C,rx.OD.Ax,n,yOD)
+                           : minusThickness(rx.OD.S,rx.OD.C,rx.OD.Ax,n,yOD);
+      const tOS = isPlusOS ? plusThickness(rx.OS.S,rx.OS.C,rx.OS.Ax,n,yOS)
+                           : minusThickness(rx.OS.S,rx.OS.C,rx.OS.Ax,n,yOS);
+
+      const px = BASE_PX * scale;
+      const odLen = tOD * px, osLen = tOS * px, frameLen = frameT * px;
+
+      const row = document.createElement("div");
+      row.className = "bar-row";
+      row.innerHTML = `
+        <div class="bar-label">${n.toFixed(2)}</div>
+        <div class="bar-pair">
+          <div class="bar-block">
+            <div class="bar" style="background:var(--barOD);width:${odLen}px;"></div>
+            <div class="bar-frame" style="width:${frameLen}px;"></div>
+            <div class="bar-text">Right Lens ${tOD.toFixed(1)} mm ${eyeLabel(isPlusOD)}</div>
+          </div>
+          <div class="bar-block">
+            <div class="bar" style="background:var(--barOS);width:${osLen}px;"></div>
+            <div class="bar-frame" style="width:${frameLen}px;"></div>
+            <div class="bar-text">Left Lens ${tOS.toFixed(1)} mm ${eyeLabel(isPlusOS)}</div>
+          </div>
+        </div>
+      `;
+      container.appendChild(row);
+    });
+
+    // concise note
+const note = [];
+const odStatus = effectivePower(rx.OD.S, rx.OD.C, rx.OD.Ax) >= 0
+  ? "center thickness (plus)"
+  : "edge thickness (minus)";
+const osStatus = effectivePower(rx.OS.S, rx.OS.C, rx.OS.Ax) >= 0
+  ? "center thickness (plus)"
+  : "edge thickness (minus)";
+
+note.push(`Right Lens shows <strong>${odStatus}</strong>`);
+note.push(`Left Lens shows <strong>${osStatus}</strong>`);
+
+document.getElementById("thickNote").innerHTML = note.join(" &nbsp;•&nbsp; ");
+
+  }
+  draw();
+}
+
+/* =========================
+   BUTTONS & FLOW
+========================= */
+document.addEventListener("DOMContentLoaded", ()=>{
+  // Price cap adjusters
+  document.getElementById("capPlus").onclick=()=>{const e=document.getElementById("priceCap");e.value=(parseFloat(e.value)||0)+100;};
+  document.getElementById("capMinus").onclick=()=>{const e=document.getElementById("priceCap");e.value=Math.max(0,(parseFloat(e.value)||0)-100);};
+
+  // Calculate by Frame — thickness only
+  document.getElementById("btnCalc").onclick=()=>{
+    const rx = parseRx();
+    const A = getVal("frameA"), DBL = getVal("frameDBL");
+    const pdOD = getVal("monoPD_OD"), pdOS = getVal("monoPD_OS");
+    const safety = getVal("safety") || 2;
+
+    if(!A || !DBL || !pdOD || !pdOS){
+      document.getElementById("mbsLine").innerHTML = "<span style='color:var(--warn);'>Please key in frame details and PD.</span>";
+      LAST_GEOM = null; LAST_MODE = null;
+      document.getElementById("thicknessBars").innerHTML = "";
+      document.getElementById("thickNote").textContent = "";
+      return;
+    }
+
+    LAST_GEOM = computeMBS(A,DBL,pdOD,pdOS,safety); // {semiOD, semiOS, MBS}
+    LAST_MODE = "frame";
+    document.getElementById("mbsLine").innerHTML = `<strong> - Minimum Blank Size:</strong> <strong> ${LAST_GEOM.MBS.toFixed(1)} mm</strong>`;
+    renderBars(rx, LAST_GEOM, "frame");
+  };
+
+  // Calculate by Length — thickness only
+  document.getElementById("btnLength").onclick=()=>{
+    const rx = parseRx();
+    const len = getVal("lengthInput") || 30;
+    LAST_GEOM = { semiOD: len, semiOS: len, MBS: 2*len };
+    LAST_MODE = "length";
+    document.getElementById("mbsLine").textContent = `Thickness at ${len} mm`;
+    renderBars(rx, LAST_GEOM, "length", len);
+  };
+
+  // Fetch Lenses — uses LAST_GEOM + filters
+  document.getElementById("btnFetch").onclick=()=>{
+    const rx = parseRx();
+    buildResults(LAST_GEOM, rx);
+  };
+});
+
+// Clear all filter checkboxes (does not auto-fetch)
+document.getElementById("btnClearFilters").onclick = () => {
+  document.querySelectorAll('.fl-appear, .fl-index, .fl-func')
+    .forEach(cb => cb.checked = false);
+
+  // Optional: also clear the table message so it's obvious filters are cleared
+  // const body = document.getElementById("resultsBody");
+  // body.innerHTML = `<tr><td colspan="6" class="muted">Filters cleared. Click “Fetch Lenses”.</td></tr>`;
+};
+
+
+
 </script>
 
-
-
+</body>
+</html>
 
 
 
