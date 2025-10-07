@@ -5,6 +5,111 @@
 <meta name="viewport" content="width=160, initial-scale=0.8, maximum-scale=1.0, user-scalable=yes">
 <title>Kiara Optometry Algorithm Refraction</title>
 <style>
+.lens-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px 15px;
+  margin-bottom: 12px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  transition: all 0.2s ease;
+}
+.lens-card:hover {
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+.lens-header {
+  font-weight: 600;
+  font-size: 1.05em;
+  color: #0b3d2e;
+  margin-bottom: 6px;
+}
+.lens-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.tag {
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 0.8em;
+  font-weight: 500;
+}
+.tag.index { background: #d9f0ff; }
+.tag.type { background: #f6f0d9; }
+.tag.func { background: #def5e0; }
+.lens-price {
+  font-weight: 600;
+  color: #333;
+  margin: 4px 0;
+}
+.lens-note {
+  font-size: 0.85em;
+  color: #666;
+  margin-bottom: 6px;
+}
+.select-btn {
+  border: none;
+  background: #0b3d2e;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.select-btn:hover {
+  background: #145b43;
+}
+
+
+
+  :root{
+    --green:#0b3d2e;
+    --pale:#ffffe0;
+    --off:#f8f8f5;
+    --line:#d7d7cf;
+    --warn:#B42318;
+    --barOD:#7EABD6;
+    --barOS:#7EABD6;
+    --frame:#915140;
+  }
+
+  
+ h1{font-size:10px;text-align:center;margin:12px 0 10px;}
+  h3{font-size:10px;margin:0 0 8px;}
+  
+  label{font-weight:600}
+  .row{align-items:center}
+  .field{gap:0px}
+  .field.w90{width:90px}
+  .tiny{font-size:10px;opacity:1}
+  .muted{opacity:1}
+
+
+  button:focus{outline:2px solid #fff4; outline-offset:2px;}
+  button:hover{filter:brightness(1.05);}
+  button:active{transform:translateY(1px);}
+
+
+  .pane h4{margin:0 0 8px;font-size:10px}
+
+  /* Bars */
+  .bar-row{display:flex;align-items:flex-start;gap:10px;margin:6px 0;flex-wrap:wrap}
+  .bar-label{width:20px;text-align:right;font-weight:bold}
+  .bar-pair{display:flex;gap:0px;align-items:flex-start;flex-wrap:wrap} /* visual gap between OD & OS */
+  .bar-block{display:flex;flex-direction:column;gap:0px;min-width:70px}
+.bar { height: 10px;}
+  .bar-frame{height:10px;background:var(--frame)}
+  .bar-text{font-size:10px;}
+
+  /* Filters inside panes */
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 2px}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border:1px solid var(--line);border-radius:4px;background:#fff}
+
+  @media(max-width:1200px){
+    .row{flex-direction:column;align-items:flex-start}
+    .bar-block{min-width:100px}
+  }
+
 * {
   font-size: 10px;
   letter-spacing: 1px;
@@ -3369,75 +3474,25 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 
+
 </div>
+</div>
+
+
+
+
+
+
+
 
 <!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!>
 
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>Lens Selector (Geometry & Fitting V12)</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<style>
-  :root{
-    --green:#0b3d2e;
-    --pale:#ffffe0;
-    --off:#f8f8f5;
-    --line:#d7d7cf;
-    --warn:#B42318;
-    --barOD:#7EABD6;
-    --barOS:#7EABD6;
-    --frame:#915140;
-  }
-
-  
- h1{font-size:10px;text-align:center;margin:12px 0 10px;}
-  h3{font-size:10px;margin:0 0 8px;}
-  
-  label{font-weight:600}
-  .row{align-items:center}
-  .field{gap:0px}
-  .field.w90{width:90px}
-  .tiny{font-size:10px;opacity:1}
-  .muted{opacity:1}
-
-
-  button:focus{outline:2px solid #fff4; outline-offset:2px;}
-  button:hover{filter:brightness(1.05);}
-  button:active{transform:translateY(1px);}
-
-
-  .pane h4{margin:0 0 8px;font-size:10px}
-
-  /* Bars */
-  .bar-row{display:flex;align-items:flex-start;gap:10px;margin:6px 0;flex-wrap:wrap}
-  .bar-label{width:20px;text-align:right;font-weight:bold}
-  .bar-pair{display:flex;gap:0px;align-items:flex-start;flex-wrap:wrap} /* visual gap between OD & OS */
-  .bar-block{display:flex;flex-direction:column;gap:3px;min-width:70px}
-  .bar{height:10px;border-radius:2px}
-  .bar-frame{height:10px;border-radius:2px;background:var(--frame)}
-  .bar-text{font-size:10px;}
-
-  /* Filters inside panes */
-  .filters{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 2px}
-  .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border:1px solid var(--line);border-radius:4px;background:#fff}
-
-  @media(max-width:1200px){
-    .row{flex-direction:column;align-items:flex-start}
-    .bar-block{min-width:100px}
-  }
-
-</style>
-</head>
-<body>
-</div>
 
 <div class="section">
 <span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-lens-thickness">
-  ▼ How to Check Lens Thickness
+  ▼ <i>How to Check Lens Thickness</I>
 </span>
 
 <div id="lens-thickness" style="display:none;">
@@ -3448,6 +3503,9 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 <h2>Lens Thickness and Minimum Blank Size Calculator</h2>
   <div class="pane"><br>
+
+
+
 
     <table>
 <tr class="calibrator">
@@ -3460,7 +3518,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
   <td style="border:none;"></td>
 </tr>
 <tr class="white">
-<td colspan="7" style="text-align:left;">&nbsp;&nbsp;&nbsp;<b>Import From Existing RX - </b>
+<td colspan="7" style="text-align:left;">&nbsp;&nbsp;&nbsp;<b>Import From Existing RX : </b>
   <button class="normal-btn" onclick="copyRx('current')">Current</button> &nbsp;
   <button class="normal-btn" onclick="copyRx('manual')">Manual</button> &nbsp;
   <button class="normal-btn" onclick="copyRx('ouRe')">Comfy</button> 
@@ -3508,8 +3566,8 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 <tr class="white">
 <td colspan="7"><b>Generate using &nbsp;
-  <button id="btnCalc" class="small-normal-btn">Frame Details</button>&nbsp; or&nbsp;
-  <button id="btnLength" class="small-normal-btn">Longest Length</button>
+  <button id="btnCalc" class="normal-btn">Frame Details</button>&nbsp; or&nbsp;
+  <button id="btnLength" class="normal-btn">Longest Length</button>
    
           <label for="lengthInput" style="Display:none;">Length (mm)</label>
           <input type="number" id="lengthInput"value="30" step="1" style="max-width:40px;">&nbsp;(mm)</b><br>
@@ -3533,72 +3591,74 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </div>
 </div>
 
-    <div class="section" style="margin-bottom:10px;">
+    <!-- =========================
+     FINAL STAGE: LENS OPTIONS (NEW)
+========================= -->
+<div class="section" style="margin-bottom:10px;">
 
-  <!-- Lens Options with Filters in white panes -->
-    <div class="pane" style="margin-bottom:10px;">
+  <div class="pane" style="margin-bottom:10px;">
     <h3>Lens Options</h3>
- Fetch Lenses Needs Thickness Calculation First <button id="btnFetch">Fetch Lenses</button>
+    <p>Fetch Lenses (requires thickness calculation first)</p>
+    <button id="btnFetch" class="normal-btn">Fetch Lenses</button>
     <span id="status" class="tiny muted"></span>
-    <button id="btnClearFilters">Clear All Filters</button>
+    <button id="btnClearFilters" class="normal-btn" style="float:right;">Clear Filters</button>
+  </div>
 
-<div class="pane" style="margin:10px 0px 10px 0px;">
-      <h4>Price (RM)</h4>
-      <div class="row" style="gap:8px;align-items:center;">
-        Max Price <input id="priceCap" type="number" placeholder="e.g. 1000" style="width:110px;">
-        <button id="capMinus">– RM100</button>
-        <button id="capPlus">+ RM100</button>
-</div>
-</div>
-
-    <div class="pane" style="margin-bottom:10px;">
-      <h4>Appearance</h4>
-      <div class="filters">
-        <label class="chip"><input type="checkbox" class="fl-appear" value="Clear" checked> Clear</label>
-        <label class="chip"><input type="checkbox" class="fl-appear" value="Photochromic" checked> Photochromic</label>
-        <label class="chip"><input type="checkbox" class="fl-appear" value="Tinted" checked> Tinted</label>
-        <label class="chip"><input type="checkbox" class="fl-appear" value="Polarized" checked> Polarized</label>
-      </div>
+  <!-- Price Cap -->
+  <div class="pane" style="margin-bottom:10px;">
+    <h4>Price (RM)</h4>
+    <div class="row" style="gap:8px;align-items:center;">
+      Max Price <input id="priceCap" type="number" placeholder="e.g. 1000" style="width:110px;">
+      <button id="capMinus">– RM100</button>
+      <button id="capPlus">+ RM100</button>
     </div>
+  </div>
 
-    <div class="pane" style="margin-bottom:10px;">
-      <h4>Index Group</h4>
-      <div class="filters">
-        <label class="chip"><input type="checkbox" class="fl-index" value="1.5" checked> 1.5 group</label>
-        <label class="chip"><input type="checkbox" class="fl-index" value="Safety" checked> Safety (1.53/1.59)</label>
-        <label class="chip"><input type="checkbox" class="fl-index" value="1.6" checked> 1.6 group</label>
-        <label class="chip"><input type="checkbox" class="fl-index" value="1.67" checked> 1.67 group</label>
-        <label class="chip"><input type="checkbox" class="fl-index" value="1.74" checked> 1.74 group</label>
-      </div>
+  <!-- Filters -->
+  <div class="pane" style="margin-bottom:10px;">
+    <h4>Appearance</h4>
+    <div class="filters">
+      <label class="chip"><input type="checkbox" class="fl-appear" value="Clear" checked> Clear</label>
+      <label class="chip"><input type="checkbox" class="fl-appear" value="Photochromic" checked> Photochromic</label>
+      <label class="chip"><input type="checkbox" class="fl-appear" value="Tinted" checked> Tinted</label>
+      <label class="chip"><input type="checkbox" class="fl-appear" value="Polarized" checked> Polarized</label>
     </div>
+  </div>
 
-    <div class="pane" style="margin-bottom:10px;">
-      <h4>Function</h4>
-      <div class="filters">
-        <label class="chip"><input type="checkbox" class="fl-func" value="SV" checked> SV</label>
-        <label class="chip"><input type="checkbox" class="fl-func" value="Multifocal" checked> Multifocal</label>
-        <label class="chip"><input type="checkbox" class="fl-func" value="Office" checked> Office</label>
-        <label class="chip"><input type="checkbox" class="fl-func" value="Anti-fatigue" checked> Anti-Fatigue</label>
-      </div>
+  <div class="pane" style="margin-bottom:10px;">
+    <h4>Index Group</h4>
+    <div class="filters">
+      <label class="chip"><input type="checkbox" class="fl-index" value="1.5" checked> 1.5 group</label>
+      <label class="chip"><input type="checkbox" class="fl-index" value="Safety" checked> Safety (1.53/1.59)</label>
+      <label class="chip"><input type="checkbox" class="fl-index" value="1.6" checked> 1.6 group</label>
+      <label class="chip"><input type="checkbox" class="fl-index" value="1.67" checked> 1.67 group</label>
+      <label class="chip"><input type="checkbox" class="fl-index" value="1.74" checked> 1.74 group</label>
     </div>
+  </div>
 
-    <table id="resultsTable" style="margin-top:8px;">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Index</th>
-          <th>Type</th>
-          <th>Price (UV420)</th>
-          <th>High-Clarity +RM</th>
-          <th>Stock/RX</th>
-        </tr>
-      </thead>
-      <tbody id="resultsBody">
-        <tr><td colspan="6" class="muted">Calculate thickness first, then click “Fetch Lenses”.</td></tr>
-      </tbody>
-    </table>
+  <div class="pane" style="margin-bottom:10px;">
+    <h4>Function</h4>
+    <div class="filters">
+      <label class="chip"><input type="checkbox" class="fl-func" value="SV" checked> SV</label>
+      <label class="chip"><input type="checkbox" class="fl-func" value="Multifocal" checked> Multifocal</label>
+      <label class="chip"><input type="checkbox" class="fl-func" value="Office" checked> Office</label>
+      <label class="chip"><input type="checkbox" class="fl-func" value="Anti-fatigue" checked> Anti-Fatigue</label>
+    </div>
+  </div>
+
+  <!-- Container for Lens Cards -->
+  <div id="lensResults" style="margin-top:10px;">
+    <div class="muted">Calculate thickness first, then click “Fetch Lenses”.</div>
   </div>
 </div>
+
+
+
+
+
+
+
+
 
 <script>
 /* =========================
@@ -3944,7 +4004,7 @@ document.getElementById("mbsLine").innerHTML =
   // Fetch Lenses — uses LAST_GEOM + filters
   document.getElementById("btnFetch").onclick=()=>{
     const rx = parseRx();
-    buildResults(LAST_GEOM, rx);
+renderLensOptions(LAST_GEOM, rx);
   };
 });
 
@@ -3958,7 +4018,41 @@ document.getElementById("btnClearFilters").onclick = () => {
   // body.innerHTML = `<tr><td colspan="6" class="muted">Filters cleared. Click “Fetch Lenses”.</td></tr>`;
 };
 
+function copyRx(source) {
+  const map = {
+current:{
+      od:['s1_od','c1_od','a1_od'],
+      os:['s1_os','c1_os','a1_os']
+  },
+manual: {
+      od: ['manual-sph-ou-od','manual-cyl-ou-od','manual-axis-ou-od'],
+      os: ['manual-sph-ou-os','manual-cyl-ou-os','manual-axis-ou-os']
+    },
+    ouRe: {
+      od: ['res-sph-ou-re','res-cyl-ou-re','res-axis-ou-re'],
+      os: ['res-sph-ou-le','res-cyl-ou-le','res-axis-ou-le']
+    },
+    odOs2: {
+      od: ['res-sph-od-2','res-cyl-od-2','res-axis-od-2'],
+      os: ['res-sph-os-2','res-cyl-os-2','res-axis-os-2']
+    }
+  };
 
+  const targets = {
+    od: ['sphOD','cylOD','axisOD'],
+    os: ['sphOS','cylOS','axisOS']
+  };
+
+  const src = map[source];
+  if (!src) return;
+
+  ['od','os'].forEach(eye => {
+    const [s,c,a] = src[eye].map(id => document.getElementById(id)?.value || document.getElementById(id)?.textContent || '');
+    if (s !== undefined) document.getElementById(targets[eye][0]).value = s;
+    if (c !== undefined) document.getElementById(targets[eye][1]).value = c;
+    if (a !== undefined) document.getElementById(targets[eye][2]).value = a;
+  });
+}
 
 /* =========================
    GEOMETRY
@@ -4053,67 +4147,7 @@ function checkedValues(selector){
 /* =========================
    RESULTS TABLE
 ========================= */
-function withinCap(price, cap){ if(!cap) return true; return Number(price) <= cap * 1.10; } // buffer kept silently
-function buildResults(geom, rx){
-  const body = document.getElementById("resultsBody");
-  body.innerHTML = "";
-
-  if(!geom){
-    body.innerHTML = `<tr><td colspan="6" class="muted">Calculate thickness first, then click “Fetch Lenses”.</td></tr>`;
-    return;
-  }
-
-  const appearSet = checkedValues(".fl-appear");
-  const indexSet  = checkedValues(".fl-index");
-  const funcSet   = checkedValues(".fl-func");
-
-  const cap = parseFloat(document.getElementById("priceCap").value)||0;
-  const FhOD = effectivePower(rx.OD.S, rx.OD.C, rx.OD.Ax);
-
-  let count = 0;
-  PRODUCTS.forEach(row=>{
-    const price = parseFloat(row["UV_420_BL_PRICE_RM"]||"0");
-    if(!withinCap(price, cap)) return;
-
-    const app = getAppearance(row["CLEAR_CHANGING_TINT"]||"");
-    const idxGroup = getIndexGroup(row["INDEX"]||"");
-    const func = getFunctionCat(row["FUNCTION"]||"");
-
-    if(appearSet.length && !appearSet.includes(app)) return;
-    if(indexSet.length  && !indexSet.includes(idxGroup)) return;
-    if(funcSet.length   && !funcSet.includes(func)) return;
-
-    const dia = parseFloat(row["DIA"]||"0");
-    let stockMsg = "Stock OK";
-    if(dia < geom.MBS){
-      const shortfall = +(geom.MBS - dia).toFixed(1);
-      const prism = Math.abs(((shortfall/2)/10) * FhOD).toFixed(1); // Prentice
-      const isStock = /stock/i.test(row["LENS_DESIGN"]||"") || /stock/i.test(row["PRODUCT_NAME"]||"");
-      stockMsg = isStock
-        ? `<span style="color:var(--warn);font-weight:700;">⚠ Lens too small – ${prism}Δ prism risk.</span>`
-        : `Custom diameter +RM100 (larger lens).`;
-    }
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${row["PRODUCT_NAME"]||""}</td>
-      <td>${row["INDEX"]||""}</td>
-      <td>${app} / ${func}</td>
-      <td>${price ? "RM"+price : "—"}</td>
-      <td>${row["HIGH_CLARITY_COATING_PRICE_RM"] ? "+RM"+row["HIGH_CLARITY_COATING_PRICE_RM"] : "—"}</td>
-      <td>${stockMsg}</td>
-    `;
-    body.appendChild(tr);
-    count++;
-  });
-
-  if(!count){
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td colspan="6" class="muted">No items match filters or price cap.</td>`;
-    body.appendChild(tr);
-  }
-}
-
+function withinCap(price, cap){ if(!cap) return true; return Number(price) <= cap * 1.10; }
 
 
 
@@ -4127,6 +4161,142 @@ function buildResults(geom, rx){
 
 
 </script>
+
+
+
+
+<!-- =========================
+     LENS OPTION SCRIPT (NEW)
+========================= -->
+<script>
+function renderLensOptions(geom, rx) {
+  const container = document.getElementById("lensResults");
+  container.innerHTML = "";
+
+  if (!geom) {
+    container.innerHTML = `<div class="muted">Calculate thickness first, then click “Fetch Lenses”.</div>`;
+    return;
+  }
+
+  const appearSet = checkedValues(".fl-appear");
+  const indexSet = checkedValues(".fl-index");
+  const funcSet = checkedValues(".fl-func");
+  const cap = parseFloat(document.getElementById("priceCap").value) || 0;
+
+  const matches = PRODUCTS.filter(row => {
+    const price = parseFloat(row["UV_420_BL_PRICE_RM"]||"0");
+    const app = getAppearance(row["CLEAR_CHANGING_TINT"]||"");
+    const idx = getIndexGroup(row["INDEX"]||"");
+    const func = getFunctionCat(row["FUNCTION"]||"");
+    return withinCap(price, cap)
+        && (!appearSet.length || appearSet.includes(app))
+        && (!indexSet.length || indexSet.includes(idx))
+        && (!funcSet.length || funcSet.includes(func));
+  });
+
+  if (!matches.length) {
+    container.innerHTML = `<div class="muted">No lens options match your filters or price cap.</div>`;
+    return;
+  }
+
+  matches.slice(0, 8).forEach(row => {
+    const app = getAppearance(row["CLEAR_CHANGING_TINT"]);
+    const idx = getIndexGroup(row["INDEX"]);
+    const func = getFunctionCat(row["FUNCTION"]);
+    const price = row["UV_420_BL_PRICE_RM"] ? "RM " + row["UV_420_BL_PRICE_RM"] : "—";
+    const dia = row["DIA"] || "—";
+    const clarity = row["HIGH_CLARITY_COATING_PRICE_RM"] ? "+RM" + row["HIGH_CLARITY_COATING_PRICE_RM"] : "—";
+    const stock = row["STOCK_OR_RX"] || "";
+
+    const card = document.createElement("div");
+    card.className = "lens-card";
+    card.innerHTML = `
+      <div class="lens-header">${row["PRODUCT_NAME"] || "(Unnamed Lens)"}</div>
+      <div class="lens-tags">
+        <span class="tag index">${idx}</span>
+        <span class="tag type">${app}</span>
+        <span class="tag func">${func}</span>
+      </div>
+      <div class="lens-price">${price} ${clarity !== "—" ? "• " + clarity : ""}</div>
+      <div class="lens-note">Available DIA ${dia} mm • ${stock}</div>
+      <button class="select-btn">Select Lens</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// Reconnect button
+document.getElementById("btnFetch").onclick = () => {
+  const rx = parseRx();
+  renderLensOptions(LAST_GEOM, rx);
+};
+
+// Clear Filters (reuse your logic)
+document.getElementById("btnClearFilters").onclick = () => {
+  document.querySelectorAll('.fl-appear, .fl-index, .fl-func')
+    .forEach(cb => cb.checked = false);
+  document.getElementById("lensResults").innerHTML =
+    `<div class="muted">Filters cleared. Click “Fetch Lenses”.</div>`;
+};
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script>
 // --- universal toggle handler ---
@@ -4153,80 +4323,6 @@ makeToggle("toggle-lens-thickness", "lens-thickness");
 makeToggle("toggle-settings-block", "settings-block");
 
 </script>
-
-<script>
-function copyRx(source) {
-  const map = {
-current:{
-      od:['s1_od','c1_od','a1_od'],
-      os:['s1_os','c1_os','a1_os']
-  },
-manual: {
-      od: ['manual-sph-ou-od','manual-cyl-ou-od','manual-axis-ou-od'],
-      os: ['manual-sph-ou-os','manual-cyl-ou-os','manual-axis-ou-os']
-    },
-    ouRe: {
-      od: ['res-sph-ou-re','res-cyl-ou-re','res-axis-ou-re'],
-      os: ['res-sph-ou-le','res-cyl-ou-le','res-axis-ou-le']
-    },
-    odOs2: {
-      od: ['res-sph-od-2','res-cyl-od-2','res-axis-od-2'],
-      os: ['res-sph-os-2','res-cyl-os-2','res-axis-os-2']
-    }
-  };
-
-  const targets = {
-    od: ['sphOD','cylOD','axisOD'],
-    os: ['sphOS','cylOS','axisOS']
-  };
-
-  const src = map[source];
-  if (!src) return;
-
-  ['od','os'].forEach(eye => {
-    const [s,c,a] = src[eye].map(id => document.getElementById(id)?.value || document.getElementById(id)?.textContent || '');
-    if (s !== undefined) document.getElementById(targets[eye][0]).value = s;
-    if (c !== undefined) document.getElementById(targets[eye][1]).value = c;
-    if (a !== undefined) document.getElementById(targets[eye][2]).value = a;
-  });
-}
-</script>
-
-
-
-
-
-
-
-
-
-
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -4256,7 +4352,6 @@ manual: {
 
 </body>
 </html>
-
 
 
 
