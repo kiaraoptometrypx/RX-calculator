@@ -110,7 +110,7 @@ input {   width:80px;
 .calibrator th {
   border: none !important;}
 
-.wrap{width:90%;max-width:900px;margin:0 auto;padding:12px;}
+.wrap{width:90%;max-width:2000px;margin:0 auto;padding:0px;}
 .now td { background: #F5F5F5; }
 .now-comfort td { background: #F5F5F5 ;}
 .white td { background: #d9d9d9; }
@@ -287,7 +287,6 @@ table input {
   .pane h4{margin:0 0 8px;font-size:12px}
 
   .section{background:var(--pale);border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0;}
-  .wrap{width:90%;max-width:2000px;margin:0 auto;padding:12px;}
 
 
 
@@ -333,31 +332,12 @@ table input {
   };
 </script>
 
-
 <div style="height:20px;"></div>
-
 <div class="wrap">
-<div class="section" style="text-align:center;">
-  <span class="fixed-label"
-        style="cursor:pointer; user-select:none; font-weight:bold; display:inline-block;">
-    Welcome to Kiara Optometry's Algorithm Refraction
-  </span>
-</div>
-
-
-
-<div class="section" >
-<div style="display:flex; justify-content:space-between; align-items:center; width:95%; margin:0px auto;">
-  
-  <!-- Left side: Settings -->
-  <span class="toggle-btn" onclick="toggleSection('settings-block')" 
-        style="cursor:pointer; color: grey; user-select:none; font-weight:bold;">
-    <i>▼▲ Settings & Guide</i>
-  </span>
 
   <!-- Right side: Font controls -->
   <div style="text-align:right;">
-    <span class="fixed-label" style="cursor:pointer;user-select:none; margin-right:10px; font-weight:bold;">
+    <span class="fixed-label" style="cursor:pointer;user-select:none; margin-right:10px;">
       Font:
     </span>
     <button class="font-btn" onclick="setFontSize('S', this)">S</button>
@@ -365,6 +345,7 @@ table input {
     <button class="font-btn" onclick="setFontSize('L', this)">L</button>
     <button class="font-btn" onclick="setFontSize('XL', this)">XL</button>
   </div>
+
 <script>
 function setFontSize(size, btn) {
   document.body.classList.remove(
@@ -378,6 +359,28 @@ function setFontSize(size, btn) {
   btn.classList.add('active');
 }
 </script>
+</div>
+
+
+
+<div class="wrap">
+<div class="section" style="text-align:center;">
+  <span class="fixed-label"
+        style="user-select:none; font-weight:bold; display:inline-block;">
+    Welcome to Kiara Optometry's Algorithm Refraction
+  </span>
+
+</div>
+
+
+
+<div class="section" >
+<div style="display:flex; justify-content:space-between; align-items:center; width:95%; margin:0px auto;">
+  
+  <span id="toggle-settings-block" style="cursor:pointer; user-select:none;">
+    <i>▼ Eye Exam & Algorithm Guide </i>
+  </span>
+
 </div>
 
 
@@ -586,11 +589,9 @@ function toggleSection(id) {
 
 
 </div>
-</div>
 
 
 
-<div class="section">
 <h2>Customer Details and Eye Exams</h2>
 <div class="pane">
 
@@ -1755,28 +1756,7 @@ document.addEventListener("DOMContentLoaded", attachNoteHandlers);
 
 
 
-<script>
-// --- universal toggle handler ---
-function makeToggle(buttonId, sectionId) {
-  const btn = document.getElementById(buttonId);
-  const section = document.getElementById(sectionId);
 
-  if (!btn || !section) return;
-
-  btn.addEventListener("click", () => {
-    const hidden = section.style.display === "none" || section.style.display === "";
-    section.style.display = hidden ? "block" : "none";
-    btn.textContent = hidden
-      ? `▲ ${btn.textContent.replace("▼", "").replace("▲", "").trim()}`
-      : `▼ ${btn.textContent.replace("▼", "").replace("▲", "").trim()}`;
-  });
-}
-
-// --- setup all three toggles ---
-makeToggle("toggle-manual", "exam-manual");
-makeToggle("toggle-comfy", "exam-comfy");
-makeToggle("toggle-sharpest", "exam-sharpest");
-</script>
 
 
 <script>
@@ -3447,7 +3427,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
   @media(max-width:1200px){
     .row{flex-direction:column;align-items:flex-start}
-    .bar-block{min-width:180px}
+    .bar-block{min-width:100px}
   }
 
 </style>
@@ -3456,11 +3436,18 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </div>
 
 <div class="section">
-<h2>Lens Thickness and Minimum Blank Size Calculator</h2>
-  <div class="pane">
+<span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-lens-thickness">
+  ▼ How to Check Lens Thickness
+</span>
+
+<div id="lens-thickness" style="display:none;">
 <div class="row" style="gap:10px; padding:5px 15px 0px 15px;">
 <i>1. Key in PD and RX.<br>2. Either choose to calculate by Frames Details or Longest Length.<br>3. If choose Longest length, then measure OC to the longest distance on the lens.<br>4. Calculator will then show what is the thickness at the position.</I><br>
 </div>
+</div>
+
+<h2>Lens Thickness and Minimum Blank Size Calculator</h2>
+  <div class="pane"><br>
 
     <table>
 <tr class="calibrator">
@@ -3472,6 +3459,19 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
   <td style="border:none;"></td>
   <td style="border:none;"></td>
 </tr>
+<tr class="white">
+<td colspan="7" style="text-align:left;">&nbsp;&nbsp;&nbsp;<b>Import From Existing RX - </b>
+  <button class="normal-button" onclick="copyRx('current')">Current</button> &nbsp;
+  <button class="normal-button" onclick="copyRx('manual')">Manual</button> &nbsp;
+  <button class="normal-button" onclick="copyRx('ouRe')">Comfy</button> 
+&nbsp;
+  <button class="normal-button" onclick="copyRx('odOs2')">Sharpest</button>
+</td>
+</tr>
+<tr>
+<td colspan="7" style="border:none;"></td>
+</tr>
+
 <tr class="white">
 <td><b>Sides</b></td>
 <td><b>PD</b></td>
@@ -3503,23 +3503,29 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
         </tr>
 <tr>
-<td colspan="7" style="border:none;">
-    
-        <button id="btnCalc" class="normal-btn">Frame Details</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>or</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <button id="btnLength" class="normal-btn">Longest Length</button>
+<td colspan="7" style="border:none;"></td>
+</tr>
+
+<tr class="white">
+<td colspan="7"><b>Generate using &nbsp;
+  <button id="btnCalc" class="small-normal-btn">Frame Details</button>&nbsp; or&nbsp;
+  <button id="btnLength" class="small-normal-btn">Longest Length</button>
    
           <label for="lengthInput" style="Display:none;">Length (mm)</label>
-          <input type="number" id="lengthInput"value="30" step="1" style="max-width:40px;">&nbsp;(mm)
+          <input type="number" id="lengthInput"value="30" step="1" style="max-width:40px;">&nbsp;(mm)</b><br>
 
 </td></tr>
+<tr>
+<td colspan="7" style="border:none;"></td>
+</tr>
 </table>
 
 
 <div class="row"
      style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
 
-  <div id="mbsLine" class="tiny" style="flex:1;"></div>
-  <div id="thicknessBars" style="flex:1; margin-top:10px;"></div>
+  <div class="pane" style="min-width:90%; padding:10px; text-align:center;" id="mbsLine" class="tiny" style="flex:1;"><b>- Minimum Blank Size: -- mm to optimize wearing comfort.</b></div>
+  <div class="pane" style="width:90%; padding:10px; text-align:center;" id="thicknessBars" style="flex:1; margin-top:10px;"><I>~ Generating Lens Thickness Here..</i></div>
   <div id="thickNote" class="tiny muted" style="flex:1; margin-top:4px;"></div>
 
 </div>
@@ -3760,11 +3766,11 @@ function renderBars(rx, geom, mode, lenOverride){
 
     // concise note logic (used in box descriptions)
     const odStatus = effectivePower(rx.OD.S, rx.OD.C, rx.OD.Ax) >= 0
-      ? "center thickness<br>Plus power center is thickest."
-      : "edge thickness<br>Minus power edge is thickest.";
+      ? "<b>center.</b>"
+      : "<b>edge.</b>.";
     const osStatus = effectivePower(rx.OS.S, rx.OS.C, rx.OS.Ax) >= 0
-      ? "center thickness<br>Plus power center is thickest."
-      : "edge thickness<br>Minus power edge is thickest.";
+      ? "<b>center.</b>."
+      : "<b>edge.</b>.";
 
     // --- outer flex wrapper ---
     const wrapper = document.createElement("div");
@@ -3788,7 +3794,7 @@ function renderBars(rx, geom, mode, lenOverride){
       padding:10px 15px;
     `;
     rightBox.innerHTML = `<div style="text-align:center;margin-bottom:6px;">
-      <b>Right Lens</b> shows <span style="color:#333;">${odStatus}</span>
+      <b>Right Lens</b> is thickest at ${odStatus}</span>
     </div>`;
 
     // --- LEFT box ---
@@ -3802,7 +3808,7 @@ function renderBars(rx, geom, mode, lenOverride){
       padding:10px 15px;
     `;
     leftBox.innerHTML = `<div style="text-align:center; margin-bottom:6px;">
-      <b>Left Lens</b> shows <span style="color:#333;">${osStatus}</span>
+      <b>Left Lens</b> is thickest at ${osStatus}</span>
     </div>`;
 
     // --- generate bar rows ---
@@ -3830,7 +3836,7 @@ function renderBars(rx, geom, mode, lenOverride){
       rightRow.innerHTML = `
         <div class="bar-label"><br>${n.toFixed(2)}</div>
         <div class="bar-block">
-          <div class="bar-text"><br><b>Lens thickness ${tOD.toFixed(1)} mm ${eyeLabel(isPlusOD)}</b></div>
+          <div class="bar-text"><br><b>Thickness ${tOD.toFixed(1)} mm ${eyeLabel(isPlusOD)}</b></div>
           <div class="bar" style="background:var(--barOD);width:${odLen}px;"></div>
           <div class="bar-frame" style="background:#a8733b;width:${frameLen}px;"></div>
         </div>
@@ -3844,7 +3850,7 @@ function renderBars(rx, geom, mode, lenOverride){
       leftRow.innerHTML = `
         <div class="bar-label"><br>${n.toFixed(2)}</div>
         <div class="bar-block">
-          <div class="bar-text"><br><b>Lens thickness ${tOS.toFixed(1)} mm ${eyeLabel(isPlusOS)}</b></div>
+          <div class="bar-text"><br><b>Thickness ${tOS.toFixed(1)} mm ${eyeLabel(isPlusOS)}</b></div>
           <div class="bar" style="background:var(--barOS);width:${osLen}px;"></div>
           <div class="bar-frame" style="background:#a8733b;width:${frameLen}px;"></div>
         </div>
@@ -3919,7 +3925,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
     LAST_GEOM = computeMBS(A,DBL,pdOD,pdOS,safety); // {semiOD, semiOS, MBS}
     LAST_MODE = "frame";
-    document.getElementById("mbsLine").innerHTML = `<strong> - Minimum Blank Size:</strong> <strong> ${LAST_GEOM.MBS.toFixed(1)} mm</strong>`;
+    document.getElementById("mbsLine").innerHTML = `<strong> - Minimum Blank Size:</strong> <strong> ${LAST_GEOM.MBS} mm to optimize wearing comfort.</strong>`;
     renderBars(rx, LAST_GEOM, "frame");
   };
 
@@ -3930,7 +3936,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
     LAST_GEOM = { semiOD: len, semiOS: len, MBS: 2*len };
     LAST_MODE = "length";
 document.getElementById("mbsLine").innerHTML = 
-  `Thickness at ${len} mm<strong> - Minimum Blank Size: ${2 * len+4} mm</strong>`;
+  `<strong> - Minimum Blank Size: ${2 * len+4} mm to optimize wearing comfort.</strong>`;
 
     renderBars(rx, LAST_GEOM, "length", len);
   };
@@ -4122,8 +4128,69 @@ function buildResults(geom, rx){
 
 </script>
 
+<script>
+// --- universal toggle handler ---
+function makeToggle(buttonId, sectionId) {
+  const btn = document.getElementById(buttonId);
+  const section = document.getElementById(sectionId);
 
+  if (!btn || !section) return;
 
+  btn.addEventListener("click", () => {
+    const hidden = section.style.display === "none" || section.style.display === "";
+    section.style.display = hidden ? "block" : "none";
+    btn.textContent = hidden
+      ? `▲ ${btn.textContent.replace("▼", "").replace("▲", "").trim()}`
+      : `▼ ${btn.textContent.replace("▼", "").replace("▲", "").trim()}`;
+  });
+}
+
+// --- setup all three toggles ---
+makeToggle("toggle-manual", "exam-manual");
+makeToggle("toggle-comfy", "exam-comfy");
+makeToggle("toggle-sharpest", "exam-sharpest");
+makeToggle("toggle-lens-thickness", "lens-thickness");
+makeToggle("toggle-settings-block", "settings-block");
+
+</script>
+
+<script>
+function copyRx(source) {
+  const map = {
+current:{
+      od:['s1_od','c1_od','a1_od'],
+      os:['s1_os','c1_os','a1_os']
+  },
+manual: {
+      od: ['manual-sph-ou-od','manual-cyl-ou-od','manual-axis-ou-od'],
+      os: ['manual-sph-ou-os','manual-cyl-ou-os','manual-axis-ou-os']
+    },
+    ouRe: {
+      od: ['res-sph-ou-re','res-cyl-ou-re','res-axis-ou-re'],
+      os: ['res-sph-ou-le','res-cyl-ou-le','res-axis-ou-le']
+    },
+    odOs2: {
+      od: ['res-sph-od-2','res-cyl-od-2','res-axis-od-2'],
+      os: ['res-sph-os-2','res-cyl-os-2','res-axis-os-2']
+    }
+  };
+
+  const targets = {
+    od: ['sphOD','cylOD','axisOD'],
+    os: ['sphOS','cylOS','axisOS']
+  };
+
+  const src = map[source];
+  if (!src) return;
+
+  ['od','os'].forEach(eye => {
+    const [s,c,a] = src[eye].map(id => document.getElementById(id)?.value || document.getElementById(id)?.textContent || '');
+    if (s !== undefined) document.getElementById(targets[eye][0]).value = s;
+    if (c !== undefined) document.getElementById(targets[eye][1]).value = c;
+    if (a !== undefined) document.getElementById(targets[eye][2]).value = a;
+  });
+}
+</script>
 
 
 
