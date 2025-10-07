@@ -208,7 +208,28 @@ input {   width:80px;
   font-size: 12px !important; /* stays fixed */
   color: black;
   border: 1px solid #999;   /* 🔹 border thickness + colour */
+}
 
+.normal-btn {
+  padding: 2px 20px 2px 20px;
+  margin: 10px 0px 10px 0px;
+  background: #eee;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 10px;
+  color: black;
+  border: 1px solid #999;   /* 🔹 border thickness + colour */
+}
+
+.small-normal-btn {
+  padding: 2px 5px 2px 5px;
+  margin: 0px 0px 0px 0px;
+  background: #eee;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 10px;
+  color: black;
+  border: 1px solid #999;   /* 🔹 border thickness + colour */
 }
 
 .font-btn.active {
@@ -3408,27 +3429,21 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
   button:hover{filter:brightness(1.05);}
   button:active{transform:translateY(1px);}
 
-  /* Pane boxes (white interior) */
-  .pane{
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:10px;
-  }
+
   .pane h4{margin:0 0 8px;font-size:10px}
 
   /* Bars */
   .bar-row{display:flex;align-items:flex-start;gap:10px;margin:6px 0;flex-wrap:wrap}
-  .bar-label{width:40px;text-align:right;font-weight:bold}
-  .bar-pair{display:flex;gap:70px;align-items:flex-start;flex-wrap:wrap} /* visual gap between OD & OS */
-  .bar-block{display:flex;flex-direction:column;gap:3px;min-width:220px}
+  .bar-label{width:20px;text-align:right;font-weight:bold}
+  .bar-pair{display:flex;gap:0px;align-items:flex-start;flex-wrap:wrap} /* visual gap between OD & OS */
+  .bar-block{display:flex;flex-direction:column;gap:3px;min-width:70px}
   .bar{height:10px;border-radius:2px}
   .bar-frame{height:10px;border-radius:2px;background:var(--frame)}
-  .bar-text{font-size:10px;opacity:1}
+  .bar-text{font-size:10px;}
 
   /* Filters inside panes */
   .filters{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 2px}
-  .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border:1px solid var(--line);border-radius:12px;background:#fff}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border:1px solid var(--line);border-radius:4px;background:#fff}
 
   @media(max-width:1200px){
     .row{flex-direction:column;align-items:flex-start}
@@ -3441,8 +3456,11 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </div>
 
 <div class="section">
-<h2>Prescription & Frame Details</h2>
+<h2>Lens Thickness and Minimum Blank Size Calculator</h2>
   <div class="pane">
+<div class="row" style="gap:10px; padding:5px 15px 0px 15px;">
+<i>1. Key in PD and RX.<br>2. Either choose to calculate by Frames Details or Longest Length.<br>3. If choose Longest length, then measure OC to the longest distance on the lens.<br>4. Calculator will then show what is the thickness at the position.</I><br>
+</div>
 
     <table>
 <tr class="calibrator">
@@ -3484,32 +3502,32 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <td style="display:none;">    <input id="safety" type="number" placeholder="2" value="2"></td>
 
         </tr>
-    </table>
-</div>
-
-<div style="height:10px;"></div>
-  
-
-    <div class="pane" style="margin-bottom:10px;">
-    <h3>Thickness and Minimum Blank Size Calculator</h3><i>- Choose to either calculate by Frames Details or Longest Length.</I><br><br>
-<div class="pane">
-      <div class="row" style="gap:10px;">
-        <button id="btnCalc">Frame Details</button> <b>or </b>
-        <button id="btnLength">Longest Length (mm)</button>
+<tr>
+<td colspan="7" style="border:none;">
+    
+        <button id="btnCalc" class="normal-btn">Frame Details</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>or</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button id="btnLength" class="normal-btn">Longest Length</button>
    
           <label for="lengthInput" style="Display:none;">Length (mm)</label>
-          <input id="lengthInput" type="number" value="30" step="1" style="width:40px;">
-   </div>
+          <input type="number" id="lengthInput"value="30" step="1" style="max-width:40px;">&nbsp;(mm)
+
+</td></tr>
+</table>
+
+
+<div class="row"
+     style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+
+  <div id="mbsLine" class="tiny" style="flex:1;"></div>
+  <div id="thicknessBars" style="flex:1; margin-top:10px;"></div>
+  <div id="thickNote" class="tiny muted" style="flex:1; margin-top:4px;"></div>
+
 </div>
 
+</div>
+</div>
 
-    <div id="thicknessBars" style="margin-top:10px;"></div>
-    <div id="thickNote" class="tiny muted" style="margin-top:4px;"></div>
-    <div id="mbsLine" class="tiny"></div>
-  </div>
-
-
-
+    <div class="section" style="margin-bottom:10px;">
 
   <!-- Lens Options with Filters in white panes -->
     <div class="pane" style="margin-bottom:10px;">
@@ -3658,6 +3676,283 @@ function plusThickness(S,C,A,n,y){
   t *= plusCorr(n);
   return t;
 }
+
+
+
+
+
+
+/* =========================
+   BARS / THICKNESS
+========================= */
+function renderBars(rx, geom, mode, lenOverride){
+  const container = document.getElementById("thicknessBars");
+  container.innerHTML = `
+<div class="pane">
+  <div style="display:flex; flex-wrap:wrap; gap:5px; align-items:center;">
+    <span style="margin-left:20px;">Zoom in to see:</span>
+    <button id="resetZoom" class="small-normal-btn">Reset</button>
+    <input id="barScale" type="range" name="barScale"
+      min="0.01" max="0.7" step="0.01" value="0.165"
+      style="width:300px; accent-color:grey;">
+  </div>
+
+  <div style="display:flex; flex-wrap:wrap; gap:5px; align-items:center;">
+    <span style="margin-left:25px;">Frame Thickness (mm):</span>
+    <button id="btnMetal" class="small-normal-btn">Metal</button>
+    <button id="btnPlastic" class="small-normal-btn">Plastic</button>
+    <input type="range" id="frameThickness"
+      min="1" max="7" step="0.1" value="3.5"
+      style="width:165px; accent-color:grey;"
+      oninput="thicknessValue.textContent=this.value">
+    <span id="thicknessValue" style="min-width:10px;">3.5</span>
+  </div>
+</div>
+
+<!-- dedicated diagram container -->
+<div id="thicknessDiagram"></div>
+  `;
+
+  // --- controls ---
+  const barScaleEl = container.querySelector("#barScale");
+  const resetBtn   = container.querySelector("#resetZoom");
+  const frameInput = container.querySelector("#frameThickness");
+  const metalBtn   = container.querySelector("#btnMetal");
+  const plasticBtn = container.querySelector("#btnPlastic");
+  const diagram    = container.querySelector("#thicknessDiagram");
+
+  let scale = parseFloat(barScaleEl.value) || 0.165;
+
+  // zoom slider
+  barScaleEl.addEventListener("input", () => {
+    scale = parseFloat(barScaleEl.value) || 0.165;
+    draw();
+  });
+
+  resetBtn.addEventListener("click", () => {
+    const def = 0.165;
+    barScaleEl.value = def;
+    barScaleEl.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+
+  // frame thickness slider
+  frameInput.addEventListener("input", () => {
+    document.getElementById("thicknessValue").textContent = frameInput.value;
+    draw();
+  });
+
+  // quick-set buttons
+  metalBtn.addEventListener("click", () => {
+    frameInput.value = 2;
+    frameInput.dispatchEvent(new Event("input", { bubbles:true }));
+  });
+  plasticBtn.addEventListener("click", () => {
+    frameInput.value = 4;
+    frameInput.dispatchEvent(new Event("input", { bubbles:true }));
+  });
+
+  function eyeLabel(isPlus){ return isPlus ? "" : ""; }
+
+  // ========== DRAW FUNCTION ==========
+  function draw() {
+    diagram.innerHTML = ""; // ✅ clears old drawings only, keeps controls fixed
+    const frameT = parseFloat(frameInput.value) || 0;
+
+    // concise note logic (used in box descriptions)
+    const odStatus = effectivePower(rx.OD.S, rx.OD.C, rx.OD.Ax) >= 0
+      ? "center thickness<br>Plus power center is thickest."
+      : "edge thickness<br>Minus power edge is thickest.";
+    const osStatus = effectivePower(rx.OS.S, rx.OS.C, rx.OS.Ax) >= 0
+      ? "center thickness<br>Plus power center is thickest."
+      : "edge thickness<br>Minus power edge is thickest.";
+
+    // --- outer flex wrapper ---
+    const wrapper = document.createElement("div");
+    wrapper.className = "bar-box-wrapper";
+    wrapper.style.cssText = `
+      display:flex;
+      flex-wrap:wrap;
+      gap:20px;
+      justify-content:space-between;
+      margin-top:15px;
+    `;
+
+    // --- RIGHT box ---
+    const rightBox = document.createElement("div");
+    rightBox.className = "bar-side-box";
+    rightBox.style.cssText = `
+      flex:1;
+      min-width:50px;
+      border:1px solid #ccc;
+      border-radius:10px;
+      padding:10px 15px;
+    `;
+    rightBox.innerHTML = `<div style="text-align:center;margin-bottom:6px;">
+      <b>Right Lens</b> shows <span style="color:#333;">${odStatus}</span>
+    </div>`;
+
+    // --- LEFT box ---
+    const leftBox = document.createElement("div");
+    leftBox.className = "bar-side-box";
+    leftBox.style.cssText = `
+      flex:1;
+      min-width:50px;
+      border:1px solid #ccc;
+      border-radius:10px;
+      padding:10px 15px;
+    `;
+    leftBox.innerHTML = `<div style="text-align:center; margin-bottom:6px;">
+      <b>Left Lens</b> shows <span style="color:#333;">${osStatus}</span>
+    </div>`;
+
+    // --- generate bar rows ---
+    INDICES.forEach(n=>{
+      const yOD = (mode==="length") ? lenOverride : geom.semiOD;
+      const yOS = (mode==="length") ? lenOverride : geom.semiOS;
+
+      const FhOD = effectivePower(rx.OD.S,rx.OD.C,rx.OD.Ax);
+      const FhOS = effectivePower(rx.OS.S,rx.OS.C,rx.OS.Ax);
+      const isPlusOD = FhOD >= 0;
+      const isPlusOS = FhOS >= 0;
+
+      const tOD = isPlusOD ? plusThickness(rx.OD.S,rx.OD.C,rx.OD.Ax,n,yOD)
+                           : minusThickness(rx.OD.S,rx.OD.C,rx.OD.Ax,n,yOD);
+      const tOS = isPlusOS ? plusThickness(rx.OS.S,rx.OS.C,rx.OS.Ax,n,yOS)
+                           : minusThickness(rx.OS.S,rx.OS.C,rx.OS.Ax,n,yOS);
+
+      const px = BASE_PX * scale;
+      const odLen = tOD * px, osLen = tOS * px, frameLen = frameT * px;
+
+      // Right bar
+      const rightRow = document.createElement("div");
+      rightRow.className = "bar-row";
+      rightRow.style.margin = "6px 0";
+      rightRow.innerHTML = `
+        <div class="bar-label"><br>${n.toFixed(2)}</div>
+        <div class="bar-block">
+          <div class="bar-text"><br><b>Lens thickness ${tOD.toFixed(1)} mm ${eyeLabel(isPlusOD)}</b></div>
+          <div class="bar" style="background:var(--barOD);width:${odLen}px;"></div>
+          <div class="bar-frame" style="background:#a8733b;width:${frameLen}px;"></div>
+        </div>
+      `;
+      rightBox.appendChild(rightRow);
+
+      // Left bar
+      const leftRow = document.createElement("div");
+      leftRow.className = "bar-row";
+      leftRow.style.margin = "6px 0";
+      leftRow.innerHTML = `
+        <div class="bar-label"><br>${n.toFixed(2)}</div>
+        <div class="bar-block">
+          <div class="bar-text"><br><b>Lens thickness ${tOS.toFixed(1)} mm ${eyeLabel(isPlusOS)}</b></div>
+          <div class="bar" style="background:var(--barOS);width:${osLen}px;"></div>
+          <div class="bar-frame" style="background:#a8733b;width:${frameLen}px;"></div>
+        </div>
+      `;
+      leftBox.appendChild(leftRow);
+    });
+
+    wrapper.appendChild(rightBox);
+    wrapper.appendChild(leftBox);
+    diagram.appendChild(wrapper);
+
+// --- add legend diagram ---
+const legend = document.createElement("div");
+legend.className = "legend";
+legend.style.cssText = `
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  margin-top:5px;
+`;
+
+legend.innerHTML = `
+
+  <div style="margin-left:10px; margin-top:6px;">
+   <i><b>* Below is an example if the lens is thicker than the frame: </i></b><br>
+  <!-- Lens row -->
+  <div style="display:flex; align-items:center; gap:10px; margin-left:10px;">
+    <div style="width:40px; height:10px; background:var(--barOD); border-radius:2px;"></div>
+    <span> Lens (blue) extends beyond frame
+    </span>
+  </div>
+
+  <!-- Frame row -->
+  <div style="display:flex; align-items:center; gap:10px; margin-left:10px;">
+    <div style="width:25px; height:10px; background:#a8733b; border-radius:2px;"></div>
+    <span> Frame (brown) thinner than lens
+    </span>
+  </div>
+</div>
+
+`;
+
+diagram.appendChild(legend);
+
+  }
+
+  draw();
+}
+
+/* =========================
+   BUTTONS & FLOW
+========================= */
+document.addEventListener("DOMContentLoaded", ()=>{
+  // Price cap adjusters
+  document.getElementById("capPlus").onclick=()=>{const e=document.getElementById("priceCap");e.value=(parseFloat(e.value)||0)+100;};
+  document.getElementById("capMinus").onclick=()=>{const e=document.getElementById("priceCap");e.value=Math.max(0,(parseFloat(e.value)||0)-100);};
+
+  // Calculate by Frame — thickness only
+  document.getElementById("btnCalc").onclick=()=>{
+    const rx = parseRx();
+    const A = getVal("frameA"), DBL = getVal("frameDBL");
+    const pdOD = getVal("monoPD_OD"), pdOS = getVal("monoPD_OS");
+    const safety = getVal("safety") || 2;
+
+    if(!A || !DBL || !pdOD || !pdOS){
+      document.getElementById("mbsLine").innerHTML = "<span style='color:var(--warn);'>Please key in frame details and PD.</span>";
+      LAST_GEOM = null; LAST_MODE = null;
+      document.getElementById("thicknessBars").innerHTML = "";
+      document.getElementById("thickNote").textContent = "";
+      return;
+    }
+
+    LAST_GEOM = computeMBS(A,DBL,pdOD,pdOS,safety); // {semiOD, semiOS, MBS}
+    LAST_MODE = "frame";
+    document.getElementById("mbsLine").innerHTML = `<strong> - Minimum Blank Size:</strong> <strong> ${LAST_GEOM.MBS.toFixed(1)} mm</strong>`;
+    renderBars(rx, LAST_GEOM, "frame");
+  };
+
+  // Calculate by Length — thickness only
+  document.getElementById("btnLength").onclick=()=>{
+    const rx = parseRx();
+    const len = getVal("lengthInput") || 30;
+    LAST_GEOM = { semiOD: len, semiOS: len, MBS: 2*len };
+    LAST_MODE = "length";
+document.getElementById("mbsLine").innerHTML = 
+  `Thickness at ${len} mm<strong> - Minimum Blank Size: ${2 * len+4} mm</strong>`;
+
+    renderBars(rx, LAST_GEOM, "length", len);
+  };
+
+  // Fetch Lenses — uses LAST_GEOM + filters
+  document.getElementById("btnFetch").onclick=()=>{
+    const rx = parseRx();
+    buildResults(LAST_GEOM, rx);
+  };
+});
+
+// Clear all filter checkboxes (does not auto-fetch)
+document.getElementById("btnClearFilters").onclick = () => {
+  document.querySelectorAll('.fl-appear, .fl-index, .fl-func')
+    .forEach(cb => cb.checked = false);
+
+  // Optional: also clear the table message so it's obvious filters are cleared
+  // const body = document.getElementById("resultsBody");
+  // body.innerHTML = `<tr><td colspan="6" class="muted">Filters cleared. Click “Fetch Lenses”.</td></tr>`;
+};
+
+
 
 /* =========================
    GEOMETRY
@@ -3813,152 +4108,31 @@ function buildResults(geom, rx){
   }
 }
 
-/* =========================
-   BARS / THICKNESS
-========================= */
-function renderBars(rx, geom, mode, lenOverride){
-  const container = document.getElementById("thicknessBars");
-  container.innerHTML = `
-    <div style="margin-bottom:8px;display:flex; flex-wrap:wrap;gap:10px;align-items:center;">
-      <label>Frame Thickness (mm):
-        <input type="number" id="frameThickness" value="3.5" step="0.5" style="width:45px;">
-      </label>
-      <span style="font-weight:600;">Change Bar Scale:</span>
-      <label><input type="range" name="barScale" min="0.01" max="0.3" step="0.01" value="0.15"
-       style="width:200px; accent-color:grey;" ></label>
-    </div>
-<br>
 
-  `;
 
-  const frameInput = container.querySelector("#frameThickness");
-  let scale = 0.15;
 
-  container.querySelectorAll('input[name="barScale"]').forEach(r=>{
-    r.addEventListener("change", ()=>{ scale=parseFloat(r.value); draw(); });
-  });
-  frameInput.addEventListener("input", ()=>draw());
 
-  function eyeLabel(isPlus){ return isPlus ? "(center)" : "(edge)"; }
 
-  function draw(){
-    container.querySelectorAll(".bar-row").forEach(e=>e.remove());
-    const frameT = parseFloat(frameInput.value)||0;
 
-    INDICES.forEach(n=>{
-      const yOD = (mode==="length") ? lenOverride : geom.semiOD;
-      const yOS = (mode==="length") ? lenOverride : geom.semiOS;
 
-      const FhOD = effectivePower(rx.OD.S,rx.OD.C,rx.OD.Ax);
-      const FhOS = effectivePower(rx.OS.S,rx.OS.C,rx.OS.Ax);
-      const isPlusOD = FhOD >= 0;
-      const isPlusOS = FhOS >= 0;
 
-      const tOD = isPlusOD ? plusThickness(rx.OD.S,rx.OD.C,rx.OD.Ax,n,yOD)
-                           : minusThickness(rx.OD.S,rx.OD.C,rx.OD.Ax,n,yOD);
-      const tOS = isPlusOS ? plusThickness(rx.OS.S,rx.OS.C,rx.OS.Ax,n,yOS)
-                           : minusThickness(rx.OS.S,rx.OS.C,rx.OS.Ax,n,yOS);
 
-      const px = BASE_PX * scale;
-      const odLen = tOD * px, osLen = tOS * px, frameLen = frameT * px;
-
-      const row = document.createElement("div");
-      row.className = "bar-row";
-      row.innerHTML = `
-        <div class="bar-label">${n.toFixed(2)}</div>
-        <div class="bar-pair">
-          <div class="bar-block">
-            <div class="bar" style="background:var(--barOD);width:${odLen}px;"></div>
-            <div class="bar-frame" style="width:${frameLen}px;"></div>
-            <div class="bar-text">Right Lens ${tOD.toFixed(1)} mm ${eyeLabel(isPlusOD)}</div>
-          </div>
-          <div class="bar-block">
-            <div class="bar" style="background:var(--barOS);width:${osLen}px;"></div>
-            <div class="bar-frame" style="width:${frameLen}px;"></div>
-            <div class="bar-text">Left Lens ${tOS.toFixed(1)} mm ${eyeLabel(isPlusOS)}</div>
-          </div>
-        </div>
-      `;
-      container.appendChild(row);
-    });
-
-    // concise note
-const note = [];
-const odStatus = effectivePower(rx.OD.S, rx.OD.C, rx.OD.Ax) >= 0
-  ? "center thickness (Critical area for plus power is the center)."
-  : "edge thickness (Critical area for minus power is the edge).";
-const osStatus = effectivePower(rx.OS.S, rx.OS.C, rx.OS.Ax) >= 0
-  ? "center thickness (Critical area for plus power is the center)."
-  : "edge thickness (Critical area for minus power is the edge).";
-
-note.push(`<br><br>Right Lens shows <strong>${odStatus}</strong>`);
-note.push(`Left Lens shows <strong>${osStatus}</strong>`);
-
-document.getElementById("thickNote").innerHTML = note.join("<br>");
-
-  }
-  draw();
-}
-
-/* =========================
-   BUTTONS & FLOW
-========================= */
-document.addEventListener("DOMContentLoaded", ()=>{
-  // Price cap adjusters
-  document.getElementById("capPlus").onclick=()=>{const e=document.getElementById("priceCap");e.value=(parseFloat(e.value)||0)+100;};
-  document.getElementById("capMinus").onclick=()=>{const e=document.getElementById("priceCap");e.value=Math.max(0,(parseFloat(e.value)||0)-100);};
-
-  // Calculate by Frame — thickness only
-  document.getElementById("btnCalc").onclick=()=>{
-    const rx = parseRx();
-    const A = getVal("frameA"), DBL = getVal("frameDBL");
-    const pdOD = getVal("monoPD_OD"), pdOS = getVal("monoPD_OS");
-    const safety = getVal("safety") || 2;
-
-    if(!A || !DBL || !pdOD || !pdOS){
-      document.getElementById("mbsLine").innerHTML = "<span style='color:var(--warn);'>Please key in frame details and PD.</span>";
-      LAST_GEOM = null; LAST_MODE = null;
-      document.getElementById("thicknessBars").innerHTML = "";
-      document.getElementById("thickNote").textContent = "";
-      return;
-    }
-
-    LAST_GEOM = computeMBS(A,DBL,pdOD,pdOS,safety); // {semiOD, semiOS, MBS}
-    LAST_MODE = "frame";
-    document.getElementById("mbsLine").innerHTML = `<strong> - Minimum Blank Size:</strong> <strong> ${LAST_GEOM.MBS.toFixed(1)} mm</strong>`;
-    renderBars(rx, LAST_GEOM, "frame");
-  };
-
-  // Calculate by Length — thickness only
-  document.getElementById("btnLength").onclick=()=>{
-    const rx = parseRx();
-    const len = getVal("lengthInput") || 30;
-    LAST_GEOM = { semiOD: len, semiOS: len, MBS: 2*len };
-    LAST_MODE = "length";
-    document.getElementById("mbsLine").textContent = `Thickness at ${len} mm`;
-    renderBars(rx, LAST_GEOM, "length", len);
-  };
-
-  // Fetch Lenses — uses LAST_GEOM + filters
-  document.getElementById("btnFetch").onclick=()=>{
-    const rx = parseRx();
-    buildResults(LAST_GEOM, rx);
-  };
-});
-
-// Clear all filter checkboxes (does not auto-fetch)
-document.getElementById("btnClearFilters").onclick = () => {
-  document.querySelectorAll('.fl-appear, .fl-index, .fl-func')
-    .forEach(cb => cb.checked = false);
-
-  // Optional: also clear the table message so it's obvious filters are cleared
-  // const body = document.getElementById("resultsBody");
-  // body.innerHTML = `<tr><td colspan="6" class="muted">Filters cleared. Click “Fetch Lenses”.</td></tr>`;
-};
 
 
 
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
