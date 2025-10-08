@@ -422,6 +422,42 @@ table input {
 .dc-select option[value="BAL"] { color: black; }
 
 
+/* --- Unified Checkbox Style (Appear / Func / Index) --- */
+.fl-appear[type="checkbox"],
+.fl-func[type="checkbox"],
+.fl-index[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border: 1px solid black;
+  border-radius: 40%;          /* makes it round */
+  cursor: pointer;
+  position: relative;
+  background: #fff;
+}
+
+.fl-appear[type="checkbox"]:checked,
+.fl-func[type="checkbox"]:checked,
+.fl-index[type="checkbox"]:checked {
+  background: #8BAD79;         /* filled green */
+}
+label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--off, #f8f8f5);
+  padding: 5px 5px;
+  border-radius: 4px;
+  border: 1px solid #d7d7cf;
+  user-select: none;
+}
+
+label:hover {
+  background: #ffffe0;     /* pale yellow hover */
+}
+
+
 
 </style>
 </head>
@@ -3671,7 +3707,14 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
   </div>
 
   <div id="filterPanel" style="margin-top:10px; display:block;">
-    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px;">
+<div id="filterPanel" style="margin-top:10px; display:block;">
+  <div style="
+    display:grid;
+    grid-template-columns: 50% 50%;
+    gap:10px;
+    width:100%;
+  ">
+
 
       <!-- Price -->
       <div style="border:1px solid #ddd; border-radius:8px; padding:8px 10px;">
@@ -4568,7 +4611,6 @@ document.getElementById("resetSph").addEventListener("click", () => {
 
 </body>
 </html>
-
 
 
 
