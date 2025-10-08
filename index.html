@@ -18,9 +18,6 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
 .lens-header {
-  font-weight: 600;
-  font-size: 1.05em;
-  color: #0b3d2e;
   margin-bottom: 6px;
 }
 .lens-tags {
@@ -32,20 +29,14 @@
 .tag {
   padding: 2px 8px;
   border-radius: 8px;
-  font-size: 0.8em;
-  font-weight: 500;
 }
 .tag.index { background: #d9f0ff; }
 .tag.type { background: #f6f0d9; }
 .tag.func { background: #def5e0; }
 .lens-price {
-  font-weight: 600;
-  color: #333;
   margin: 4px 0;
 }
 .lens-note {
-  font-size: 0.85em;
-  color: #666;
   margin-bottom: 6px;
 }
 .select-btn {
@@ -97,8 +88,34 @@
   .bar-label{width:20px;text-align:right;font-weight:bold}
   .bar-pair{display:flex;gap:0px;align-items:flex-start;flex-wrap:wrap} /* visual gap between OD & OS */
   .bar-block{display:flex;flex-direction:column;gap:0px;min-width:70px}
-.bar { height: 10px;}
-  .bar-frame{height:10px;background:var(--frame)}
+.bar {  position: absolute;
+  top: 0;
+  left: 0;
+  height: 10px;
+  background: lightblue;
+  z-index: 1; /* lens below */
+}
+  .bar-frame{
+ position: absolute;
+  top: 0;
+  left: 0;
+  height: 10px;
+  background: #a8733b;
+  z-index: 2; /* frame on top */
+}
+.bar-stock {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 10px;
+  background: darkblue;    
+  z-index: 0;           /* behind main lens bar */
+  border-radius: 2px;
+}
+
+
+
+
   .bar-text{font-size:10px;}
 
   /* Filters inside panes */
@@ -109,6 +126,13 @@
     .row{flex-direction:column;align-items:flex-start}
     .bar-block{min-width:100px}
   }
+
+.bar-block {
+  position: relative;
+  height: 10px; /* same as bar height */
+}
+
+
 
 * {
   font-size: 10px;
@@ -281,9 +305,9 @@ input {   width:80px;
 
 .choice-group input[type="radio"]:checked + label {
   background: LIGHTGREY;   /* active color */
-  color: black;
-  font-weight: 700;
-  border-color: #285C00;
+  background: #444;
+  color: #fff;
+  border-color: #222;
 }
 
 #apply-controls { text-align:left; margin-bottom:10px; margin-top:10px; margin-left:10px }
@@ -316,6 +340,7 @@ input {   width:80px;
 }
 
 .normal-btn {
+
   padding: 2px 20px 2px 20px;
   margin: 10px 0px 10px 0px;
   background: #eee;
@@ -324,6 +349,15 @@ input {   width:80px;
   font-size: 10px;
   color: black;
   border: 1px solid #999;   /* 🔹 border thickness + colour */
+}
+
+.normal-btn:focus {
+  outline: none;
+  box-shadow: none;
+  background: #444;
+  color: #fff;
+  border-color: #222;
+
 }
 
 .small-normal-btn {
@@ -368,20 +402,7 @@ table input {
   text-align: center;
 }
 
-  :root{
-    --green:#0b3d2e;
-    --pale:#ffffe0;
-    --off:#f8f8f5;
-    --line:#d7d7cf;
-    --warn:#B42318;
-    --barOD:#b0a2d9;
-    --barOS:#d0c9eb;
-    --frame:#a9a9a9;
-    --btn-bg:#0b3d2e;
-    --btn-text:#ffffe0;
-    --btn-border:#ffffff;
-  }
-
+ 
   /* Pane boxes (white interior) */
   .pane{
     background:#fff;
@@ -855,7 +876,7 @@ function toggleSection(id) {
 </span>
 </td>
 <td style="border-left:none;">
-<span id="toggle-sharpest" style="cursor:pointer; font-weight:bold; user-select:none;">
+<span id="toggle-sharpest" style="cursor:pointer; font-weight:bold; user-select:none; display:none;">
   ▼ Sharpest Exam
 </span>
 </td>
@@ -1909,6 +1930,7 @@ function makeToggle(spanId, hideClass) {
 makeToggle("testToggle1", "testStatus"); // this one toggles other spans
 makeToggle("testToggle2");               // standalone
 makeToggle("testToggle3");               // standalone
+
 </script>
 
 
@@ -3518,15 +3540,34 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
   <td style="border:none;"></td>
 </tr>
 <tr class="white">
-<td colspan="7" style="text-align:left;">&nbsp;&nbsp;&nbsp;<b>Import From Existing RX : </b>
-  <button class="normal-btn" onclick="copyRx('current')">Current</button> &nbsp;
-  <button class="normal-btn" onclick="copyRx('manual')">Manual</button> &nbsp;
-  <button class="normal-btn" onclick="copyRx('ouRe')">Comfy</button> 
-&nbsp;
-  <button class="normal-btn" onclick="copyRx('odOs2')">Sharpest</button>
+<td colspan="2" style="text-align:left;">&nbsp;&nbsp;&nbsp;<b>Import RX : </b></td>
+<td colspan="5"><div style="display:flex; gap:20px; margin-left:20px;">
+  <button class="small-normal-btn" onclick="copyRx('current')">Current</button>
+  <button class="small-normal-btn" onclick="copyRx('manual')">Manual</button>
+  <button class="small-normal-btn" onclick="copyRx('ouRe')">Comfy</button> 
+  <button class="small-normal-btn" style="display:none;" onclick="copyRx('odOs2')">Sharpest</button>
+</div>
 </td>
 </tr>
-<tr>
+<tr class="white">
+<td colspan="2" style="text-align:left;">&nbsp;&nbsp;&nbsp;<b>Quick Estimate : </b></td>
+<td colspan="5"><div style="display:flex; gap:20px; margin-left:20px;">
+
+    <button class="small-normal-btn" data-value="-3.00">−3.00</button>
+    <button class="small-normal-btn" data-value="-2.00">−2.00</button>
+    <button class="small-normal-btn" data-value="-1.00">−1.00</button>
+    <button class="small-normal-btn" data-value="-0.50">−0.50</button></div>
+<div style="display:flex; gap:20px; margin-left:20px; margin-top:5px;">
+    <button class="small-normal-btn" data-value="+3.00">+3.00</button>
+    <button class="small-normal-btn" data-value="+2.00">+2.00</button>
+    <button class="small-normal-btn" data-value="+1.00">+1.00</button>
+    <button class="small-normal-btn" data-value="+0.50">+0.50</button>
+    <button id="resetSph" class="small-normal-btn">Reset 0.00</button>
+</div>
+
+</td>
+</tr>
+
 <td colspan="7" style="border:none;"></td>
 </tr>
 
@@ -3567,10 +3608,10 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <tr class="white">
 <td colspan="7"><b>Generate using &nbsp;
   <button id="btnCalc" class="normal-btn">Frame Details</button>&nbsp; or&nbsp;
-  <button id="btnLength" class="normal-btn">Longest Length</button>
+  <button id="btnLength" class="normal-btn">Longest Lens</button>
    
           <label for="lengthInput" style="Display:none;">Length (mm)</label>
-          <input type="number" id="lengthInput"value="30" step="1" style="max-width:40px;">&nbsp;(mm)</b><br>
+          <input type="number" id="lengthInput"value="33" step="1" style="max-width:40px;">&nbsp;(mm)</b><br>
 
 </td></tr>
 <tr>
@@ -3582,8 +3623,8 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <div class="row"
      style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
 
-  <div class="pane" style="min-width:90%; padding:10px; text-align:center;" id="mbsLine" class="tiny" style="flex:1;"><b>- Minimum Blank Size: -- mm to optimize wearing comfort.</b></div>
-  <div class="pane" style="width:90%; padding:10px; text-align:center;" id="thicknessBars" style="flex:1; margin-top:10px;"><I>~ Generating Lens Thickness Here..</i></div>
+  <div class="pane" style="min-width:90%; padding:10px; text-align:center;" id="mbsLine" class="tiny" style="flex:1;"><i>- Generating Minimum Blank Size.</i></div>
+  <div class="pane" style="width:90%; padding:10px; text-align:center;" id="thicknessBars" style="flex:1; margin-top:10px;"><I>~ Generating Lens Thickness.</i></div>
   <div id="thickNote" class="tiny muted" style="flex:1; margin-top:4px;"></div>
 
 </div>
@@ -3591,62 +3632,110 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </div>
 </div>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <!-- =========================
-     FINAL STAGE: LENS OPTIONS (NEW)
+     FINAL STAGE: LENS OPTIONS (NEW) xxxxx
 ========================= -->
 <div class="section" style="margin-bottom:10px;">
+    <h2>Recommended Lens Options</h2>
 
-  <div class="pane" style="margin-bottom:10px;">
-    <h3>Lens Options</h3>
-    <p>Fetch Lenses (requires thickness calculation first)</p>
+
+<!-- =========================
+     FILTER PANEL WITH TOGGLE
+========================= -->
+<div class="pane" style="margin-bottom:10px;">
+  <div style="justify-content:space-between; gap:20px; align-items:center; padding:15px;">
+    <span>Fetch Lenses (requires thickness calculation first)</span><br>
     <button id="btnFetch" class="normal-btn">Fetch Lenses</button>
     <span id="status" class="tiny muted"></span>
-    <button id="btnClearFilters" class="normal-btn" style="float:right;">Clear Filters</button>
+    <button id="btnClearFilters" class="normal-btn" >Clear Filters</button>
+    <button id="toggleFilters" class="normal-btn" style="font-size:0.9em;">Hide Filters ▲</button>
   </div>
 
-  <!-- Price Cap -->
-  <div class="pane" style="margin-bottom:10px;">
-    <h4>Price (RM)</h4>
-    <div class="row" style="gap:8px;align-items:center;">
-      Max Price <input id="priceCap" type="number" placeholder="e.g. 1000" style="width:110px;">
-      <button id="capMinus">– RM100</button>
-      <button id="capPlus">+ RM100</button>
-    </div>
-  </div>
+  <div id="filterPanel" style="margin-top:10px; display:block;">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px;">
 
-  <!-- Filters -->
-  <div class="pane" style="margin-bottom:10px;">
-    <h4>Appearance</h4>
-    <div class="filters">
-      <label class="chip"><input type="checkbox" class="fl-appear" value="Clear" checked> Clear</label>
-      <label class="chip"><input type="checkbox" class="fl-appear" value="Photochromic" checked> Photochromic</label>
-      <label class="chip"><input type="checkbox" class="fl-appear" value="Tinted" checked> Tinted</label>
-      <label class="chip"><input type="checkbox" class="fl-appear" value="Polarized" checked> Polarized</label>
-    </div>
-  </div>
+      <!-- Price -->
+      <div style="border:1px solid #ddd; border-radius:8px; padding:8px 10px;">
+        <b>Price (RM)</b>
+        <div style="margin-top:6px; display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
+          <span>Max</span>
+          <input id="priceCap" type="number" placeholder="1000" style="width:70px;">
+          <button id="capMinus" class="small-normal-btn">–100</button>
+          <button id="capPlus" class="small-normal-btn">+100</button>
+        </div>
+      </div>
 
-  <div class="pane" style="margin-bottom:10px;">
-    <h4>Index Group</h4>
-    <div class="filters">
-      <label class="chip"><input type="checkbox" class="fl-index" value="1.5" checked> 1.5 group</label>
-      <label class="chip"><input type="checkbox" class="fl-index" value="Safety" checked> Safety (1.53/1.59)</label>
-      <label class="chip"><input type="checkbox" class="fl-index" value="1.6" checked> 1.6 group</label>
-      <label class="chip"><input type="checkbox" class="fl-index" value="1.67" checked> 1.67 group</label>
-      <label class="chip"><input type="checkbox" class="fl-index" value="1.74" checked> 1.74 group</label>
-    </div>
-  </div>
+      <!-- Appearance -->
+      <div style="border:1px solid #ddd; border-radius:8px; padding:8px 10px;">
+        <b>Appearance</b>
+        <div style="margin-top:6px; display:flex; flex-wrap:wrap; gap:8px;">
+          <label><input type="checkbox" class="fl-appear" value="Clear" checked> Clear</label>
+          <label><input type="checkbox" class="fl-appear" value="Photochromic" checked> Photochromic</label>
+          <label><input type="checkbox" class="fl-appear" value="Tinted" checked> Tinted</label>
+          <label><input type="checkbox" class="fl-appear" value="Polarized" checked> Polarized</label>
+        </div>
+      </div>
 
-  <div class="pane" style="margin-bottom:10px;">
-    <h4>Function</h4>
-    <div class="filters">
-      <label class="chip"><input type="checkbox" class="fl-func" value="SV" checked> SV</label>
-      <label class="chip"><input type="checkbox" class="fl-func" value="Multifocal" checked> Multifocal</label>
-      <label class="chip"><input type="checkbox" class="fl-func" value="Office" checked> Office</label>
-      <label class="chip"><input type="checkbox" class="fl-func" value="Anti-fatigue" checked> Anti-Fatigue</label>
+      <!-- Index -->
+      <div style="border:1px solid #ddd; border-radius:8px; padding:8px 10px;">
+        <b>Index Group</b>
+        <div style="margin-top:6px; display:flex; flex-wrap:wrap; gap:8px;">
+          <label><input type="checkbox" class="fl-index" value="1.5" checked> 1.5</label>
+          <label><input type="checkbox" class="fl-index" value="Safety" checked> Safety</label>
+          <label><input type="checkbox" class="fl-index" value="1.6" checked> 1.6</label>
+          <label><input type="checkbox" class="fl-index" value="1.67" checked> 1.67</label>
+          <label><input type="checkbox" class="fl-index" value="1.74" checked> 1.74</label>
+        </div>
+      </div>
+
+      <!-- Function -->
+      <div style="border:1px solid #ddd; border-radius:8px; padding:8px 10px;">
+        <b>Function</b>
+        <div style="margin-top:6px; display:flex; flex-wrap:wrap; gap:8px;">
+          <label><input type="checkbox" class="fl-func" value="SV" checked> SV</label>
+          <label><input type="checkbox" class="fl-func" value="Multifocal" checked> Multifocal</label>
+          <label><input type="checkbox" class="fl-func" value="Office" checked> Office</label>
+          <label><input type="checkbox" class="fl-func" value="Anti-fatigue" checked> Anti-Fatigue</label>
+        </div>
+      </div>
+
     </div>
   </div>
+</div>
+
+<script>
+// Toggle show/hide filters
+document.getElementById("toggleFilters").addEventListener("click", () => {
+  const panel = document.getElementById("filterPanel");
+  const btn = document.getElementById("toggleFilters");
+  const visible = panel.style.display !== "none";
+  panel.style.display = visible ? "none" : "block";
+  btn.textContent = visible ? "Show Filters ▼" : "Hide Filters ▲";
+});
+</script>
+
 
   <!-- Container for Lens Cards -->
+
   <div id="lensResults" style="margin-top:10px;">
     <div class="muted">Calculate thickness first, then click “Fetch Lenses”.</div>
   </div>
@@ -3671,7 +3760,7 @@ const EDGE_PLUS    = 1.3;   // plus lens min center thickness
 const BASE_PX      = 50 * 0.6; // px per mm before scale radios
 
 function minusCorr(n){ if(n===1.56) return 1.075; if(n===1.60) return 1.025; return 1; }
-function plusCorr(n){  if(n===1.56) return 1.10;  if(n===1.60) return 1.05;  if(n===1.67) return 1.025; if(n===1.74) return 1.0125; return 1; }
+function plusCorr(n){  if(n===1.56) return 1.1;  if(n===1.60) return 1.05;  if(n===1.67) return 1.025; if(n===1.74) return 1.0125; return 1; }
 
 /* =========================
    STATE
@@ -3760,24 +3849,31 @@ function renderBars(rx, geom, mode, lenOverride){
     <button id="resetZoom" class="small-normal-btn">Reset</button>
     <input id="barScale" type="range" name="barScale"
       min="0.01" max="0.7" step="0.01" value="0.165"
-      style="width:300px; accent-color:grey;">
+      style="width:270px; accent-color:grey;">
   </div>
 
   <div style="display:flex; flex-wrap:wrap; gap:5px; align-items:center;">
-    <span style="margin-left:25px;">Frame Thickness (mm):</span>
-    <button id="btnMetal" class="small-normal-btn">Metal</button>
-    <button id="btnPlastic" class="small-normal-btn">Plastic</button>
+<span id="toggle-bar-frame" style="margin-left:20px;; cursor:pointer; user-select:none;">
+ ▼ Show Frame Thickness
+</span>
+    <button id="btnMetal" class="small-normal-btn">2mm</button>
+    <button id="btnPlastic" class="small-normal-btn">4mm</button>
     <input type="range" id="frameThickness"
-      min="1" max="7" step="0.1" value="3.5"
+      min="1" max="7" step="0.1" value="4"
       style="width:165px; accent-color:grey;"
       oninput="thicknessValue.textContent=this.value">
-    <span id="thicknessValue" style="min-width:10px;">3.5</span>
+    <span id="thicknessValue" style="min-width:10px;">4</span>
   </div>
 </div>
+
+
+
+
 
 <!-- dedicated diagram container -->
 <div id="thicknessDiagram"></div>
   `;
+
 
   // --- controls ---
   const barScaleEl = container.querySelector("#barScale");
@@ -3820,17 +3916,27 @@ function renderBars(rx, geom, mode, lenOverride){
   function eyeLabel(isPlus){ return isPlus ? "" : ""; }
 
   // ========== DRAW FUNCTION ==========
+// --- helper for stock lens % ---
+function stockFactor(n){
+  if (n === 1.56) return 1.20;     
+  if (n === 1.60) return 1.10;
+  if(n === 1.67) return 1.05; 
+  if (n === 1.74) return 1.05;        
+  return 1.0;
+}
+
+
   function draw() {
     diagram.innerHTML = ""; // ✅ clears old drawings only, keeps controls fixed
     const frameT = parseFloat(frameInput.value) || 0;
 
     // concise note logic (used in box descriptions)
     const odStatus = effectivePower(rx.OD.S, rx.OD.C, rx.OD.Ax) >= 0
-      ? "<b>center.</b>"
-      : "<b>edge.</b>.";
+      ? "CENTER"
+      : "EDGE";
     const osStatus = effectivePower(rx.OS.S, rx.OS.C, rx.OS.Ax) >= 0
-      ? "<b>center.</b>."
-      : "<b>edge.</b>.";
+      ? "CENTER"
+      : "EDGE";
 
     // --- outer flex wrapper ---
     const wrapper = document.createElement("div");
@@ -3851,10 +3957,10 @@ function renderBars(rx, geom, mode, lenOverride){
       min-width:50px;
       border:1px solid #ccc;
       border-radius:10px;
-      padding:10px 15px;
+      padding:20px 20px;
     `;
     rightBox.innerHTML = `<div style="text-align:center;margin-bottom:6px;">
-      <b>Right Lens</b> is thickest at ${odStatus}</span>
+      <u><b>Right Lens thickest ${odStatus}</U></b></span>
     </div>`;
 
     // --- LEFT box ---
@@ -3865,10 +3971,10 @@ function renderBars(rx, geom, mode, lenOverride){
       min-width:50px;
       border:1px solid #ccc;
       border-radius:10px;
-      padding:10px 15px;
+      padding:20px 20px;
     `;
     leftBox.innerHTML = `<div style="text-align:center; margin-bottom:6px;">
-      <b>Left Lens</b> is thickest at ${osStatus}</span>
+      <u><b>Left Lens thickest ${osStatus}</u></b></span>
     </div>`;
 
     // --- generate bar rows ---
@@ -3896,10 +4002,19 @@ function renderBars(rx, geom, mode, lenOverride){
       rightRow.innerHTML = `
         <div class="bar-label"><br>${n.toFixed(2)}</div>
         <div class="bar-block">
-          <div class="bar-text"><br><b>Thickness ${tOD.toFixed(1)} mm ${eyeLabel(isPlusOD)}</b></div>
+<div class="bar-text"><br>
+  <b>
+    RX/Stock = ${tOD.toFixed(1)}mm / ${(tOD * stockFactor(n)).toFixed(1)}mm${eyeLabel(isPlusOD)}
+  </b>
+</div><div class="bar-block">
+
           <div class="bar" style="background:var(--barOD);width:${odLen}px;"></div>
+<div class="bar-stock" style="width:${odLen * stockFactor(n)}px;"></div>
           <div class="bar-frame" style="background:#a8733b;width:${frameLen}px;"></div>
+
         </div>
+</div>
+
       `;
       rightBox.appendChild(rightRow);
 
@@ -3910,10 +4025,17 @@ function renderBars(rx, geom, mode, lenOverride){
       leftRow.innerHTML = `
         <div class="bar-label"><br>${n.toFixed(2)}</div>
         <div class="bar-block">
-          <div class="bar-text"><br><b>Thickness ${tOS.toFixed(1)} mm ${eyeLabel(isPlusOS)}</b></div>
+<div class="bar-text"><br>
+  <b>
+    RX/Stock = ${tOS.toFixed(1)}mm / ${(tOS * stockFactor(n)).toFixed(1)}mm ${eyeLabel(isPlusOS)}
+  </b>
+</div><div class="bar-block">
           <div class="bar" style="background:var(--barOS);width:${osLen}px;"></div>
+ <div class="bar-stock" style="width:${osLen * stockFactor(n)}px;"></div>
           <div class="bar-frame" style="background:#a8733b;width:${frameLen}px;"></div>
         </div>
+</div>
+
       `;
       leftBox.appendChild(leftRow);
     });
@@ -3921,6 +4043,57 @@ function renderBars(rx, geom, mode, lenOverride){
     wrapper.appendChild(rightBox);
     wrapper.appendChild(leftBox);
     diagram.appendChild(wrapper);
+
+// --- bar frame toggle inside renderBars ---
+const frameToggleBtn = document.getElementById("toggle-bar-frame");
+if (frameToggleBtn) {
+  let visible = window.barFrameVisible ?? false; // remember last state, start hidden if undefined
+
+  // hide/show all based on current state
+  document.querySelectorAll(".bar-frame").forEach(el => {
+    el.style.display = visible ? "block" : "none";
+  });
+
+  // update button label + color
+  frameToggleBtn.textContent = visible ? "▼ Show Frame Thickness" : "▲ Show Frame Thickness";
+  frameToggleBtn.style.color = visible ? "#a8733b" : "grey";
+  frameToggleBtn.style.fontWeight = visible ? "bold" : "bold"; // bold when visible
+
+
+  // remove old listeners before reattaching
+  const newBtn = frameToggleBtn.cloneNode(true);
+  frameToggleBtn.parentNode.replaceChild(newBtn, frameToggleBtn);
+
+  newBtn.addEventListener("click", () => {
+    visible = !visible;
+    window.barFrameVisible = visible; // store for next redraw
+
+    document.querySelectorAll(".bar-frame").forEach(el => {
+      el.style.display = visible ? "block" : "none";
+    });
+
+    newBtn.textContent = visible ? "▼ Show Frame Thickness" : "▲ Show Frame Thickness";
+    newBtn.style.color = visible ? "#a8733b" : "grey"; // brown when shown, grey when hidden
+    newBtn.style.fontWeight = visible ? "bold" : "bold"; // bold when visible
+
+  });
+
+// --- stock lens toggle ---
+const stockBtn = document.createElement("button");
+stockBtn.id = "toggleStock";
+stockBtn.className = "small-normal-btn";
+stockBtn.textContent = "Show Stock Lens";
+stockBtn.style.marginLeft = "20px";
+frameToggleBtn.parentNode.appendChild(stockBtn);
+
+stockBtn.addEventListener("click", () => {
+  window.showStockBars = !window.showStockBars;
+  stockBtn.textContent = window.showStockBars ? "Hide Stock Lens" : "Show Stock Lens";
+  draw();
+});
+
+}
+
 
 // --- add legend diagram ---
 const legend = document.createElement("div");
@@ -3934,22 +4107,26 @@ legend.style.cssText = `
 
 legend.innerHTML = `
 
-  <div style="margin-left:10px; margin-top:6px;">
-   <i><b>* Below is an example if the lens is thicker than the frame: </i></b><br>
+  <div style="margin-top:6px;">
+
+
   <!-- Lens row -->
-  <div style="display:flex; align-items:center; gap:10px; margin-left:10px;">
-    <div style="width:40px; height:10px; background:var(--barOD); border-radius:2px;"></div>
-    <span> Lens (blue) extends beyond frame
+  <div style="display:flex; align-items:center; gap:10px; margin-left:30px;">
+    <div style="width:30px; height:10px; background:var(--barOD);"></div>
+    <span> Blue bar represents lens thickness at the horizontal height.
     </span>
+
   </div>
 
   <!-- Frame row -->
-  <div style="display:flex; align-items:center; gap:10px; margin-left:10px;">
-    <div style="width:25px; height:10px; background:#a8733b; border-radius:2px;"></div>
-    <span> Frame (brown) thinner than lens
-    </span>
+  <div style="display:flex; align-items:center; gap:10px; margin-left:30px;">
+    <div style="width:30px; height:10px; background:#a8733b;"></div>
+    <span> Brown bar represents frame thickness.    </span>
   </div>
 </div>
+
+
+
 
 `;
 
@@ -4035,8 +4212,9 @@ manual: {
     odOs2: {
       od: ['res-sph-od-2','res-cyl-od-2','res-axis-od-2'],
       os: ['res-sph-os-2','res-cyl-os-2','res-axis-os-2']
-    }
+    },
   };
+
 
   const targets = {
     od: ['sphOD','cylOD','axisOD'],
@@ -4161,6 +4339,9 @@ function withinCap(price, cap){ if(!cap) return true; return Number(price) <= ca
 
 
 </script>
+
+
+
 
 
 
@@ -4315,12 +4496,48 @@ function makeToggle(buttonId, sectionId) {
   });
 }
 
+
 // --- setup all three toggles ---
 makeToggle("toggle-manual", "exam-manual");
 makeToggle("toggle-comfy", "exam-comfy");
 makeToggle("toggle-sharpest", "exam-sharpest");
 makeToggle("toggle-lens-thickness", "lens-thickness");
 makeToggle("toggle-settings-block", "settings-block");
+
+
+</script>
+
+<script>
+function roundQuarter(x) {
+  return (Math.round(x * 4) / 4).toFixed(2);
+}
+
+document.querySelectorAll(".small-normal-btn[data-value]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const addVal = parseFloat(btn.dataset.value);
+    const eyes = ["sphOD", "sphOS"];
+
+    eyes.forEach(id => {
+      const field = document.getElementById(id);
+      if (!field) return;
+
+      const current = parseFloat(field.value) || 0;
+      const newVal = roundQuarter(current + addVal);
+      field.value = (newVal > 0 ? "+" : "") + newVal;
+      field.dispatchEvent(new Event("input"));
+    });
+  });
+});
+
+document.getElementById("resetSph").addEventListener("click", () => {
+  ["sphOD", "sphOS"].forEach(id => {
+    const field = document.getElementById(id);
+    if (field) {
+      field.value = "+0.00";
+      field.dispatchEvent(new Event("input"));
+    }
+  });
+});
 
 </script>
 
@@ -4344,9 +4561,8 @@ makeToggle("toggle-settings-block", "settings-block");
 
 
 
-
 <!-- Spacer at the bottom for scrolling -->
-<div style="height:300px;"></div>
+<div style="height:1000px;"></div>
 
 
 
