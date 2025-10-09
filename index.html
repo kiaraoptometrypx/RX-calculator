@@ -14,6 +14,11 @@
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   transition: all 0.2s ease;
 }
+
+.hidden-stock {
+  display: none;
+}
+
 .lens-card:hover {
   box-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
@@ -52,7 +57,6 @@
 }
 
 
-
   :root{
     --green:#0b3d2e;
     --pale:#ffffe0;
@@ -84,10 +88,12 @@
   .pane h4{margin:0 0 8px;font-size:10px}
 
   /* Bars */
-  .bar-row{display:flex;align-items:flex-start;gap:10px;margin:6px 0;flex-wrap:wrap}
-  .bar-label{width:20px;text-align:right;font-weight:bold}
+  .bar-row{display:flex;align-items:flex-start;gap:20px;margin:30px 0;flex-wrap:wrap}
+  .bar-label{width:20px;text-align:right;font-weight:bold; margin-bottom:30px;} <!-- change height between bars --!>
   .bar-pair{display:flex;gap:0px;align-items:flex-start;flex-wrap:wrap} /* visual gap between OD & OS */
-  .bar-block{display:flex;flex-direction:column;gap:0px;min-width:70px}
+
+  .bar-block{display:flex;
+flex-direction:column;gap:0px;min-width:70px}
 .bar {  position: absolute;
   top: 0;
   left: 0;
@@ -110,9 +116,53 @@
   height: 10px;
   background: darkblue;    
   z-index: 0;           /* behind main lens bar */
-  border-radius: 2px;
 }
 
+.bar-track {
+  position: relative;
+  height: 10px;
+  overflow: visible;           /* allow bar to render fully */
+
+}
+
+.bar-track.reverse {
+  transform: scaleX(-1);
+  transform-origin: left center;  /* stay anchored on left */
+}
+
+.bar, .bar-stock, .bar-frame {
+margin-top: 5px;
+  position: absolute;
+  top:0 ;
+  left: 0;
+  height: 30px;
+
+}
+.eye-arrow {
+  font-size: 23px;          /* smaller eye glyph */
+  min-width: 20px;
+ margin-top:11px;
+  text-align: right;
+  margin-right: 4px;
+  user-select: none;
+  position: relative;
+  top: 2px;                 /* 👈 nudges it down visually */
+  line-height: 10px;        /* matches bar height */
+  display: flex;
+  align-items: center;      /* vertical centering within flex row */
+}
+.your-eye {
+  font-size: 10px;         
+  min-width: 20px;
+ margin-top:8px;
+  text-align: right;
+  margin-right: 2px;
+  user-select: none;
+  position: relative;
+  line-height: 10px;        /* matches bar height */
+  display: flex;
+  align-items: center;      /* vertical centering within flex row */
+}
 
 
 
@@ -858,8 +908,8 @@ function toggleSection(id) {
 
 <tr class="white">
     <td><b>Current Add</b></td>
-    <td colspan="3"><b>Phone Length & Add Needed</b></td>
-    <td colspan="3"><b>Screen Length & Add Needed</b></td>
+    <td colspan="3"><b>Phone Length (cm) & Add Needed</b></td>
+    <td colspan="3"><b>Screen Length (cm) & Add Needed</b></td>
 </tr>
 <tr>
 
@@ -867,12 +917,12 @@ function toggleSection(id) {
 
     <td colspan="3" style="text-align:left;">
     <label for="targetDistInput" style="display:none;">Book</label>
-    <input type="number" id="targetDistInput" min="0" placeholder="33 cm" style="max-width:70px; margin: 0px 0px 0px 10px">
+    <input type="number" id="targetDistInput" min="0" placeholder="33" style="max-width:35px; margin: 0px 0px 0px 10px">
     &nbsp;&nbsp;&nbsp;<span id="addOutput">–</span>
     </td>
     <td colspan="3" style="text-align:left;">
     <label for="targetDistInput2" style="display:none;">Screen:</label>
-    <input type="number" id="targetDistInput2" min="0" placeholder="50 cm" style="max-width:70px; margin: 0px 0px 0px 10px">
+    <input type="number" id="targetDistInput2" min="0" placeholder="50" style="max-width:35px; margin: 0px 0px 0px 10px">
     &nbsp;&nbsp;&nbsp;<span id="addOutput2">–</span>
     </td>
 </tr>
@@ -966,8 +1016,8 @@ function toggleSection(id) {
   </tr>
 <tr class="white">
 
-    <td>FC DC Error<br>Notes</td>
-<td>Both</td>
+    <td row>FC DC Error<br>Notes</td>
+<td>Right</td>
 
     <td><input id="dc-sph-ou-manual-notes" placeholder="+0.00"></td>
     <td><input id="c2_ou_manual_notes" placeholder="+0.00"></td>
@@ -1303,9 +1353,7 @@ function toggleSection(id) {
 
 
 
-
-<!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!><!--- Sharper RX ----!>
-
+<!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ----><!--- Sharper RX ---->
 
 
 
@@ -1570,7 +1618,7 @@ function toggleSection(id) {
 
 
 
-<!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!><!---- MATHS LOGIC STARTS HERE -----!> <!---- MATHS LOGIC STARTS HERE -----!>
+<!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE -----><!---- MATHS LOGIC STARTS HERE ----->
 
 
 <!-- script for AA calculator & change tolerance (keep this below the row) -->
@@ -1891,7 +1939,7 @@ function attachNoteHandlers() {
     // --- OU (regular) ---
     "dc-sph-ou-notes", "c2_ou_notes", "a2_ou_notes",
     // --- OU (manual) ---
-    "dc-sph-ou-manual-notes", "c2_ou_manual_notes", "a2_ou_manual_notes"
+    "dc-sph-ou-manual-notes", "c2_ou_manual_notes", "a2_ou_manual_notes","add-ou"
   ];
 
   ids.forEach(id => {
@@ -2762,7 +2810,7 @@ document.querySelectorAll('.sph-btn-mono').forEach(btn => {
 
 
 <script>
-(function(){
+function(){
   // isolated namespace
   const _ID = '__dcAdvice_isolated_v1';
 
@@ -3543,7 +3591,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 
-<!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!><!--- LENS SELECTOR ---!>
+<!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR --->
 
 
 
@@ -3577,7 +3625,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </tr>
 <tr class="white">
 <td colspan="2" style="text-align:left;">&nbsp;&nbsp;&nbsp;<b>Import RX : </b></td>
-<td colspan="5"><div style="display:flex; gap:20px; margin-left:20px;">
+<td colspan="5" style="background-color: white"><div style="display:flex; gap:20px; margin-left:20px;">
   <button class="small-normal-btn" onclick="copyRx('current')">Current</button>
   <button class="small-normal-btn" onclick="copyRx('manual')">Manual</button>
   <button class="small-normal-btn" onclick="copyRx('ouRe')">Comfy</button> 
@@ -3587,7 +3635,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </tr>
 <tr class="white">
 <td colspan="2" style="text-align:left;">&nbsp;&nbsp;&nbsp;<b>Quick Estimate : </b></td>
-<td colspan="5"><div style="display:flex; gap:20px; margin-left:20px;">
+<td colspan="5" style="background-color: white"><div style="display:flex; gap:20px; margin-left:20px;">
 
     <button class="small-normal-btn" data-value="-3.00">−3.00</button>
     <button class="small-normal-btn" data-value="-2.00">−2.00</button>
@@ -3642,11 +3690,14 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </tr>
 
 <tr class="white">
-<td colspan="7"><b>Generate using &nbsp;
-  <button id="btnCalc" class="normal-btn">Frame Details</button>&nbsp; or&nbsp;
-  <button id="btnLength" class="normal-btn">Longest Lens</button>
+<td colspan="2"><b>Generate With<br>Either One  </td>
+<td colspan="2" style="background-color:white; border-right:none">
+<button id="btnCalc" class="normal-btn">Frame Details<br>(Personalised)</button>
+<td colspan="3" style="background-color:white; border-left:none">
+
+  <button id="btnLength" class="normal-btn">Longest Edge<br>Distance</button>
    
-          <label for="lengthInput" style="Display:none;">Length (mm)</label>
+          <label for="lengthInput" style="Display:none;">Length (mm)</label>&nbsp;&nbsp;
           <input type="number" id="lengthInput"value="33" step="1" style="max-width:40px;">&nbsp;(mm)</b><br>
 
 </td></tr>
@@ -3665,14 +3716,52 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 </div>
 
+
+
+
+
+<table style="
+  border:none;
+  border-collapse:collapse;
+  text-align:left;
+  margin-left:45px;
+  font-size:12px;
+  color:var(--green);
+">
+  <tr style="border:none;">
+    <td style="border:none; padding:4px 0;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="width:30px; height:10px; background:var(--barOD);"></div>
+        <span> = <b> RX lens thickness.</b></span>
+      </div>
+    </td>
+  </tr>
+
+  <tr style="border:none;">
+    <td style="border:none; padding:4px 0;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="width:30px; height:10px; background: darkblue;"></div>
+        <span> = <b> Additional thickness if stock lens</b></span>
+      </div>
+    </td>
+  </tr>
+
+  <tr style="border:none;">
+    <td style="border:none; padding:4px 0;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="width:30px; height:10px; background:#a8733b;"></div>
+        <span>= <b>Frame thickness</b> used for comparison.</span>
+      </div>
+    </td>
+  </tr>
+
+</table>
+
+
+
+
 </div>
 </div>
-
-
-
-
-
-
 
 
 
@@ -3707,7 +3796,6 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
   </div>
 
   <div id="filterPanel" style="margin-top:10px; display:block;">
-<div id="filterPanel" style="margin-top:10px; display:block;">
   <div style="
     display:grid;
     grid-template-columns: 50% 50%;
@@ -3798,12 +3886,12 @@ document.getElementById("toggleFilters").addEventListener("click", () => {
 ========================= */
 const CSV_URL = "https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/lens%20selector.csv";
 const INDICES = [1.56, 1.60, 1.67, 1.74];
-const CENTER_MINUS = 1.3;   // minus lens min center thickness
-const EDGE_PLUS    = 1.3;   // plus lens min center thickness
+const CENTER_MINUS = 1.1;   // minus lens min center thickness
+const EDGE_PLUS    = 1.1;   // plus lens min center thickness
 const BASE_PX      = 50 * 0.6; // px per mm before scale radios
 
-function minusCorr(n){ if(n===1.56) return 1.075; if(n===1.60) return 1.025; return 1; }
-function plusCorr(n){  if(n===1.56) return 1.1;  if(n===1.60) return 1.05;  if(n===1.67) return 1.025; if(n===1.74) return 1.0125; return 1; }
+function minusCorr(n){ if(n===1.56) return 1.2; if(n===1.60) return 1.2; return 1; }
+function plusCorr(n){  if(n===1.56) return 1.6;  if(n===1.60) return 1.2;  if(n===1.67) return 1.1; if(n===1.74) return 1.05; return 1; }
 
 /* =========================
    STATE
@@ -3870,7 +3958,7 @@ function minusThickness(S,C,A,n,y){
 function plusThickness(S,C,A,n,y){
   const Fh = effectivePower(S,C,A);
   let t = EDGE_PLUS + (y*y*Fh)/(2000*(n-1)); // center thickness from rim sag
-  t = Math.max(t, 1.3);
+  t = Math.max(t, 1.1	);
   t *= plusCorr(n);
   return t;
 }
@@ -3959,15 +4047,57 @@ function renderBars(rx, geom, mode, lenOverride){
   function eyeLabel(isPlus){ return isPlus ? "" : ""; }
 
   // ========== DRAW FUNCTION ==========
-// --- helper for stock lens % ---
-function stockFactor(n){
-  if (n === 1.56) return 1.20;     
-  if (n === 1.60) return 1.10;
-  if(n === 1.67) return 1.05; 
-  if (n === 1.74) return 1.05;        
+// --- helper for stock lens %, separated for plus/minus ---
+function stockFactor(n, isPlus) {
+  if (isPlus) {
+    // PLUS lenses (center thickness heavier, smaller scaling)
+    if (n === 1.56) return 1.5;
+    if (n === 1.60) return 1.1;
+    if (n === 1.67) return 1.1;
+    if (n === 1.74) return 1.05;
+  } else {
+    // MINUS lenses (edge thicker, bigger scaling)
+    if (n === 1.56) return 1.2;
+    if (n === 1.60) return 1.1;
+    if (n === 1.67) return 1.1;
+    if (n === 1.74) return 1.05;
+  }
   return 1.0;
 }
 
+
+// --- Stock lens availability rules (paste here) ---
+function getStockAvailability(S, C, n) {
+  if (S > 2.00) return { available: false, maxDia: null };
+  if (C < -2.00) return { available: false, maxDia: null };
+
+  if (n === 1.56) {
+    if (S > +2.00 || S < -6.00) return { available: false, maxDia: null };
+    if (S >= 0 && S <= +2.00) return { available: true, maxDia: 65 };
+    return { available: true, maxDia: 70 };
+  }
+
+  if (n === 1.60) {
+    if (S > 0 || S < -8.00) return { available: false, maxDia: null };
+    return { available: true, maxDia: 70 };
+  }
+
+  if (n === 1.67) {
+    if (S > 0 || S < -12.00) return { available: false, maxDia: null };
+    if (S >= -8.00) return { available: true, maxDia: 70 };
+    return { available: true, maxDia: 65 };
+  }
+
+  if (n === 1.74) {
+    if (S > -2.00 || S < -12.00) return { available: false, maxDia: null };
+    if (S >= -8.00) return { available: true, maxDia: 70 };
+    return { available: true, maxDia: 65 };
+  }
+
+  return { available: false, maxDia: null };
+}
+
+window.showStockBars = true;
 
   function draw() {
     diagram.innerHTML = ""; // ✅ clears old drawings only, keeps controls fixed
@@ -4003,7 +4133,7 @@ function stockFactor(n){
       padding:20px 20px;
     `;
     rightBox.innerHTML = `<div style="text-align:center;margin-bottom:6px;">
-      <u><b>Right Lens thickest ${odStatus}</U></b></span>
+      <u><b>Right Lens thickest (mm) ${odStatus}</U></b></span>
     </div>`;
 
     // --- LEFT box ---
@@ -4017,7 +4147,7 @@ function stockFactor(n){
       padding:20px 20px;
     `;
     leftBox.innerHTML = `<div style="text-align:center; margin-bottom:6px;">
-      <u><b>Left Lens thickest ${osStatus}</u></b></span>
+      <u><b>Left Lens thickest (mm) ${osStatus}</u></b></span>
     </div>`;
 
     // --- generate bar rows ---
@@ -4030,6 +4160,16 @@ function stockFactor(n){
       const isPlusOD = FhOD >= 0;
       const isPlusOS = FhOS >= 0;
 
+const reverseOD = isPlusOD ? "" : "reverse";
+const reverseOS = isPlusOS ? "" : "reverse";
+
+// --- stock lens availability per index ---
+const stockOD = getStockAvailability(rx.OD.S, rx.OD.C, n);
+const stockOS = getStockAvailability(rx.OS.S, rx.OS.C, n);
+
+
+
+
       const tOD = isPlusOD ? plusThickness(rx.OD.S,rx.OD.C,rx.OD.Ax,n,yOD)
                            : minusThickness(rx.OD.S,rx.OD.C,rx.OD.Ax,n,yOD);
       const tOS = isPlusOS ? plusThickness(rx.OS.S,rx.OS.C,rx.OS.Ax,n,yOS)
@@ -4038,48 +4178,70 @@ function stockFactor(n){
       const px = BASE_PX * scale;
       const odLen = tOD * px, osLen = tOS * px, frameLen = frameT * px;
 
+// flip the offset condition to match the new direction logic
+const offsetOD = !isPlusOD ? `margin-left:${odLen + 3}px;` : "";
+const offsetOS = !isPlusOS ? `margin-left:${osLen + 3}px;` : "";
+
+
       // Right bar
       const rightRow = document.createElement("div");
       rightRow.className = "bar-row";
       rightRow.style.margin = "6px 0";
-      rightRow.innerHTML = `
-        <div class="bar-label"><br>${n.toFixed(2)}</div>
-        <div class="bar-block">
-<div class="bar-text"><br>
-  <b>
-    RX/Stock = ${tOD.toFixed(1)}mm / ${(tOD * stockFactor(n)).toFixed(1)}mm${eyeLabel(isPlusOD)}
-  </b>
-</div><div class="bar-block">
+rightRow.innerHTML = `
+  <div class="bar-label"><br>${n.toFixed(2)}</div>
+  <div class="bar-block">
+    <div class="bar-text"><br>
+      <b>
+        RX ${tOD.toFixed(1)}
+        <span>/ Stock ${stockOD.available ? (tOD * stockFactor(n, isPlusOD)).toFixed(1) : "None"}${eyeLabel(isPlusOD)}</span>
+      </b>
+    </div>
+    <div style="display:flex; align-items:flex-start; gap:6px; position:relative;">
+      <div class="your-eye">Your<br>Eye</span></div>
+    <div class="eye-arrow">◑´→</div>
+      <div class="bar-track ${reverseOD}" style="${offsetOD}">
+        <div class="bar" style="background:var(--barOD);width:${odLen}px;"></div>
+        <div class="bar-stock" style="
+          display:${(window.showStockBars && stockOD.available) ? 'block' : 'none'};
+          width:${(window.showStockBars && stockOD.available) ? odLen * stockFactor(n, isPlusOD) : 0}px;"></div>
+        <div class="bar-frame" style="background:#a8733b;width:${frameLen}px;"></div>
+      </div>
+    </div>
+  </div>
+`;
 
-          <div class="bar" style="background:var(--barOD);width:${odLen}px;"></div>
-<div class="bar-stock" style="width:${odLen * stockFactor(n)}px;"></div>
-          <div class="bar-frame" style="background:#a8733b;width:${frameLen}px;"></div>
 
-        </div>
-</div>
-
-      `;
       rightBox.appendChild(rightRow);
 
       // Left bar
       const leftRow = document.createElement("div");
       leftRow.className = "bar-row";
       leftRow.style.margin = "6px 0";
-      leftRow.innerHTML = `
-        <div class="bar-label"><br>${n.toFixed(2)}</div>
-        <div class="bar-block">
-<div class="bar-text"><br>
-  <b>
-    RX/Stock = ${tOS.toFixed(1)}mm / ${(tOS * stockFactor(n)).toFixed(1)}mm ${eyeLabel(isPlusOS)}
-  </b>
-</div><div class="bar-block">
-          <div class="bar" style="background:var(--barOS);width:${osLen}px;"></div>
- <div class="bar-stock" style="width:${osLen * stockFactor(n)}px;"></div>
-          <div class="bar-frame" style="background:#a8733b;width:${frameLen}px;"></div>
-        </div>
-</div>
+leftRow.innerHTML = `
+  <div class="bar-label"><br>${n.toFixed(2)}</div>
+  <div class="bar-block">
+    <div class="bar-text"><br>
+      <b>
+        RX ${tOS.toFixed(1)}
+        <span>/ Stock ${stockOS.available ? (tOS * stockFactor(n, isPlusOS)).toFixed(1) : "None"}${eyeLabel(isPlusOS)}</span>
+      </b>
+    </div>
+    <div style="display:flex; align-items:flex-start; gap:6px; position:relative;">
+      <div class="your-eye">Your<br>Eye</span></div>
+      <div class="eye-arrow">◑´→</div>
+      <div class="bar-track ${reverseOS}" style="${offsetOS}">
+        <div class="bar" style="background:var(--barOS);width:${osLen}px;"></div>
+        <div class="bar-stock" style="
+          display:${(window.showStockBars && stockOS.available) ? 'block' : 'none'};
+          width:${(window.showStockBars && stockOS.available) ? osLen * stockFactor(n, isPlusOS) : 0}px;"></div>
+        <div class="bar-frame" style="background:#a8733b;width:${frameLen}px;"></div>
 
-      `;
+      </div>
+    </div>
+  </div>
+`;
+;
+
       leftBox.appendChild(leftRow);
     });
 
@@ -4150,29 +4312,7 @@ legend.style.cssText = `
 
 legend.innerHTML = `
 
-  <div style="margin-top:6px;">
-
-
-  <!-- Lens row -->
-  <div style="display:flex; align-items:center; gap:10px; margin-left:30px;">
-    <div style="width:30px; height:10px; background:var(--barOD);"></div>
-    <span> Blue bar represents lens thickness at the horizontal height.
-    </span>
-
-  </div>
-
-  <!-- Frame row -->
-  <div style="display:flex; align-items:center; gap:10px; margin-left:30px;">
-    <div style="width:30px; height:10px; background:#a8733b;"></div>
-    <span> Brown bar represents frame thickness.    </span>
-  </div>
-</div>
-
-
-
-
 `;
-
 diagram.appendChild(legend);
 
   }
@@ -4303,6 +4443,14 @@ function parseRx(){
     OS:{ S:SOS, C:COS, Ax:getVal("axisOS") }
   };
 }
+
+
+
+
+
+
+
+
 
 /* =========================
    CSV LOADING (DOM-safe)
