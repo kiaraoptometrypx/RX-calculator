@@ -803,8 +803,8 @@ function toggleSection(id) {
 </div>
 
 
-
-<h2>Customer Details and Eye Exams</h2>
+<br>
+<h2>Customer Details & Eye Exams</h2>
 <div class="pane">
 
 
@@ -3595,7 +3595,6 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 
-
 <div class="section">
 <span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-lens-thickness">
   ▼ <i>How to Check Lens Thickness</I>
@@ -3603,15 +3602,21 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 <div id="lens-thickness" style="display:none;">
 <div class="row" style="gap:10px; padding:5px 15px 0px 15px;">
-<i>1. Key in PD and RX.<br>2. Either choose to calculate by Frames Details or Longest Length.<br>3. If choose Longest length, then measure OC to the longest distance on the lens.<br>4. Calculator will then show what is the thickness at the position.</I><br>
+<i>1. Key in PD and RX.<br>2. Either choose to calculate by Frames Details or Longest Length.<br>3. If choose Longest length, then measure OC to the longest distance on the lens.<br>4. Calculator will then show what is the thickness at the position.</I>
 </div>
 </div>
+<br><br>
+<h2>Lens Thickness & Minimum Blank Size Calculator</h2>
 
-<h2>Lens Thickness and Minimum Blank Size Calculator</h2>
+
+
+
+
   <div class="pane"><br>
-
-
-
+<span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-frame-lens-details">
+  ▼ <i>Frame Details & Prescription</I>
+</span>
+<div id="frame-lens-details" style="display:none;">
 
     <table>
 <tr class="calibrator">
@@ -3655,6 +3660,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <td colspan="7" style="border:none;"></td>
 </tr>
 
+
 <tr class="white">
 <td><b>Sides</b></td>
 <td><b>PD</b></td>
@@ -3692,20 +3698,24 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <tr class="white">
 <td colspan="2"><b>Generate With<br>Either One  </td>
 <td colspan="2" style="background-color:white; border-right:none">
-<button id="btnCalc" class="normal-btn">Frame Details<br>(Personalised)</button>
+<button id="btnCalc" class="normal-btn">Customer & <br> Frame Details</button>
 <td colspan="3" style="background-color:white; border-left:none">
 
-  <button id="btnLength" class="normal-btn">Longest Edge<br>Distance</button>
+  <button id="btnLength" class="normal-btn">Longest Edge<br>Distance (mm)</button>
    
           <label for="lengthInput" style="Display:none;">Length (mm)</label>&nbsp;&nbsp;
-          <input type="number" id="lengthInput"value="33" step="1" style="max-width:40px;">&nbsp;(mm)</b><br>
+          <input type="number" id="lengthInput"value="33" step="1" style="max-width:40px; height:32px; transform: translateY(-6px)"></b><br>
 
 </td></tr>
 <tr>
 <td colspan="7" style="border:none;"></td>
 </tr>
 </table>
+</div>
 
+
+
+<div id="frame-lens-2-details" style="display:none;">
 
 <div class="row"
      style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
@@ -3713,21 +3723,14 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
   <div class="pane" style="min-width:90%; padding:10px; text-align:center;" id="mbsLine" class="tiny" style="flex:1;"><i>- Generating Minimum Blank Size.</i></div>
   <div class="pane" style="width:90%; padding:10px; text-align:center;" id="thicknessBars" style="flex:1; margin-top:10px;"><I>~ Generating Lens Thickness.</i></div>
   <div id="thickNote" class="tiny muted" style="flex:1; margin-top:4px;"></div>
-
 </div>
 
 
 
-
-
-<table style="
-  border:none;
-  border-collapse:collapse;
-  text-align:left;
-  margin-left:45px;
-  font-size:12px;
-  color:var(--green);
-">
+<div class="row"
+     style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+<div class="pane" style="min-width:90%; padding:10px; text-align:center;>
+<table>
   <tr style="border:none;">
     <td style="border:none; padding:4px 0;">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -3756,16 +3759,13 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
   </tr>
 
 </table>
+</div>
 
-
-
+</div>
 
 </div>
 </div>
-
-
-
-
+</div>
 
 
 
@@ -3777,7 +3777,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
     <!-- =========================
-     FINAL STAGE: LENS OPTIONS (NEW) xxxxx
+     FINAL STAGE: LENS OPTIONS (NEW) 
 ========================= -->
 <div class="section" style="margin-bottom:10px;">
     <h2>Recommended Lens Options</h2>
@@ -4073,7 +4073,7 @@ function getStockAvailability(S, C, n) {
 
   if (n === 1.56) {
     if (S > +2.00 || S < -6.00) return { available: false, maxDia: null };
-    if (S >= 0 && S <= +2.00) return { available: true, maxDia: 65 };
+    if (S >= +0.25 && S <= +2.00) return { available: true, maxDia: 61 };
     return { available: true, maxDia: 70 };
   }
 
@@ -4084,13 +4084,13 @@ function getStockAvailability(S, C, n) {
 
   if (n === 1.67) {
     if (S > 0 || S < -12.00) return { available: false, maxDia: null };
-    if (S >= -8.00) return { available: true, maxDia: 70 };
+    if (S >= -8.00) return { available: true, maxDia: 65 };
     return { available: true, maxDia: 65 };
   }
 
   if (n === 1.74) {
     if (S > -2.00 || S < -12.00) return { available: false, maxDia: null };
-    if (S >= -8.00) return { available: true, maxDia: 70 };
+    if (S >= -8.00) return { available: true, maxDia: 65 };
     return { available: true, maxDia: 65 };
   }
 
@@ -4167,7 +4167,11 @@ const reverseOS = isPlusOS ? "" : "reverse";
 const stockOD = getStockAvailability(rx.OD.S, rx.OD.C, n);
 const stockOS = getStockAvailability(rx.OS.S, rx.OS.C, n);
 
+// --- check if stock diameter can cover required blank size ---
+const requiredDia = LAST_GEOM?.MBS || 0;
 
+const stockUsableOD = stockOD.available && stockOD.maxDia && requiredDia <= stockOD.maxDia;
+const stockUsableOS = stockOS.available && stockOS.maxDia && requiredDia <= stockOS.maxDia;
 
 
       const tOD = isPlusOD ? plusThickness(rx.OD.S,rx.OD.C,rx.OD.Ax,n,yOD)
@@ -4193,7 +4197,8 @@ rightRow.innerHTML = `
     <div class="bar-text"><br>
       <b>
         RX ${tOD.toFixed(1)}
-        <span>/ Stock ${stockOD.available ? (tOD * stockFactor(n, isPlusOD)).toFixed(1) : "None"}${eyeLabel(isPlusOD)}</span>
+        <span>, Stock ${stockUsableOD ? (tOD * stockFactor(n, isPlusOD)).toFixed(1) : "-"}${eyeLabel(isPlusOD)}</span>
+
       </b>
     </div>
     <div style="display:flex; align-items:flex-start; gap:6px; position:relative;">
@@ -4202,7 +4207,7 @@ rightRow.innerHTML = `
       <div class="bar-track ${reverseOD}" style="${offsetOD}">
         <div class="bar" style="background:var(--barOD);width:${odLen}px;"></div>
         <div class="bar-stock" style="
-          display:${(window.showStockBars && stockOD.available) ? 'block' : 'none'};
+display:${(window.showStockBars && stockUsableOD) ? 'block' : 'none'};
           width:${(window.showStockBars && stockOD.available) ? odLen * stockFactor(n, isPlusOD) : 0}px;"></div>
         <div class="bar-frame" style="background:#a8733b;width:${frameLen}px;"></div>
       </div>
@@ -4223,7 +4228,7 @@ leftRow.innerHTML = `
     <div class="bar-text"><br>
       <b>
         RX ${tOS.toFixed(1)}
-        <span>/ Stock ${stockOS.available ? (tOS * stockFactor(n, isPlusOS)).toFixed(1) : "None"}${eyeLabel(isPlusOS)}</span>
+<span>, Stock ${stockUsableOS ? (tOS * stockFactor(n, isPlusOS)).toFixed(1) : "-"}${eyeLabel(isPlusOS)}</span>
       </b>
     </div>
     <div style="display:flex; align-items:flex-start; gap:6px; position:relative;">
@@ -4232,7 +4237,7 @@ leftRow.innerHTML = `
       <div class="bar-track ${reverseOS}" style="${offsetOS}">
         <div class="bar" style="background:var(--barOS);width:${osLen}px;"></div>
         <div class="bar-stock" style="
-          display:${(window.showStockBars && stockOS.available) ? 'block' : 'none'};
+display:${(window.showStockBars && stockUsableOS) ? 'block' : 'none'};
           width:${(window.showStockBars && stockOS.available) ? osLen * stockFactor(n, isPlusOS) : 0}px;"></div>
         <div class="bar-frame" style="background:#a8733b;width:${frameLen}px;"></div>
 
@@ -4288,7 +4293,7 @@ const stockBtn = document.createElement("button");
 stockBtn.id = "toggleStock";
 stockBtn.className = "small-normal-btn";
 stockBtn.textContent = "Show Stock Lens";
-stockBtn.style.marginLeft = "20px";
+stockBtn.style.marginLeft = "50px";
 frameToggleBtn.parentNode.appendChild(stockBtn);
 
 stockBtn.addEventListener("click", () => {
@@ -4694,6 +4699,8 @@ makeToggle("toggle-comfy", "exam-comfy");
 makeToggle("toggle-sharpest", "exam-sharpest");
 makeToggle("toggle-lens-thickness", "lens-thickness");
 makeToggle("toggle-settings-block", "settings-block");
+makeToggle("toggle-frame-lens-details","frame-lens-details")
+makeToggle("toggle-frame-lens-details","frame-lens-2-details")
 
 
 </script>
@@ -4748,8 +4755,8 @@ document.getElementById("resetSph").addEventListener("click", () => {
 
 
 
-
-
+</div>
+</div>
 
 
 <!-- Spacer at the bottom for scrolling -->
