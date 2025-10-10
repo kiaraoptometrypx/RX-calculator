@@ -72,7 +72,6 @@
  h1{font-size:10px;text-align:center;margin:12px 0 10px;}
   h3{font-size:10px;margin:0 0 8px;}
   
-  label{font-weight:600}
   .row{align-items:center}
   .field{gap:0px}
   .field.w90{width:90px}
@@ -439,7 +438,7 @@ table input {
 
 .fixed-label {
   font-size: 12px !important;   /* stays fixed regardless */
-  font-weight: 600;
+ 
 }
 /* Default select look */
 .dc-select {
@@ -494,6 +493,7 @@ table input {
 .fl-index[type="checkbox"]:checked {
   background: #8BAD79;         /* filled green */
 }
+
 label {
   display: flex;
   align-items: center;
@@ -3837,8 +3837,6 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 
-
-
 <div class="section">
 
 <div class="pane" style="align-items:center; padding:10px;">
@@ -3853,23 +3851,16 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <div id="lens-selector" style="display:none;">
  <div style="height:10px;"></div>
 
-<div class="pane" style="padding:10px 10px 0px 10px;">
-<span><b>Select your preferences then search for lenses.</b></span><br>
-
-    <button id="btnFetch" class="normal-btn">Search Lenses</button>
-    <span id="status" class="tiny muted"></span>&nbsp;
-    <button id="btnClearFilters" class="normal-btn" >Clear Filters</button>&nbsp;
-    <button id="toggleFilters" class="normal-btn">Hide Filters ▲</button>
-</div>
+<div class="pane" style="padding:10px">
+  <span id="toggle-single" style="cursor:pointer; user-select:none; font-weight:bold;">▼ Build Your Single Vision Lens</span>
 
 
-<div id="filterPanel">
- <div style="height:10px;"></div>
-
-<div class="pane" style="align-items:center; padding:5px 10px 5px 10px;">
 
 
-<span><b>Preferences</b></span><br>
+
+
+
+<div id="singleFilters" style="display:none;">
 
 
       <!-- Appearance -->
@@ -3877,10 +3868,10 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
  <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
         <b>Appearance :</b>
 
-  <label><input type="checkbox" class="fl-appear" value="Clear" checked> Clear</label>
-  <label><input type="checkbox" class="fl-appear" value="Photochromic" checked> Photochromic</label>
-  <label><input type="checkbox" class="fl-appear" value="Tinted" checked> Tinted</label>
-  <label><input type="checkbox" class="fl-appear" value="Polarized" checked> Polarized</label>
+  <label><input type="checkbox" class="fl-appear" value="Clear"> Clear</label>
+  <label><input type="checkbox" class="fl-appear" value="Photochromic" > Photochromic</label>
+  <label><input type="checkbox" class="fl-appear" value="Tinted" > Tinted</label>
+  <label><input type="checkbox" class="fl-appear" value="Polarized" > Polarized</label>
 </div>
 
       </div>
@@ -3890,11 +3881,11 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
  <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
         <b>Index Group :</b>
 
-          <label><input type="checkbox" class="fl-index" value="1.5" checked> 1.5</label>
-          <label><input type="checkbox" class="fl-index" value="Safety" checked> Safety</label>
-          <label><input type="checkbox" class="fl-index" value="1.6" checked> 1.6</label>
-          <label><input type="checkbox" class="fl-index" value="1.67" checked> 1.67</label>
-          <label><input type="checkbox" class="fl-index" value="1.74" checked> 1.74</label>
+          <label><input type="checkbox" class="fl-index" value="1.5" > 1.5</label>
+          <label><input type="checkbox" class="fl-index" value="Safety" > Safety</label>
+          <label><input type="checkbox" class="fl-index" value="1.6" > 1.6</label>
+          <label><input type="checkbox" class="fl-index" value="1.67" > 1.67</label>
+          <label><input type="checkbox" class="fl-index" value="1.74" > 1.74</label>
         </div>
       </div>
 
@@ -3903,10 +3894,10 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
  <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
         <b>Function :</b>
 
-          <label><input type="checkbox" class="fl-func" value="SV" checked> SV</label>
-          <label><input type="checkbox" class="fl-func" value="Multifocal" checked> Multifocal</label>
-          <label><input type="checkbox" class="fl-func" value="Office" checked> Office</label>
-          <label><input type="checkbox" class="fl-func" value="Anti-fatigue" checked> Anti-Fatigue</label>
+          <label><input type="checkbox" class="fl-func" value="SV" > SV</label>
+          <label><input type="checkbox" class="fl-func" value="Multifocal" > Multifocal</label>
+          <label><input type="checkbox" class="fl-func" value="Office" > Office</label>
+          <label><input type="checkbox" class="fl-func" value="Anti-fatigue" > Anti-Fatigue</label>
         </div>
 </div>
 
@@ -3914,9 +3905,9 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
   <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
     <b>Clarity & Coating :</b>
-    <label><input type="checkbox" class="fl-normal" value="Standard" checked> Standard</label>
-    <label><input type="checkbox" class="fl-normal" value="High Clarity" checked> High Clarity</label>
-    <label><input type="checkbox" class="fl-normal" value="Premium Ultra Clear" checked> Premium Ultra Clear</label>
+    <label><input type="checkbox" class="fl-normal" value="Standard" > Standard</label>
+    <label><input type="checkbox" class="fl-normal" value="High Clarity" > High Clarity</label>
+    <label><input type="checkbox" class="fl-normal" value="Premium Ultra Clear" > Premium Ultra Clear</label>
   </div>
 </div>
 
@@ -3924,8 +3915,8 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
   <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
     <b>Durability Preference :</b>
-    <label><input type="checkbox" class="fl-normal" value="Less Reflection (Lower Durability)" checked> Less Reflection (Lower Durability)</label>
-    <label><input type="checkbox" class="fl-normal" value="High Durability (More Reflection)" checked> High Durability (More Reflection)</label>
+    <label><input type="checkbox" class="fl-normal" value="Less Reflection (Lower Durability)" > Less Reflection (Lower Durability)</label>
+    <label><input type="checkbox" class="fl-normal" value="High Durability (More Reflection)" > High Durability (More Reflection)</label>
   </div>
 </div>
 
@@ -3933,16 +3924,13 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
   <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
     <b>Viewing Preference :</b>
-    <label><input type="checkbox" class="fl-normal" value="Wider View (Spherical)" checked> Wider View (Spherical)</label>
-    <label><input type="checkbox" class="fl-normal" value="Thinner Lens (Aspheric)" checked> Thinner Lens (Aspheric)</label>
+    <label><input type="checkbox" class="fl-normal" value="Wider View (Spherical)" > Wider View (Spherical)</label>
+    <label><input type="checkbox" class="fl-normal" value="Thinner Lens (Aspheric)" > Thinner Lens (Aspheric)</label>
 
   </div>
 </div>
 
-
-
-
-      <!-- Price -->
+     <!-- Price -->
       <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
         <b>Price (RM) :</b>
           <span>Max</span>
@@ -3950,23 +3938,44 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
           <button id="capMinus" class="small-normal-btn">–100</button>
           <button id="capPlus" class="small-normal-btn">+100</button>
       </div>
+
+
+
+    <span id="status" class="tiny muted"></span>&nbsp;
+    <button id="btnClearFilters" class="normal-btn" >Clear Filters</button>&nbsp;
+<button id="btnSelectAllSV" class="normal-btn">Select All (SV)</button>
+
       </div>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  <div style="height:10px;"></div>
 
 
 
 
 
-
-
-<div class="pane" style="padding:10px;">
+<div class="pane" style="padding:0 10px 10px 10px;">
+<span>    <button id="btnFetch" class="normal-btn">Search Lenses</button>
+</span>
   <div id="lensResults">
     <div class="muted">Calculate thickness to see lenses choices.”.</div>
   </div>
 </div>
 </div>
-</div>
 
 
 
@@ -3980,6 +3989,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 
+<!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR --->
 
 
 
@@ -3990,17 +4000,6 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 
-
-<script>
-// Toggle show/hide filters
-document.getElementById("toggleFilters").addEventListener("click", () => {
-  const panel = document.getElementById("filterPanel");
-  const btn = document.getElementById("toggleFilters");
-  const visible = panel.style.display !== "none";
-  panel.style.display = visible ? "none" : "block";
-  btn.textContent = visible ? "Show Filters ▼" : "Hide Filters ▲";
-});
-</script>
 
 
   <!-- Container for Lens Cards -->
@@ -4608,15 +4607,23 @@ function parseRx(){
 async function loadCSV(url){
   const res = await fetch(url, { cache:"no-store" });
   if(!res.ok) throw new Error("HTTP "+res.status);
-  const text = await res.text();
-  const rows = text.trim().split(/\r?\n/).map(r => r.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/));
-  const headers = rows[0].map(h => h.replace(/^"|"$/g,'').trim());
-  return rows.slice(1).map(r=>{
-    const obj={};
-    r.forEach((val,i)=> obj[headers[i]] = (val||"").replace(/^"|"$/g,'').trim() );
+  let text = await res.text();
+
+  // Remove BOM and trim
+  text = text.replace(/^\uFEFF/, '').trim();
+
+  const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+  if (lines.length < 2) return [];
+
+  const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g,'').trim());
+  return lines.slice(1).map(line => {
+    const cols = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+    const obj = {};
+    headers.forEach((h,i)=> obj[h] = (cols[i]||"").replace(/^"|"$/g,'').trim());
     return obj;
   });
 }
+
 async function init(){
   const statusEl = document.getElementById("status");
   if(statusEl) statusEl.textContent = "Loading CSV…";
@@ -4629,6 +4636,10 @@ async function init(){
   }
 }
 document.addEventListener("DOMContentLoaded", init);
+
+
+
+
 
 /* =========================
    FILTER GROUPING HELPERS
@@ -4683,12 +4694,8 @@ function withinCap(price, cap){ if(!cap) return true; return Number(price) <= ca
 
 
 
-
-
-
-
 <!-- =========================
-     LENS OPTION SCRIPT (NEW)
+     LENS OPTION SCRIPT (FIXED)
 ========================= -->
 <script>
 function renderLensOptions(geom, rx) {
@@ -4700,35 +4707,58 @@ function renderLensOptions(geom, rx) {
     return;
   }
 
+  // Collect filter selections
   const appearSet = checkedValues(".fl-appear");
-  const indexSet = checkedValues(".fl-index");
-  const funcSet = checkedValues(".fl-func");
+  const indexSet  = checkedValues(".fl-index");
+  const funcSet   = checkedValues(".fl-func");
+  const normalSet = checkedValues(".fl-normal");
   const cap = parseFloat(document.getElementById("priceCap").value) || 0;
 
+  // Filter lenses from CSV
   const matches = PRODUCTS.filter(row => {
-    const price = parseFloat(row["UV_420_BL_PRICE_RM"]||"0");
-    const app = getAppearance(row["CLEAR_CHANGING_TINT"]||"");
-    const idx = getIndexGroup(row["INDEX"]||"");
-    const func = getFunctionCat(row["FUNCTION"]||"");
+    const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
+    const idx   = getIndexGroup(row["INDEX"] || "");
+    const func  = getFunctionCat(row["LENS_DESIGN"] || "");
+    const price = parseFloat(row["UV_400_PRICE_RM"] || "0");
+    const coat  = (row["FUNCTION"] || "").trim();  // reused for stock/custom
+    const dura  = "";  // not used
+    const geomT = "";  // not used
+
+if (
+  appearSet.length === 0 &&
+  indexSet.length === 0 &&
+  funcSet.length === 0 &&
+  normalSet.length === 0
+) {
+  return false; // no filters selected → skip all
+}
+
     return withinCap(price, cap)
-        && (!appearSet.length || appearSet.includes(app))
-        && (!indexSet.length || indexSet.includes(idx))
-        && (!funcSet.length || funcSet.includes(func));
+      && (!appearSet.length || appearSet.includes(app))
+      && (!indexSet.length  || indexSet.includes(idx))
+      && (!funcSet.length   || funcSet.includes(func))
+      && (!normalSet.length || normalSet.includes(coat) || normalSet.includes(dura) || normalSet.includes(geomT));
   });
 
+  console.log("Products loaded:", PRODUCTS.length);
+  console.log("Matches found:", matches.length);
+  console.log("First few:", PRODUCTS.slice(0,3));
+
+  // No results
   if (!matches.length) {
     container.innerHTML = `<div class="muted">No lens options match your filters or price cap.</div>`;
     return;
   }
 
+  // Render top 4 matches
   matches.slice(0, 4).forEach(row => {
-    const app = getAppearance(row["CLEAR_CHANGING_TINT"]);
-    const idx = getIndexGroup(row["INDEX"]);
-    const func = getFunctionCat(row["FUNCTION"]);
-    const price = row["UV_420_BL_PRICE_RM"] ? "RM " + row["UV_420_BL_PRICE_RM"] : "—";
-    const dia = row["DIA"] || "—";
-    const clarity = row["HIGH_CLARITY_COATING_PRICE_RM"] ? "+RM" + row["HIGH_CLARITY_COATING_PRICE_RM"] : "—";
-    const stock = row["STOCK_OR_RX"] || "";
+    const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
+    const idx   = getIndexGroup(row["INDEX"] || "");
+    const func  = getFunctionCat(row["LENS_DESIGN"] || "");
+    const price = parseFloat(row["UV_400_PRICE_RM"] || "0");
+    const coat  = (row["FUNCTION"] || "").trim();  // reused for stock/custom
+    const dia   = row["DIA"] || "—";               // ✅ fixed
+    const stock = row["FUNCTION"] || "—";          // ✅ fixed
 
     const card = document.createElement("div");
     card.className = "lens-card";
@@ -4739,27 +4769,20 @@ function renderLensOptions(geom, rx) {
         <span class="tag type">${app}</span>
         <span class="tag func">${func}</span>
       </div>
-      <div class="lens-price">${price} ${clarity !== "—" ? "• " + clarity : ""}</div>
-      <div class="lens-note">Available DIA ${dia} mm • ${stock}</div>
+      <div class="lens-price">RM ${price}</div>
+      <div class="lens-note">Coating: ${coat} • DIA ${dia} mm • ${stock}</div>
       <button class="select-btn">Select Lens</button>
     `;
     container.appendChild(card);
   });
 }
 
-// Reconnect button
+// Reconnect "Search Lenses" button
 document.getElementById("btnFetch").onclick = () => {
   const rx = parseRx();
   renderLensOptions(LAST_GEOM, rx);
 };
 
-// Clear Filters (reuse your logic)
-document.getElementById("btnClearFilters").onclick = () => {
-  document.querySelectorAll('.fl-appear, .fl-index, .fl-func,.fl-normal')
-    .forEach(cb => cb.checked = false);
-  document.getElementById("lensResults").innerHTML =
-    `<div class="muted">Filters cleared. Search again.</div>`;
-};
 </script>
 
 
@@ -4779,10 +4802,61 @@ document.getElementById("btnClearFilters").onclick = () => {
 
 
 
+<script>
+// ===========================
+// UNIVERSAL FILTER ACTIONS
+// ===========================
+function updateStatus(msg) {
+  document.querySelectorAll(".status, #status").forEach(st => (st.textContent = msg));
+}
+
+function setFilters(checked, selector = '.fl-appear, .fl-index, .fl-func, .fl-normal') {
+  document.querySelectorAll(selector).forEach(cb => (cb.checked = checked));
+}
+
+// ===========================
+// SHARED LOGIC (safe version)
+// ===========================
+
+// Toggle filters (show/hide both sets)
+document.querySelectorAll(".btnToggleFilters").forEach(btn =>
+  btn.addEventListener("click", () => {
+    const allFilters = document.querySelectorAll("#singleFilters, #multifocalFilters");
+    const hide = btn.textContent.includes("Hide");
+    allFilters.forEach(f => (f.style.display = hide ? "none" : "block"));
+
+    document.querySelectorAll(".btnToggleFilters").forEach(b => {
+      b.textContent = hide ? "Show Filters ▼" : "Hide Filters ▲";
+    });
+  })
+);
+
+// ===========================
+// SINGLE VISION CONTROLS (fixed to only affect SV filters)
+// ===========================
+document.getElementById("btnSelectAllSV")?.addEventListener("click", () => {
+  setFilters(true, "#singleFilters input[type='checkbox']");
+});
+
+document.getElementById("btnClearSV")?.addEventListener("click", () => {
+  setFilters(false, "#singleFilters input[type='checkbox']");
+  updateStatus("Single vision filters cleared.");
+});
 
 
+// ===========================
+// MULTIFOCAL CONTROLS
+// ===========================
+document.getElementById("btnSelectAllMF")?.addEventListener("click", () => {
+  setFilters(true, "#multifocalFilters input[type='checkbox']");
+  updateStatus("All multifocal filters selected.");
+});
 
-
+document.getElementById("btnClearMF")?.addEventListener("click", () => {
+  setFilters(false, "#multifocalFilters input[type='checkbox']");
+  updateStatus("Multifocal filters cleared.");
+});
+</script>
 
 
 
@@ -4848,7 +4922,8 @@ makeToggle("toggle-frame-lens-details","frame-lens-details");
 makeToggle("toggle-frame-lens-details","frame-lens-2-details");
 makeToggle("toggle-customer-details","customer-details");
 makeToggle("toggle-lens-selector","lens-selector")
-
+makeToggle("toggle-single", "singleFilters", "Show Single Vision Filters", "Hide Single Vision Filters");
+makeToggle("toggle-multi", "multifocalFilters", "Show Multifocal Filters", "Hide Multifocal Filters")
 
 </script>
 
@@ -4887,6 +4962,9 @@ document.getElementById("resetSph").addEventListener("click", () => {
 });
 
 </script>
+
+
+
 
 
 
