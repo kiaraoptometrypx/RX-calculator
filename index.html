@@ -3643,7 +3643,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <div class="row" style="gap:10px; padding:5px 15px 0px 15px;">
 <i>1. Key in PD and RX.<br>2. Either choose to calculate by Frames Details or Longest Length.<br>3. If choose Longest length, then measure OC to the longest distance on the lens.<br>4. Calculator will then show what is the thickness at the position.</I>
 </div>
-  <input id="safety" type="number" style="width:30px; height:15px; margin-left:20px; margin-top:5px; margin-right:10px;" placeholder="3" value="3"><span>Safety</span>
+  <input id="safety" type="number" style="width:30px; height:15px; margin-left:20px; margin-top:5px; margin-right:10px;" placeholder="2" value="2"><span>Safety</span>
 </div>
 <br><br>
 
@@ -3754,15 +3754,14 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </tr>
 
 <tr class="white">
-<td colspan="2"><b>Generate With<br>Either One<br></td>
-<td colspan="2" style="background-color:white; border-right:none">
-<button id="btnCalc" class="normal-btn">Customer & <br> Frame Details</button>
-<td colspan="3" style="background-color:white; border-left:none">
+<td colspan="7" style="background-color:white;">
+<button id="btnCalc" class="normal-btn">Generate with<br>Customer & Frame Details</button>&nbsp;&nbsp;or&nbsp;&nbsp; 
 
-  <button id="btnLength" class="normal-btn">Longest Edge<br>Distance (mm)</button>
+  <button id="btnLength" class="normal-btn">Generate with<br>Longest Edge Length (mm)</button>
+
    
-          <label for="lengthInput" style="Display:none;">Length (mm)</label>&nbsp;&nbsp;
-          <input type="number" id="lengthInput"value="30" step="1" style="max-width:40px; height:32px; transform: translateY(-6px)"></b><br>
+          <label for="lengthInput" style="Display:none;">Length (mm)</label>
+          <input type="number" id="lengthInput"value="30" step="1" style="max-width:40px;"></b><br>
 
 </td>
 
@@ -3950,25 +3949,14 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 
-    <label><input type="checkbox" class="fl-multifocal" value="Multifocal"> Multifocal – clear far to near without line.</label>
-    <label><input type="checkbox" class="fl-office" value="Office"> Office – clear mid to near for computer use.</label>
-
-
-
-     <!-- Price -->
-      <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
-        <b>Price (RM) :</b>
-          <span>Max</span>
-          <input id="priceCap" type="number" placeholder="1000" style="width:70px;">
-          <button id="capMinus" class="small-normal-btn">–100</button>
-          <button id="capPlus" class="small-normal-btn">+100</button>
-      </div>
-
-
 
     <span id="status" class="tiny muted"></span>&nbsp;
     <button id="btnClearFilters" class="normal-btn" >Clear Filters</button>&nbsp;
 <button id="btnSelectAllSV" class="normal-btn">Select All (SV)</button>
+
+    <label><input type="checkbox" class="fl-multifocal" value="Multifocal"> Multifocal – clear far to near without line.</label>
+    <label><input type="checkbox" class="fl-office" value="Office"> Office – clear mid to near for computer use.</label>
+
 
       </div>
 </div>
@@ -3989,7 +3977,15 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
  <div style="height:10px;"></div>
 
+     <!-- Price -->
+      <div class="pane" style="padding:10px; margin:5px 0px 5px 0px;">
+        <b>Price (RM) :</b>
+          <span>Max</span>
+          <input id="priceCap" type="number" placeholder="1000"  style="width:70px; border:1px solid grey; border-radius:4px; height:25px; padding:4px 6px; appearance:textfield;">
 
+          <button id="capMinus" class="small-normal-btn">–100</button>
+          <button id="capPlus" class="small-normal-btn">+100</button>
+      </div>
 
 
 
