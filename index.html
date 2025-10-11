@@ -273,12 +273,17 @@ th, td {
   white-space: normal;   /* allow line wrapping */
   word-wrap: break-word; /* legacy */
   overflow-wrap: break-word; /* modern */
+
 }
+
+
+
 
 th {   background:#d9d9d9; 
   color: black;}
 
-input {   width:80px; 
+input {   width:80px;
+  height:30px; 
   padding:2px; 
   text-align:center; 
   box-sizing: border-box;}
@@ -290,6 +295,7 @@ input {   width:80px;
 
 .wrap{width:90%;max-width:2000px;margin:0 auto;padding:0px;}
 .now td { background: #F5F5F5; }
+.adjustments td {height:25px;}
 .now-comfort td { background: #F5F5F5 ;}
 .white td { background: #d9d9d9; }
 .fc-results td { background: #EFF5E6; }
@@ -410,7 +416,7 @@ input {   width:80px;
 }
 
 .small-normal-btn {
-  padding: 2px 5px 2px 5px;
+  padding: 5px 10px 5px 10px;
   margin: 0px 0px 0px 0px;
   background: #eee;
   border-radius: 4px;
@@ -471,28 +477,33 @@ table input {
 .dc-select option[value="BAL"] { color: black; }
 
 
-/* --- Unified Checkbox Style (Appear / Func / Index) --- */
+/* --- Unified Checkbox Style (All Filter Types) --- */
 .fl-appear[type="checkbox"],
-.fl-normal[type="checkbox"],
+.fl-index[type="checkbox"],
 .fl-func[type="checkbox"],
-.fl-index[type="checkbox"] {
+.fl-clarity[type="checkbox"],
+.fl-durability[type="checkbox"],
+.fl-viewing[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
   width: 10px;
   height: 10px;
   border: 1px solid black;
-  border-radius: 40%;          /* makes it round */
+  border-radius: 40%;        /* makes it round */
   cursor: pointer;
   position: relative;
   background: #fff;
 }
 
 .fl-appear[type="checkbox"]:checked,
-.fl-normal[type="checkbox"]:checked,
+.fl-index[type="checkbox"]:checked,
 .fl-func[type="checkbox"]:checked,
-.fl-index[type="checkbox"]:checked {
-  background: #8BAD79;         /* filled green */
+.fl-clarity[type="checkbox"]:checked,
+.fl-durability[type="checkbox"]:checked,
+.fl-viewing[type="checkbox"]:checked {
+  background: #8BAD79;       /* filled green */
 }
+
 
 label {
   display: flex;
@@ -884,7 +895,7 @@ function toggleSection(id) {
 <table>
 <tr class="white">
     <td><b>Current RX</b></td>
-    <td><b>Sides</b></td>
+    <td><b>R/L</b></td>
     <td><b>Sph</b></td>
     <td><b>Cyl</b></td>
     <td><b>Axis</b></td>
@@ -901,7 +912,7 @@ function toggleSection(id) {
     <label for="current-wear-glasses">Glasses</label>
 </div>
 </td>
-    <td>Right</td>
+    <td>R</td>
     <td><input id="s1_od" placeholder="+0.00"></td>
     <td><input id="c1_od" placeholder="+0.00"></td>
     <td><input id="a1_od" placeholder="0"></td>
@@ -920,7 +931,7 @@ function toggleSection(id) {
     <input type="radio" id="current-wear-contacts" name="current-wearType" value="contacts">
     <label for="current-wear-contacts">Contacts</label>
   </div>
-    <td>Left</td>
+    <td>L</td>
     <td><input id="s1_os" placeholder="+0.00"></td>
     <td><input id="c1_os" placeholder="+0.00"></td>
     <td><input id="a1_os" placeholder="0"></td>
@@ -1034,7 +1045,7 @@ function toggleSection(id) {
 
   <tr class="white">
 <td colspan="1"><b>Test</b></td>
-<td><b>Sides</b></td>
+<td><b>R/L</b></td>
 <td><b>Sph</b></td>
 <td colspan="1"><b>Cyl</b></td>
 <td colspan="1"><b>Axis</b></td>
@@ -1044,7 +1055,7 @@ function toggleSection(id) {
 <tr class="white">
 
     <td row>FC DC Error<br>Notes</td>
-<td>Right</td>
+<td>R</td>
 
     <td><input id="dc-sph-ou-manual-notes" placeholder="+0.00"></td>
     <td><input id="c2_ou_manual_notes" placeholder="+0.00"></td>
@@ -1057,7 +1068,7 @@ function toggleSection(id) {
 
 <tr class="paleblue">
   <td><b>Final Rx</b></td>
-  <td><b>Sides</b></td>
+  <td><b>R/L</b></td>
   <td><b>Sph</b></td>
   <td><b>Cyl</b></td>
   <td><b>Axis</b></td>
@@ -1073,7 +1084,7 @@ function toggleSection(id) {
       <label for="manual-ou-wear-glasses">Glasses</label>
     </div>
   </td>
-  <td>Right</td>
+  <td>R</td>
   <!-- use text so + is allowed; keep numeric keypad -->
   <td><input type="text" id="manual-sph-ou-od" placeholder="+0.00" inputmode="decimal" pattern="^[+\-]?\d*\.?\d*$"></td>
   <td><input type="text" id="manual-cyl-ou-od" placeholder="+0.00" inputmode="decimal" pattern="^[+\-]?\d*\.?\d*$"></td>
@@ -1104,7 +1115,7 @@ function toggleSection(id) {
       <label for="manual-ou-wear-contacts">Contacts</label>
     </div>
   </td>
-  <td>Left</td>
+  <td>L</td>
   <td><input type="text" id="manual-sph-ou-os" placeholder="+0.00" inputmode="decimal" pattern="^[+\-]?\d*\.?\d*$"></td>
   <td><input type="text" id="manual-cyl-ou-os" placeholder="+0.00" inputmode="decimal" pattern="^[+\-]?\d*\.?\d*$"></td>
   <td><input type="number" id="manual-axis-ou-os" placeholder="0" step="1" min="0" max="180"></td>
@@ -1192,7 +1203,7 @@ function toggleSection(id) {
   <!-- Deficit Rows -->
   <tr class="white">
 <td colspan="1"><b>Test</b></td>
-<td><b>Sides</b></td>
+<td><b>R/L</b></td>
 <td><b>Sph</b></td>
 <td colspan="1"><b>Cyl</b></td>
 <td colspan="1"><b>Axis</b></td>
@@ -1201,7 +1212,7 @@ function toggleSection(id) {
  
 <tr class="white">
     <td rowspan="1">FC DC Error<br>Notes</td>
-<td>Both</td>
+<td>B</td>
 
     <td><input id="dc-sph-ou-notes" placeholder="+0.00"></td>
     <td><input id="c2_ou_notes" placeholder="+0.00"></td>
@@ -1212,7 +1223,7 @@ function toggleSection(id) {
 
 <tr class="now">
     <td><b>Adjusted<br>FC DC Error<b></td>
-<td>Both</td>
+<td>B</td>
     <td><input id="dc-sph-ou" placeholder="+0.00"></td>
     <td><input id="c2_ou" placeholder="+0.00"></td>
     <td><input id="a2_ou" placeholder="0"></td>
@@ -1222,7 +1233,7 @@ function toggleSection(id) {
 
 <tr class="now">
   <td rowspan="2">FC DC<br>Balance</td>
-<td>Right</td>
+<td>R</td>
   <td id="final-sph-ou-re">0.00</td>
   <td id="final-cyl-ou-re">0.00</td>
   <td id="final-axis-ou-re">0</td>
@@ -1231,7 +1242,7 @@ function toggleSection(id) {
   <td id="final-dc-ou-re">—</td>
 </tr>
 <tr class="now">
- <td>Left</td>
+ <td>L</td>
 
   <td id="final-sph-ou-le">0.00</td>
   <td id="final-cyl-ou-le">0.00</td>
@@ -1252,7 +1263,7 @@ function toggleSection(id) {
 
 <tr class="comfort">
 <td><b>Final RX</b></td>
-<td><b>Sides</b></td>
+<td><b>R/L</b></td>
 <td><b>Sph</b></td>
 <td><b>Cyl</b></td>
 <td><b>Axis</b></td>
@@ -1268,7 +1279,7 @@ function toggleSection(id) {
 </div>
 </td>
 
-<td>Right</td>
+<td>R</td>
 
     <td id="res-sph-ou-re">0.00</td>
     <td id="res-cyl-ou-re">0.00</td>
@@ -1284,14 +1295,14 @@ function toggleSection(id) {
     <label for="wear-contacts">Contacts</label>
   </div>
 </td>
- <td>Left</td>
+ <td>L</td>
     <td id="res-sph-ou-le">0.00</td>
     <td id="res-cyl-ou-le">0.00</td>
     <td id="res-axis-ou-le">0</td>
     <td >—</td>
     <td id="res-dc-ou-le">BAL</td>
   </tr>
-<tr>
+<tr class="adjustments">
 <td colspan="7">
 <span onclick="toggleRow('adjustments-row-1')" 
    style="cursor:pointer; color:black; user-select:none; margin:0px 30px;">
@@ -1308,9 +1319,9 @@ function toggleSection(id) {
 
 
 
-<tr id="adjustments-row-1" style="display:none;">
+<tr class="adjustments" id="adjustments-row-1" style="display:none;">
   <td>Adjustments</td>
-  <td>Both</td>
+  <td>B</td>
   <td colspan="5" style="padding:0px; text-align:left;">
     <div>
       <!-- Clickable control to apply -0.25 x 180 -->
@@ -1339,16 +1350,15 @@ function toggleSection(id) {
   <td rowspan="2" colspan="1"><b>Extra Notes:</b></td>
   <td colspan="6" rowspan="2">
     <textarea id="extra-notes" rows="2" placeholder="Type anything here..." 
-  style="width:95%; height:40px; box-sizing:border-box;"></textarea>
-
-  </td>
+  style="width:95%; height:100px; box-sizing:border-box;"></textarea>  </td>
 </tr>
+
+
 <tr></tr>
 
 <tr class="comfort">
   <td colspan="7" style="padding:2px;"><i>~ End ~</i></td>
 </tr>
-</tbody>
 
 <tbody class="toggle-section-comfort-analysis" style="display:none;">
 
@@ -1366,6 +1376,7 @@ function toggleSection(id) {
 </tr>
 
 
+</tbody>
 </tbody>
 
 </table>
@@ -1430,7 +1441,7 @@ function toggleSection(id) {
 
   <tr class="white">
 <td colspan="1"><b>Test</b></td>
-<td><b>Sides</b></td>
+<td><b>R/L</b></td>
 <td><b>Sph</b></td>
 <td colspan="1"><b>Cyl</b></td>
 <td colspan="1"><b>Axis</b></td>
@@ -1441,7 +1452,7 @@ function toggleSection(id) {
 
   <tr class="white">
     <td rowspan="2">FC DC Error<br>Notes</td>
-<td>Right</td>
+<td>R</td>
 
     <td><input id="dc-sph-od-notes" placeholder="+0.00"></td>
     <td><input id="c2_od_notes" placeholder="+0.00"></td>
@@ -1451,7 +1462,7 @@ function toggleSection(id) {
   </tr>
 
   <tr class="white">
-<td>Left</td>
+<td>L</td>
 
     <td><input id="dc-sph-os-notes" placeholder="+0.00"></td>
     <td><input id="c2_os_notes" placeholder="+0.00"></td>
@@ -1620,7 +1631,7 @@ function toggleSection(id) {
   <td rowspan="2" colspan="1"><b>Extra Notes:</b></td>
   <td colspan="6" rowspan="2">
     <textarea id="extra-notes" rows="2" placeholder="Type anything here..." 
-  style="width:95%; height:40px; box-sizing:border-box;"></textarea>
+  style="width:95%; height:100px; box-sizing:border-box;"></textarea>
 
   </td>
 </tr>
@@ -2838,7 +2849,7 @@ document.querySelectorAll('.sph-btn-mono').forEach(btn => {
 
 
 <script>
-function(){
+(() => {
   // isolated namespace
   const _ID = '__dcAdvice_isolated_v1';
 
@@ -2880,7 +2891,7 @@ function _numToWord(n) {
 
     if (diffSteps < 0) {
       // need MORE minus -> press S-0.25 (red)
-      return `Click <span style="color:green;">S-0.25</span> ${word} ${plural} match DC.`;
+      return `Click <span style="color:green;">S-0.25</span> ${word} ${plural} balance DC.`;
     } else {
       // need MORE plus -> press S+0.25 (green)
       return `Click <span style="color:red;">S+0.25</span> ${word} ${plural} match DC.`;
@@ -3632,7 +3643,6 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <div class="row" style="gap:10px; padding:5px 15px 0px 15px;">
 <i>1. Key in PD and RX.<br>2. Either choose to calculate by Frames Details or Longest Length.<br>3. If choose Longest length, then measure OC to the longest distance on the lens.<br>4. Calculator will then show what is the thickness at the position.</I>
 </div>
- </span></b>
   <input id="safety" type="number" style="width:30px; height:15px; margin-left:20px; margin-top:5px; margin-right:10px;" placeholder="3" value="3"><span>Safety</span>
 </div>
 <br><br>
@@ -3699,7 +3709,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 <tr class="white">
-<td><b>Sides</b></td>
+<td><b>R/L</b></td>
 <td><b>PD</b></td>
 <td><b>SPH</b></td>
 <td><b>Cyl</b></td>
@@ -3708,7 +3718,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
   </tr>
 
-<td colspan="1"><b>Right</b></td>
+<td colspan="1"><b>R</b></td>
 <td>      <div><input id="monoPD_OD" type="number" placeholder="31"></div></td>
           <td><input type="text" id="sphOD" placeholder="+0.00"></td>
           <td><input type="text" id="cylOD" placeholder="+0.00"></td>
@@ -3731,7 +3741,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
         </tr>
         <tr>
-<td colspan="1"><b>Left</b></td>
+<td colspan="1"><b>L</b></td>
 <td>      <div><input id="monoPD_OS" type="number" placeholder="31"></div></td>
           <td><input type="text" id="sphOS" placeholder="+0.00"></td>
           <td><input type="text" id="cylOS" placeholder="+0.00"></td>
@@ -3744,7 +3754,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </tr>
 
 <tr class="white">
-<td colspan="2"><b>Generate With<br>Either One<br>  </td>
+<td colspan="2"><b>Generate With<br>Either One<br></td>
 <td colspan="2" style="background-color:white; border-right:none">
 <button id="btnCalc" class="normal-btn">Customer & <br> Frame Details</button>
 <td colspan="3" style="background-color:white; border-left:none">
@@ -3842,9 +3852,9 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <div class="pane" style="align-items:center; padding:10px;">
 
 <div style="display:flex; justify-content:center;">
-  <b><span   id="toggle-lens-selector"    style="cursor:pointer; user-select:none; text-align:center;">
+ <span   id="toggle-lens-selector"    style="cursor:pointer; user-select:none; text-align:center;">
     ▼ Lens Selector
-  </span></b>
+  </span>
 </div>
 
 
@@ -3865,70 +3875,85 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
       <!-- Appearance -->
       <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
- <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
-        <b>Appearance :</b>
+        <b>Type of Lens :</b> Do you want changing colour lenses? Do you want sunglasses? Do you want premium sunglasses that cuts glare (polarize)? Or just normal clear material?<br><br>
 
-  <label><input type="checkbox" class="fl-appear" value="Clear"> Clear</label>
-  <label><input type="checkbox" class="fl-appear" value="Photochromic" > Photochromic</label>
-  <label><input type="checkbox" class="fl-appear" value="Tinted" > Tinted</label>
-  <label><input type="checkbox" class="fl-appear" value="Polarized" > Polarized</label>
+
+<div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+
+
+<label><input type="checkbox" class="fl-appear" value="Clear"> Clear – normal transparent lens.</label>
+<label><input type="checkbox" class="fl-appear" value="Photochromic"> Photochromic – darkens under sunlight and then clears back indoors.</label>
+<label><input type="checkbox" class="fl-appear" value="Tinted"> Tinted – fixed color sunglasses lens.</label>
+<label><input type="checkbox" class="fl-appear" value="Polarized"> Polarized – Also sunglasses but cuts glare and colours are more vivid due to technology.</label>
+
 </div>
 
       </div>
 
-      <!-- Index -->
-      <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
- <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
-        <b>Index Group :</b>
+<!-- Index -->
+<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+  <b>Lens thick or thinness :</b> Do you prefer lighter and thinner lenses (higher index)? Or do you want normal thickness lenses that are more affordable?<br><br>
 
-          <label><input type="checkbox" class="fl-index" value="1.5" > 1.5</label>
-          <label><input type="checkbox" class="fl-index" value="Safety" > Safety</label>
-          <label><input type="checkbox" class="fl-index" value="1.6" > 1.6</label>
-          <label><input type="checkbox" class="fl-index" value="1.67" > 1.67</label>
-          <label><input type="checkbox" class="fl-index" value="1.74" > 1.74</label>
+<div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+
+
+<label><input type="checkbox" class="fl-index" value="1.5"> Standard (1.5) – normal thickness and curvy lens for everyday use.</label>
+<label><input type="checkbox" class="fl-index" value="Safety"> Safety – impact-resistant material for tougher protection.</label>
+<label><input type="checkbox" class="fl-index" value="1.6"> Thin (1.6) – lighter, flatter lens that looks neater.</label>
+<label><input type="checkbox" class="fl-index" value="1.67"> Extra Thin (1.67) - even slimmer, even lighter and even flatter for stable optics.</label>
+<label><input type="checkbox" class="fl-index" value="1.74"> Ultra Thin (1.74) – utmost thinnest, lightest, flattest lens for most stable optics.</label>
+
+
         </div>
       </div>
 
-      <!-- Function -->
-      <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
- <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
-        <b>Function :</b>
-
-          <label><input type="checkbox" class="fl-func" value="SV" > SV</label>
-          <label><input type="checkbox" class="fl-func" value="Multifocal" > Multifocal</label>
-          <label><input type="checkbox" class="fl-func" value="Office" > Office</label>
-          <label><input type="checkbox" class="fl-func" value="Anti-fatigue" > Anti-Fatigue</label>
-        </div>
+<!-- Functional Lens -->
+<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+  <b>Functional Lens :</b> Since we never look at far through the bottom of the lens, the prescription is optimized so the lenses are not over-powering; feeling more comfortable and relaxed all day.<br><br>
+  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+    <label><input type="checkbox" class="fl-func" value="SV"> Single vision - for single type prescription (Far/Near/Intermediate/etc).</label>
+    <label><input type="checkbox" class="fl-func" value="Anti-fatigue"> Dual zone vision - bottom part of lenses are optimized for ergnomics.</label>
+  </div>
 </div>
+
 
 <!-- Clarity & Coating -->
 <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
-  <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
-    <b>Clarity & Coating :</b>
-    <label><input type="checkbox" class="fl-normal" value="Standard" > Standard</label>
-    <label><input type="checkbox" class="fl-normal" value="High Clarity" > High Clarity</label>
-    <label><input type="checkbox" class="fl-normal" value="Premium Ultra Clear" > Premium Ultra Clear</label>
+  <b>Clarity & Coating :</b> Choose how clear you want your vision and how easy the lens is to clean.<br><br>
+  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+    <label><input type="checkbox" class="fl-clarity" value="UV_400"> Standard – basic UV400 clear lens with simple coating.</label>
+    <label><input type="checkbox" class="fl-clarity" value="UV_420_BL"> Blue-Light blocker – sharper view with less glare.</label>
+    <label><input type="checkbox" class="fl-clarity" value="high_clarity"> Premium Ultra Clear – crystal view, repels dust and smudge.</label>
   </div>
 </div>
+
 
 <!-- Durability Preference -->
 <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
-  <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
-    <b>Durability Preference :</b>
-    <label><input type="checkbox" class="fl-normal" value="Less Reflection (Lower Durability)" > Less Reflection (Lower Durability)</label>
-    <label><input type="checkbox" class="fl-normal" value="High Durability (More Reflection)" > High Durability (More Reflection)</label>
+  <b>Durability Preference :</b> Decide between softer coatings with less reflection, or tougher ones that last longer.<br><br>
+  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+    <label><input type="checkbox" class="fl-durability" value="Less Reflection (Lower Durability)"> Less Reflection – low glare but softer coating.</label>
+    <label><input type="checkbox" class="fl-durability" value="High Durability (More Reflection)"> High Durability – tougher coating, slightly more reflection.</label>
   </div>
 </div>
+
 
 <!-- Viewing Preference -->
 <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
-  <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
-    <b>Viewing Preference :</b>
-    <label><input type="checkbox" class="fl-normal" value="Wider View (Spherical)" > Wider View (Spherical)</label>
-    <label><input type="checkbox" class="fl-normal" value="Thinner Lens (Aspheric)" > Thinner Lens (Aspheric)</label>
-
+  <b>Viewing Preference :</b> Pick your preferred look and view balance – wider vision or slimmer design.<br><br>
+  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+    <label><input type="checkbox" class="fl-viewing" value="Wider View (Spherical)"> Wider View – traditional curve, natural peripheral vision.</label>
+    <label><input type="checkbox" class="fl-viewing" value="Thinner Lens (Aspheric)"> Thinner Lens – flatter front, slimmer and modern look.</label>
   </div>
 </div>
+
+
+
+
+    <label><input type="checkbox" class="fl-multifocal" value="Multifocal"> Multifocal – clear far to near without line.</label>
+    <label><input type="checkbox" class="fl-office" value="Office"> Office – clear mid to near for computer use.</label>
+
+
 
      <!-- Price -->
       <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
@@ -3972,7 +3997,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <span>    <button id="btnFetch" class="normal-btn">Search Lenses</button>
 </span>
   <div id="lensResults">
-    <div class="muted">Calculate thickness to see lenses choices.”.</div>
+    <div class="muted">Generate thickness first to see lenses choices.</div>
   </div>
 </div>
 </div>
@@ -4519,13 +4544,15 @@ renderLensOptions(LAST_GEOM, rx);
 
 // Clear all filter checkboxes (does not auto-fetch)
 document.getElementById("btnClearFilters").onclick = () => {
-  document.querySelectorAll('.fl-appear, .fl-index, .fl-func,.fl-normal')
+  document.querySelectorAll('.fl-appear, .fl-index, .fl-func, .fl-clarity, .fl-durability, .fl-viewing')
     .forEach(cb => cb.checked = false);
+};
+
 
   // Optional: also clear the table message so it's obvious filters are cleared
   // const body = document.getElementById("resultsBody");
   // body.innerHTML = `<tr><td colspan="6" class="muted">Filters cleared. Search again.”.</td></tr>`;
-};
+
 
 function copyRx(source) {
   const map = {
@@ -4698,20 +4725,35 @@ function withinCap(price, cap){ if(!cap) return true; return Number(price) <= ca
      LENS OPTION SCRIPT (FIXED)
 ========================= -->
 <script>
+// --- Choose correct coating price based on clarity selection ---
+function getPriceByClarity(row, clarityChoice) {
+  // Map checkbox values directly to CSV headers
+  const colMap = {
+    UV_400: "UV_400_PRICE_RM",
+    UV_420_BL: "UV_420_BL_PRICE_RM",
+    high_clarity: "HIGH_CLARITY_COATING_PRICE_RM"
+  };
+
+  const column = colMap[clarityChoice] || "UV_400_PRICE_RM";
+  return parseFloat(row[column] || 0);
+}
+
 function renderLensOptions(geom, rx) {
   const container = document.getElementById("lensResults");
   container.innerHTML = "";
 
   if (!geom) {
-    container.innerHTML = `<div class="muted"><b><span style="color:red;">"Search Lenses" requires thickness calculation first.</span></b></div>`;
+    container.innerHTML = `<div class="muted"><b><span style="color:red;">"Search Lenses" requires thickness generation first.</span></b></div>`;
     return;
   }
 
   // Collect filter selections
-  const appearSet = checkedValues(".fl-appear");
-  const indexSet  = checkedValues(".fl-index");
-  const funcSet   = checkedValues(".fl-func");
-  const normalSet = checkedValues(".fl-normal");
+  const appearSet     = checkedValues(".fl-appear");
+  const indexSet      = checkedValues(".fl-index");
+  const funcSet       = checkedValues(".fl-func");
+  const claritySet    = checkedValues(".fl-clarity");
+  const durabilitySet = checkedValues(".fl-durability");
+  const viewingSet    = checkedValues(".fl-viewing");
   const cap = parseFloat(document.getElementById("priceCap").value) || 0;
 
   // Filter lenses from CSV
@@ -4719,25 +4761,30 @@ function renderLensOptions(geom, rx) {
     const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
     const idx   = getIndexGroup(row["INDEX"] || "");
     const func  = getFunctionCat(row["LENS_DESIGN"] || "");
-    const price = parseFloat(row["UV_400_PRICE_RM"] || "0");
-    const coat  = (row["FUNCTION"] || "").trim();  // reused for stock/custom
-    const dura  = "";  // not used
-    const geomT = "";  // not used
+    const clarity = (row["CLARITY_LEVEL"] || "").trim();
+    const durability = (row["DURABILITY_LEVEL"] || "").trim();
+    const viewing = (row["VIEWING_STYLE"] || "").trim();
 
-if (
-  appearSet.length === 0 &&
-  indexSet.length === 0 &&
-  funcSet.length === 0 &&
-  normalSet.length === 0
-) {
-  return false; // no filters selected → skip all
-}
+    // ✅ Dynamic price based on clarity filter
+    const clarityChoice = claritySet[0] || "UV_400";
+    const price = getPriceByClarity(row, clarityChoice);
+
+    if (
+      appearSet.length === 0 &&
+      indexSet.length === 0 &&
+      funcSet.length === 0 &&
+      claritySet.length === 0 &&
+      durabilitySet.length === 0 &&
+      viewingSet.length === 0
+    ) return false;
 
     return withinCap(price, cap)
       && (!appearSet.length || appearSet.includes(app))
       && (!indexSet.length  || indexSet.includes(idx))
       && (!funcSet.length   || funcSet.includes(func))
-      && (!normalSet.length || normalSet.includes(coat) || normalSet.includes(dura) || normalSet.includes(geomT));
+      && (!claritySet.length || claritySet.includes(clarityChoice))
+      && (!durabilitySet.length || durabilitySet.includes(durability))
+      && (!viewingSet.length || viewingSet.includes(viewing));
   });
 
   console.log("Products loaded:", PRODUCTS.length);
@@ -4755,10 +4802,10 @@ if (
     const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
     const idx   = getIndexGroup(row["INDEX"] || "");
     const func  = getFunctionCat(row["LENS_DESIGN"] || "");
-    const price = parseFloat(row["UV_400_PRICE_RM"] || "0");
-    const coat  = (row["FUNCTION"] || "").trim();  // reused for stock/custom
-    const dia   = row["DIA"] || "—";               // ✅ fixed
-    const stock = row["FUNCTION"] || "—";          // ✅ fixed
+    const clarityChoice = claritySet[0] || "UV_400";
+    const price = getPriceByClarity(row, clarityChoice);
+    const dia   = row["DIA"] || "—";
+    const stock = row["FUNCTION"] || "—";
 
     const card = document.createElement("div");
     card.className = "lens-card";
@@ -4770,7 +4817,7 @@ if (
         <span class="tag func">${func}</span>
       </div>
       <div class="lens-price">RM ${price}</div>
-      <div class="lens-note">Coating: ${coat} • DIA ${dia} mm • ${stock}</div>
+      <div class="lens-note">DIA ${dia} mm • ${stock}</div>
       <button class="select-btn">Select Lens</button>
     `;
     container.appendChild(card);
@@ -4782,8 +4829,9 @@ document.getElementById("btnFetch").onclick = () => {
   const rx = parseRx();
   renderLensOptions(LAST_GEOM, rx);
 };
-
 </script>
+
+
 
 
 
@@ -4810,9 +4858,10 @@ function updateStatus(msg) {
   document.querySelectorAll(".status, #status").forEach(st => (st.textContent = msg));
 }
 
-function setFilters(checked, selector = '.fl-appear, .fl-index, .fl-func, .fl-normal') {
+function setFilters(checked, selector = '.fl-appear, .fl-index, .fl-func, .fl-clarity, .fl-durability, .fl-viewing') {
   document.querySelectorAll(selector).forEach(cb => (cb.checked = checked));
 }
+
 
 // ===========================
 // SHARED LOGIC (safe version)
