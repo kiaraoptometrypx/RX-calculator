@@ -477,32 +477,46 @@ table input {
 .dc-select option[value="BAL"] { color: black; }
 
 
-/* --- Unified Checkbox Style (All Filter Types) --- */
+/* --- Unified Checkbox Style (All Filter Types: SV + MF) --- */
 .fl-appear[type="checkbox"],
 .fl-index[type="checkbox"],
 .fl-func[type="checkbox"],
 .fl-clarity[type="checkbox"],
 .fl-durability[type="checkbox"],
-.fl-viewing[type="checkbox"] {
+.fl-viewing[type="checkbox"],
+.fl-opti[type="checkbox"],
+.fl-mf-view[type="checkbox"],
+.fl-mf-swim[type="checkbox"],
+.fl-mf-zone[type="checkbox"],
+.fl-mf-tier[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
   width: 10px;
   height: 10px;
   border: 1px solid black;
-  border-radius: 40%;        /* makes it round */
+  border-radius: 40%;          /* rounded look */
   cursor: pointer;
   position: relative;
   background: #fff;
+  transition: all 0.15s ease-in-out;
 }
 
+/* Checked state */
 .fl-appear[type="checkbox"]:checked,
 .fl-index[type="checkbox"]:checked,
 .fl-func[type="checkbox"]:checked,
 .fl-clarity[type="checkbox"]:checked,
 .fl-durability[type="checkbox"]:checked,
-.fl-viewing[type="checkbox"]:checked {
-  background: #8BAD79;       /* filled green */
+.fl-viewing[type="checkbox"]:checked,
+.fl-opti[type="checkbox"]:checked,
+.fl-mf-view[type="checkbox"]:checked,
+.fl-mf-swim[type="checkbox"]:checked,
+.fl-mf-zone[type="checkbox"]:checked,
+.fl-mf-tier[type="checkbox"]:checked {
+  background: #8BAD79;         /* filled green */
+  border-color: #5f7f56;
 }
+
 
 
 label {
@@ -3851,6 +3865,14 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 
+
+
+
+
+
+
+
+
 <!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR --->
 
 
@@ -3870,16 +3892,16 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <div id="lens-selector" style="display:none;">
  <div style="height:10px;"></div>
 
+
+
+
+
 <div class="pane" style="padding:10px">
-  <span id="toggle-single" style="cursor:pointer; user-select:none; font-weight:bold;">▼ Build Your Single Vision Lens</span>
+  <span id="toggle-lensMaterialCoating" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 1. Choose Your Lens Material & Coating</span>
 
 
+<div id="lensMaterialCoating" style="display:none;">
 
-
-
-
-
-<div id="singleFilters" style="display:none;">
 
 
       <!-- Appearance -->
@@ -3915,17 +3937,6 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
         </div>
       </div>
-
-<!-- Functional Lens -->
-<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
-  <b>Functional Lens :</b> Since we never look at far through the bottom of the lens, the prescription is optimized so the lenses are not over-powering; feeling more comfortable and relaxed all day.<br><br>
-  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-    <label><input type="checkbox" class="fl-func" value="SV"> Single vision - for single type prescription (Far/Near/Intermediate/etc).</label>
-    <label><input type="checkbox" class="fl-func" value="Anti-fatigue"> Dual zone vision - bottom part of lenses are optimized for ergnomics.</label>
-  </div>
-</div>
-
-
 <!-- Clarity & Coating -->
 <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
   <b>Clarity & Coating :</b> Choose how clear you want your vision and how easy the lens is to clean.<br><br>
@@ -3947,6 +3958,46 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </div>
 
 
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+ <div style="height:5px;"></div>
+
+
+
+
+
+
+
+<div class="pane" style="padding:10px">
+  <span id="toggle-single" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 2. Build Your Single Vision Lens</span>
+
+
+<div id="singleFilters" style="display:none;">
+
+<!-- Functional Lens -->
+<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+  <b>Functional Lens :</b> Since we never look at far through the bottom of the lens, the prescription is optimized so the lenses are not over-powering; feeling more comfortable and relaxed all day.<br><br>
+  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+<label><input type="checkbox" class="fl-func" value="Stock SV"> Standard single vision (stock)</label>
+
+    <label><input type="checkbox" class="fl-func" value="Custom SV"> Single vision - for single type prescription (Far/Near/Intermediate/etc).</label>
+
+    <label><input type="checkbox" class="fl-func" value="Anti-Fatigue"> Dual zone vision - bottom part of lenses are optimized for ergnomics.</label>
+  </div>
+</div>
+
+
+
 <!-- Viewing Preference -->
 <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
   <b>Viewing Preference :</b> Pick your preferred look and view balance – wider vision or slimmer design.<br><br>
@@ -3964,11 +4015,74 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
     <button id="btnClearFilters" class="normal-btn" >Clear Filters</button>&nbsp;
 <button id="btnSelectAllSV" class="normal-btn">Select All (SV)</button>
 
-    <label><input type="checkbox" class="fl-multifocal" value="Multifocal"> Multifocal – clear far to near without line.</label>
-    <label><input type="checkbox" class="fl-office" value="Office"> Office – clear mid to near for computer use.</label>
-
 
       </div>
+</div>
+
+ <div style="height:5px;"></div>
+
+
+
+
+<div class="pane" style="padding:10px">
+  <span id="toggle-multi" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 3. Build Your Multi-Focal Vision Lens</span>
+
+
+
+
+
+<!-- Multifocal Filters -->
+<div id="multifocalFilters" style="display:none;">
+
+  <!-- 1️⃣ Viewing Emphasis -->
+  <div class="pane" style="padding:10px; margin:5px 0px;">
+    <b>Viewing Emphasis :</b> Choose which distance you value most.<br><br>
+    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+      <label><input type="checkbox" class="fl-mf-view" value="Wide Distance"> Wide Distance – clearer far range.</label>
+      <label><input type="checkbox" class="fl-mf-view" value="Wide Near"> Wide Near – easier reading focus.</label>
+      <label><input type="checkbox" class="fl-mf-view" value="Balanced Both"> Balanced Both – all-round smooth corridor.</label>
+    </div>
+  </div>
+
+  <!-- 2️⃣ Peripheral Behavior -->
+  <div class="pane" style="padding:10px; margin:5px 0px;">
+    <b>Peripheral Behavior :</b> Choose between stability or width.<br><br>
+    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+      <label><input type="checkbox" class="fl-mf-swim" value="Less Swim"> Less Swim – narrower but stable edges.</label>
+      <label><input type="checkbox" class="fl-mf-swim" value="More Swim"> More Swim – wider but more dynamic.</label>
+    </div>
+  </div>
+
+  <!-- 3️⃣ Zone Enhancement -->
+  <div class="pane" style="padding:10px; margin:5px 0px;">
+    <b>Zone Enhancement :</b> Emphasize near or mid-range vision.<br><br>
+    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+      <label><input type="checkbox" class="fl-mf-zone" value="Enhanced Near"> Enhanced Near – larger reading zone.</label>
+      <label><input type="checkbox" class="fl-mf-zone" value="Enhanced Intermediate"> Enhanced Intermediate – wider computer zone.</label>
+    </div>
+  </div>
+
+  <!-- 4️⃣ Design Technology Tier -->
+  <div class="pane" style="padding:10px; margin:5px 0px;">
+    <b>Design Tier :</b> Select the optical design sophistication.<br><br>
+    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+      <label><input type="checkbox" class="fl-mf-tier" value="Double Surface"> Double Surface – maximum optics & comfort.</label>
+      <label><input type="checkbox" class="fl-mf-tier" value="Single Surface"> Single Surface – everyday modern design.</label>
+      <label><input type="checkbox" class="fl-mf-tier" value="Traditional"> Traditional – basic everyday progressive.</label>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
 </div>
 
 
@@ -3981,34 +4095,48 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 
-
-
-
-
- <div style="height:10px;"></div>
+ <div style="height:5px;"></div>
 
      <!-- Price -->
+
+      <div class="pane" style="padding:10px;">
+        <b>Set Max Price (RM) :</b>
+         <input id="priceCap" type="number" placeholder="1000"  style="width:70px; border:1px solid grey; border-radius:4px; height:25px; padding:4px 6px; appearance:textfield; margin-left:10px">
+
+     
+          <button style="margin-left:5px" id="cap1000Plus" class="small-normal-btn"><span style="color:green">+1000</span></button></span>
+          <button style="margin-left:5px" id="cap500Plus" class="small-normal-btn"><span style="color:green">+500</span></button></span>
+          <button style="margin-left:5px" id="capPlus" class="small-normal-btn"><span style="color:green">+100</span></button>
+
+          <button style="margin-left:5px" id="cap1000Minus" class="small-normal-btn"><span style="color:red">–1000</span></button>
+          <button style="margin-left:5px" id="cap500Minus" class="small-normal-btn"><span style="color:red">–500</span></button>
+     <button style="margin-left:5px" id="capMinus" class="small-normal-btn"><span style="color:red">–100</span></button>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+ <div style="height:15px;"></div>
+
+
+
       <div class="pane" style="padding:10px; margin:5px 0px 5px 0px;">
-        <b>Price (RM) :</b>
-          <span>Max</span>
-          <input id="priceCap" type="number" placeholder="1000"  style="width:70px; border:1px solid grey; border-radius:4px; height:25px; padding:4px 6px; appearance:textfield;">
+<span><button id="btnFetch" class="small-normal-btn">Search Lenses</button>
+</span> <div style="height:10px;"></div>
 
-          <button id="capMinus" class="small-normal-btn">–100</button>
-          <button id="capPlus" class="small-normal-btn">+100</button>
-      </div>
-
-
-
-<div class="pane" style="padding:0 10px 10px 10px;">
-<span>    <button id="btnFetch" class="normal-btn">Search Lenses</button>
-</span>
   <div id="lensResults">
     <div class="muted">Generate thickness first to see lenses choices.</div>
   </div>
 </div>
+
 </div>
-
-
 
 
 
@@ -4233,36 +4361,6 @@ function stockFactor(n, isPlus) {
 }
 
 
-// --- Stock lens availability rules (paste here) ---
-function getStockAvailability(S, C, n) {
-  if (S > 2.00) return { available: false, maxDia: null };
-  if (C < -2.00) return { available: false, maxDia: null };
-
-  if (n === 1.56) {
-    if (S > +2.00 || S < -6.00) return { available: false, maxDia: null };
-    if (S >= +0.25 && S <= +2.00) return { available: true, maxDia: 65 };
-    return { available: true, maxDia: 70 };
-  }
-
-  if (n === 1.60) {
-    if (S > 0 || S < -8.00) return { available: false, maxDia: null };
-    return { available: true, maxDia: 70 };
-  }
-
-  if (n === 1.67) {
-    if (S > 0 || S < -12.00) return { available: false, maxDia: null };
-    if (S >= -8.00) return { available: true, maxDia: 65 };
-    return { available: true, maxDia: 65 };
-  }
-
-  if (n === 1.74) {
-    if (S > -2.00 || S < -12.00) return { available: false, maxDia: null };
-    if (S >= -8.00) return { available: true, maxDia: 65 };
-    return { available: true, maxDia: 65 };
-  }
-
-  return { available: false, maxDia: null };
-}
 
 window.showStockBars = true;
 
@@ -4500,6 +4598,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
   document.getElementById("capPlus").onclick=()=>{const e=document.getElementById("priceCap");e.value=(parseFloat(e.value)||0)+100;};
   document.getElementById("capMinus").onclick=()=>{const e=document.getElementById("priceCap");e.value=Math.max(0,(parseFloat(e.value)||0)-100);};
 
+  document.getElementById("cap500Plus").onclick=()=>{const e=document.getElementById("priceCap");e.value=(parseFloat(e.value)||0)+500;};
+  document.getElementById("cap500Minus").onclick=()=>{const e=document.getElementById("priceCap");e.value=Math.max(0,(parseFloat(e.value)||0)-500);};
+
+  document.getElementById("cap1000Plus").onclick=()=>{const e=document.getElementById("priceCap");e.value=(parseFloat(e.value)||0)+1000;};
+  document.getElementById("cap1000Minus").onclick=()=>{const e=document.getElementById("priceCap");e.value=Math.max(0,(parseFloat(e.value)||0)-1000);};
+
+
   // Calculate by Frame — thickness only
   document.getElementById("btnCalc").onclick=()=>{
     const rx = parseRx();
@@ -4635,7 +4740,7 @@ function parseRx(){
 
 
 /* =========================
-   CSV LOADING (DOM-safe)
+   CSV LOADING (DOM-safe) START OF LENS OPTIONS SELECTION
 ========================= */
 async function loadCSV(url){
   const res = await fetch(url, { cache:"no-store" });
@@ -4712,34 +4817,73 @@ function checkedValues(selector){
 ========================= */
 function withinCap(price, cap){ if(!cap) return true; return Number(price) <= cap * 1.10; }
 
-
-
-
-
-
-
-
-
-
-
-
 </script>
 
 
 
-<!-- =========================
-     LENS OPTION SCRIPT (FIXED)
-========================= -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
-// --- Choose correct coating price based on clarity selection ---
+
+// --- Stock lens availability rules (paste here) ---
+function getStockAvailability(S, C, n) {
+  if (S > 2.00) return { available: false, maxDia: null };
+  if (C < -2.00) return { available: false, maxDia: null };
+
+  if (n === 1.56) {
+    if (S > +2.00 || S < -6.00) return { available: false, maxDia: null };
+    if (S >= +0.25 && S <= +2.00) return { available: true, maxDia: 65 };
+    return { available: true, maxDia: 70 };
+  }
+
+  if (n === 1.60) {
+    if (S > 0 || S < -8.00) return { available: false, maxDia: null };
+    return { available: true, maxDia: 70 };
+  }
+
+  if (n === 1.67) {
+    if (S > 0 || S < -12.00) return { available: false, maxDia: null };
+    if (S >= -8.00) return { available: true, maxDia: 65 };
+    return { available: true, maxDia: 65 };
+  }
+
+  if (n === 1.74) {
+    if (S > -2.00 || S < -12.00) return { available: false, maxDia: null };
+    if (S >= -8.00) return { available: true, maxDia: 65 };
+    return { available: true, maxDia: 65 };
+  }
+
+  return { available: false, maxDia: null };
+}
+
+
+
+// --- Coating price selector (unchanged) ---
 function getPriceByClarity(row, clarityChoice) {
-  // Map checkbox values directly to CSV headers
   const colMap = {
     UV_400: "UV_400_PRICE_RM",
     UV_420_BL: "UV_420_BL_PRICE_RM",
     high_clarity: "HIGH_CLARITY_COATING_PRICE_RM"
   };
-
   const column = colMap[clarityChoice] || "UV_400_PRICE_RM";
   return parseFloat(row[column] || 0);
 }
@@ -4753,65 +4897,140 @@ function renderLensOptions(geom, rx) {
     return;
   }
 
-  // Collect filter selections
+  // Collect selections
   const appearSet     = checkedValues(".fl-appear");
   const indexSet      = checkedValues(".fl-index");
-  const funcSet       = checkedValues(".fl-func");
+  const funcSet       = checkedValues(".fl-func");         // STRICT against LENS_DESIGN when present
   const claritySet    = checkedValues(".fl-clarity");
   const durabilitySet = checkedValues(".fl-durability");
   const viewingSet    = checkedValues(".fl-viewing");
+
+  // MF sub-filters
+  const mfViewSet = checkedValues(".fl-mf-view");
+  const mfSwimSet = checkedValues(".fl-mf-swim");
+  const mfZoneSet = checkedValues(".fl-mf-zone");
+  const mfTierSet = checkedValues(".fl-mf-tier");
+
   const cap = parseFloat(document.getElementById("priceCap").value) || 0;
 
-  // Filter lenses from CSV
+  // If nothing selected anywhere, return nothing
+  const totalSelected =
+    appearSet.length + indexSet.length + funcSet.length +
+    claritySet.length + durabilitySet.length + viewingSet.length +
+    mfViewSet.length + mfSwimSet.length + mfZoneSet.length + mfTierSet.length;
+
+  if (totalSelected === 0) {
+    container.innerHTML = `<div class="muted">Please select at least one filter before searching.</div>`;
+    return;
+  }
+
+  // Buckets for design types
+const MF_DESIGNS = ["progressive","office","myopia control"];
+const SV_DESIGNS = ["stock sv","single vision","anti-fatigue"];
+
+
+  // Did user explicitly ask for MF or SV via funcSet?
+const funcWant = funcSet.map(v => v.toLowerCase().replace(/\s+/g, " "));
+const userAskedMF = funcWant.some(v => MF_DESIGNS.includes(v)) ||
+                    (mfViewSet.length + mfSwimSet.length + mfZoneSet.length + mfTierSet.length > 0);
+
+
   const matches = PRODUCTS.filter(row => {
-    const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
-    const idx   = getIndexGroup(row["INDEX"] || "");
-    const func  = getFunctionCat(row["LENS_DESIGN"] || "");
-    const clarity = (row["CLARITY_LEVEL"] || "").trim();
-    const durability = (row["DURABILITY_LEVEL"] || "").trim();
-    const viewing = (row["VIEWING_STYLE"] || "").trim();
+  // --- authoritative design & normalization ---
+  const design = String(row["LENS_DESIGN"] || "").trim();
+  const designKey = design.toLowerCase().replace(/\s+/g, " ");
 
-    // ✅ Dynamic price based on clarity filter
-    const clarityChoice = claritySet[0] || "UV_400";
-    const price = getPriceByClarity(row, clarityChoice);
+  const MF_DESIGNS = ["progressive","office","myopia control"];
+  const SV_DESIGNS = ["stock sv","single vision","anti-fatigue"];
+  const isMF = MF_DESIGNS.includes(designKey);
 
-    if (
-      appearSet.length === 0 &&
-      indexSet.length === 0 &&
-      funcSet.length === 0 &&
-      claritySet.length === 0 &&
-      durabilitySet.length === 0 &&
-      viewingSet.length === 0
-    ) return false;
+  const funcWant = funcSet.map(v => v.toLowerCase().replace(/\s+/g, " "));
+  const userAskedMF = funcWant.some(v => MF_DESIGNS.includes(v)) ||
+                      (mfViewSet.length + mfSwimSet.length + mfZoneSet.length + mfTierSet.length > 0);
 
-    return withinCap(price, cap)
-      && (!appearSet.length || appearSet.includes(app))
-      && (!indexSet.length  || indexSet.includes(idx))
-      && (!funcSet.length   || funcSet.includes(func))
-      && (!claritySet.length || claritySet.includes(clarityChoice))
-      && (!durabilitySet.length || durabilitySet.includes(durability))
-      && (!viewingSet.length || viewingSet.includes(viewing));
-  });
+  // Hide MF unless explicitly asked
+  if (!userAskedMF && isMF) return false;
 
-  console.log("Products loaded:", PRODUCTS.length);
-  console.log("Matches found:", matches.length);
-  console.log("First few:", PRODUCTS.slice(0,3));
+  // If func selected, require exact (normalized) LENS_DESIGN match
+  if (funcWant.length && !funcWant.includes(designKey)) return false;
 
-  // No results
+  // --- diameter guard for Stock SV ---
+  const mbs = geom?.MBS || 0;
+  const diaNum = parseFloat(String(row["DIA"] || "").replace(/[^\d.]/g, ""));
+  if (designKey === "stock sv") {
+    if (!(Number.isFinite(diaNum) && mbs > 0 && diaNum >= mbs)) return false;
+  }
+
+  // --- STOCK SV GUARD: prescription + DIA must cover MBS ---
+  if (designKey === "stock sv") {
+    const n = parseFloat(row["INDEX"] || "");
+    const diaNum = parseFloat(String(row["DIA"] || "").replace(/[^\d.]/g, ""));
+    const mbs = geom?.MBS || 0;
+
+    // require usable numbers
+    if (!Number.isFinite(n) || !Number.isFinite(diaNum) || !(mbs > 0)) return false;
+
+    // must be Rx-available for BOTH eyes at this index
+    const odOk = getStockAvailability(rx.OD.S, rx.OD.C, n).available;
+    const osOk = getStockAvailability(rx.OS.S, rx.OS.C, n).available;
+    if (!(odOk && osOk)) return false;
+
+    // product DIA must cover required MBS
+    if (diaNum < mbs) return false;
+  }
+
+
+
+
+  // Price by clarity (default to UV_400)
+  const clarityChoice = claritySet[0] || "UV_400";
+  const price = getPriceByClarity(row, clarityChoice);
+
+  // Relaxed shared filters (only enforce if user picked them)
+  const app = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
+  const idx = getIndexGroup(row["INDEX"] || "");
+  const dur = (row["DURABILITY_LEVEL"] || "").trim();
+  const view = (row["VIEWING_STYLE"] || "").trim();
+
+  if (appearSet.length     && !appearSet.includes(app)) return false;
+  if (indexSet.length      && !indexSet.includes(idx))  return false; // index strict
+  if (claritySet.length    && !claritySet.includes(clarityChoice)) return false;
+  if (durabilitySet.length && !durabilitySet.includes(dur)) return false;
+  if (viewingSet.length    && !viewingSet.includes(view)) return false;
+
+  if (!withinCap(price, cap)) return false;
+
+  // If MF explicitly asked, apply MF sub-filters
+  if (userAskedMF && isMF) {
+    const mfView = (row["MF_VIEWING"] || "").trim();
+    const mfSwim = (row["MF_SWIM"] || "").trim();
+    const mfZone = (row["MF_ZONE"] || "").trim();
+    const mfTier = (row["MF_TIER"] || "").trim();
+
+    if (mfViewSet.length && !mfViewSet.includes(mfView)) return false;
+    if (mfSwimSet.length && !mfSwimSet.includes(mfSwim)) return false;
+    if (mfZoneSet.length && !mfZoneSet.includes(mfZone)) return false;
+    if (mfTierSet.length && !mfTierSet.includes(mfTier)) return false;
+  }
+
+  return true;
+});
+
+
   if (!matches.length) {
     container.innerHTML = `<div class="muted">No lens options match your filters or price cap.</div>`;
     return;
   }
 
-  // Render top 4 matches
-  matches.slice(0, 4).forEach(row => {
-    const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
+  // Render
+  matches.slice(0, 10).forEach(row => {
     const idx   = getIndexGroup(row["INDEX"] || "");
-    const func  = getFunctionCat(row["LENS_DESIGN"] || "");
+    const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
+    const design = row["LENS_DESIGN"] || "—";
     const clarityChoice = claritySet[0] || "UV_400";
     const price = getPriceByClarity(row, clarityChoice);
     const dia   = row["DIA"] || "—";
-    const stock = row["FUNCTION"] || "—";
+    const note  = row["FUNCTION"] || "";
 
     const card = document.createElement("div");
     card.className = "lens-card";
@@ -4820,22 +5039,23 @@ function renderLensOptions(geom, rx) {
       <div class="lens-tags">
         <span class="tag index">${idx}</span>
         <span class="tag type">${app}</span>
-        <span class="tag func">${func}</span>
+        <span class="tag func">${design}</span>
       </div>
       <div class="lens-price">RM ${price}</div>
-      <div class="lens-note">DIA ${dia} mm • ${stock}</div>
+      <div class="lens-note">DIA ${dia} mm • ${note}</div>
       <button class="select-btn">Select Lens</button>
     `;
     container.appendChild(card);
   });
 }
 
-// Reconnect "Search Lenses" button
+// Hook up button
 document.getElementById("btnFetch").onclick = () => {
   const rx = parseRx();
   renderLensOptions(LAST_GEOM, rx);
 };
 </script>
+
 
 
 
@@ -4867,6 +5087,10 @@ function updateStatus(msg) {
 function setFilters(checked, selector = '.fl-appear, .fl-index, .fl-func, .fl-clarity, .fl-durability, .fl-viewing') {
   document.querySelectorAll(selector).forEach(cb => (cb.checked = checked));
 }
+
+
+
+
 
 
 // ===========================
@@ -4911,8 +5135,9 @@ document.getElementById("btnClearMF")?.addEventListener("click", () => {
   setFilters(false, "#multifocalFilters input[type='checkbox']");
   updateStatus("Multifocal filters cleared.");
 });
-</script>
 
+
+</script>
 
 
 
@@ -4977,8 +5202,10 @@ makeToggle("toggle-frame-lens-details","frame-lens-details");
 makeToggle("toggle-frame-lens-details","frame-lens-2-details");
 makeToggle("toggle-customer-details","customer-details");
 makeToggle("toggle-lens-selector","lens-selector")
-makeToggle("toggle-single", "singleFilters", "Show Single Vision Filters", "Hide Single Vision Filters");
-makeToggle("toggle-multi", "multifocalFilters", "Show Multifocal Filters", "Hide Multifocal Filters")
+makeToggle("toggle-single", "singleFilters");
+makeToggle("toggle-multi", "multifocalFilters");
+makeToggle("toggle-lensMaterialCoating", "lensMaterialCoating")
+
 
 </script>
 
