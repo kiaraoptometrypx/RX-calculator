@@ -3865,313 +3865,6 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 
-
-
-
-
-
-
-
-
-<!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR --->
-
-
-
-
-<div class="section">
-
-<div class="pane" style="align-items:center; padding:10px;">
-
-<div style="display:flex; justify-content:center;">
- <span   id="toggle-lens-selector"    style="cursor:pointer; user-select:none; text-align:center;">
-    ▼ Lens Selector
-  </span>
-</div>
-
-
-<div id="lens-selector" style="display:none;">
- <div style="height:10px;"></div>
-
-
-
-
-
-<div class="pane" style="padding:10px">
-  <span id="toggle-lensMaterialCoating" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 1. Choose Your Lens Material & Coating</span>
-
-
-<div id="lensMaterialCoating" style="display:none;">
-
-
-
-      <!-- Appearance -->
-      <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
-        <b>Type of Lens :</b> Do you want changing colour lenses? Do you want sunglasses? Do you want premium sunglasses that cuts glare (polarize)? Or just normal clear material?<br><br>
-
-
-<div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-
-
-<label><input type="checkbox" class="fl-appear" value="Clear"> Clear – normal transparent lens.</label>
-<label><input type="checkbox" class="fl-appear" value="Photochromic"> Photochromic – darkens under sunlight and then clears back indoors.</label>
-<label><input type="checkbox" class="fl-appear" value="Tinted"> Tinted – fixed color sunglasses lens.</label>
-<label><input type="checkbox" class="fl-appear" value="Polarized"> Polarized – Also sunglasses but cuts glare and colours are more vivid due to technology.</label>
-
-</div>
-
-      </div>
-
-<!-- Index -->
-<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
-  <b>Lens thick or thinness :</b> Do you prefer lighter and thinner lenses (higher index)? Or do you want normal thickness lenses that are more affordable?<br><br>
-
-<div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-
-
-<label><input type="checkbox" class="fl-index" value="1.5"> Standard (1.5) – normal thickness and curvy lens for everyday use.</label>
-<label><input type="checkbox" class="fl-index" value="Safety"> Safety – impact-resistant material for tougher protection.</label>
-<label><input type="checkbox" class="fl-index" value="1.6"> Thin (1.6) – lighter, flatter lens that looks neater.</label>
-<label><input type="checkbox" class="fl-index" value="1.67"> Extra Thin (1.67) - even slimmer, even lighter and even flatter for stable optics.</label>
-<label><input type="checkbox" class="fl-index" value="1.74"> Ultra Thin (1.74) – utmost thinnest, lightest, flattest lens for most stable optics.</label>
-
-
-        </div>
-      </div>
-<!-- Clarity & Coating -->
-<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
-  <b>Clarity & Coating :</b> Choose how clear you want your vision and how easy the lens is to clean.<br><br>
-  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-    <label><input type="checkbox" class="fl-clarity" value="UV_400"> Standard – basic UV400 clear lens with simple coating.</label>
-    <label><input type="checkbox" class="fl-clarity" value="UV_420_BL"> Blue-Light blocker – sharper view with less glare.</label>
-    <label><input type="checkbox" class="fl-clarity" value="high_clarity"> Premium Ultra Clear – crystal view, repels dust and smudge.</label>
-  </div>
-</div>
-
-
-<!-- Durability Preference -->
-<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
-  <b>Durability Preference :</b> Decide between softer coatings with less reflection, or tougher ones that last longer.<br><br>
-  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-    <label><input type="checkbox" class="fl-durability" value="Less Reflection (Lower Durability)"> Less Reflection – low glare but softer coating.</label>
-    <label><input type="checkbox" class="fl-durability" value="High Durability (More Reflection)"> High Durability – tougher coating, slightly more reflection.</label>
-  </div>
-</div>
-
-
-
-</div>
-
-</div>
-
-
-
-
-
-
-
-
- <div style="height:5px;"></div>
-
-
-
-
-
-
-
-<div class="pane" style="padding:10px">
-  <span id="toggle-single" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 2. Build Your Single Vision Lens</span>
-
-
-<div id="singleFilters" style="display:none;">
-
-<!-- Functional Lens -->
-<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
-  <b>Functional Lens :</b> Since we never look at far through the bottom of the lens, the prescription is optimized so the lenses are not over-powering; feeling more comfortable and relaxed all day.<br><br>
-  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-<label><input type="checkbox" class="fl-func" value="Stock SV"> Standard single vision (stock)</label>
-
-    <label><input type="checkbox" class="fl-func" value="Custom SV"> Single vision - for single type prescription (Far/Near/Intermediate/etc).</label>
-
-    <label><input type="checkbox" class="fl-func" value="Anti-Fatigue"> Dual zone vision - bottom part of lenses are optimized for ergnomics.</label>
-  </div>
-</div>
-
-
-
-<!-- Viewing Preference -->
-<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
-  <b>Viewing Preference :</b> Pick your preferred look and view balance – wider vision or slimmer design.<br><br>
-  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-    <label><input type="checkbox" class="fl-viewing" value="Wider View (Spherical)"> Wider View – traditional curve, natural peripheral vision.</label>
-    <label><input type="checkbox" class="fl-viewing" value="Thinner Lens (Aspheric)"> Thinner Lens – flatter front, slimmer and modern look.</label>
-  </div>
-</div>
-
-
-
-
-
-    <span id="status" class="tiny muted"></span>&nbsp;
-    <button id="btnClearFilters" class="normal-btn" >Clear Filters</button>&nbsp;
-<button id="btnSelectAllSV" class="normal-btn">Select All (SV)</button>
-
-
-      </div>
-</div>
-
- <div style="height:5px;"></div>
-
-
-
-
-<div class="pane" style="padding:10px">
-  <span id="toggle-multi" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 3. Build Your Multi-Focal Vision Lens</span>
-
-
-
-
-
-<!-- Multifocal Filters -->
-<div id="multifocalFilters" style="display:none;">
-
-  <!-- 1️⃣ Viewing Emphasis -->
-  <div class="pane" style="padding:10px; margin:5px 0px;">
-    <b>Viewing Emphasis :</b> Choose which distance you value most.<br><br>
-    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-view" value="Wide Distance"> Wide Distance – clearer far range.</label>
-      <label><input type="checkbox" class="fl-mf-view" value="Wide Near"> Wide Near – easier reading focus.</label>
-      <label><input type="checkbox" class="fl-mf-view" value="Balanced Both"> Balanced Both – all-round smooth corridor.</label>
-    </div>
-  </div>
-
-  <!-- 2️⃣ Peripheral Behavior -->
-  <div class="pane" style="padding:10px; margin:5px 0px;">
-    <b>Peripheral Behavior :</b> Choose between stability or width.<br><br>
-    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-swim" value="Less Swim"> Less Swim – narrower but stable edges.</label>
-      <label><input type="checkbox" class="fl-mf-swim" value="More Swim"> More Swim – wider but more dynamic.</label>
-    </div>
-  </div>
-
-  <!-- 3️⃣ Zone Enhancement -->
-  <div class="pane" style="padding:10px; margin:5px 0px;">
-    <b>Zone Enhancement :</b> Emphasize near or mid-range vision.<br><br>
-    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-zone" value="Enhanced Near"> Enhanced Near – larger reading zone.</label>
-      <label><input type="checkbox" class="fl-mf-zone" value="Enhanced Intermediate"> Enhanced Intermediate – wider computer zone.</label>
-    </div>
-  </div>
-
-  <!-- 4️⃣ Design Technology Tier -->
-  <div class="pane" style="padding:10px; margin:5px 0px;">
-    <b>Design Tier :</b> Select the optical design sophistication.<br><br>
-    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-tier" value="Double Surface"> Double Surface – maximum optics & comfort.</label>
-      <label><input type="checkbox" class="fl-mf-tier" value="Single Surface"> Single Surface – everyday modern design.</label>
-      <label><input type="checkbox" class="fl-mf-tier" value="Traditional"> Traditional – basic everyday progressive.</label>
-    </div>
-  </div>
-
-</div>
-
-
-
-
-
-
-
-
-
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
- <div style="height:5px;"></div>
-
-     <!-- Price -->
-
-      <div class="pane" style="padding:10px;">
-        <b>Set Max Price (RM) :</b>
-         <input id="priceCap" type="number" placeholder="1000"  style="width:70px; border:1px solid grey; border-radius:4px; height:25px; padding:4px 6px; appearance:textfield; margin-left:10px">
-
-     
-          <button style="margin-left:5px" id="cap1000Plus" class="small-normal-btn"><span style="color:green">+1000</span></button></span>
-          <button style="margin-left:5px" id="cap500Plus" class="small-normal-btn"><span style="color:green">+500</span></button></span>
-          <button style="margin-left:5px" id="capPlus" class="small-normal-btn"><span style="color:green">+100</span></button>
-
-          <button style="margin-left:5px" id="cap1000Minus" class="small-normal-btn"><span style="color:red">–1000</span></button>
-          <button style="margin-left:5px" id="cap500Minus" class="small-normal-btn"><span style="color:red">–500</span></button>
-     <button style="margin-left:5px" id="capMinus" class="small-normal-btn"><span style="color:red">–100</span></button>
-
-
-
-
-
-
-
-
-
-
-</div>
-
- <div style="height:15px;"></div>
-
-
-
-      <div class="pane" style="padding:10px; margin:5px 0px 5px 0px;">
-<span><button id="btnFetch" class="small-normal-btn">Search Lenses</button>
-</span> <div style="height:10px;"></div>
-
-  <div id="lensResults">
-    <div class="muted">Generate thickness first to see lenses choices.</div>
-  </div>
-</div>
-
-</div>
-
-
-
-
-
-
-
-
-
-
-
-<!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR --->
-
-
-
-
-
-
-
-
-
-
-
-
-  <!-- Container for Lens Cards -->
-
- 
-
-
-
-
-
-
-
-
 <script>
 /* =========================
    CONFIG
@@ -4733,22 +4426,331 @@ function parseRx(){
 
 
 
+</script>
 
 
 
 
 
 
-/* =========================
-   CSV LOADING (DOM-safe) START OF LENS OPTIONS SELECTION
-========================= */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR --->
+
+
+
+
+<div class="section">
+
+<div class="pane" style="align-items:center; padding:10px;">
+
+<div style="display:flex; justify-content:center;">
+ <span   id="toggle-lens-selector"    style="cursor:pointer; user-select:none; text-align:center;">
+    ▼ Lens Selector
+  </span>
+</div>
+
+
+<div id="lens-selector" style="display:none;">
+ <div style="height:10px;"></div>
+
+
+
+
+
+<div class="pane" style="padding:10px">
+  <span id="toggle-lensMaterialCoating" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 1. Choose Your Lens Material & Coating</span>
+
+
+<div id="lensMaterialCoating" style="display:none;">
+
+
+
+      <!-- Appearance -->
+      <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+        <b>Type of Lens :</b> Do you want changing colour lenses? Do you want sunglasses? Do you want premium sunglasses that cuts glare (polarize)? Or just normal clear material?<br><br>
+
+
+<div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+
+
+<label><input type="checkbox" class="fl-appear" value="Clear"> Clear – normal transparent lens.</label>
+<label><input type="checkbox" class="fl-appear" value="Photochromic"> Photochromic – darkens under sunlight and then clears back indoors.</label>
+<label><input type="checkbox" class="fl-appear" value="Tinted"> Tinted – fixed color sunglasses lens.</label>
+<label><input type="checkbox" class="fl-appear" value="Polarized"> Polarized – Also sunglasses but cuts glare and colours are more vivid due to technology.</label>
+
+</div>
+
+      </div>
+
+<!-- Index -->
+<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+  <b>Lens thick or thinness :</b> Do you prefer lighter and thinner lenses (higher index)? Or do you want normal thickness lenses that are more affordable?<br><br>
+
+<div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+
+
+<label><input type="checkbox" class="fl-index" value="1.5"> Standard (1.5) – normal thickness and curvy lens for everyday use.</label>
+<label><input type="checkbox" class="fl-index" value="Safety"> Safety – impact-resistant material for tougher protection.</label>
+<label><input type="checkbox" class="fl-index" value="1.6"> Thin (1.6) – lighter, flatter lens that looks neater.</label>
+<label><input type="checkbox" class="fl-index" value="1.67"> Extra Thin (1.67) - even slimmer, even lighter and even flatter for stable optics.</label>
+<label><input type="checkbox" class="fl-index" value="1.74"> Ultra Thin (1.74) – utmost thinnest, lightest, flattest lens for most stable optics.</label>
+
+
+        </div>
+      </div>
+<!-- Clarity & Coating -->
+<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+  <b>Clarity & Coating :</b> Choose how clear you want your vision and how easy the lens is to clean.<br><br>
+  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+    <label><input type="checkbox" class="fl-clarity" value="UV_400"> Standard – basic UV400 clear lens with simple coating.</label>
+    <label><input type="checkbox" class="fl-clarity" value="UV_420_BL"> Blue-Light blocker – sharper view with less glare.</label>
+    <label><input type="checkbox" class="fl-clarity" value="high_clarity"> Premium Ultra Clear – crystal view, repels dust and smudge.</label>
+  </div>
+</div>
+
+
+<!-- Durability Preference -->
+<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+  <b>Durability Preference :</b> Decide between softer coatings with less reflection, or tougher ones that last longer.<br><br>
+  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+    <label><input type="checkbox" class="fl-durability" value="Less Reflection (Lower Durability)"> Less Reflection – low glare but softer coating.</label>
+    <label><input type="checkbox" class="fl-durability" value="High Durability (More Reflection)"> High Durability – tougher coating, slightly more reflection.</label>
+  </div>
+</div>
+
+<!-- Brands -->
+<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+  <b>Brands :</b> Choose which brands to include.<br><br>
+  <div id="brandFilterPane" style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+
+
+
+    <!-- checkboxes will be injected here -->
+
+
+
+  </div>
+</div>
+
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+ <div style="height:5px;"></div>
+
+
+
+
+
+
+
+<div class="pane" style="padding:10px">
+  <span id="toggle-single" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 2. Build Your Single Vision Lens</span>
+
+
+<div id="singleFilters" style="display:none;">
+
+<!-- Functional Lens -->
+<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+  <b>Functional Lens :</b> Since we never look at far through the bottom of the lens, the prescription is optimized so the lenses are not over-powering; feeling more comfortable and relaxed all day.<br><br>
+  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+<label><input type="checkbox" class="fl-func" value="Stock SV"> Standard single vision (stock)</label>
+
+    <label><input type="checkbox" class="fl-func" value="Custom SV"> Single vision - for single type prescription (Far/Near/Intermediate/etc).</label>
+
+    <label><input type="checkbox" class="fl-func" value="Anti-Fatigue"> Dual zone vision - bottom part of lenses are optimized for ergnomics.</label>
+  </div>
+</div>
+
+
+
+<!-- Viewing Preference -->
+<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+  <b>Viewing Preference :</b> Pick your preferred look and view balance – wider vision or slimmer design.<br><br>
+  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+    <label><input type="checkbox" class="fl-viewing" value="Wider View (Spherical)"> Wider View – traditional curve, natural peripheral vision.</label>
+    <label><input type="checkbox" class="fl-viewing" value="Thinner Lens (Aspheric)"> Thinner Lens – flatter front, slimmer and modern look.</label>
+  </div>
+</div>
+
+
+
+
+
+    <span id="status" class="tiny muted"></span>&nbsp;
+    <button id="btnClearFilters" class="normal-btn" >Clear Filters</button>&nbsp;
+<button id="btnSelectAllSV" class="normal-btn">Select All (SV)</button>
+
+
+      </div>
+</div>
+
+ <div style="height:5px;"></div>
+
+
+
+
+<div class="pane" style="padding:10px">
+  <span id="toggle-multi" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 3. Build Your Multi-Focal Vision Lens</span>
+
+
+
+
+
+<!-- Multifocal Filters -->
+<div id="multifocalFilters" style="display:none;">
+
+  <!-- 1️⃣ Viewing Emphasis -->
+  <div class="pane" style="padding:10px; margin:5px 0px;">
+    <b>Viewing Emphasis :</b> Choose which distance you value most.<br><br>
+    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+      <label><input type="checkbox" class="fl-mf-view" value="Wide Distance"> Wide Distance – clearer far range.</label>
+      <label><input type="checkbox" class="fl-mf-view" value="Wide Near"> Wide Near – easier reading focus.</label>
+      <label><input type="checkbox" class="fl-mf-view" value="Balanced Both"> Balanced Both – all-round smooth corridor.</label>
+    </div>
+  </div>
+
+  <!-- 2️⃣ Peripheral Behavior -->
+  <div class="pane" style="padding:10px; margin:5px 0px;">
+    <b>Peripheral Behavior :</b> Choose between stability or width.<br><br>
+    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+      <label><input type="checkbox" class="fl-mf-swim" value="Less Swim"> Less Swim – narrower but stable edges.</label>
+      <label><input type="checkbox" class="fl-mf-swim" value="More Swim"> More Swim – wider but more dynamic.</label>
+    </div>
+  </div>
+
+  <!-- 3️⃣ Zone Enhancement -->
+  <div class="pane" style="padding:10px; margin:5px 0px;">
+    <b>Zone Enhancement :</b> Emphasize near or mid-range vision.<br><br>
+    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+      <label><input type="checkbox" class="fl-mf-zone" value="Enhanced Near"> Enhanced Near – larger reading zone.</label>
+      <label><input type="checkbox" class="fl-mf-zone" value="Enhanced Intermediate"> Enhanced Intermediate – wider computer zone.</label>
+    </div>
+  </div>
+
+  <!-- 4️⃣ Design Technology Tier -->
+  <div class="pane" style="padding:10px; margin:5px 0px;">
+    <b>Design Tier :</b> Select the optical design sophistication.<br><br>
+    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+      <label><input type="checkbox" class="fl-mf-tier" value="Double Surface"> Double Surface – maximum optics & comfort.</label>
+      <label><input type="checkbox" class="fl-mf-tier" value="Single Surface"> Single Surface – everyday modern design.</label>
+      <label><input type="checkbox" class="fl-mf-tier" value="Traditional"> Traditional – basic everyday progressive.</label>
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+ <div style="height:5px;"></div>
+
+     <!-- Price -->
+
+      <div class="pane" style="padding:10px;">
+        <b>Set Max Price (RM) :</b>
+         <input id="priceCap" type="number" placeholder="1000"  style="width:70px; border:1px solid grey; border-radius:4px; height:25px; padding:4px 6px; appearance:textfield; margin-left:10px">
+
+     
+          <button style="margin-left:5px" id="cap1000Plus" class="small-normal-btn"><span style="color:green">+1000</span></button></span>
+          <button style="margin-left:5px" id="cap500Plus" class="small-normal-btn"><span style="color:green">+500</span></button></span>
+          <button style="margin-left:5px" id="capPlus" class="small-normal-btn"><span style="color:green">+100</span></button>
+
+          <button style="margin-left:5px" id="cap1000Minus" class="small-normal-btn"><span style="color:red">–1000</span></button>
+          <button style="margin-left:5px" id="cap500Minus" class="small-normal-btn"><span style="color:red">–500</span></button>
+     <button style="margin-left:5px" id="capMinus" class="small-normal-btn"><span style="color:red">–100</span></button>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+ <div style="height:15px;"></div>
+
+
+
+      <div class="pane" style="padding:10px; margin:5px 0px 5px 0px;">
+<span><button id="btnFetch" class="small-normal-btn">Search Lenses</button>
+</span> <div style="height:10px;"></div>
+<div style="margin-bottom:8px;">
+  <button id="btnSort" class="small-normal-btn">Sort by Price ↑</button>
+</div>
+
+
+
+
+  <div id="lensResults">
+    <div class="muted">Generate thickness first to see lenses choices.</div>
+  </div>
+</div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR --->
+
+
+
+<script>
+// =========================
+// CSV LOADING (DOM-safe)
+// =========================
 async function loadCSV(url){
   const res = await fetch(url, { cache:"no-store" });
   if(!res.ok) throw new Error("HTTP "+res.status);
   let text = await res.text();
-
-  // Remove BOM and trim
-  text = text.replace(/^\uFEFF/, '').trim();
+  text = text.replace(/^\uFEFF/, '').trim(); // remove BOM
 
   const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
   if (lines.length < 2) return [];
@@ -4762,12 +4764,16 @@ async function loadCSV(url){
   });
 }
 
+// =========================
+// INIT
+// =========================
 async function init(){
   const statusEl = document.getElementById("status");
   if(statusEl) statusEl.textContent = "Loading CSV…";
   try{
     PRODUCTS = await loadCSV(CSV_URL);
-    if(statusEl) statusEl.textContent = ""; // blank on success
+    if(statusEl) statusEl.textContent = "";
+    renderBrandCheckboxes();  // build Brand (Q7) checkboxes from CSV
   }catch(e){
     if(statusEl) statusEl.textContent = "CSV load failed.";
     console.error("CSV load error:", e);
@@ -4775,13 +4781,9 @@ async function init(){
 }
 document.addEventListener("DOMContentLoaded", init);
 
-
-
-
-
-/* =========================
-   FILTER GROUPING HELPERS
-========================= */
+// =========================
+// FILTER GROUPING HELPERS
+// =========================
 function getAppearance(val=""){
   const s = val.toLowerCase();
   if(s.includes("polar")) return "Polarized";
@@ -4809,15 +4811,106 @@ function getFunctionCat(val=""){
   return "SV";
 }
 function checkedValues(selector){
-  return Array.from(document.querySelectorAll(selector)).filter(i=>i.checked).map(i=>i.value);
+  return Array.from(document.querySelectorAll(selector))
+    .filter(i=>i.checked)
+    .map(i=>i.value);
 }
-
-/* =========================
-   RESULTS TABLE
-========================= */
 function withinCap(price, cap){ if(!cap) return true; return Number(price) <= cap * 1.10; }
 
-</script>
+
+
+
+
+
+// =========================
+// Q7: BRAND CHECKBOXES
+// (injects checkboxes into <div id="brandFilterPane">)
+// =========================
+// Optional local fallback notes (only used if CSV has no desc column)
+const BRAND_INFO = {
+  "Seiko Japan": "Japanese optics, strong aspheric SV.",
+  "Pentax Japan": "Wide portfolio, premium coatings.",
+  "Rodenstock": "Progressive know-how, German design.",
+  // ...add more as needed
+};
+
+function renderBrandCheckboxes() {
+  const box = document.getElementById("brandFilterPane");
+  if (!box || !Array.isArray(PRODUCTS)) return;
+
+  // collect unique brands + first available desc from CSV
+  const seen = new Set();
+  const brands = [];
+  for (const r of PRODUCTS) {
+    const raw = (r["BRAND"] || "").trim();
+    if (!raw) continue;
+    const key = raw.toLowerCase().replace(/\s+/g, " ");
+    if (!seen.has(key)) {
+      seen.add(key);
+      // try multiple CSV columns for description
+      const desc = (r["BRAND_DESC"] || r["BRAND_NOTE"] || "").trim();
+      brands.push({ label: raw, key, desc });
+    }
+  }
+
+  box.innerHTML = "";
+  if (!brands.length) {
+    box.innerHTML = `<div class="muted">No brand data found in CSV.</div>`;
+    return;
+  }
+
+  // borrow classes from your existing inputs/labels so styling matches
+  const sampleInput = document.querySelector(
+    "#singleFilters input[type='checkbox'], #multifocalFilters input[type='checkbox'], .pane input[type='checkbox']"
+  );
+  const baseClasses = sampleInput ? sampleInput.className : "";
+  const sampleLabel = sampleInput ? sampleInput.closest("label") : null;
+  const labelClass = (sampleLabel && sampleLabel.className) ? sampleLabel.className : "";
+
+  // small "Clear Brands" button
+  const controls = document.createElement("div");
+  controls.style.margin = "0 0 6px 0";
+  const clearBtn = document.createElement("button");
+  clearBtn.id = "btnClearBrands";
+  clearBtn.className = "small-normal-btn";
+  clearBtn.textContent = "Clear Brands";
+  clearBtn.addEventListener("click", () => {
+    box.querySelectorAll("input.fl-brand[type='checkbox']").forEach(cb => (cb.checked = false));
+  });
+  controls.appendChild(clearBtn);
+  box.appendChild(controls);
+
+  // build items
+  brands.sort((a,b)=> a.label.localeCompare(b.label)).forEach(b => {
+    const id = `brand_${b.key.replace(/[^a-z0-9]+/gi, "_")}`;
+
+    const label = document.createElement("label");
+    if (labelClass) label.className = labelClass;
+    label.style.marginRight = "14px";
+
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.id = id;
+    cb.value = b.label;
+    cb.checked = true;
+    cb.className = (baseClasses ? baseClasses + " " : "") + "fl-brand";
+
+    // text + optional description
+    const nameNode = document.createTextNode(" " + b.label + " ");
+    const descText = b.desc || BRAND_INFO[b.label] || "";
+    const descSpan = document.createElement("span");
+    descSpan.className = "muted";                 // uses your existing muted style
+    descSpan.textContent = descText ? `— ${descText}` : "";
+
+    label.appendChild(cb);
+    label.appendChild(nameNode);
+    label.appendChild(descSpan);
+    box.appendChild(label);
+
+    // tooltip too (for long notes)
+    if (descText) label.title = descText;
+  });
+}
 
 
 
@@ -4831,20 +4924,9 @@ function withinCap(price, cap){ if(!cap) return true; return Number(price) <= ca
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-<script>
-
-// --- Stock lens availability rules (paste here) ---
+// =========================
+/* STOCK LENS AVAILABILITY */
+// =========================
 function getStockAvailability(S, C, n) {
   if (S > 2.00) return { available: false, maxDia: null };
   if (C < -2.00) return { available: false, maxDia: null };
@@ -4854,30 +4936,24 @@ function getStockAvailability(S, C, n) {
     if (S >= +0.25 && S <= +2.00) return { available: true, maxDia: 65 };
     return { available: true, maxDia: 70 };
   }
-
   if (n === 1.60) {
     if (S > 0 || S < -8.00) return { available: false, maxDia: null };
     return { available: true, maxDia: 70 };
   }
-
   if (n === 1.67) {
     if (S > 0 || S < -12.00) return { available: false, maxDia: null };
-    if (S >= -8.00) return { available: true, maxDia: 65 };
     return { available: true, maxDia: 65 };
   }
-
   if (n === 1.74) {
     if (S > -2.00 || S < -12.00) return { available: false, maxDia: null };
-    if (S >= -8.00) return { available: true, maxDia: 65 };
     return { available: true, maxDia: 65 };
   }
-
   return { available: false, maxDia: null };
 }
 
-
-
-// --- Coating price selector (unchanged) ---
+// =========================
+// PRICE BY CLARITY + SORT
+// =========================
 function getPriceByClarity(row, clarityChoice) {
   const colMap = {
     UV_400: "UV_400_PRICE_RM",
@@ -4887,7 +4963,11 @@ function getPriceByClarity(row, clarityChoice) {
   const column = colMap[clarityChoice] || "UV_400_PRICE_RM";
   return parseFloat(row[column] || 0);
 }
+let sortAsc = true; // toggle state for sorting
 
+// =========================
+/* MAIN: Render Lens Options */
+// =========================
 function renderLensOptions(geom, rx) {
   const container = document.getElementById("lensResults");
   container.innerHTML = "";
@@ -4900,129 +4980,115 @@ function renderLensOptions(geom, rx) {
   // Collect selections
   const appearSet     = checkedValues(".fl-appear");
   const indexSet      = checkedValues(".fl-index");
-  const funcSet       = checkedValues(".fl-func");         // STRICT against LENS_DESIGN when present
+  const funcSet       = checkedValues(".fl-func");
   const claritySet    = checkedValues(".fl-clarity");
   const durabilitySet = checkedValues(".fl-durability");
   const viewingSet    = checkedValues(".fl-viewing");
-
-  // MF sub-filters
-  const mfViewSet = checkedValues(".fl-mf-view");
-  const mfSwimSet = checkedValues(".fl-mf-swim");
-  const mfZoneSet = checkedValues(".fl-mf-zone");
-  const mfTierSet = checkedValues(".fl-mf-tier");
+  const brandSet      = checkedValues(".fl-brand"); // Q7 brand
+  const mfViewSet     = checkedValues(".fl-mf-view");
+  const mfSwimSet     = checkedValues(".fl-mf-swim");
+  const mfZoneSet     = checkedValues(".fl-mf-zone");
+  const mfTierSet     = checkedValues(".fl-mf-tier");
 
   const cap = parseFloat(document.getElementById("priceCap").value) || 0;
 
-  // If nothing selected anywhere, return nothing
+  // Empty search guard
   const totalSelected =
     appearSet.length + indexSet.length + funcSet.length +
     claritySet.length + durabilitySet.length + viewingSet.length +
-    mfViewSet.length + mfSwimSet.length + mfZoneSet.length + mfTierSet.length;
+    brandSet.length + mfViewSet.length + mfSwimSet.length + mfZoneSet.length + mfTierSet.length;
 
   if (totalSelected === 0) {
     container.innerHTML = `<div class="muted">Please select at least one filter before searching.</div>`;
     return;
   }
 
-  // Buckets for design types
-const MF_DESIGNS = ["progressive","office","myopia control"];
-const SV_DESIGNS = ["stock sv","single vision","anti-fatigue"];
-
-
-  // Did user explicitly ask for MF or SV via funcSet?
-const funcWant = funcSet.map(v => v.toLowerCase().replace(/\s+/g, " "));
-const userAskedMF = funcWant.some(v => MF_DESIGNS.includes(v)) ||
-                    (mfViewSet.length + mfSwimSet.length + mfZoneSet.length + mfTierSet.length > 0);
-
-
-  const matches = PRODUCTS.filter(row => {
-  // --- authoritative design & normalization ---
-  const design = String(row["LENS_DESIGN"] || "").trim();
-  const designKey = design.toLowerCase().replace(/\s+/g, " ");
-
-  const MF_DESIGNS = ["progressive","office","myopia control"];
-  const SV_DESIGNS = ["stock sv","single vision","anti-fatigue"];
-  const isMF = MF_DESIGNS.includes(designKey);
-
+  // Design buckets + normalization
+  const MF_KEYS = ["progressive","office","myopia control"];
   const funcWant = funcSet.map(v => v.toLowerCase().replace(/\s+/g, " "));
-  const userAskedMF = funcWant.some(v => MF_DESIGNS.includes(v)) ||
+  const userAskedMF = funcWant.some(v => MF_KEYS.includes(v)) ||
                       (mfViewSet.length + mfSwimSet.length + mfZoneSet.length + mfTierSet.length > 0);
 
-  // Hide MF unless explicitly asked
-  if (!userAskedMF && isMF) return false;
+  // Filter
+  const matches = PRODUCTS.filter(row => {
+    const design = String(row["LENS_DESIGN"] || "").trim();
+    const designKey = design.toLowerCase().replace(/\s+/g, " ");
+    const isMF = MF_KEYS.includes(designKey);
 
-  // If func selected, require exact (normalized) LENS_DESIGN match
-  if (funcWant.length && !funcWant.includes(designKey)) return false;
+    // Hide MF unless explicitly asked
+    if (!userAskedMF && isMF) return false;
 
-  // --- diameter guard for Stock SV ---
-  const mbs = geom?.MBS || 0;
-  const diaNum = parseFloat(String(row["DIA"] || "").replace(/[^\d.]/g, ""));
-  if (designKey === "stock sv") {
-    if (!(Number.isFinite(diaNum) && mbs > 0 && diaNum >= mbs)) return false;
-  }
+    // If func selected, require exact LENS_DESIGN match
+    if (funcWant.length && !funcWant.includes(designKey)) return false;
 
-  // --- STOCK SV GUARD: prescription + DIA must cover MBS ---
-  if (designKey === "stock sv") {
-    const n = parseFloat(row["INDEX"] || "");
-    const diaNum = parseFloat(String(row["DIA"] || "").replace(/[^\d.]/g, ""));
-    const mbs = geom?.MBS || 0;
+    // STOCK SV guard: DIA must cover MBS and Rx must be available at index
+    if (designKey === "stock sv") {
+      const n = parseFloat(row["INDEX"] || "");
+      const diaNum = parseFloat(String(row["DIA"] || "").replace(/[^\d.]/g, ""));
+      const mbs = geom?.MBS || 0;
+      if (!Number.isFinite(n) || !Number.isFinite(diaNum) || !(mbs > 0)) return false;
 
-    // require usable numbers
-    if (!Number.isFinite(n) || !Number.isFinite(diaNum) || !(mbs > 0)) return false;
+      const odOk = getStockAvailability(rx.OD.S, rx.OD.C, n).available;
+      const osOk = getStockAvailability(rx.OS.S, rx.OS.C, n).available;
+      if (!(odOk && osOk)) return false;
+      if (diaNum < mbs) return false;
+    }
 
-    // must be Rx-available for BOTH eyes at this index
-    const odOk = getStockAvailability(rx.OD.S, rx.OD.C, n).available;
-    const osOk = getStockAvailability(rx.OS.S, rx.OS.C, n).available;
-    if (!(odOk && osOk)) return false;
+    // Price by clarity
+    const clarityChoice = claritySet[0] || "UV_400";
+    const price = getPriceByClarity(row, clarityChoice);
 
-    // product DIA must cover required MBS
-    if (diaNum < mbs) return false;
-  }
+    // Relaxed shared filters (only if selected)
+    const app  = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
+    const idx  = getIndexGroup(row["INDEX"] || "");
+    const dur  = (row["DURABILITY_LEVEL"] || "").trim();
+    const view = (row["VIEWING_STYLE"] || "").trim();
 
+    if (appearSet.length     && !appearSet.includes(app))  return false;
+    if (indexSet.length      && !indexSet.includes(idx))   return false;
+    if (claritySet.length    && !claritySet.includes(clarityChoice)) return false;
+    if (durabilitySet.length && !durabilitySet.includes(dur)) return false;
+    if (viewingSet.length    && !viewingSet.includes(view)) return false;
+    if (!withinCap(price, cap)) return false;
 
+    // Brand filter (normalized to compare)
+    if (brandSet.length) {
+      const prodBrandKey = String(row["BRAND"] || "").trim().toLowerCase().replace(/\s+/g, " ");
+      const pickedBrandKeys = brandSet.map(v => String(v).trim().toLowerCase().replace(/\s+/g, " "));
+      if (!pickedBrandKeys.includes(prodBrandKey)) return false;
+    }
 
+    // MF sub-filters (when MF asked)
+    if (userAskedMF && isMF) {
+      const mfView = (row["MF_VIEWING"] || "").trim();
+      const mfSwim = (row["MF_SWIM"] || "").trim();
+      const mfZone = (row["MF_ZONE"] || "").trim();
+      const mfTier = (row["MF_TIER"] || "").trim();
 
-  // Price by clarity (default to UV_400)
-  const clarityChoice = claritySet[0] || "UV_400";
-  const price = getPriceByClarity(row, clarityChoice);
+      if (mfViewSet.length && !mfViewSet.includes(mfView)) return false;
+      if (mfSwimSet.length && !mfSwimSet.includes(mfSwim)) return false;
+      if (mfZoneSet.length && !mfZoneSet.includes(mfZone)) return false;
+      if (mfTierSet.length && !mfTierSet.includes(mfTier)) return false;
+    }
 
-  // Relaxed shared filters (only enforce if user picked them)
-  const app = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
-  const idx = getIndexGroup(row["INDEX"] || "");
-  const dur = (row["DURABILITY_LEVEL"] || "").trim();
-  const view = (row["VIEWING_STYLE"] || "").trim();
+    return true;
+  });
 
-  if (appearSet.length     && !appearSet.includes(app)) return false;
-  if (indexSet.length      && !indexSet.includes(idx))  return false; // index strict
-  if (claritySet.length    && !claritySet.includes(clarityChoice)) return false;
-  if (durabilitySet.length && !durabilitySet.includes(dur)) return false;
-  if (viewingSet.length    && !viewingSet.includes(view)) return false;
+  // Sort by price based on current clarity (default UV_400)
+  const clarityChoiceForSort = (claritySet && claritySet[0]) ? claritySet[0] : "UV_400";
+  matches.sort((a, b) => {
+    const pa = getPriceByClarity(a, clarityChoiceForSort);
+    const pb = getPriceByClarity(b, clarityChoiceForSort);
+    return sortAsc ? (pa - pb) : (pb - pa);
+  });
 
-  if (!withinCap(price, cap)) return false;
-
-  // If MF explicitly asked, apply MF sub-filters
-  if (userAskedMF && isMF) {
-    const mfView = (row["MF_VIEWING"] || "").trim();
-    const mfSwim = (row["MF_SWIM"] || "").trim();
-    const mfZone = (row["MF_ZONE"] || "").trim();
-    const mfTier = (row["MF_TIER"] || "").trim();
-
-    if (mfViewSet.length && !mfViewSet.includes(mfView)) return false;
-    if (mfSwimSet.length && !mfSwimSet.includes(mfSwim)) return false;
-    if (mfZoneSet.length && !mfZoneSet.includes(mfZone)) return false;
-    if (mfTierSet.length && !mfTierSet.includes(mfTier)) return false;
-  }
-
-  return true;
-});
-
-
+  // No results
   if (!matches.length) {
     container.innerHTML = `<div class="muted">No lens options match your filters or price cap.</div>`;
     return;
   }
 
-  // Render
+  // Render (top 10)
   matches.slice(0, 10).forEach(row => {
     const idx   = getIndexGroup(row["INDEX"] || "");
     const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
@@ -5049,94 +5115,60 @@ const userAskedMF = funcWant.some(v => MF_DESIGNS.includes(v)) ||
   });
 }
 
-// Hook up button
+// Buttons
 document.getElementById("btnFetch").onclick = () => {
   const rx = parseRx();
   renderLensOptions(LAST_GEOM, rx);
 };
-</script>
 
+// Sort button (optional)
+const btnSort = document.getElementById("btnSort");
+if (btnSort) {
+  btnSort.textContent = "Sort by Price ↑";
+  btnSort.onclick = () => {
+    sortAsc = !sortAsc;
+    btnSort.textContent = sortAsc ? "Sort by Price ↑" : "Sort by Price ↓";
+    const rx = parseRx();
+    renderLensOptions(LAST_GEOM, rx);
+  };
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<script>
 // ===========================
 // UNIVERSAL FILTER ACTIONS
 // ===========================
 function updateStatus(msg) {
   document.querySelectorAll(".status, #status").forEach(st => (st.textContent = msg));
 }
-
-function setFilters(checked, selector = '.fl-appear, .fl-index, .fl-func, .fl-clarity, .fl-durability, .fl-viewing') {
+function setFilters(checked, selector = '.fl-appear, .fl-index, .fl-func, .fl-clarity, .fl-durability, .fl-viewing, .fl-brand') {
   document.querySelectorAll(selector).forEach(cb => (cb.checked = checked));
 }
 
-
-
-
-
-
-// ===========================
-// SHARED LOGIC (safe version)
-// ===========================
-
-// Toggle filters (show/hide both sets)
+// Shared UI toggles
 document.querySelectorAll(".btnToggleFilters").forEach(btn =>
   btn.addEventListener("click", () => {
     const allFilters = document.querySelectorAll("#singleFilters, #multifocalFilters");
     const hide = btn.textContent.includes("Hide");
     allFilters.forEach(f => (f.style.display = hide ? "none" : "block"));
-
     document.querySelectorAll(".btnToggleFilters").forEach(b => {
       b.textContent = hide ? "Show Filters ▼" : "Hide Filters ▲";
     });
   })
 );
-
-// ===========================
-// SINGLE VISION CONTROLS (fixed to only affect SV filters)
-// ===========================
 document.getElementById("btnSelectAllSV")?.addEventListener("click", () => {
   setFilters(true, "#singleFilters input[type='checkbox']");
 });
-
 document.getElementById("btnClearSV")?.addEventListener("click", () => {
   setFilters(false, "#singleFilters input[type='checkbox']");
   updateStatus("Single vision filters cleared.");
 });
-
-
-// ===========================
-// MULTIFOCAL CONTROLS
-// ===========================
 document.getElementById("btnSelectAllMF")?.addEventListener("click", () => {
   setFilters(true, "#multifocalFilters input[type='checkbox']");
   updateStatus("All multifocal filters selected.");
 });
-
 document.getElementById("btnClearMF")?.addEventListener("click", () => {
   setFilters(false, "#multifocalFilters input[type='checkbox']");
   updateStatus("Multifocal filters cleared.");
 });
-
-
 </script>
 
 
