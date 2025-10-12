@@ -4471,6 +4471,7 @@ function parseRx(){
 
 <div id="lens-selector" style="display:none;">
  <div style="height:10px;"></div>
+<button id="btnToggleDesc" class="small-normal-btn">Hide Descriptions ▲</button>
 
 
 
@@ -5171,6 +5172,117 @@ document.getElementById("btnClearMF")?.addEventListener("click", () => {
 });
 </script>
 
+
+<script>
+// ===============================
+// 0) Ensure a toggle button exists
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+  if (!document.getElementById("btnToggleDesc")) {
+    const host =
+      document.querySelector("#lensMaterialCoating")?.parentElement ||
+      document.querySelector("#lens-selector") ||
+      document.body;
+    const row = document.createElement("div");
+    row.style.margin = "6px 0";
+    const btn = document.createElement("button");
+    btn.id = "btnToggleDesc";
+    btn.className = "small-normal-btn";
+    btn.type = "button";
+    btn.textContent = "Hide Descriptions ▲";
+    row.appendChild(btn);
+    host.insertBefore(row, host.firstChild);
+  }
+
+  // Run setup
+  wrapPaneDescriptions();
+  wrapLabelDescriptions("#lensMaterialCoating");
+  wrapLabelDescriptions("#singleFilters");
+  wrapLabelDescriptions("#multifocalFilters");
+  setDescriptionsHidden(false);
+
+  // Wire the button
+  document.getElementById("btnToggleDesc")?.addEventListener("click", () => {
+    setDescriptionsHidden(!descHidden);
+  });
+});
+
+// ===============================
+// 1) Wrap paragraph blurbs under <b> so they can be hidden
+// ===============================
+function wrapPaneDescriptions() {
+  const panes = document.querySelectorAll(
+    "#lensMaterialCoating .pane, #singleFilters .pane, #multifocalFilters .pane"
+  );
+  panes.forEach(pane => {
+    const title = pane.querySelector("b");
+    if (!title) return;
+
+    // Wrap everything after <b> up to the first options DIV
+    let n = title.nextSibling, wrap = null;
+    while (n) {
+      const next = n.nextSibling;
+      if (n.nodeType === 1 && n.tagName === "DIV") break; // options start
+      if (!wrap) {
+        wrap = document.createElement("span");
+        wrap.className = "descWrap";
+        pane.insertBefore(wrap, n);
+      }
+      wrap.appendChild(n);
+      n = next;
+    }
+  });
+}
+
+// ===============================
+// 2) LABELS: keep text BEFORE dash; hide dash + after
+//    Works for "-", "–", "—" (ASCII, en, em dashes)
+// ===============================
+function wrapLabelDescriptions(rootSel) {
+  document.querySelectorAll(`${rootSel} label`).forEach(label => {
+    const input = label.querySelector("input[type='checkbox'],input[type='radio']");
+    if (!input) return;
+    if (label.querySelector(".descPart")) return; // already processed
+
+    // Find the first TEXT NODE after the input that contains any dash
+    let node = input.nextSibling;
+    while (node && !(node.nodeType === 3 && /-|–|—/.test(node.textContent))) {
+      node = node.nextSibling;
+    }
+    if (!node) return;
+
+    const s = node.textContent;           // preserve spacing exactly
+    const dashIndex = s.search(/-|–|—/);  // first dash of any type
+    if (dashIndex === -1) return;
+
+    const before = s.slice(0, dashIndex); // stays visible EXACTLY as written
+    const after  = s.slice(dashIndex);    // includes the dash -> toggled/hidden
+
+    // Replace that single text node with: [before][<span class="descPart">after</span>]
+    const frag = document.createDocumentFragment();
+    frag.appendChild(document.createTextNode(before));
+    const descSpan = document.createElement("span");
+    descSpan.className = "descPart";
+    descSpan.textContent = after;
+    frag.appendChild(descSpan);
+    label.replaceChild(frag, node);
+  });
+}
+
+// ===============================
+// 3) Toggle visibility
+// ===============================
+let descHidden = false;
+function setDescriptionsHidden(hide) {
+  descHidden = hide;
+  // Hide pane blurbs and the dash+after in labels
+  document.querySelectorAll(".descWrap, .descPart").forEach(el => {
+    el.style.display = hide ? "none" : "";
+  });
+  const btn = document.getElementById("btnToggleDesc");
+  if (btn) btn.textContent = hide ? "Show Descriptions ▼" : "Hide Descriptions ▲";
+}
+</script>
 
 
 
