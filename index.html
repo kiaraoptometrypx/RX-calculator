@@ -5198,7 +5198,7 @@ switch (tintOpt) {
     tintNote = `<span class="tag tint">Tintable (+RM${tintCharge.toFixed(0)} surcharge)</span>`;
     break;
   case "Already":
-    tintNote = `<span class="tag tint">Already tinted</span>`;
+    tintNote = `<span></span>`;
     break;
   case "No":
     tintNote = `<span class="tag tint">Non-tintable</span>`;
@@ -5215,15 +5215,13 @@ const card = document.createElement("div");
 card.className = "lens-card";
 card.innerHTML = `
   <div class="lens-header">
-    (${design} ${dia} mm) - ${idx} ${row["PRODUCT_NAME"] || "(Unnamed Lens)"}
+    (${design} ${dia} mm) - ${idx} ${row["PRODUCT_NAME"] || "(Unnamed Lens)"} ${clarityLabel}
   </div>
 
   <div class="lens-tags">
     <span class="tag brand">Brand: ${brand}</span> 
-    <span class="tag brand">Material: ${app}</span> 
+    <span class="tag func">Appearance: ${app} ${note}</span> 
     ${tintNote}
-    <span class="tag type">${note ? `, ${note}` : ""}</span>
-<span class="tag coating">Coating: ${clarityLabel}</span>
 
   </div>
 
