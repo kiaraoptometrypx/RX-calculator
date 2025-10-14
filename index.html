@@ -42,6 +42,7 @@
 .tag.tint {background: #CFEDBB;}
 .tag.coating {background: #CFEDBB;}
 
+
 .lens-price {
   margin: 4px 0;
 }
@@ -86,7 +87,7 @@
 
 
   button:focus{outline:2px solid #fff4; outline-offset:2px;}
-  button:hover{filter:brightness(1.05);}
+  button:hover{filter:brightness(1);}
   button:active{transform:translateY(1px);}
 
 
@@ -464,13 +465,13 @@ table input {
 }
 
  
-  /* Pane boxes (white interior) */
-  .pane{
-    background:#fff;
-    border:1px solid var(--line);
-    border-radius:10px;
-    padding:5px;
-  }
+.pane{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:5px;
+}
+
   .pane h4{margin:0 0 8px;font-size:10px}
 
   .section{background:var(--pale);border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0;}
@@ -3680,7 +3681,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
   <b><span
     id="toggle-frame-lens-details"
     style="cursor:pointer; user-select:none; text-align:center;">
-    ▼ Lens Thickness & Minimum Blank Size Calculator 
+    ▼ Lens Thickness & Minimum Blank Size Calculator </span></b>
  </div>
 
 
@@ -3699,7 +3700,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
   <td style="border:none;"></td>
 </tr>
 <tr class="white">
-<td colspan="2" style="text-align:left;">&nbsp;&nbsp;&nbsp;<b>Import RX : </b></td>
+<td colspan="2" style="text-align:left;">&nbsp;&nbsp;&nbsp;Import RX :</td>
 <td colspan="5" style="background-color: white"><div style="display:flex; gap:10px; margin-left:20px;">
   <button class="small-normal-btn" onclick="copyRx('current')">Current</button>
   <button class="small-normal-btn" onclick="copyRx('manual')">Manual</button>
@@ -3709,7 +3710,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </td>
 </tr>
 <tr class="white">
-<td colspan="2" style="text-align:left;">&nbsp;&nbsp;&nbsp;<b>Quick Estimate : </b></td>
+<td colspan="2" style="text-align:left;">&nbsp;&nbsp;&nbsp;Quick Estimate :</td>
 <td colspan="5" style="background-color: white"><div style="display:flex; gap:20px; margin-left:20px;">
 
     <button class="small-normal-btn" data-value="-3.00">−3.00</button>
@@ -3741,7 +3742,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
   </tr>
 
-<td colspan="1"><b>R</b></td>
+<td colspan="1">R</td>
 <td>      <div><input id="monoPD_OD" type="number" placeholder="31"></div></td>
           <td><input type="text" id="sphOD" placeholder="+0.00"></td>
           <td><input type="text" id="cylOD" placeholder="+0.00"></td>
@@ -3754,17 +3755,17 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 <div><input id="frameA" type="number" placeholder="52"></div>
 <div style="height:5px;"></div>
 
-<b>Lens Width</b><br><i>(A Size)</i></td>
+Lens Width<br><i>(A Size)</i></td>
 
     <td rowspan="2">
 <div> <input id="frameDBL" type="number" placeholder="17"></div>
 <div style="height:5px;"></div>
 
-<b>Bridge Size</b><br><i>(DBL size)</i></td>
+Bridge Size<br><i>(DBL size)</i></td>
 
         </tr>
         <tr>
-<td colspan="1"><b>L</b></td>
+<td colspan="1">L</td>
 <td>      <div><input id="monoPD_OS" type="number" placeholder="31"></div></td>
           <td><input type="text" id="sphOS" placeholder="+0.00"></td>
           <td><input type="text" id="cylOS" placeholder="+0.00"></td>
@@ -3786,7 +3787,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
       <span>or</span>
 
-      <button id="btnLength" class="normal-btn">
+      <button id="btnLength" class="normal-btn" style="border:3px solid grey">
         Generate with<br>Longest Edge Length (mm)
       </button>
 
@@ -3839,7 +3840,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
     <td style="padding:3px 0; border:none;">
       <div style="display:flex; align-items:center; gap:8px; justify-content:flex-start;">
         <div style="width:30px; height:10px; background:var(--barOD);"></div>
-        <span>= <b>Custom (RX) lens thickness, usually thinner and better optics.</b></span>
+        <span>= Custom (RX) lens thickness, usually thinner and better optics.</span>
       </div>
     </td>
   </tr>
@@ -3847,7 +3848,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
     <td style="padding:3px 0; border:none;">
       <div style="display:flex; align-items:center; gap:8px; justify-content:flex-start;">
         <div style="width:30px; height:10px; background:darkblue;"></div>
-        <span>= <b>Diagram shows additional thickness of stock compared to RX.</b></span>
+        <span>= Diagram shows additional thickness of stock compared to RX.</span>
       </div>
     </td>
   </tr>
@@ -3855,7 +3856,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
     <td style="padding:3px 0; border:none;">
       <div style="display:flex; align-items:center; gap:8px; justify-content:flex-start;">
         <div style="width:30px; height:10px; background:#a8733b;"></div>
-        <span>= <b>Frame thickness</b> used for comparison</span>
+        <span>= Frame thickness used for comparison</span>
       </div>
     </td>
   </tr>
@@ -4471,13 +4472,25 @@ function parseRx(){
 
 
 <div class="section">
+<span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-build-your-lens">
+  ▼ How to Build your Lens
+</span>
+
+<div id="build-your-lens" style="display:none;">
+<div class="row" style="gap:10px; padding:5px 15px 0px 15px;">
+<i>1. Thickness must be generated so only lenses with sufficient diameter will show.<br>2. Pick only 1 selection from each question. The less selection, the more refined the search.<br>3. Picking more than 1 selection from the same question may result in no lenses shown..</i>
+</div>
+</div>
+
+ <div style="height:15px;"></div>
+
 
 <div class="pane" style="align-items:center; padding:10px 10px 10px 10px;">
 
 <div style="display:flex; justify-content:center;">
- <span   id="toggle-lens-selector"    style="cursor:pointer; user-select:none; text-align:center;">
-    ▼ Lens Selector
-  </span>
+ <b><span   id="toggle-lens-selector"    style="cursor:pointer; user-select:none; text-align:center;">
+    ▼ Build Your Lens
+  </span></b>
 
 </div>
 
@@ -4490,7 +4503,7 @@ function parseRx(){
 
 <div class="pane" style="padding:10px">
 
-  <span id="toggle-lensMaterialCoating" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 1. Choose Your Lens Material & Coating</span>
+  <span id="toggle-lensMaterialCoating" style="cursor:pointer; user-select:none;">▼ 1. Choose Your Lens Material, Coating & Brand</span>
 
 
 
@@ -4503,7 +4516,7 @@ function parseRx(){
 
 
       <!-- Appearance -->
-      <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
 
         <b>Type of Lens :</b> Do you want changing colour lenses? Do you want sunglasses? Do you want premium sunglasses that cuts glare (polarize)? Or just normal clear material?
 
@@ -4523,7 +4536,7 @@ function parseRx(){
       </div>
 
 <!-- Index -->
-<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
   <b>Lens thick or thinness :</b> Do you prefer lighter and thinner lenses (higher index)? Or do you want normal thickness lenses that are more affordable?
  <div style="height:10px;"></div>
 
@@ -4541,7 +4554,7 @@ function parseRx(){
         </div>
       </div>
 <!-- Clarity & Coating -->
-<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
   <b>Clarity & Coating :</b> Choose how clear you want your vision and how easy the lens is to clean.
  <div style="height:10px;"></div>
 
@@ -4554,13 +4567,13 @@ function parseRx(){
 
 
 <!-- Durability Preference -->
-<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
   <b>Durability Preference :</b> Decide between softer coatings with less reflection, or tougher ones that last longer.
 
  <div style="height:10px;"></div>
 
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-    <label><input type="checkbox" class="fl-durability" value="LOW"> Low – but makes the lens more transparent and appealing. Suitable for careful usage.</label>
+
     <label><input type="checkbox" class="fl-durability" value="STANDARD"> Standard – industry standard that comes with 1 year warranty.</label>
     <label><input type="checkbox" class="fl-durability" value="HIGH"> High – comes with 2 years warranty but has more reflection. Suitable for rough usage.</label>
   </div>
@@ -4568,41 +4581,47 @@ function parseRx(){
 
 
 
+
+
 <!-- Brands -->
-<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
   <b>Brands :</b> Choose based on optical quality, price, and origin.
 
   <div style="height:10px;"></div>
 
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
 
-    <label><input type="checkbox" class="fl-brand" value="Asahi"> <b>
-Asahi</b>&nbsp;&nbsp; –
-  Quality = ⭐️⭐️⭐️⭐️⬤ · Price = 💰💰💰⬤ ⬤ - 
-   Japan made. First to pioneer high-index lenses. Good choice to reduce lens thickness of moderate-to-high prescriptions.</label>
+    <label><input type="checkbox" class="fl-brand" value="Asahi"> 
+Asahi&nbsp;&nbsp; –
+  Quality = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ - 
+   Japan made. Pioneer in thin lenses.  Good choice to reduce lens thickness..</label>
 
-<label><input type="checkbox" class="fl-brand" value="Rayfilter"> <b>Rayfilter</b>&nbsp;&nbsp; –
-    Quality = ⭐️⭐️⭐️⬤⬤ · Price = 💰💰⬤⬤⬤  -
-    Taiwan made. Simple everyday clarity with nothing fancy. Basic and cost-focused.</label>
+<label><input type="checkbox" class="fl-brand" value="Rayfilter">Rayfilter&nbsp;&nbsp; –
+    Quality = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
+    Taiwan made. Simple everyday lenses with nothing fancy. Basic and cost-focused.</label>
 
-    <label><input type="checkbox" class="fl-brand" value="Rodenstock"> <b>Rodenstock</b>&nbsp;&nbsp; –
+    <label><input type="checkbox" class="fl-brand" value="Rodenstock">Rodenstock&nbsp;&nbsp; –
     Quality = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
-    German engineered. Pioneers of multiple optical technologies. Excellent for maximising visual experience.</label>
+    German engineered. Pioneers of many optical technologies. Excellent visual experience.</label>
 
-    <label><input type="checkbox" class="fl-brand" value="Pentax"> <b>Pentax</b>&nbsp;&nbsp; –
-    Quality = ⭐️⭐️⭐️⭐️⬤ · Price = 💰💰💰💰⬤ -
-    Japan optics lineage. Great coating durability for its price. Balanced choice of clarity and value.</label>
+    <label><input type="checkbox" class="fl-brand" value="Pentax"> Pentax&nbsp;&nbsp; –
+    Quality = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰💰 ⬤ -
+    Japan optics lineage. Great coating durability.</label>
 
-    <label><input type="checkbox" class="fl-brand" value="Opto-tech"><b>Optotech</b>&nbsp;&nbsp; –
-    Quality = ⭐️⭐️⭐️⭐️⬤ · Price = 💰💰💰⬤⬤ -
-    German design. Reasonable price with near-luxury technologies. Great value for money.</label>
+    <label><input type="checkbox" class="fl-brand" value="Opto-tech">Optotech&nbsp;&nbsp; –
+    Quality = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
+    German design. Reasonable price with modern technologies.</label>
 
-    <label><input type="checkbox" class="fl-brand" value="Seiko"> <b>Seiko</b>&nbsp;&nbsp; –   Quality = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
-    Made in Japan. Premium customised aspheric technology for thinner, clearer lenses.</label>
+    <label><input type="checkbox" class="fl-brand" value="Seiko"> Seiko&nbsp;&nbsp; –   Quality = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
+    Made in Japan. Ultra premium customised aspheric technology; thinnest possible optics..</label>
 
-    <label><input type="checkbox" class="fl-brand" value="Advance Lens"> <b>Advance Lens</b>&nbsp;&nbsp; –
-    Quality = ⭐️⭐️⭐️⬤⬤ · Price = 💰💰⬤⬤⬤ -
-    Local lab with simple, durable optics. Practical everyday option.</label>
+    <label><input type="checkbox" class="fl-brand" value="Advance Lens"> Local&nbsp;&nbsp; –
+    Quality = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
+    Local lab with simple, durable lenses..</label>
+
+    <label><input type="checkbox" class="fl-brand" value="Meyer"> Meyer&nbsp;&nbsp; –
+    Quality = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰 ⬤ -
+    German design. Premium price with modern technologies.</label>
 
 
   </div>
@@ -4633,7 +4652,7 @@ Asahi</b>&nbsp;&nbsp; –
 <div class="pane" style="padding:10px">
 
 
-  <span id="toggle-single" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 2. Build Your Single Vision Lens</span>
+  <span id="toggle-single" style="cursor:pointer; user-select:none;">▼ 2. Build Your Single Vision Lens</span>
 
 
 
@@ -4650,7 +4669,7 @@ Asahi</b>&nbsp;&nbsp; –
 
 
 <!-- Functional Lens -->
-<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
   <b>Functional Lens :</b> Since we never look at far through the bottom of the lens, the prescription is optimized so the lenses are not over-powering; feeling more comfortable and relaxed all day.
 
  <div style="height:10px;"></div>
@@ -4666,13 +4685,15 @@ Asahi</b>&nbsp;&nbsp; –
 
 
 <!-- Viewing Preference -->
-<div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
   <b>Viewing Preference :</b> Pick your preferred look and view balance – wider vision or slimmer design.
  <div style="height:10px;"></div>
 
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-    <label><input type="checkbox" class="fl-viewing" value="Wider View (Spherical)"> Wider View – traditional curve, natural peripheral vision.</label>
-    <label><input type="checkbox" class="fl-viewing" value="Thinner Lens (Aspheric)"> Thinner Lens – flatter front, slimmer and modern look.</label>
+    <label><input type="checkbox" class="fl-viewing" value="SPH"> Spherical Lens – traditional curve, natural peripheral vision.</label>
+    <label><input type="checkbox" class="fl-viewing" value="ASP"> Aspheric Lens – flatter front, less magnification of the eye but may notice peripheral swim..</label>
+    <label><input type="checkbox" class="fl-viewing" value="ATO"> Atoric Lens – ideal for astigmatism prescription as it makes the prescription less tilt and more stable.</label>
+    <label><input type="checkbox" class="fl-viewing" value="DAS"> Double Aspheric Lens – maximum aspheric optics, thinnest and most realistic magnification but may notice peripheral swim..</label>
   </div>
 </div>
 
@@ -4694,7 +4715,7 @@ Asahi</b>&nbsp;&nbsp; –
 <div class="pane" style="padding:10px">
 
 
-  <span id="toggle-multi" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 3. Build Your Multi-Focal Vision Lens</span> 
+  <span id="toggle-multi" style="cursor:pointer; user-select:none;">▼ 3. Build Your Multi-Focal Vision Lens</span> 
 
 
 
@@ -4707,49 +4728,64 @@ Asahi</b>&nbsp;&nbsp; –
 <button id="btnToggleDesc" class="small-normal-btn">▲ Hide Descriptions</button>
 
   <!-- 1️⃣ Viewing Emphasis -->
-  <div class="pane" style="padding:10px; margin:5px 0px;">
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
     <b>Viewing Emphasis :</b> Choose which distance you value most.
 
  <div style="height:10px;"></div>
 
     <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-view" value="Wide Distance"> Wide Distance – clearer far range.</label>
-      <label><input type="checkbox" class="fl-mf-view" value="Wide Near"> Wide Near – easier reading focus.</label>
-      <label><input type="checkbox" class="fl-mf-view" value="Balanced Both"> Balanced Both – all-round smooth corridor.</label>
+      <label><input type="checkbox" class="fl-mf-view" value="Dist"> Distance - bigger distance zone priority  for wider far view, from side to side..</label>
+      <label><input type="checkbox" class="fl-mf-view" value="Near">Near - bigger near zone priority for bigger reading zone, lesser head turns.</label>
+      <label><input type="checkbox" class="fl-mf-view" value="Both"> Balanced Both – even amount for both distance and near.</label>
     </div>
   </div>
 
   <!-- 2️⃣ Peripheral Behavior -->
-  <div class="pane" style="padding:10px; margin:5px 0px;">
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
     <b>Peripheral Behavior :</b> Choose between stability or width.
  <div style="height:10px;"></div>
     <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-swim" value="Less Swim"> Less Swim – narrower but stable edges.</label>
-      <label><input type="checkbox" class="fl-mf-swim" value="More Swim"> More Swim – wider but more dynamic.</label>
+      <label><input type="checkbox" class="fl-mf-swim" value="Soft"> Soft - Less swim & disrtortion but clear zones are smaller.</label>
+      <label><input type="checkbox" class="fl-mf-swim" value="Hard">Hard - More swim and distortion but clear zones are much wider..</label>
     </div>
   </div>
 
   <!-- 3️⃣ Zone Enhancement -->
-  <div class="pane" style="padding:10px; margin:5px 0px;">
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
     <b>Zone Enhancement :</b> Emphasize near or mid-range vision.
  <div style="height:10px;"></div>
 
     <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-zone" value="Enhanced Near"> Enhanced Near – larger reading zone.</label>
-      <label><input type="checkbox" class="fl-mf-zone" value="Enhanced Intermediate"> Enhanced Intermediate – wider computer zone.</label>
+      <label><input type="checkbox" class="fl-mf-zone" value="Reading"> Near preferred – larger reading zone but less intermediate.</label>
+      <label><input type="checkbox" class="fl-mf-zone" value="Intermediate"> Intermediate preferred - larger intermediate but smaller near.</label>
+<label><input type="checkbox" class="fl-mf-zone" value="Equal"> Equal both - both are equally spread.</label>
     </div>
   </div>
 
   <!-- 4️⃣ Design Technology Tier -->
-  <div class="pane" style="padding:10px; margin:5px 0px;">
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
     <b>Design Tier :</b> Select the optical design sophistication.
  <div style="height:10px;"></div>
     <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-tier" value="Double Surface"> Double Surface – maximum optics & comfort.</label>
-      <label><input type="checkbox" class="fl-mf-tier" value="Single Surface"> Single Surface – everyday modern design.</label>
-      <label><input type="checkbox" class="fl-mf-tier" value="Traditional"> Traditional – basic everyday progressive.</label>
+      <label><input type="checkbox" class="fl-mf-tier" value="Double"> Double Surface – maximum optics & comfort. Overall huge reduction in distortion.</label>
+      <label><input type="checkbox" class="fl-mf-tier" value="Single"> Single Surface – common choice nowadays due to balance between cost and performance.</label>
+      <label><input type="checkbox" class="fl-mf-tier" value="Traditional"> Traditional – old fashioned optics performance, cost priority.</label>
     </div>
   </div>
+
+  <!-- 4️⃣ Personalisation Tier -->
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
+    <b>Personalization :</b> Optimize optics by fitting for the frame & wearer.
+ <div style="height:10px;"></div>
+    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+      <label><input type="checkbox" class="fl-mf-tier" value="Full"> Full personalization - optics are optimized for your frame and how you wear the glasses.</label>
+      <label><input type="checkbox" class="fl-mf-tier" value="Partial"> Partial personalization - optics are optimized for the frame only.</label>
+      <label><input type="checkbox" class="fl-mf-tier" value="None"> No personalization - optics are made as default and may not feel the best.</label>
+    </div>
+  </div>
+
+
+
 
 </div>
 
@@ -5139,6 +5175,19 @@ const BRAND_ALIASES = {
   "advance": "Advance Lens"
 };
 
+// Show these per brand in each card
+const BRAND_RATINGS = {
+  "Asahi":       { optical: "⭐️⭐️⭐️⭐️⬤", price: "💰💰💰⬤⬤" },
+  "Rayfilter":   { optical: "⭐️⭐️⭐️⬤⬤", price: "💰💰⬤⬤⬤" },
+  "Rodenstock":  { optical: "⭐️⭐️⭐️⭐️⭐️", price: "💰💰💰💰💰" },
+  "Pentax":      { optical: "⭐️⭐️⭐️⭐️⬤", price: "💰💰💰💰⬤" },
+  "Opto-tech":   { optical: "⭐️⭐️⭐️⭐️⬤", price: "💰💰💰⬤⬤" },
+  "Seiko":       { optical: "⭐️⭐️⭐️⭐️⭐️", price: "💰💰💰💰💰" },
+  "Advance Lens":{ optical: "⭐️⭐️⭐️⬤⬤", price: "💰💰⬤⬤⬤" }
+};
+
+
+
 function getBrandGroup(val = "") {
   // normalize the CSV brand string
   const s = String(val).toLowerCase()
@@ -5172,8 +5221,8 @@ const clarityLabel = clarityMap[clarityChoice] || "Blue Light Blocker UV420";
 
 
 
-  // Render (top 10)
-  matches.slice(0, 10).forEach(row => {
+  // Render (top 20)
+  matches.slice(0, 20).forEach(row => {
 const idx = (row["INDEX"] || "—").trim();
   const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
   const design = row["LENS_DESIGN"] || "—";
@@ -5183,6 +5232,14 @@ const idx = (row["INDEX"] || "—").trim();
 const rawNote = (row["EXTRA_NOTE"] ?? "").toString().trim();
 const note = (rawNote && rawNote !== "-") ? rawNote : "";
   const brand = row["BRAND"] || ""; 
+
+
+const brandKey = getBrandGroup(brand);
+
+const rating = BRAND_RATINGS[brandKey];
+const brandMeta = rating
+  ? `<span class="tag meta">Optical: ${rating.optical} · Price: ${rating.price}</span>`
+  : "";
 
 
 // --- TINT OPTION NOTE ---
@@ -5217,7 +5274,8 @@ card.innerHTML = `
   </div>
 
   <div class="lens-tags">
-    <span class="tag brand">Brand: ${brand}</span> 
+<span class="tag brand">Brand: ${brandKey || (row["BRAND"] || "")}</span>
+    ${brandMeta}
     <span class="tag func">Appearance: ${app} ${note}</span> 
     ${tintNote}
 
@@ -5559,10 +5617,15 @@ makeToggle("toggle-settings-block", "settings-block");
 makeToggle("toggle-frame-lens-details","frame-lens-details");
 makeToggle("toggle-frame-lens-details","frame-lens-2-details");
 makeToggle("toggle-customer-details","customer-details");
-makeToggle("toggle-lens-selector","lens-selector")
+makeToggle("toggle-build-your-lens","build-your-lens");
+makeToggle("toggle-lens-selector","lens-selector");
 makeToggle("toggle-single", "singleFilters");
 makeToggle("toggle-multi", "multifocalFilters");
 makeToggle("toggle-lensMaterialCoating", "lensMaterialCoating")
+
+
+
+
 
 
 </script>
