@@ -12,7 +12,7 @@
   margin-bottom: 12px;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  transition: all 0.2s ease;
+  transition: all 0.0s ease;
 }
 
 .hidden-stock {
@@ -405,7 +405,7 @@ input {   width:80px;
   padding: 2px 20px 2px 20px;
   margin: 10px 0px 10px 0px;
   background: #eee;
-  border-radius: 4px;
+  border-radius: 30px;
   cursor: pointer;
   font-size: 10px;
   color: black;
@@ -425,7 +425,7 @@ input {   width:80px;
   padding: 5px 10px 5px 10px;
   margin: 0px 0px 0px 0px;
   background: #eee;
-  border-radius: 4px;
+  border-radius: 30px;
   cursor: pointer;
   font-size: 10px;
   color: black;
@@ -488,6 +488,7 @@ table input {
 .fl-index[type="checkbox"],
 .fl-func[type="checkbox"],
 .fl-clarity[type="checkbox"],
+.fl-brand[type="checkbox"],
 .fl-durability[type="checkbox"],
 .fl-viewing[type="checkbox"],
 .fl-opti[type="checkbox"],
@@ -504,7 +505,7 @@ table input {
   cursor: pointer;
   position: relative;
   background: #fff;
-  transition: all 0.15s ease-in-out;
+  transition: all 0.0s ease-in-out;
 }
 
 /* Checked state */
@@ -512,6 +513,8 @@ table input {
 .fl-index[type="checkbox"]:checked,
 .fl-func[type="checkbox"]:checked,
 .fl-clarity[type="checkbox"]:checked,
+.fl-brand[type="checkbox"]:checked,
+
 .fl-durability[type="checkbox"]:checked,
 .fl-viewing[type="checkbox"]:checked,
 .fl-opti[type="checkbox"]:checked,
@@ -3873,16 +3876,20 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 <script>
 /* =========================
-   CONFIG - change index thickness
+   CONFIG - CHANG THICKNESS
 ========================= */
 const CSV_URL = "https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/lens%20selector.csv";
 const INDICES = [1.56, 1.60, 1.67, 1.74];
-const CENTER_MINUS = 1.4;   // minus lens min center thickness
-const EDGE_PLUS    = 1.4;   // plus lens min center thickness
+const CENTER_MINUS = 1.2;   // minus lens min center thickness
+const EDGE_PLUS    = 1.2;   // plus lens min center thickness
 const BASE_PX      = 50 * 0.6; // px per mm before scale radios
 
-function minusCorr(n){ if(n===1.56) return 1.2; if(n===1.60) return 1.1; return 1; }
-function plusCorr(n){  if(n===1.56) return 1.2;  if(n===1.60) return 1.1;  if(n===1.67) return 1.05; if(n===1.74) return 1.0; return 1; }
+/* =========================
+   CONFIG - CHANG THICKNESS
+========================= */
+
+function minusCorr(n){ if(n===1.56) return 1.05; if(n===1.60) return 1.025; return 1.0; }
+function plusCorr(n){  if(n===1.56) return 1.3;  if(n===1.60) return 1.1;  if(n===1.67) return 1.05; if(n===1.74) return 1.0; return 1; }
 
 /* =========================
    STATE
@@ -4041,7 +4048,7 @@ function renderBars(rx, geom, mode, lenOverride){
   function eyeLabel(isPlus){ return isPlus ? "" : ""; }
 
   // ========== DRAW FUNCTION ==========
-// --- helper for stock lens %, separated for plus/minus ---
+// --- helper for stock lens %, separated for plus/minus CHANGE THICKNESS  ---
 function stockFactor(n, isPlus) {
   if (isPlus) {
     // PLUS lenses (center thickness heavier, smaller scaling)
@@ -4051,10 +4058,10 @@ function stockFactor(n, isPlus) {
     if (n === 1.74) return 1.05;
   } else {
     // MINUS lenses (edge thicker, bigger scaling)
-    if (n === 1.56) return 1.4;
-    if (n === 1.60) return 1.1;
-    if (n === 1.67) return 1.07;
-    if (n === 1.74) return 1.05;
+    if (n === 1.56) return 1.1;
+    if (n === 1.60) return 1.07;
+    if (n === 1.67) return 1.05;
+    if (n === 1.74) return 1.02;
   }
   return 1.0;
 }
@@ -4482,13 +4489,17 @@ function parseRx(){
 
 
 <div class="pane" style="padding:10px">
-  <span id="toggle-lensMaterialCoating" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 1. Choose Your Lens Material & Coating</span> -<button id="btnToggleDesc" class="small-normal-btn">▲ Hide Descriptions</button>
+
+  <span id="toggle-lensMaterialCoating" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 1. Choose Your Lens Material & Coating</span>
 
 
 
 
 <div id="lensMaterialCoating" style="display:none;">
+ <div style="height:10px;"></div>
 
+-- <button id="btnToggleSeg1" class="small-normal-btn" style="margin-left:10px; border:none; background-color:white;">Select All</button>
+<button id="btnToggleDesc" class="small-normal-btn">▲ Hide Descriptions</button>
 
 
       <!-- Appearance -->
@@ -4555,21 +4566,49 @@ function parseRx(){
   </div>
 </div>
 
+
+
 <!-- Brands -->
 <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
- <div style="height:10px;"></div>
+  <b>Brands :</b> Choose based on optical quality, price, and origin.
 
-  <b>Brands :</b> Choose which brands to include.<br><br>
-  <div id="brandFilterPane" style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+  <div style="height:10px;"></div>
 
+  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
 
+    <label><input type="checkbox" class="fl-brand" value="Asahi"> <b>
+Asahi</b>&nbsp;&nbsp; –
+  Quality = ⭐️⭐️⭐️⭐️⬤ · Price = 💰💰💰⬤ ⬤ - 
+   Japan made. First to pioneer high-index lenses. Good choice to reduce lens thickness of moderate-to-high prescriptions.</label>
 
-    <!-- checkboxes will be injected here -->
+<label><input type="checkbox" class="fl-brand" value="Rayfilter"> <b>Rayfilter</b>&nbsp;&nbsp; –
+    Quality = ⭐️⭐️⭐️⬤⬤ · Price = 💰💰⬤⬤⬤  -
+    Taiwan made. Simple everyday clarity with nothing fancy. Basic and cost-focused.</label>
 
+    <label><input type="checkbox" class="fl-brand" value="Rodenstock"> <b>Rodenstock</b>&nbsp;&nbsp; –
+    Quality = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
+    German engineered. Pioneers of multiple optical technologies. Excellent for maximising visual experience.</label>
+
+    <label><input type="checkbox" class="fl-brand" value="Pentax"> <b>Pentax</b>&nbsp;&nbsp; –
+    Quality = ⭐️⭐️⭐️⭐️⬤ · Price = 💰💰💰💰⬤ -
+    Japan optics lineage. Great coating durability for its price. Balanced choice of clarity and value.</label>
+
+    <label><input type="checkbox" class="fl-brand" value="Opto-tech"><b>Optotech</b>&nbsp;&nbsp; –
+    Quality = ⭐️⭐️⭐️⭐️⬤ · Price = 💰💰💰⬤⬤ -
+    German design. Reasonable price with near-luxury technologies. Great value for money.</label>
+
+    <label><input type="checkbox" class="fl-brand" value="Seiko"> <b>Seiko</b>&nbsp;&nbsp; –   Quality = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
+    Made in Japan. Premium customised aspheric technology for thinner, clearer lenses.</label>
+
+    <label><input type="checkbox" class="fl-brand" value="Advance Lens"> <b>Advance Lens</b>&nbsp;&nbsp; –
+    Quality = ⭐️⭐️⭐️⬤⬤ · Price = 💰💰⬤⬤⬤ -
+    Local lab with simple, durable optics. Practical everyday option.</label>
 
 
   </div>
 </div>
+
+
 
 
 </div>
@@ -4592,11 +4631,23 @@ function parseRx(){
 
 
 <div class="pane" style="padding:10px">
-  <span id="toggle-single" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 2. Build Your Single Vision Lens</span> - <button id="btnToggleDesc" class="small-normal-btn">▲ Hide Descriptions</button>
+
+
+  <span id="toggle-single" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 2. Build Your Single Vision Lens</span>
+
+
 
 
 
 <div id="singleFilters" style="display:none;">
+ <div style="height:10px;"></div>
+
+--<button id="btnToggleSeg2" class="small-normal-btn" style="margin-left:10px; border:none; background-color:white;">Select All</button>
+<button id="btnToggleDesc" class="small-normal-btn">▲ Hide Descriptions</button>
+
+
+
+
 
 <!-- Functional Lens -->
 <div class="pane" style="padding:10px; margin:5px 0px 5px 0px">
@@ -4629,7 +4680,6 @@ function parseRx(){
 
 
 
-    <span id="status" class="tiny muted"></span>&nbsp;
 
 
 
@@ -4642,15 +4692,19 @@ function parseRx(){
 
 
 <div class="pane" style="padding:10px">
-  <span id="toggle-multi" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 3. Build Your Multi-Focal Vision Lens</span> - <button id="btnToggleDesc" class="small-normal-btn">▲ Hide Descriptions</button>
 
 
-
+  <span id="toggle-multi" style="cursor:pointer; user-select:none; font-weight:bold;">▼ 3. Build Your Multi-Focal Vision Lens</span> 
 
 
 
 <!-- Multifocal Filters -->
 <div id="multifocalFilters" style="display:none;">
+
+ <div style="height:10px;"></div>
+
+--<button id="btnToggleSeg3" class="small-normal-btn" style="margin-left:10px; border:none; background-color: white;">Select All</button>
+<button id="btnToggleDesc" class="small-normal-btn">▲ Hide Descriptions</button>
 
   <!-- 1️⃣ Viewing Emphasis -->
   <div class="pane" style="padding:10px; margin:5px 0px;">
@@ -4711,13 +4765,15 @@ function parseRx(){
 
 
 
- <div style="height:5px;"></div>
+ <div style="height:15px;"></div>
 
      <!-- Price -->
 
-      <div class="pane" style="padding:10px;">
+      <div class="pane" style="padding:5 0 5px 0px;">
+    <span style="display:none" id="status" class="tiny muted"></span>&nbsp;
+
         <b>Set Max Price (RM) :</b>
-         <input id="priceCap" type="number" placeholder="1000"  style="width:70px; border:1px solid grey; border-radius:4px; height:25px; padding:4px 6px; appearance:textfield; margin-left:10px">
+         <input id="priceCap" type="number" placeholder="1000"  style="width:70px; border:1px solid lightgrey; border-radius:30px; height:25px; padding:4px 6px; appearance:textfield; margin-left:10px">
 
      
           <button style="margin-left:5px" id="cap1000Plus" class="small-normal-btn"><span style="color:green">+1000</span></button></span>
@@ -4739,16 +4795,21 @@ function parseRx(){
 
 </div>
 
- <div style="height:15px;"></div>
+
 
 
 
       <div class="pane" style="padding:10px; margin:5px 0px 5px 0px;">
-<span><button id="btnFetch" class="small-normal-btn">Search Lenses</button>
-</span> <div style="height:10px;"></div>
-<div style="margin-bottom:8px;">
-  <button id="btnSort" class="small-normal-btn">Sort by Price ↑</button>
+  <b>Search :</b>
+  <input id="lensSearch" type="text" placeholder="Type brand, model, design, index…" 
+         style="width:280px; border:1px solid #ccc; border-radius:30px; height:28px; padding:4px 8px; margin-left:4px;">
+  <span id="searchCount" class="tiny muted" style="margin-left:8px;"></span>
+<span><button id="btnFetch" class="small-normal-btn">Search</button>
+</span> 
+  <button id="btnSort" class="small-normal-btn">Sort by Price</button>
+
 </div>
+
 
 
 
@@ -4805,7 +4866,6 @@ async function init(){
   try{
     PRODUCTS = await loadCSV(CSV_URL);
     if(statusEl) statusEl.textContent = "";
-    renderBrandCheckboxes();  // build Brand (Q7) checkboxes from CSV
   }catch(e){
     if(statusEl) statusEl.textContent = "CSV load failed.";
     console.error("CSV load error:", e);
@@ -4816,6 +4876,34 @@ document.addEventListener("DOMContentLoaded", init);
 // =========================
 // FILTER GROUPING HELPERS
 // =========================
+// simple debounce so we don't re-render on every keystroke
+function debounce(fn, ms=200){
+  let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), ms); };
+}
+
+// global search term
+let LENS_SEARCH_TERM = "";
+
+// build a lowercase “haystack” for searching
+function rowHaystack(row){
+  return [
+    row["PRODUCT_NAME"], row["BRAND"], row["LENS_DESIGN"], row["INDEX"],
+    row["CLEAR_CHANGING_TINT"], row["VIEWING_STYLE"], row["EXTRA_NOTE"],
+    row["MF_VIEWING"], row["MF_SWIM"], row["MF_ZONE"], row["MF_TIER"]
+  ].map(x => (x||"").toString().toLowerCase()).join(" | ");
+}
+
+// true if all words in the query appear anywhere in the row
+function matchesSearch(row, query){
+  const q = (query||"").trim().toLowerCase();
+  if (!q) return true;
+  const terms = q.split(/\s+/).filter(Boolean);
+  const hay = rowHaystack(row);
+  return terms.every(t => hay.includes(t));
+}
+
+
+
 function getAppearance(val=""){
   const s = val.toLowerCase();
   if(s.includes("polar")) return "Polarized";
@@ -4826,8 +4914,8 @@ function getAppearance(val=""){
 function getIndexGroup(val=""){
   const n = parseFloat(val)||0;
   if(n===1.53 || n===1.59) return "Safety";
-  if(n>=1.49 && n<1.59)    return "1.5";
-  if(n>=1.59 && n<1.65)    return "1.6";
+  if(n>=1.49 && n<1.57)    return "1.5";
+  if(n>=1.6 && n<1.65)    return "1.6";
   if(n>=1.65 && n<1.71)    return "1.67";
   if(n>=1.73 && n<1.76)    return "1.74";
   if(Math.abs(n-1.67)<0.02) return "1.67";
@@ -4847,144 +4935,7 @@ function checkedValues(selector){
     .filter(i=>i.checked)
     .map(i=>i.value);
 }
-function withinCap(price, cap){ if(!cap) return true; return Number(price) <= cap * 1.10; }
-
-
-
-
-
-
-// =========================
-// Q7: BRAND CHECKBOXES
-// (injects checkboxes into <div id="brandFilterPane">)
-// =========================
-// Optional local fallback notes (only used if CSV has no desc column)
-const BRAND_INFO = {
-
-  "Asahi": "Optical Quality = ⭐️ ⭐️ ⭐️ ⭐️ ⬤ · Price Wise = 💰 💰 💰 ⬤ ⬤ · Japan made. First to pioneer high-index lenses. Good choice to reduce lens thickness of moderate-to-high prescriptions.",
-  "Rayfilter": "Optical Quality = ⭐️ ⭐️ ⭐️ ⬤ ⬤ · Price Wise = 💰 💰 ⬤ ⬤ ⬤ · Taiwan made. Simple everyday clarity with nothing fancy. Basic and cost-focused.",
-  "Rodenstock": "Optical Quality = ⭐️ ⭐️ ⭐️ ⭐️ ⭐️ · Price Wise = 💰 💰 💰 💰 💰 · German engineered. Pioneers of multiple optical technologies. Excellent for maximising visual experience.",
-  "Pentax": "Optical Quality = ⭐️ ⭐️ ⭐️ ⭐️ ⬤ · Price Wise = 💰 💰 💰 💰 ⬤ · Japan optics lineage. Great coating durability for its price. Balanced choice of clarity and value.",
-  "Opto-tech": "Optical Quality = ⭐️ ⭐️ ⭐️ ⭐️ ⬤ · Price Wise = 💰 💰 💰 ⬤ ⬤ · German design. Reasonable price with near-luxury technologies. Great value for money.",
-  "Seiko": "Optical Quality = ⭐️ ⭐️ ⭐️ ⭐️ ⭐️ · Price Wise = 💰 💰 💰 💰 💰 · Made in Japan. Premium customised aspheric technology for thinner, clearer lenses.",
-  "Advance Lens": "Optical Quality = ⭐️ ⭐️ ⭐️ ⬤ ⬤ · Price Wise = 💰 💰 ⬤ ⬤ ⬤ · Local lab with simple, durable optics. Practical everyday option."
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-function renderBrandCheckboxes() {
-  const box = document.getElementById("brandFilterPane");
-  if (!box || !Array.isArray(PRODUCTS)) return;
-
-  // collect unique brands + first available desc from CSV
-  const seen = new Set();
-  const brands = [];
-  for (const r of PRODUCTS) {
-    const raw = (r["BRAND"] || "").trim();
-    if (!raw) continue;
-    const key = raw.toLowerCase().replace(/\s+/g, " ");
-    if (!seen.has(key)) {
-      seen.add(key);
-      // try multiple CSV columns for description
-      const desc = (r["BRAND_DESC"] || r["BRAND_NOTE"] || "").trim();
-      brands.push({ label: raw, key, desc });
-    }
-  }
-
-  box.innerHTML = "";
-  if (!brands.length) {
-    box.innerHTML = `<div class="muted">No brand data found in CSV.</div>`;
-    return;
-  }
-
-  // borrow classes from your existing inputs/labels so styling matches
-  const sampleInput = document.querySelector(
-    "#singleFilters input[type='checkbox'], #multifocalFilters input[type='checkbox'], .pane input[type='checkbox']"
-  );
-  const baseClasses = sampleInput ? sampleInput.className : "";
-  const sampleLabel = sampleInput ? sampleInput.closest("label") : null;
-  const labelClass = (sampleLabel && sampleLabel.className) ? sampleLabel.className : "";
-
-  // small "Clear Brands" button
-  const controls = document.createElement("div");
-  controls.style.margin = "0 0 0px 0";
-  const clearBtn = document.createElement("button");
-  clearBtn.id = "btnClearBrands";
-  clearBtn.className = "small-normal-btn";
-  clearBtn.textContent = "Clear Brand Filters";
-  clearBtn.addEventListener("click", () => {
-    box.querySelectorAll("input.fl-brand[type='checkbox']").forEach(cb => (cb.checked = false));
-  });
-  controls.appendChild(clearBtn);
-  box.appendChild(controls);
-
-// build items (checkbox | Brand - ⏎ description)
-brands.sort((a,b)=> a.label.localeCompare(b.label)).forEach(b => {
-  const id = `brand_${b.key.replace(/[^a-z0-9]+/gi, "_")}`;
-
-  const label = document.createElement("label");
-  if (labelClass) label.className = labelClass;
-
-  // Layout + spacing so it doesn't feel congested
-  label.style.display = "flex";
-  label.style.alignItems = "flex-start";
-  label.style.gap = "8px";              // space between checkbox and text
-  label.style.margin = "0px 0";         // vertical breathing room
-  label.style.lineHeight = "1.4";      // readable line height
-  label.style.maxWidth = "100%";
-
-  // Checkbox
-  const cb = document.createElement("input");
-  cb.type = "checkbox";
-  cb.id = id;
-  cb.value = b.label;
-  cb.checked = true;
-  cb.className = (baseClasses ? baseClasses + " " : "") + "fl-brand";
-
-  // Text column (wraps nicely)
-  const textWrap = document.createElement("div");
-  textWrap.style.display = "block";
-  textWrap.style.minWidth = "0";
-  textWrap.style.maxWidth = "100%";
-  textWrap.style.whiteSpace = "normal";
-  textWrap.style.overflowWrap = "anywhere";
-
-  // Brand line
-  const titleSpan = document.createElement("span");
-  titleSpan.textContent = `${b.label} -`;
-  titleSpan.style.display = "block";
-
-  // Description line (muted)
-  const descText = b.desc || BRAND_INFO[b.label] || "";
-  const descSpan = document.createElement("span");
-  descSpan.className = "muted";
-  descSpan.style.display = "block";
-  descSpan.style.marginTop = "2px";
-  descSpan.textContent = descText;
-
-  // Assemble
-  textWrap.appendChild(titleSpan);
-  if (descText) textWrap.appendChild(descSpan);
-
-  label.appendChild(cb);
-  label.appendChild(textWrap);
-  box.appendChild(label);
-});
-
-}
-
-
-
+function withinCap(price, cap){ if(!cap) return true; return Number(price) <= cap * 1.20; }
 
 
 
@@ -5024,12 +4975,15 @@ function getPriceByClarity(row, clarityChoice) {
     UV_420_BL: "UV_420_BL_PRICE_RM",
     high_clarity: "HIGH_CLARITY_COATING_PRICE_RM"
   };
-  const column = colMap[clarityChoice] || "UV_400_PRICE_RM";
+  const column = colMap[clarityChoice] || "UV_420_BL_PRICE_RM";
   // use "" so parseFloat("") => NaN (not 0)
   return parseFloat(row[column] ?? "");
 }
 
 let sortAsc = true; // toggle state for sorting
+
+
+
 
 // =========================
 /* MAIN: Render Lens Options */
@@ -5058,16 +5012,13 @@ function renderLensOptions(geom, rx) {
 
   const cap = parseFloat(document.getElementById("priceCap").value) || 0;
 
-  // Empty search guard
-  const totalSelected =
-    appearSet.length + indexSet.length + funcSet.length +
-    claritySet.length + durabilitySet.length + viewingSet.length +
-    brandSet.length + mfViewSet.length + mfSwimSet.length + mfZoneSet.length + mfTierSet.length;
+// No filters selected → show all (still respects price cap, thickness, etc.)
+const totalSelected =
+  appearSet.length + indexSet.length + funcSet.length +
+  claritySet.length + durabilitySet.length + viewingSet.length +
+  brandSet.length + mfViewSet.length + mfSwimSet.length + mfZoneSet.length + mfTierSet.length;
+// do nothing; an empty selection means “no filtering”
 
-  if (totalSelected === 0) {
-    container.innerHTML = `<div class="muted">Please select at least one filter before searching.</div>`;
-    return;
-  }
 
   // Design buckets + normalization
   const MF_KEYS = ["progressive","office","myopia control"];
@@ -5101,7 +5052,7 @@ function renderLensOptions(geom, rx) {
     }
 
     // Price by clarity
-    const clarityChoice = claritySet[0] || "UV_400";
+    const clarityChoice = claritySet[0] || "UV_420_BL";
     const price = getPriceByClarity(row, clarityChoice);
 
 // ⬇️ add this: skip if price is missing/NaN
@@ -5140,11 +5091,11 @@ if (!Number.isFinite(price)) return false;
       if (mfTierSet.length && !mfTierSet.includes(mfTier)) return false;
     }
 
-    return true;
+  return matchesSearch(row, LENS_SEARCH_TERM);
   });
 
-  // Sort by price based on current clarity (default UV_400)
-  const clarityChoiceForSort = (claritySet && claritySet[0]) ? claritySet[0] : "UV_400";
+  // Sort by price based on current clarity (default UV_420_BL)
+  const clarityChoiceForSort = (claritySet && claritySet[0]) ? claritySet[0] : "UV_420_BL";
   matches.sort((a, b) => {
     const pa = getPriceByClarity(a, clarityChoiceForSort);
     const pb = getPriceByClarity(b, clarityChoiceForSort);
@@ -5157,6 +5108,55 @@ if (!Number.isFinite(price)) return false;
     return;
   }
 
+if (searchCount) {
+  searchCount.textContent = `${matches.length} found`;
+}
+
+
+
+
+// =========================
+// BRAND GROUPING HELPER
+// =========================
+const BRAND_ALIASES = {
+  "asahi": "Asahi",
+  "asahi lens": "Asahi",
+  "asahi optical": "Asahi",
+
+  "rayfilter": "Rayfilter",
+
+  "rodenstock": "Rodenstock",
+
+  "pentax": "Pentax",
+
+  "opto-tech": "Opto-tech",
+  "opto tech": "Opto-tech",
+  "optotech": "Opto-tech",
+
+  "seiko": "Seiko",
+
+  "advance lens": "Advance Lens",
+  "advance": "Advance Lens"
+};
+
+function getBrandGroup(val = "") {
+  // normalize the CSV brand string
+  const s = String(val).toLowerCase()
+    .replace(/\./g, "")
+    .replace(/\b(lens|optical|co|co ltd|ltd|gmbh|inc|corp|corporation)\b/g, "") // drop suffixes
+    .replace(/[^a-z0-9]+/g, " ")   // collapse punctuation/hyphens
+    .trim();
+
+  // alias match by substring (like your other relaxed mappers)
+  for (const key in BRAND_ALIASES) {
+    if (s.includes(key)) return BRAND_ALIASES[key];
+  }
+
+  // fallback: title-case the cleaned token
+  return s ? s.replace(/\b\w/g, m => m.toUpperCase()) : "";
+}
+
+
 
 
 // --- Clarity / Coating short labels ---
@@ -5166,10 +5166,8 @@ const clarityMap = {
   "high_clarity": "Premium Ultra High Clarity"
 };
 
-const clarityChoice = claritySet[0] || "UV_400";
-const clarityLabel = clarityMap[clarityChoice] || "Standard UV400";
-
-
+const clarityChoice = claritySet[0] || "UV_420_BL";
+const clarityLabel = clarityMap[clarityChoice] || "Blue Light Blocker UV420";
 
 
 
@@ -5179,12 +5177,12 @@ const clarityLabel = clarityMap[clarityChoice] || "Standard UV400";
 const idx = (row["INDEX"] || "—").trim();
   const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
   const design = row["LENS_DESIGN"] || "—";
-  const clarityChoice = claritySet[0] || "UV_400";
+  const clarityChoice = claritySet[0] || "UV_420_BL";
   const price = getPriceByClarity(row, clarityChoice);
   const dia   = row["DIA"] || "—";
 const rawNote = (row["EXTRA_NOTE"] ?? "").toString().trim();
 const note = (rawNote && rawNote !== "-") ? rawNote : "";
-  const brand = row["BRAND"] || ""; // <-- add this
+  const brand = row["BRAND"] || ""; 
 
 
 // --- TINT OPTION NOTE ---
@@ -5252,6 +5250,23 @@ if (btnSort) {
   };
 }
 
+/* ====== SEARCH INPUT WIRING (Step 3) ====== */
+const searchInput = document.getElementById("lensSearch");
+const searchCount = document.getElementById("searchCount");
+if (searchInput){
+  searchInput.addEventListener("input", debounce(() => {
+    LENS_SEARCH_TERM = searchInput.value || "";
+    const rx = parseRx();
+    renderLensOptions(LAST_GEOM, rx);
+  }, 200));
+}
+
+
+
+
+
+
+
 // ===========================
 // UNIVERSAL FILTER ACTIONS
 // ===========================
@@ -5307,7 +5322,42 @@ document.getElementById("btnClearMF")?.addEventListener("click", () => {
 
 
 
+<script>
+// helper: set all checkboxes within a root selector
+function setGroupChecked(rootSel, checked) {
+  document.querySelectorAll(`${rootSel} input[type='checkbox']`)
+    .forEach(cb => cb.checked = checked);
+}
 
+// make a toggle button that alternates Select All <-> Clear All
+function initToggleButton(btnId, rootSel) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+
+  // no memory except flip-flop on the button itself
+  btn.dataset.mode = 'select';           // next click action
+  btn.textContent = 'Select All';
+
+  btn.addEventListener('click', () => {
+    const mode = btn.dataset.mode || 'select';
+
+    if (mode === 'select') {
+      setGroupChecked(rootSel, true);    // check everything in the segment
+      btn.dataset.mode = 'clear';
+      btn.textContent = 'Clear All';
+    } else {
+      setGroupChecked(rootSel, false);   // clear everything in the segment
+      btn.dataset.mode = 'select';
+      btn.textContent = 'Select All';
+    }
+  });
+}
+
+// init 3 segment toggles
+initToggleButton('btnToggleSeg1', '#lensMaterialCoating');
+initToggleButton('btnToggleSeg2', '#singleFilters');
+initToggleButton('btnToggleSeg3', '#multifocalFilters');
+</script>
 
 
 
