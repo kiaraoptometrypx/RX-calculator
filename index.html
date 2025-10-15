@@ -4523,7 +4523,7 @@ function parseRx(){
       <!-- Appearance -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
 
-       <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 1 of 4. Type of Lens :</b> Do you want changing colour lenses? Do you want sunglasses? Do you want premium sunglasses that cuts glare (polarize)? Or just normal clear material?
+       <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 1 of 5. Type of Lens :</b> Do you want changing colour lenses? Do you want sunglasses? Do you want premium sunglasses that cuts glare (polarize)? Or just normal clear material?
 
  <div style="height:10px;"></div>
 
@@ -4543,7 +4543,7 @@ function parseRx(){
 <!-- Index -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
   
-       <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 2 of 4. Lens thick or thinness :</b> Do you prefer lighter and thinner lenses (higher index)? Or do you want normal thickness lenses that are more affordable?
+       <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 2 of 5. Lens thick or thinness :</b> Do you prefer lighter and thinner lenses (higher index)? Or do you want normal thickness lenses that are more affordable?
  <div style="height:10px;"></div>
 
 
@@ -4560,7 +4560,7 @@ function parseRx(){
         </div>
       </div>
 <!-- Clarity & Coating -->
-<div style="display:none;" class="pane" style="padding:10px; margin:15px 0px 15px 0px">
+<div style="" class="pane" style="padding:10px; margin:15px 0px 15px 0px">
       <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 3 of 5. Clarity & Coating :</b> Choose how clear you want your vision and how easy the lens is to clean.
  <div style="height:10px;"></div>
 
@@ -4575,7 +4575,7 @@ function parseRx(){
 <!-- Durability Preference -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
 
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 3 of 4. Durability Preference :</b> Decide between softer coatings with less reflection, or tougher ones that last longer.
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 4 of 5. Durability Preference :</b> Decide between softer coatings with less reflection, or tougher ones that last longer.
 
  <div style="height:10px;"></div>
 
@@ -4592,7 +4592,7 @@ function parseRx(){
 
 <!-- Brands -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 4 of 4. Brand Quality & Price :</b> Choose your preference based on optical quality, price, and origin.
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 5 of 5. Brand Quality & Price :</b> Choose your preference based on optical quality, price, and origin.
 
   <div style="height:10px;"></div>
 
@@ -4919,7 +4919,6 @@ document.addEventListener("DOMContentLoaded", init);
 /* =========================
    UNIVERSAL HELPERS
 ========================= */
-// Number sanitizer (handles RM, commas, units, dashes)
 function toNumber(v){
   if (v == null) return null;
   const s = String(v).trim();
@@ -4931,11 +4930,9 @@ function toNumber(v){
   const n = parseFloat(cleaned);
   return Number.isFinite(n) ? n : null;
 }
-
 function debounce(fn, ms=200){
   let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), ms); };
 }
-
 function parseTags(s){ return (s||"").toString().split(/[|;,]\s*/).filter(Boolean); }
 function matchesMultiField(cell, wanted){
   if (!wanted || wanted.size===0) return true;
@@ -4953,7 +4950,6 @@ function rowHaystack(row){
     row["MF_VIEWING"], row["MF_SWIM"], row["MF_ZONE"], row["MF_TIER"], row["MF_PERSONALIZATION"]
   ].map(x => (x||"").toString().toLowerCase()).join(" | ");
 }
-
 function matchesSearch(row, query){
   const q = (query||"").trim().toLowerCase();
   if (!q) return true;
@@ -4969,7 +4965,6 @@ function getAppearance(val=""){
   if(s.includes("chang") || s.includes("photo")) return "Photochromic";
   return "Clear";
 }
-
 function getIndexGroup(val=""){
   const n = toNumber(val) ?? 0;
   if (Math.abs(n-1.59) < 0.01 || Math.abs(n-1.53) < 0.01) return "Safety";
@@ -4982,7 +4977,6 @@ function getIndexGroup(val=""){
   if (Math.abs(n-1.74)<0.02) return "1.74";
   return "1.5";
 }
-
 function getFunctionCat(val=""){
   const s = val.toLowerCase();
   if(s.includes("anti")) return "Anti-fatigue";
@@ -4990,13 +4984,11 @@ function getFunctionCat(val=""){
   if(s.includes("pal") || s.includes("progress") || s.includes("multi")) return "Multifocal";
   return "SV";
 }
-
 function checkedValues(selector){
   return Array.from(document.querySelectorAll(selector))
     .filter(i=>i.checked)
     .map(i=>i.value);
 }
-
 function withinCap(price, cap){ if(!cap) return true; return Number(price) <= cap * 1.20; }
 
 /* =========================
@@ -5008,10 +5000,21 @@ function getPriceByClarity(row, clarityChoice) {
     UV_420_BL: "UV_420_BL_PRICE_RM",
     high_clarity: "HIGH_CLARITY_COATING_PRICE_RM"
   };
-  const column = colMap[clarityChoice] || "UV_420_BL_PRICE_RM";
+  const column = colMap[clarityChoice];
+  if (!column) return null;
   return toNumber(row[column]);
 }
-
+function getAllPrices(row){
+  return {
+    UV_400:       getPriceByClarity(row, "UV_400"),
+    UV_420_BL:    getPriceByClarity(row, "UV_420_BL"),
+    high_clarity: getPriceByClarity(row, "high_clarity")
+  };
+}
+function minPrice(prices){
+  const vals = Object.values(prices).filter(v => v != null);
+  return vals.length ? Math.min(...vals) : null;
+}
 function getPriceRange(){
   const minEl = document.getElementById("priceMin");
   const maxEl = document.getElementById("priceMax");
@@ -5020,53 +5023,12 @@ function getPriceRange(){
   if (min != null && max != null && min > max){ const t=min; min=max; max=t; }
   return { min, max };
 }
-
-// Hide rows with no price
 function withinPriceRange(price, min, max){
-  if (price == null) return false; // critical: items without price are excluded
+  if (price == null) return false;           // rows with no price for the checked coating are excluded
   if (min != null && price < min) return false;
   if (max != null && price > max) return false;
   return true;
 }
-
-// Helpers for "no clarity selected" → show all prices, sort by cheapest
-function getAllPrices(row){
-  return {
-    UV_420_BL:    getPriceByClarity(row, "UV_420_BL"),
-    UV_400:       getPriceByClarity(row, "UV_400"),
-    high_clarity: getPriceByClarity(row, "high_clarity")
-  };
-}
-function minPrice(prices){
-  const vals = Object.values(prices).filter(v => v != null);
-  return vals.length ? Math.min(...vals) : null;
-}
-function formatAllPrices(prices){
-  // Order + full labels
-  const order = ["UV_400", "UV_420_BL", "high_clarity"];
-  const labels = {
-    UV_400: "UV Only Filter",
-    UV_420_BL: "UV & Blue Light Filter",
-    high_clarity: "Filter & High Clarity Coat"
-  };
-  // Colors: UV400 black (no style), UV420 blue, High Clarity purple
-  const colorMap = {
-    UV_400: "",                 // black / default
-    UV_420_BL: "color:#1e66ff", // blue
-    high_clarity: "color:#7c3aed" // purple
-  };
-
-  const parts = [];
-  order.forEach(k => {
-    const v = prices[k];
-    if (v != null){
-      const style = colorMap[k] ? ` style="${colorMap[k]}"` : "";
-      parts.push(`<span class="tag price"${style}>${labels[k]}: RM ${v}</span>`);
-    }
-  });
-  return parts.join(' &nbsp;|&nbsp; ');
-}
-
 
 /* =========================
    STOCK LENS AVAILABILITY
@@ -5095,6 +5057,9 @@ function getStockAvailability(S, C, n) {
   return { available: false, maxDia: null };
 }
 
+/* =========================
+   MF BADGES
+========================= */
 function makeMFBadges(row){
   const labels = [];
   const rawView = String(row["MF_VIEWING"]||"");
@@ -5166,10 +5131,7 @@ function makeMFBadges(row){
     if (t.startsWith("none"))    pushOnce(PERS_TEXT.None);
   });
 
-  parseTags(rawSwim).forEach(t => {
-    const clean = t.trim();
-    if (clean) pushOnce(`Swim: ${clean}`);
-  });
+  parseTags(rawSwim).forEach(t => { const clean = t.trim(); if (clean) pushOnce(`Swim: ${clean}`); });
 
   return labels;
 }
@@ -5206,11 +5168,6 @@ function renderLensOptions(geom, rx) {
 
   const cap = toNumber(document.getElementById("priceCap")?.value) || 0;
 
-  const wantMFView = new Set(mfViewSet);
-  const wantMFZone = new Set(mfZoneSet);
-  const wantMFTier = new Set(mfTierSet);
-  const wantMFPers = new Set(mfPersSet);
-
   const { min: priceMin, max: priceMax } = getPriceRange();
 
   // Filter
@@ -5219,50 +5176,40 @@ function renderLensOptions(geom, rx) {
     const designKey  = rawDesign.toLowerCase().replace(/\s+/g, " ").trim();
     const designType = getFunctionCat(rawDesign); // "SV", "Multifocal", "Office", "Anti-fatigue"
 
-    // Function filter (optional) — minimal shim using LENS_DESIGN
+    // Functional filter via LENS_DESIGN keywords
     if (funcSet.length) {
       const d = designKey;
       const ok = funcSet.some(f => {
         const s = String(f).toLowerCase();
-
-        if (s === "stock sv") {
-          return /\bstock\b/.test(d) && (/\bsv\b/.test(d) || /\bsingle vision\b/.test(d));
-        }
-        if (s === "custom sv") {
-          return !/\bstock\b/.test(d)
-            && (/\bsv\b/.test(d) || /\bsingle vision\b/.test(d))
-            && !/\b(anti[- ]?fatigue|relax|boost|dual\s*zone|office|room|pal|progress|multifocal|varifocal|bifocal)\b/.test(d);
-        }
-        if (s === "anti-fatigue") {
-          return /\banti[- ]?fatigue\b|\b(relax|boost|dual\s*zone)\b/.test(d);
-        }
-        if (s === "office") {
-          return /\b(office|room|computer|degressive)\b/.test(d);
-        }
-        if (s === "multifocal") {
-          return /\b(pal|progress|multifocal|varifocal|bifocal)\b/.test(d);
-        }
+        if (s === "stock sv")  return /\bstock\b/.test(d) && (/\bsv\b/.test(d) || /\bsingle vision\b/.test(d));
+        if (s === "custom sv") return !/\bstock\b/.test(d) && (/\bsv\b/.test(d) || /\bsingle vision\b/.test(d)) &&
+                                 !/\b(anti[- ]?fatigue|relax|boost|dual\s*zone|office|room|pal|progress|multifocal|varifocal|bifocal)\b/.test(d);
+        if (s === "anti-fatigue") return /\banti[- ]?fatigue\b|\b(relax|boost|dual\s*zone)\b/.test(d);
+        if (s === "office")       return /\b(office|room|computer|degressive)\b/.test(d);
+        if (s === "multifocal")   return /\b(pal|progress|multifocal|varifocal|bifocal)\b/.test(d);
         return s === getFunctionCat(rawDesign).toLowerCase();
       });
       if (!ok) return false;
     }
 
-    // PRICE FILTER — Hide items with no price
+    // PRICE FILTERS (no default):
     if (claritySet.length){
-      const k = claritySet[0];
-      const price = getPriceByClarity(row, k);
-      if (!withinPriceRange(price, priceMin, priceMax)) return false; // null => hidden
+      // When a coating is selected: require that coating price exists and is within range (if any)
+      const sel = claritySet[0];
+      const p = getPriceByClarity(row, sel);
+      if (!withinPriceRange(p, priceMin, priceMax)) return false;
     } else {
-      const all = getAllPrices(row);                    // { UV_420_BL, UV_400, high_clarity }
+      // No coating selected: show product if it has ANY price.
+      const all = getAllPrices(row);
       const available = Object.values(all).filter(v => v != null);
-      if (available.length === 0) return false;         // no price at all => hidden
+      if (available.length === 0) return false;                      // hide rows with no price at all
       if (priceMin != null || priceMax != null) {
         const anyInRange = available.some(v => withinPriceRange(v, priceMin, priceMax));
         if (!anyInRange) return false;
       }
     }
 
-    // Shared filters (only if selected)
+    // Shared filters (only apply if selected)
     const app  = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
     const idx  = getIndexGroup(row["INDEX"] || "");
     const dur  = (row["DURABILITY_LEVEL"] || "").trim();
@@ -5270,7 +5217,6 @@ function renderLensOptions(geom, rx) {
 
     if (appearSet.length     && !appearSet.includes(app))  return false;
     if (indexSet.length      && !indexSet.includes(idx))   return false;
-    if (claritySet.length    && !claritySet.includes(claritySet[0])) return false; // keeps UI in sync
     if (durabilitySet.length && !durabilitySet.includes(dur)) return false;
     if (viewingSet.length    && !viewingSet.includes(view)) return false;
 
@@ -5281,7 +5227,7 @@ function renderLensOptions(geom, rx) {
       if (!pickedBrandKeys.includes(prodBrandKey)) return false;
     }
 
-    // Stock SV guard (only for true Stock SV rows)
+    // Stock SV guard (only for "stock sv")
     if (designType === "SV" && /\bstock sv\b/.test(designKey)) {
       const n = toNumber(row["INDEX"]);
       const diaNum = toNumber(row["DIA"]);
@@ -5293,16 +5239,20 @@ function renderLensOptions(geom, rx) {
       if (diaNum < mbs) return false;
     }
 
-    // MF sub-filters: apply only to Multifocal rows
+    // MF sub-filters
+    const mfViewSet  = checkedValues(".fl-mf-view");
+    const mfSwimSet  = checkedValues(".fl-mf-swim");
+    const mfZoneSet  = checkedValues(".fl-mf-zone");
+    const mfTierSet  = checkedValues(".fl-mf-tier");
+    const mfPersSet  = checkedValues(".fl-mf-pers");
     const anyMFWanted = (mfViewSet.length || mfSwimSet.length || mfZoneSet.length || mfTierSet.length || mfPersSet.length);
     if (anyMFWanted) {
       if (designType !== "Multifocal") return false;
-      const mfView = (row["MF_VIEWING"]         || "").trim();
-      const mfSwim = (row["MF_SWIM"]            || "").trim();
-      const mfZone = (row["MF_ZONE"]            || "").trim();
-      const mfTier = (row["MF_TIER"]            || "").trim();
-      const mfPers = (row["MF_PERSONALIZATION"] || "").trim();
-
+      const mfView = (row["MF_VIEWING"]||"").trim();
+      const mfSwim = (row["MF_SWIM"]||"").trim();
+      const mfZone = (row["MF_ZONE"]||"").trim();
+      const mfTier = (row["MF_TIER"]||"").trim();
+      const mfPers = (row["MF_PERSONALIZATION"]||"").trim();
       if (mfViewSet.length && !matchesMultiField(mfView, new Set(mfViewSet))) return false;
       if (mfSwimSet.length && !matchesMultiField(mfSwim, new Set(mfSwimSet))) return false;
       if (mfZoneSet.length && !matchesMultiField(mfZone, new Set(mfZoneSet))) return false;
@@ -5314,11 +5264,12 @@ function renderLensOptions(geom, rx) {
     return matchesSearch(row, LENS_SEARCH_TERM);
   });
 
-  // SORT — by selected clarity price; otherwise by cheapest available coating
+  // SORT — by selected coating price; otherwise by cheapest available coating
+  const claritySetNow = checkedValues(".fl-clarity");
   matches.sort((a, b) => {
     let pa, pb;
-    if (claritySet.length){
-      const k = claritySet[0];
+    if (claritySetNow.length){
+      const k = claritySetNow[0];
       pa = getPriceByClarity(a, k);
       pb = getPriceByClarity(b, k);
     } else {
@@ -5355,7 +5306,6 @@ function renderLensOptions(geom, rx) {
     "advance lens": "Advance Lens",
     "advance": "Advance Lens"
   };
-
   const BRAND_RATINGS = {
     "Asahi":       { optical: "⭐️⭐️⭐️⭐️⬤", price: "💰💰💰⬤⬤" },
     "Rayfilter":   { optical: "⭐️⭐️⭐️⬤⬤", price: "💰💰⬤⬤⬤" },
@@ -5365,7 +5315,6 @@ function renderLensOptions(geom, rx) {
     "Seiko":       { optical: "⭐️⭐️⭐️⭐️⭐️", price: "💰💰💰💰💰" },
     "Advance Lens":{ optical: "⭐️⭐️⭐️⬤⬤", price: "💰💰⬤⬤⬤" }
   };
-
   function getBrandGroup(val = "") {
     const s = String(val).toLowerCase()
       .replace(/\./g, "")
@@ -5383,8 +5332,6 @@ function renderLensOptions(geom, rx) {
     "UV_420_BL": "Blue Light Blocker UV420",
     "high_clarity": "Premium Ultra High Clarity"
   };
-  const clarityChoice = claritySet[0]; // no default when none selected
-  const clarityLabel = clarityChoice ? (clarityMap[clarityChoice] || "") : "";
 
   // Render (top 20)
   matches.slice(0, 20).forEach(row => {
@@ -5414,43 +5361,55 @@ function renderLensOptions(geom, rx) {
       default:        tintNote = "";
     }
 
-    let priceDisplayHTML = "";
-    if (clarityChoice){
-      const price = getPriceByClarity(row, clarityChoice);
-      // rows with null price are already filtered out; just in case:
-      priceDisplayHTML = `<div class="lens-price">RM ${price ?? "—"}</div>`;
+    // Build coating display (NO DEFAULT). If none selected, show each available separately.
+    const selectedClarity = checkedValues(".fl-clarity")[0] || null;
+    let coatingHTML = "";
+    const labelMap = {
+      UV_400: "UV Only Filter",
+      UV_420_BL: "Blue Light Filter",
+      high_clarity: "High Clarity Coating"
+    };
+    const colorMap = { UV_400: "", UV_420_BL: "color:#1e66ff", high_clarity: "color:#7c3aed" };
+
+    if (selectedClarity){
+      const p = getPriceByClarity(row, selectedClarity);
+      if (p != null){
+        const style = colorMap[selectedClarity] ? ` style="${colorMap[selectedClarity]}"` : "";
+        coatingHTML = `<div class="lens-prices"><span class="tag price"${style}>${labelMap[selectedClarity]}: RM ${p}</span></div>`;
+      } else {
+        coatingHTML = ""; // shouldn't appear due to filter
+      }
     } else {
       const all = getAllPrices(row);
-      const tags = formatAllPrices(all);
-   priceDisplayHTML = tags
-  ? `<div class="lens-prices">${
-      tags.replace(/<\/span>\s*(?=<span class="tag price">)/g, '</span> &nbsp;|&nbsp; ')
-    }</div>`
-  : "";
+      const order = ["UV_400", "UV_420_BL", "high_clarity"];
+      const parts = [];
+      order.forEach(k=>{
+        const v = all[k];
+        if (v != null){
+          const style = colorMap[k] ? ` style="${colorMap[k]}"` : "";
+          parts.push(`<span class="tag price"${style}>${labelMap[k]}: RM ${v}</span>`);
+        }
+      });
+      coatingHTML = parts.length ? `<div class="lens-prices">${parts.join(' &nbsp;|&nbsp; ')}</div>` : "";
     }
 
     const card = document.createElement("div");
     card.className = "lens-card";
     card.innerHTML = `
-
       <div class="lens-header">
-        (${design} ${dia} mm) &nbsp;& | &nbsp; ${idx} &nbsp; | &nbsp; ${app} &nbsp | &nbsp; ${row["PRODUCT_NAME"] || "(Unnamed Lens)"} ${clarityLabel ? "· " + clarityLabel : ""}&nbsp;&nbsp | ${brandMeta}
-<div style="height:10px;"></div>
-        ${priceDisplayHTML}
+        (${design} ${dia} mm) &nbsp;|&nbsp; ${idx} &nbsp;|&nbsp; ${app} &nbsp;|&nbsp; ${row["PRODUCT_NAME"] || "(Unnamed Lens)"} &nbsp;|&nbsp; ${brandMeta}
+        <div style="height:10px;"></div>
+        ${coatingHTML}
       </div>
 
-<div style="height:10px;"></div>
+      <div style="height:10px;"></div>
       <div class="lens-tags">
         <span class="tag brand">Brand: ${brandKey || (row["BRAND"] || "")}</span>
         <span class="tag func">Variation: ${note}</span> ${tintNote}
-
-<div>
-        ${mfTagsHTML}
-</div>
+        <div>${mfTagsHTML}</div>
       </div>
-<div style="height:10px;"></div>
-
-   `;
+      <div style="height:10px;"></div>
+    `;
     container.appendChild(card);
   });
 }
@@ -5502,7 +5461,6 @@ function updateStatus(msg) {
 function setFilters(checked, selector = '.fl-appear, .fl-index, .fl-func, .fl-clarity, .fl-durability, .fl-viewing, .fl-brand') {
   document.querySelectorAll(selector).forEach(cb => (cb.checked = checked));
 }
-
 document.querySelectorAll(".btnToggleFilters").forEach(btn =>
   btn.addEventListener("click", () => {
     const allFilters = document.querySelectorAll("#singleFilters, #multifocalFilters");
@@ -5529,6 +5487,7 @@ document.getElementById("btnClearMF")?.addEventListener("click", () => {
   updateStatus("Multifocal filters cleared.");
 });
 </script>
+
 
 
 
