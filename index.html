@@ -45,6 +45,8 @@
 
 .lens-price {
   margin: 4px 0;
+  font-weight: 700;
+  letter-spacing: 0.5em;
 }
 .lens-note {
   margin-bottom: 6px;
@@ -192,7 +194,7 @@ margin-top: 5px;
 
 * {
   font-size: 10px;
-  letter-spacing: 1px;
+  letter-spacing: 0.15em;
   color: #241D0C;
 }
 
@@ -496,6 +498,8 @@ table input {
 .fl-mf-view[type="checkbox"],
 .fl-mf-swim[type="checkbox"],
 .fl-mf-zone[type="checkbox"],
+.fl-mf-pers[type="checkbox"],
+
 .fl-mf-tier[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
@@ -522,6 +526,7 @@ table input {
 .fl-mf-view[type="checkbox"]:checked,
 .fl-mf-swim[type="checkbox"]:checked,
 .fl-mf-zone[type="checkbox"]:checked,
+.fl-mf-pers[type="checkbox"]:checked,
 .fl-mf-tier[type="checkbox"]:checked {
   background: #8BAD79;         /* filled green */
   border-color: #5f7f56;
@@ -3801,7 +3806,10 @@ Bridge Size<br><i>(DBL size)</i></td>
 
 
 <tr>
-<td colspan="7" style="border:none;"></td>
+<td colspan="7" style="border:none;">
+
+
+</td>
 
 </tr>
 </table>
@@ -4478,11 +4486,11 @@ function parseRx(){
 
 <div id="build-your-lens" style="display:none;">
 <div class="row" style="gap:10px; padding:5px 15px 0px 15px;">
-<i>1. Thickness must be generated so only lenses with sufficient diameter will show.<br>2. Pick only 1 selection from each question. The less selection, the more refined the search.<br>3. Picking more than 1 selection from the same question may result in no lenses shown..</i>
+<i>1. Thickness must be generated so only lenses with sufficient diameter will show.<br>2. Pick only 1 selection from each question. The less selection, the more refined the search.<br>3. Picking more than 1 selection from the same question may result in no lenses shown..</i><br><br>
 </div>
 </div>
 
- <div style="height:15px;"></div>
+ <div style="height:12px;"></div>
 
 
 <div class="pane" style="align-items:center; padding:10px 10px 10px 10px;">
@@ -4502,23 +4510,20 @@ function parseRx(){
 
 
 <div class="pane" style="padding:10px">
-
+<button id="btnToggleSeg1" class="small-normal-btn" style="display:none; background-color:white;">Select All</button>
   <span id="toggle-lensMaterialCoating" style="cursor:pointer; user-select:none;">▼ 1. Choose Your Lens Material, Coating & Brand</span>
 
 
 
 
 <div id="lensMaterialCoating" style="display:none;">
- <div style="height:10px;"></div>
 
--- <button id="btnToggleSeg1" class="small-normal-btn" style="margin-left:10px; border:none; background-color:white;">Select All</button>
-<button id="btnToggleDesc" class="small-normal-btn">▲ Hide Descriptions</button>
 
 
       <!-- Appearance -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
 
-        <b>Type of Lens :</b> Do you want changing colour lenses? Do you want sunglasses? Do you want premium sunglasses that cuts glare (polarize)? Or just normal clear material?
+       <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 1 of 4. Type of Lens :</b> Do you want changing colour lenses? Do you want sunglasses? Do you want premium sunglasses that cuts glare (polarize)? Or just normal clear material?
 
  <div style="height:10px;"></div>
 
@@ -4537,7 +4542,8 @@ function parseRx(){
 
 <!-- Index -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-  <b>Lens thick or thinness :</b> Do you prefer lighter and thinner lenses (higher index)? Or do you want normal thickness lenses that are more affordable?
+  
+       <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 2 of 4. Lens thick or thinness :</b> Do you prefer lighter and thinner lenses (higher index)? Or do you want normal thickness lenses that are more affordable?
  <div style="height:10px;"></div>
 
 
@@ -4554,28 +4560,29 @@ function parseRx(){
         </div>
       </div>
 <!-- Clarity & Coating -->
-<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-  <b>Clarity & Coating :</b> Choose how clear you want your vision and how easy the lens is to clean.
+<div style="display:none;" class="pane" style="padding:10px; margin:15px 0px 15px 0px">
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 3 of 5. Clarity & Coating :</b> Choose how clear you want your vision and how easy the lens is to clean.
  <div style="height:10px;"></div>
 
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-    <label><input type="checkbox" class="fl-clarity" value="UV_400"> Standard UV 400 – basic UV400 clear lens with simple coating.</label>
-    <label><input type="checkbox" class="fl-clarity" value="UV_420_BL"> Blue Light blocker UV420 – sharper view with less glare.</label>
-    <label><input type="checkbox" class="fl-clarity" value="high_clarity"> Premium Ultra High Clarity – crystal view, repels dust and smudge.</label>
+    <label><input type="checkbox" class="fl-clarity" value="UV_400"> Standard UV 400 – common UV400 clear lens with simple coating. Blocks UV light.</label>
+    <label><input type="checkbox" class="fl-clarity" value="UV_420_BL"> Blue Light Filter – blocks UV light & blue light from digital gadget. Slight yellow tint due to its function.</label>
+    <label><input type="checkbox" class="fl-clarity" value="high_clarity"> High Clarity – blocks UV light, blue light and increased clarity at night.</label>
   </div>
 </div>
 
 
 <!-- Durability Preference -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-  <b>Durability Preference :</b> Decide between softer coatings with less reflection, or tougher ones that last longer.
+
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 3 of 4. Durability Preference :</b> Decide between softer coatings with less reflection, or tougher ones that last longer.
 
  <div style="height:10px;"></div>
 
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
 
     <label><input type="checkbox" class="fl-durability" value="STANDARD"> Standard – industry standard that comes with 1 year warranty.</label>
-    <label><input type="checkbox" class="fl-durability" value="HIGH"> High – comes with 2 years warranty but has more reflection. Suitable for rough usage.</label>
+    <label><input type="checkbox" class="fl-durability" value="HIGH"> Tougher –2 years warranty but has more reflection. Much stronger and more durable.</label>
   </div>
 </div>
 
@@ -4585,7 +4592,7 @@ function parseRx(){
 
 <!-- Brands -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-  <b>Brands :</b> Choose based on optical quality, price, and origin.
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 4 of 4. Brand Quality & Price :</b> Choose your preference based on optical quality, price, and origin.
 
   <div style="height:10px;"></div>
 
@@ -4659,10 +4666,8 @@ Asahi&nbsp;&nbsp; –
 
 
 <div id="singleFilters" style="display:none;">
- <div style="height:10px;"></div>
 
---<button id="btnToggleSeg2" class="small-normal-btn" style="margin-left:10px; border:none; background-color:white;">Select All</button>
-<button id="btnToggleDesc" class="small-normal-btn">▲ Hide Descriptions</button>
+<button id="btnToggleSeg2" class="small-normal-btn" style="display:none; margin-left:10px; border:none; background-color:white;">Select All</button>
 
 
 
@@ -4670,7 +4675,7 @@ Asahi&nbsp;&nbsp; –
 
 <!-- Functional Lens -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-  <b>Functional Lens :</b> Since we never look at far through the bottom of the lens, the prescription is optimized so the lenses are not over-powering; feeling more comfortable and relaxed all day.
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 1 of 2. Functional Lens :</b> High technological lenses understands that not every part should be the same prescription in order to maintain natural and relaxed vision. Dual zone single vision maximises functionality.
 
  <div style="height:10px;"></div>
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
@@ -4686,14 +4691,14 @@ Asahi&nbsp;&nbsp; –
 
 <!-- Viewing Preference -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-  <b>Viewing Preference :</b> Pick your preferred look and view balance – wider vision or slimmer design.
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 2 of 2. Viewing Preference :</b> Pick your preferred look and view balance – wider vision or slimmer design.
  <div style="height:10px;"></div>
 
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-    <label><input type="checkbox" class="fl-viewing" value="SPH"> Spherical Lens – traditional curve, natural peripheral vision.</label>
-    <label><input type="checkbox" class="fl-viewing" value="ASP"> Aspheric Lens – flatter front, less magnification of the eye but may notice peripheral swim..</label>
-    <label><input type="checkbox" class="fl-viewing" value="ATO"> Atoric Lens – ideal for astigmatism prescription as it makes the prescription less tilt and more stable.</label>
-    <label><input type="checkbox" class="fl-viewing" value="DAS"> Double Aspheric Lens – maximum aspheric optics, thinnest and most realistic magnification but may notice peripheral swim..</label>
+    <label><input type="checkbox" class="fl-viewing" value="SPH"> Spherical – traditional curve, natural peripheral vision.</label>
+    <label><input type="checkbox" class="fl-viewing" value="ATO"> Atoric – ideal for astigmatism prescription as it makes the prescription less tilt and more stable.</label>
+    <label><input type="checkbox" class="fl-viewing" value="ASP"> Single Aspheric – flatter front, less magnification of the eye but may notice a little peripheral swim..</label>
+    <label><input type="checkbox" class="fl-viewing" value="DAS"> Double Aspheric – maximum aspheric optics, thinnest and most realistic magnification but may notice a little peripheral swim..</label>
   </div>
 </div>
 
@@ -4722,65 +4727,53 @@ Asahi&nbsp;&nbsp; –
 <!-- Multifocal Filters -->
 <div id="multifocalFilters" style="display:none;">
 
- <div style="height:10px;"></div>
 
---<button id="btnToggleSeg3" class="small-normal-btn" style="margin-left:10px; border:none; background-color: white;">Select All</button>
-<button id="btnToggleDesc" class="small-normal-btn">▲ Hide Descriptions</button>
+<button id="btnToggleSeg3" class="small-normal-btn" style="display:none; margin-left:10px; border:none; background-color: white;">Select All</button>
 
-  <!-- 1️⃣ Viewing Emphasis -->
+  <!--  Multifocal Design -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-    <b>Viewing Emphasis :</b> Choose which distance you value most.
-
- <div style="height:10px;"></div>
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 1 of 4. Multifocal Design :</b> Choose the type of multifocal design you prefer. Every design has pros and cons. Wider clear zones and swim effect is related. If one is increased the other will follow suit. <div style="height:10px;"></div>
 
     <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-view" value="Dist"> Distance - bigger distance zone priority  for wider far view, from side to side..</label>
-      <label><input type="checkbox" class="fl-mf-view" value="Near">Near - bigger near zone priority for bigger reading zone, lesser head turns.</label>
-      <label><input type="checkbox" class="fl-mf-view" value="Both"> Balanced Both – even amount for both distance and near.</label>
+      <label><input type="checkbox" class="fl-mf-view" value="Expert"> Expert - wider clear zones but swim is more obvious; requires prior experience with multifocal.</label>
+      <label><input type="checkbox" class="fl-mf-view" value="Balance">Balanced - smaller clear zones but swim effect reduced; making it more comfortable to use.</label>
+      <label><input type="checkbox" class="fl-mf-view" value="Entry"> Entry - softest and minimal swim but clear zones are narrow; good for first time adaptation.</label>
     </div>
   </div>
 
-  <!-- 2️⃣ Peripheral Behavior -->
-<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-    <b>Peripheral Behavior :</b> Choose between stability or width.
- <div style="height:10px;"></div>
-    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-swim" value="Soft"> Soft - Less swim & disrtortion but clear zones are smaller.</label>
-      <label><input type="checkbox" class="fl-mf-swim" value="Hard">Hard - More swim and distortion but clear zones are much wider..</label>
-    </div>
-  </div>
 
-  <!-- 3️⃣ Zone Enhancement -->
+  <!--  Zone Enhancement -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-    <b>Zone Enhancement :</b> Emphasize near or mid-range vision.
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 2 of 4. Zone Enhancement :</b> Emphasize near or intermediate. Near vision range defined as less than 45cm; hand distance, phone, books etc. Intermediate vision range defined as  more than 45cm; PC, laptop, tablets etc.
  <div style="height:10px;"></div>
 
     <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-zone" value="Reading"> Near preferred – larger reading zone but less intermediate.</label>
+      <label><input type="checkbox" class="fl-mf-zone" value="Near"> Near preferred – larger reading zone but less intermediate zone.</label>
       <label><input type="checkbox" class="fl-mf-zone" value="Intermediate"> Intermediate preferred - larger intermediate but smaller near.</label>
 <label><input type="checkbox" class="fl-mf-zone" value="Equal"> Equal both - both are equally spread.</label>
     </div>
   </div>
 
-  <!-- 4️⃣ Design Technology Tier -->
+  <!--  Design Technology Tier -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-    <b>Design Tier :</b> Select the optical design sophistication.
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 3 of 4. Design Tier :</b> Select the optical design sophistication. The more sophisticated the better the optics performance are but they come at a higher price. The recommended add and design is based on past customer's satisfactory level. Higher add has more complicated optics and hence sophisticated designs help. 
  <div style="height:10px;"></div>
     <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-tier" value="Double"> Double Surface – maximum optics & comfort. Overall huge reduction in distortion.</label>
-      <label><input type="checkbox" class="fl-mf-tier" value="Single"> Single Surface – common choice nowadays due to balance between cost and performance.</label>
-      <label><input type="checkbox" class="fl-mf-tier" value="Traditional"> Traditional – old fashioned optics performance, cost priority.</label>
+      <label><input type="checkbox" class="fl-mf-tier" value="Double"> Double Surface – maximum optics & comfort. Overall huge reduction in distortion. Suitable for all add power.</label>
+      <label><input type="checkbox" class="fl-mf-tier" value="Single"> Single Surface – standard choice for balance between cost and performance. Suitable for add +2.00 and below. </label>
+      <label><input type="checkbox" class="fl-mf-tier" value="Traditional"> Traditional – old fashioned optics performance, cost priority. Suitable for add +1.50 and below.</label>
     </div>
   </div>
 
-  <!-- 4️⃣ Personalisation Tier -->
+  <!--  Personalisation Tier -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-    <b>Personalization :</b> Optimize optics by fitting for the frame & wearer.
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 4 of 4. Personalization :</b> Optimize optics by personalization; fitting the lenses for the frame & wearer. Wearing position of the frame will affect the optical clarity; hence personalization will maximise the clarity at the position of wear.
+
  <div style="height:10px;"></div>
     <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-tier" value="Full"> Full personalization - optics are optimized for your frame and how you wear the glasses.</label>
-      <label><input type="checkbox" class="fl-mf-tier" value="Partial"> Partial personalization - optics are optimized for the frame only.</label>
-      <label><input type="checkbox" class="fl-mf-tier" value="None"> No personalization - optics are made as default and may not feel the best.</label>
+      <label><input type="checkbox" class="fl-mf-pers" value="Full"> Full personalization - optics are optimized for your frame and how you wear the glasses.</label>
+      <label><input type="checkbox" class="fl-mf-pers" value="Partial"> Partial personalization - optics are optimized for the frame only.</label>
+      <label><input type="checkbox" class="fl-mf-pers" value="None"> No personalization - optics are made as default and may suit or not suit the frame.</label>
     </div>
   </div>
 
@@ -4805,11 +4798,22 @@ Asahi&nbsp;&nbsp; –
 
      <!-- Price -->
 
-      <div class="pane" style="padding:5 0 5px 0px;">
+      <div class="pane" style="display:none; padding:5 0 5px 0px;">
     <span style="display:none" id="status" class="tiny muted"></span>&nbsp;
 
         <b>Set Max Price (RM) :</b>
          <input id="priceCap" type="number" placeholder="1000"  style="width:70px; border:1px solid lightgrey; border-radius:30px; height:25px; padding:4px 6px; appearance:textfield; margin-left:10px">
+
+<!-- Price Range -->
+<div class="pane" style="padding:5px 0; margin-top:6px;">
+  <b>Price Range (RM):</b>
+  <input id="priceMin" type="number" placeholder="Min"
+         style="width:80px; border:1px solid #ccc; border-radius:30px; height:25px; padding:4px 8px; margin-left:10px">
+  <span>–</span>
+  <input id="priceMax" type="number" placeholder="Max"
+         style="width:80px; border:1px solid #ccc; border-radius:30px; height:25px; padding:4px 8px; margin-left:6px">
+</div>
+
 
      
           <button style="margin-left:5px" id="cap1000Plus" class="small-normal-btn"><span style="color:green">+1000</span></button></span>
@@ -4820,17 +4824,17 @@ Asahi&nbsp;&nbsp; –
           <button style="margin-left:5px" id="cap500Minus" class="small-normal-btn"><span style="color:red">–500</span></button>
      <button style="margin-left:5px" id="capMinus" class="small-normal-btn"><span style="color:red">–100</span></button>
 
-
-
-
-
-
-
-
-
-
 </div>
 
+<!-- Price Range -->
+<div class="pane" style="padding:5 0 5px 0px">
+  <span style="margin-left:5px;"><b>Price Range (RM):</b></span>
+  <input id="priceMin" type="number" placeholder="Min"
+         style="width:80px; border:1px solid #ccc; border-radius:30px; height:25px; padding:4px 8px; margin-left:10px">
+  <span>–</span>
+  <input id="priceMax" type="number" placeholder="Max"
+         style="width:80px; border:1px solid #ccc; border-radius:30px; height:25px; padding:4px 8px; margin-left:6px">
+</div>
 
 
 
@@ -4839,7 +4843,7 @@ Asahi&nbsp;&nbsp; –
   <b>Search :</b>
   <input id="lensSearch" type="text" placeholder="Type brand, model, design, index…" 
          style="width:280px; border:1px solid #ccc; border-radius:30px; height:28px; padding:4px 8px; margin-left:4px;">
-  <span id="searchCount" class="tiny muted" style="margin-left:8px;"></span>
+  <span id="searchCount" class="tiny muted" style="display:none; margin-left:8px;"></span>
 <span><button id="btnFetch" class="small-normal-btn">Search</button>
 </span> 
   <button id="btnSort" class="small-normal-btn">Sort by Price</button>
@@ -4871,10 +4875,13 @@ Asahi&nbsp;&nbsp; –
 
 
 
+
+
+
 <script>
-// =========================
-// CSV LOADING (DOM-safe)
-// =========================
+/* =========================
+   CSV LOADING (DOM-safe)
+========================= */
 async function loadCSV(url){
   const res = await fetch(url, { cache:"no-store" });
   if(!res.ok) throw new Error("HTTP "+res.status);
@@ -4893,9 +4900,9 @@ async function loadCSV(url){
   });
 }
 
-// =========================
-// INIT
-// =========================
+/* =========================
+   INIT
+========================= */
 async function init(){
   const statusEl = document.getElementById("status");
   if(statusEl) statusEl.textContent = "Loading CSV…";
@@ -4909,27 +4916,44 @@ async function init(){
 }
 document.addEventListener("DOMContentLoaded", init);
 
-// =========================
-// FILTER GROUPING HELPERS
-// =========================
-// simple debounce so we don't re-render on every keystroke
+/* =========================
+   UNIVERSAL HELPERS
+========================= */
+// Number sanitizer (handles RM, commas, units, dashes)
+function toNumber(v){
+  if (v == null) return null;
+  const s = String(v).trim();
+  if (!s || s === "—" || s === "-") return null;
+  const cleaned = s
+    .replace(/,/g, "")
+    .replace(/[^\d.]/g, "")
+    .replace(/(\..*)\./g, "$1");
+  const n = parseFloat(cleaned);
+  return Number.isFinite(n) ? n : null;
+}
+
 function debounce(fn, ms=200){
   let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), ms); };
 }
 
-// global search term
+function parseTags(s){ return (s||"").toString().split(/[|;,]\s*/).filter(Boolean); }
+function matchesMultiField(cell, wanted){
+  if (!wanted || wanted.size===0) return true;
+  const have = new Set(parseTags(cell));
+  for (const w of wanted) if (have.has(w)) return true;
+  return false;
+}
+
 let LENS_SEARCH_TERM = "";
 
-// build a lowercase “haystack” for searching
 function rowHaystack(row){
   return [
     row["PRODUCT_NAME"], row["BRAND"], row["LENS_DESIGN"], row["INDEX"],
     row["CLEAR_CHANGING_TINT"], row["VIEWING_STYLE"], row["EXTRA_NOTE"],
-    row["MF_VIEWING"], row["MF_SWIM"], row["MF_ZONE"], row["MF_TIER"]
+    row["MF_VIEWING"], row["MF_SWIM"], row["MF_ZONE"], row["MF_TIER"], row["MF_PERSONALIZATION"]
   ].map(x => (x||"").toString().toLowerCase()).join(" | ");
 }
 
-// true if all words in the query appear anywhere in the row
 function matchesSearch(row, query){
   const q = (query||"").trim().toLowerCase();
   if (!q) return true;
@@ -4938,27 +4962,27 @@ function matchesSearch(row, query){
   return terms.every(t => hay.includes(t));
 }
 
-
-
 function getAppearance(val=""){
-  const s = val.toLowerCase();
+  const s = String(val||"").toLowerCase();
   if(s.includes("polar")) return "Polarized";
   if(s.includes("tint"))  return "Tinted";
   if(s.includes("chang") || s.includes("photo")) return "Photochromic";
   return "Clear";
 }
+
 function getIndexGroup(val=""){
-  const n = parseFloat(val)||0;
-  if(n===1.53 || n===1.59) return "Safety";
-  if(n>=1.49 && n<1.57)    return "1.5";
-  if(n>=1.6 && n<1.65)    return "1.6";
-  if(n>=1.65 && n<1.71)    return "1.67";
-  if(n>=1.73 && n<1.76)    return "1.74";
-  if(Math.abs(n-1.67)<0.02) return "1.67";
-  if(Math.abs(n-1.60)<0.02) return "1.6";
-  if(Math.abs(n-1.74)<0.02) return "1.74";
+  const n = toNumber(val) ?? 0;
+  if (Math.abs(n-1.59) < 0.01 || Math.abs(n-1.53) < 0.01) return "Safety";
+  if (n>=1.49 && n<1.57)    return "1.5";
+  if (n>=1.60 && n<1.65)    return "1.6";
+  if (n>=1.65 && n<1.71)    return "1.67";
+  if (n>=1.73 && n<1.76)    return "1.74";
+  if (Math.abs(n-1.67)<0.02) return "1.67";
+  if (Math.abs(n-1.60)<0.02) return "1.6";
+  if (Math.abs(n-1.74)<0.02) return "1.74";
   return "1.5";
 }
+
 function getFunctionCat(val=""){
   const s = val.toLowerCase();
   if(s.includes("anti")) return "Anti-fatigue";
@@ -4966,18 +4990,87 @@ function getFunctionCat(val=""){
   if(s.includes("pal") || s.includes("progress") || s.includes("multi")) return "Multifocal";
   return "SV";
 }
+
 function checkedValues(selector){
   return Array.from(document.querySelectorAll(selector))
     .filter(i=>i.checked)
     .map(i=>i.value);
 }
+
 function withinCap(price, cap){ if(!cap) return true; return Number(price) <= cap * 1.20; }
 
+/* =========================
+   PRICE HELPERS
+========================= */
+function getPriceByClarity(row, clarityChoice) {
+  const colMap = {
+    UV_400: "UV_400_PRICE_RM",
+    UV_420_BL: "UV_420_BL_PRICE_RM",
+    high_clarity: "HIGH_CLARITY_COATING_PRICE_RM"
+  };
+  const column = colMap[clarityChoice] || "UV_420_BL_PRICE_RM";
+  return toNumber(row[column]);
+}
+
+function getPriceRange(){
+  const minEl = document.getElementById("priceMin");
+  const maxEl = document.getElementById("priceMax");
+  let min = toNumber(minEl ? minEl.value : null);
+  let max = toNumber(maxEl ? maxEl.value : null);
+  if (min != null && max != null && min > max){ const t=min; min=max; max=t; }
+  return { min, max };
+}
+
+// Hide rows with no price
+function withinPriceRange(price, min, max){
+  if (price == null) return false; // critical: items without price are excluded
+  if (min != null && price < min) return false;
+  if (max != null && price > max) return false;
+  return true;
+}
+
+// Helpers for "no clarity selected" → show all prices, sort by cheapest
+function getAllPrices(row){
+  return {
+    UV_420_BL:    getPriceByClarity(row, "UV_420_BL"),
+    UV_400:       getPriceByClarity(row, "UV_400"),
+    high_clarity: getPriceByClarity(row, "high_clarity")
+  };
+}
+function minPrice(prices){
+  const vals = Object.values(prices).filter(v => v != null);
+  return vals.length ? Math.min(...vals) : null;
+}
+function formatAllPrices(prices){
+  // Order + full labels
+  const order = ["UV_400", "UV_420_BL", "high_clarity"];
+  const labels = {
+    UV_400: "UV Only Filter",
+    UV_420_BL: "UV & Blue Light Filter",
+    high_clarity: "Filter & High Clarity Coat"
+  };
+  // Colors: UV400 black (no style), UV420 blue, High Clarity purple
+  const colorMap = {
+    UV_400: "",                 // black / default
+    UV_420_BL: "color:#1e66ff", // blue
+    high_clarity: "color:#7c3aed" // purple
+  };
+
+  const parts = [];
+  order.forEach(k => {
+    const v = prices[k];
+    if (v != null){
+      const style = colorMap[k] ? ` style="${colorMap[k]}"` : "";
+      parts.push(`<span class="tag price"${style}>${labels[k]}: RM ${v}</span>`);
+    }
+  });
+  return parts.join(' &nbsp;|&nbsp; ');
+}
 
 
-// =========================
-/* STOCK LENS AVAILABILITY */
-// =========================
+/* =========================
+   STOCK LENS AVAILABILITY
+========================= */
 function getStockAvailability(S, C, n) {
   if (S > 2.00) return { available: false, maxDia: null };
   if (C < -2.00) return { available: false, maxDia: null };
@@ -5002,28 +5095,90 @@ function getStockAvailability(S, C, n) {
   return { available: false, maxDia: null };
 }
 
-// =========================
-// PRICE BY CLARITY + SORT
-// =========================
-function getPriceByClarity(row, clarityChoice) {
-  const colMap = {
-    UV_400: "UV_400_PRICE_RM",
-    UV_420_BL: "UV_420_BL_PRICE_RM",
-    high_clarity: "HIGH_CLARITY_COATING_PRICE_RM"
+function makeMFBadges(row){
+  const labels = [];
+  const rawView = String(row["MF_VIEWING"]||"");
+  const rawZone = String(row["MF_ZONE"]||"");
+  const rawTier = String(row["MF_TIER"]||"");
+  const rawPers = String(row["MF_PERSONALIZATION"]||"");
+  const rawSwim = String(row["MF_SWIM"]||"");
+
+  const pushOnce = (txt)=>{ if (txt && !labels.includes(txt)) labels.push(txt); };
+
+  const VIEW_TEXT = {
+    Expert:  "Expert — widest clear zones",
+    Balance: "Balanced — comfort vs clarity",
+    Entry:   "Entry — easiest adaptation"
   };
-  const column = colMap[clarityChoice] || "UV_420_BL_PRICE_RM";
-  // use "" so parseFloat("") => NaN (not 0)
-  return parseFloat(row[column] ?? "");
+  const ZONE_TEXT = {
+    Near:         "Near-centric",
+    Intermediate: "Intermediate-centric",
+    Equal:        "Equal spread"
+  };
+  const TIER_TEXT = {
+    Double:       "Dual-surface freeform",
+    Single:       "Single-surface freeform",
+    Traditional:  "Conventional design"
+  };
+  const PERS_TEXT = {
+    Full:    "Full personalization",
+    Partial: "Partial personalization",
+    None:    "No personalization"
+  };
+
+  if (/\bexpert\b/i.test(rawView)) pushOnce(VIEW_TEXT.Expert);
+  if (/\bbalance(?:d)?\b/i.test(rawView)) pushOnce(VIEW_TEXT.Balance);
+  if (/\bentry\b/i.test(rawView)) pushOnce(VIEW_TEXT.Entry);
+  parseTags(rawView).forEach(tok=>{
+    const t = tok.trim().toLowerCase();
+    if (t.startsWith("expert"))   pushOnce(VIEW_TEXT.Expert);
+    if (t.startsWith("balance"))  pushOnce(VIEW_TEXT.Balance);
+    if (t.startsWith("entry"))    pushOnce(VIEW_TEXT.Entry);
+  });
+
+  if (/near/i.test(rawZone))            pushOnce(ZONE_TEXT.Near);
+  if (/intermediate/i.test(rawZone))    pushOnce(ZONE_TEXT.Intermediate);
+  if (/(^|[^a-z])equal([^a-z]|$)/i.test(rawZone)) pushOnce(ZONE_TEXT.Equal);
+  parseTags(rawZone).forEach(tok=>{
+    const t = tok.trim().toLowerCase();
+    if (t.startsWith("near"))         pushOnce(ZONE_TEXT.Near);
+    if (t.startsWith("intermediate")) pushOnce(ZONE_TEXT.Intermediate);
+    if (t.startsWith("equal"))        pushOnce(ZONE_TEXT.Equal);
+  });
+
+  if (/double/i.test(rawTier))       pushOnce(TIER_TEXT.Double);
+  if (/single/i.test(rawTier))       pushOnce(TIER_TEXT.Single);
+  if (/tradition/i.test(rawTier))    pushOnce(TIER_TEXT.Traditional);
+  parseTags(rawTier).forEach(tok=>{
+    const t = tok.trim().toLowerCase();
+    if (t.startsWith("double"))       pushOnce(TIER_TEXT.Double);
+    if (t.startsWith("single"))       pushOnce(TIER_TEXT.Single);
+    if (t.startsWith("traditional"))  pushOnce(TIER_TEXT.Traditional);
+  });
+
+  if (/full/i.test(rawPers))                 pushOnce(PERS_TEXT.Full);
+  if (/partial/i.test(rawPers))              pushOnce(PERS_TEXT.Partial);
+  if (/(^|[^a-z])none([^a-z]|$)/i.test(rawPers)) pushOnce(PERS_TEXT.None);
+  parseTags(rawPers).forEach(tok=>{
+    const t = tok.trim().toLowerCase();
+    if (t.startsWith("full"))    pushOnce(PERS_TEXT.Full);
+    if (t.startsWith("partial")) pushOnce(PERS_TEXT.Partial);
+    if (t.startsWith("none"))    pushOnce(PERS_TEXT.None);
+  });
+
+  parseTags(rawSwim).forEach(t => {
+    const clean = t.trim();
+    if (clean) pushOnce(`Swim: ${clean}`);
+  });
+
+  return labels;
 }
 
-let sortAsc = true; // toggle state for sorting
+/* =========================
+   MAIN: Render Lens Options
+========================= */
+let sortAsc = true;
 
-
-
-
-// =========================
-/* MAIN: Render Lens Options */
-// =========================
 function renderLensOptions(geom, rx) {
   const container = document.getElementById("lensResults");
   container.innerHTML = "";
@@ -5040,61 +5195,74 @@ function renderLensOptions(geom, rx) {
   const claritySet    = checkedValues(".fl-clarity");
   const durabilitySet = checkedValues(".fl-durability");
   const viewingSet    = checkedValues(".fl-viewing");
-  const brandSet      = checkedValues(".fl-brand"); // Q7 brand
+  const brandSet      = checkedValues(".fl-brand");
+
+  // MF groups
   const mfViewSet     = checkedValues(".fl-mf-view");
   const mfSwimSet     = checkedValues(".fl-mf-swim");
   const mfZoneSet     = checkedValues(".fl-mf-zone");
+  const mfPersSet     = checkedValues(".fl-mf-pers");
   const mfTierSet     = checkedValues(".fl-mf-tier");
 
-  const cap = parseFloat(document.getElementById("priceCap").value) || 0;
+  const cap = toNumber(document.getElementById("priceCap")?.value) || 0;
 
-// No filters selected → show all (still respects price cap, thickness, etc.)
-const totalSelected =
-  appearSet.length + indexSet.length + funcSet.length +
-  claritySet.length + durabilitySet.length + viewingSet.length +
-  brandSet.length + mfViewSet.length + mfSwimSet.length + mfZoneSet.length + mfTierSet.length;
-// do nothing; an empty selection means “no filtering”
+  const wantMFView = new Set(mfViewSet);
+  const wantMFZone = new Set(mfZoneSet);
+  const wantMFTier = new Set(mfTierSet);
+  const wantMFPers = new Set(mfPersSet);
 
-
-  // Design buckets + normalization
-  const MF_KEYS = ["progressive","office","myopia control"];
-  const funcWant = funcSet.map(v => v.toLowerCase().replace(/\s+/g, " "));
-  const userAskedMF = funcWant.some(v => MF_KEYS.includes(v)) ||
-                      (mfViewSet.length + mfSwimSet.length + mfZoneSet.length + mfTierSet.length > 0);
+  const { min: priceMin, max: priceMax } = getPriceRange();
 
   // Filter
   const matches = PRODUCTS.filter(row => {
-    const design = String(row["LENS_DESIGN"] || "").trim();
-    const designKey = design.toLowerCase().replace(/\s+/g, " ");
-    const isMF = MF_KEYS.includes(designKey);
+    const rawDesign  = String(row["LENS_DESIGN"] || "");
+    const designKey  = rawDesign.toLowerCase().replace(/\s+/g, " ").trim();
+    const designType = getFunctionCat(rawDesign); // "SV", "Multifocal", "Office", "Anti-fatigue"
 
-    // Hide MF unless explicitly asked
-    if (!userAskedMF && isMF) return false;
+    // Function filter (optional) — minimal shim using LENS_DESIGN
+    if (funcSet.length) {
+      const d = designKey;
+      const ok = funcSet.some(f => {
+        const s = String(f).toLowerCase();
 
-    // If func selected, require exact LENS_DESIGN match
-    if (funcWant.length && !funcWant.includes(designKey)) return false;
-
-    // STOCK SV guard: DIA must cover MBS and Rx must be available at index
-    if (designKey === "stock sv") {
-      const n = parseFloat(row["INDEX"] || "");
-      const diaNum = parseFloat(String(row["DIA"] || "").replace(/[^\d.]/g, ""));
-      const mbs = geom?.MBS || 0;
-      if (!Number.isFinite(n) || !Number.isFinite(diaNum) || !(mbs > 0)) return false;
-
-      const odOk = getStockAvailability(rx.OD.S, rx.OD.C, n).available;
-      const osOk = getStockAvailability(rx.OS.S, rx.OS.C, n).available;
-      if (!(odOk && osOk)) return false;
-      if (diaNum < mbs) return false;
+        if (s === "stock sv") {
+          return /\bstock\b/.test(d) && (/\bsv\b/.test(d) || /\bsingle vision\b/.test(d));
+        }
+        if (s === "custom sv") {
+          return !/\bstock\b/.test(d)
+            && (/\bsv\b/.test(d) || /\bsingle vision\b/.test(d))
+            && !/\b(anti[- ]?fatigue|relax|boost|dual\s*zone|office|room|pal|progress|multifocal|varifocal|bifocal)\b/.test(d);
+        }
+        if (s === "anti-fatigue") {
+          return /\banti[- ]?fatigue\b|\b(relax|boost|dual\s*zone)\b/.test(d);
+        }
+        if (s === "office") {
+          return /\b(office|room|computer|degressive)\b/.test(d);
+        }
+        if (s === "multifocal") {
+          return /\b(pal|progress|multifocal|varifocal|bifocal)\b/.test(d);
+        }
+        return s === getFunctionCat(rawDesign).toLowerCase();
+      });
+      if (!ok) return false;
     }
 
-    // Price by clarity
-    const clarityChoice = claritySet[0] || "UV_420_BL";
-    const price = getPriceByClarity(row, clarityChoice);
+    // PRICE FILTER — Hide items with no price
+    if (claritySet.length){
+      const k = claritySet[0];
+      const price = getPriceByClarity(row, k);
+      if (!withinPriceRange(price, priceMin, priceMax)) return false; // null => hidden
+    } else {
+      const all = getAllPrices(row);                    // { UV_420_BL, UV_400, high_clarity }
+      const available = Object.values(all).filter(v => v != null);
+      if (available.length === 0) return false;         // no price at all => hidden
+      if (priceMin != null || priceMax != null) {
+        const anyInRange = available.some(v => withinPriceRange(v, priceMin, priceMax));
+        if (!anyInRange) return false;
+      }
+    }
 
-// ⬇️ add this: skip if price is missing/NaN
-if (!Number.isFinite(price)) return false;
-
-    // Relaxed shared filters (only if selected)
+    // Shared filters (only if selected)
     const app  = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
     const idx  = getIndexGroup(row["INDEX"] || "");
     const dur  = (row["DURABILITY_LEVEL"] || "").trim();
@@ -5102,201 +5270,199 @@ if (!Number.isFinite(price)) return false;
 
     if (appearSet.length     && !appearSet.includes(app))  return false;
     if (indexSet.length      && !indexSet.includes(idx))   return false;
-    if (claritySet.length    && !claritySet.includes(clarityChoice)) return false;
+    if (claritySet.length    && !claritySet.includes(claritySet[0])) return false; // keeps UI in sync
     if (durabilitySet.length && !durabilitySet.includes(dur)) return false;
     if (viewingSet.length    && !viewingSet.includes(view)) return false;
-    if (!withinCap(price, cap)) return false;
 
-    // Brand filter (normalized to compare)
+    // Brand filter
     if (brandSet.length) {
       const prodBrandKey = String(row["BRAND"] || "").trim().toLowerCase().replace(/\s+/g, " ");
       const pickedBrandKeys = brandSet.map(v => String(v).trim().toLowerCase().replace(/\s+/g, " "));
       if (!pickedBrandKeys.includes(prodBrandKey)) return false;
     }
 
-    // MF sub-filters (when MF asked)
-    if (userAskedMF && isMF) {
-      const mfView = (row["MF_VIEWING"] || "").trim();
-      const mfSwim = (row["MF_SWIM"] || "").trim();
-      const mfZone = (row["MF_ZONE"] || "").trim();
-      const mfTier = (row["MF_TIER"] || "").trim();
-
-      if (mfViewSet.length && !mfViewSet.includes(mfView)) return false;
-      if (mfSwimSet.length && !mfSwimSet.includes(mfSwim)) return false;
-      if (mfZoneSet.length && !mfZoneSet.includes(mfZone)) return false;
-      if (mfTierSet.length && !mfTierSet.includes(mfTier)) return false;
+    // Stock SV guard (only for true Stock SV rows)
+    if (designType === "SV" && /\bstock sv\b/.test(designKey)) {
+      const n = toNumber(row["INDEX"]);
+      const diaNum = toNumber(row["DIA"]);
+      const mbs = geom?.MBS || 0;
+      if (!Number.isFinite(n) || !Number.isFinite(diaNum) || !(mbs > 0)) return false;
+      const odOk = getStockAvailability(rx.OD.S, rx.OD.C, n).available;
+      const osOk = getStockAvailability(rx.OS.S, rx.OS.C, n).available;
+      if (!(odOk && osOk)) return false;
+      if (diaNum < mbs) return false;
     }
 
-  return matchesSearch(row, LENS_SEARCH_TERM);
+    // MF sub-filters: apply only to Multifocal rows
+    const anyMFWanted = (mfViewSet.length || mfSwimSet.length || mfZoneSet.length || mfTierSet.length || mfPersSet.length);
+    if (anyMFWanted) {
+      if (designType !== "Multifocal") return false;
+      const mfView = (row["MF_VIEWING"]         || "").trim();
+      const mfSwim = (row["MF_SWIM"]            || "").trim();
+      const mfZone = (row["MF_ZONE"]            || "").trim();
+      const mfTier = (row["MF_TIER"]            || "").trim();
+      const mfPers = (row["MF_PERSONALIZATION"] || "").trim();
+
+      if (mfViewSet.length && !matchesMultiField(mfView, new Set(mfViewSet))) return false;
+      if (mfSwimSet.length && !matchesMultiField(mfSwim, new Set(mfSwimSet))) return false;
+      if (mfZoneSet.length && !matchesMultiField(mfZone, new Set(mfZoneSet))) return false;
+      if (mfTierSet.length && !matchesMultiField(mfTier, new Set(mfTierSet))) return false;
+      if (mfPersSet.length && !matchesMultiField(mfPers, new Set(mfPersSet))) return false;
+    }
+
+    // Global search
+    return matchesSearch(row, LENS_SEARCH_TERM);
   });
 
-  // Sort by price based on current clarity (default UV_420_BL)
-  const clarityChoiceForSort = (claritySet && claritySet[0]) ? claritySet[0] : "UV_420_BL";
+  // SORT — by selected clarity price; otherwise by cheapest available coating
   matches.sort((a, b) => {
-    const pa = getPriceByClarity(a, clarityChoiceForSort);
-    const pb = getPriceByClarity(b, clarityChoiceForSort);
+    let pa, pb;
+    if (claritySet.length){
+      const k = claritySet[0];
+      pa = getPriceByClarity(a, k);
+      pb = getPriceByClarity(b, k);
+    } else {
+      pa = minPrice(getAllPrices(a));
+      pb = minPrice(getAllPrices(b));
+    }
+    if (pa == null && pb == null) return 0;
+    if (pa == null) return 1;
+    if (pb == null) return -1;
     return sortAsc ? (pa - pb) : (pb - pa);
   });
 
-  // No results
   if (!matches.length) {
     container.innerHTML = `<div class="muted">No lens options match your filters or price cap.</div>`;
     return;
   }
 
-if (searchCount) {
-  searchCount.textContent = `${matches.length} found`;
-}
-
-
-
-
-// =========================
-// BRAND GROUPING HELPER
-// =========================
-const BRAND_ALIASES = {
-  "asahi": "Asahi",
-  "asahi lens": "Asahi",
-  "asahi optical": "Asahi",
-
-  "rayfilter": "Rayfilter",
-
-  "rodenstock": "Rodenstock",
-
-  "pentax": "Pentax",
-
-  "opto-tech": "Opto-tech",
-  "opto tech": "Opto-tech",
-  "optotech": "Opto-tech",
-
-  "seiko": "Seiko",
-
-  "advance lens": "Advance Lens",
-  "advance": "Advance Lens"
-};
-
-// Show these per brand in each card
-const BRAND_RATINGS = {
-  "Asahi":       { optical: "⭐️⭐️⭐️⭐️⬤", price: "💰💰💰⬤⬤" },
-  "Rayfilter":   { optical: "⭐️⭐️⭐️⬤⬤", price: "💰💰⬤⬤⬤" },
-  "Rodenstock":  { optical: "⭐️⭐️⭐️⭐️⭐️", price: "💰💰💰💰💰" },
-  "Pentax":      { optical: "⭐️⭐️⭐️⭐️⬤", price: "💰💰💰💰⬤" },
-  "Opto-tech":   { optical: "⭐️⭐️⭐️⭐️⬤", price: "💰💰💰⬤⬤" },
-  "Seiko":       { optical: "⭐️⭐️⭐️⭐️⭐️", price: "💰💰💰💰💰" },
-  "Advance Lens":{ optical: "⭐️⭐️⭐️⬤⬤", price: "💰💰⬤⬤⬤" }
-};
-
-
-
-function getBrandGroup(val = "") {
-  // normalize the CSV brand string
-  const s = String(val).toLowerCase()
-    .replace(/\./g, "")
-    .replace(/\b(lens|optical|co|co ltd|ltd|gmbh|inc|corp|corporation)\b/g, "") // drop suffixes
-    .replace(/[^a-z0-9]+/g, " ")   // collapse punctuation/hyphens
-    .trim();
-
-  // alias match by substring (like your other relaxed mappers)
-  for (const key in BRAND_ALIASES) {
-    if (s.includes(key)) return BRAND_ALIASES[key];
+  if (searchCount) {
+    searchCount.textContent = `${matches.length} found`;
   }
 
-  // fallback: title-case the cleaned token
-  return s ? s.replace(/\b\w/g, m => m.toUpperCase()) : "";
-}
+  // BRAND helpers
+  const BRAND_ALIASES = {
+    "asahi": "Asahi",
+    "asahi lens": "Asahi",
+    "asahi optical": "Asahi",
+    "rayfilter": "Rayfilter",
+    "rodenstock": "Rodenstock",
+    "pentax": "Pentax",
+    "opto-tech": "Opto-tech",
+    "opto tech": "Opto-tech",
+    "optotech": "Opto-tech",
+    "seiko": "Seiko",
+    "advance lens": "Advance Lens",
+    "advance": "Advance Lens"
+  };
 
+  const BRAND_RATINGS = {
+    "Asahi":       { optical: "⭐️⭐️⭐️⭐️⬤", price: "💰💰💰⬤⬤" },
+    "Rayfilter":   { optical: "⭐️⭐️⭐️⬤⬤", price: "💰💰⬤⬤⬤" },
+    "Rodenstock":  { optical: "⭐️⭐️⭐️⭐️⭐️", price: "💰💰💰💰💰" },
+    "Pentax":      { optical: "⭐️⭐️⭐️⭐️⬤", price: "💰💰💰💰⬤" },
+    "Opto-tech":   { optical: "⭐️⭐️⭐️⭐️⬤", price: "💰💰💰⬤⬤" },
+    "Seiko":       { optical: "⭐️⭐️⭐️⭐️⭐️", price: "💰💰💰💰💰" },
+    "Advance Lens":{ optical: "⭐️⭐️⭐️⬤⬤", price: "💰💰⬤⬤⬤" }
+  };
 
+  function getBrandGroup(val = "") {
+    const s = String(val).toLowerCase()
+      .replace(/\./g, "")
+      .replace(/\b(lens|optical|co|co ltd|ltd|gmbh|inc|corp|corporation)\b/g, "")
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+    for (const key in BRAND_ALIASES) {
+      if (s.includes(key)) return BRAND_ALIASES[key];
+    }
+    return s ? s.replace(/\b\w/g, m => m.toUpperCase()) : "";
+  }
 
-
-// --- Clarity / Coating short labels ---
-const clarityMap = {
-  "UV_400": "Standard UV400",
-  "UV_420_BL": "Blue Light Blocker UV420",
-  "high_clarity": "Premium Ultra High Clarity"
-};
-
-const clarityChoice = claritySet[0] || "UV_420_BL";
-const clarityLabel = clarityMap[clarityChoice] || "Blue Light Blocker UV420";
-
-
-
+  const clarityMap = {
+    "UV_400": "Standard UV400",
+    "UV_420_BL": "Blue Light Blocker UV420",
+    "high_clarity": "Premium Ultra High Clarity"
+  };
+  const clarityChoice = claritySet[0]; // no default when none selected
+  const clarityLabel = clarityChoice ? (clarityMap[clarityChoice] || "") : "";
 
   // Render (top 20)
   matches.slice(0, 20).forEach(row => {
-const idx = (row["INDEX"] || "—").trim();
-  const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
-  const design = row["LENS_DESIGN"] || "—";
-  const clarityChoice = claritySet[0] || "UV_420_BL";
-  const price = getPriceByClarity(row, clarityChoice);
-  const dia   = row["DIA"] || "—";
-const rawNote = (row["EXTRA_NOTE"] ?? "").toString().trim();
-const note = (rawNote && rawNote !== "-") ? rawNote : "";
-  const brand = row["BRAND"] || ""; 
+    const idx = (row["INDEX"] || "—").trim();
+    const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
+    const design = row["LENS_DESIGN"] || "—";
+    const dia   = row["DIA"] || "—";
+    const rawNote = (row["EXTRA_NOTE"] ?? "").toString().trim();
+    const note = (rawNote && rawNote !== "-") ? rawNote : "";
+    const brand = row["BRAND"] || "";
+    const brandKey = getBrandGroup(brand);
+    const rating = BRAND_RATINGS[brandKey];
+    const brandMeta = rating
+      ? `<span class="tag meta">Quality: ${rating.optical} · Price: ${rating.price}</span>`
+      : "";
 
+    const mfBadges = makeMFBadges(row);
+    const mfTagsHTML = mfBadges.map(t => `<span class="tag mf">${t}</span>`).join("");
 
-const brandKey = getBrandGroup(brand);
+    const tintOpt = (row["TINT_OPTION"] || "").trim();
+    const tintCharge = toNumber(row["TINT_SURCHARGE"]) ?? 0;
+    let tintNote = "";
+    switch (tintOpt) {
+      case "Yes":     tintNote = `<span class="tag tint">Tintable (+RM${tintCharge.toFixed(0)} surcharge)</span>`; break;
+      case "Already": tintNote = `<span class="tag tint">Already tinted</span>`; break;
+      case "No":      tintNote = `<span class="tag tint">Non-tintable</span>`; break;
+      default:        tintNote = "";
+    }
 
-const rating = BRAND_RATINGS[brandKey];
-const brandMeta = rating
-  ? `<span class="tag meta">Optical: ${rating.optical} · Price: ${rating.price}</span>`
+    let priceDisplayHTML = "";
+    if (clarityChoice){
+      const price = getPriceByClarity(row, clarityChoice);
+      // rows with null price are already filtered out; just in case:
+      priceDisplayHTML = `<div class="lens-price">RM ${price ?? "—"}</div>`;
+    } else {
+      const all = getAllPrices(row);
+      const tags = formatAllPrices(all);
+   priceDisplayHTML = tags
+  ? `<div class="lens-prices">${
+      tags.replace(/<\/span>\s*(?=<span class="tag price">)/g, '</span> &nbsp;|&nbsp; ')
+    }</div>`
   : "";
+    }
 
+    const card = document.createElement("div");
+    card.className = "lens-card";
+    card.innerHTML = `
 
-// --- TINT OPTION NOTE ---
-const tintOpt = (row["TINT_OPTION"] || "").trim();
-const tintChargeRaw = row["TINT_SURCHARGE"];
-const tintCharge = isNaN(parseFloat(tintChargeRaw)) ? 0 : parseFloat(tintChargeRaw);
-let tintNote = "";
+      <div class="lens-header">
+        (${design} ${dia} mm) &nbsp;& | &nbsp; ${idx} &nbsp; | &nbsp; ${app} &nbsp | &nbsp; ${row["PRODUCT_NAME"] || "(Unnamed Lens)"} ${clarityLabel ? "· " + clarityLabel : ""}&nbsp;&nbsp | ${brandMeta}
+<div style="height:10px;"></div>
+        ${priceDisplayHTML}
+      </div>
 
-switch (tintOpt) {
-  case "Yes":
-    tintNote = `<span class="tag tint">Tintable (+RM${tintCharge.toFixed(0)} surcharge)</span>`;
-    break;
-  case "Already":
-    tintNote = `<span></span>`;
-    break;
-  case "No":
-    tintNote = `<span class="tag tint">Non-tintable</span>`;
-    break;
-  default:
-    tintNote = ""; // no tag if undefined
-    break;
+<div style="height:10px;"></div>
+      <div class="lens-tags">
+        <span class="tag brand">Brand: ${brandKey || (row["BRAND"] || "")}</span>
+        <span class="tag func">Variation: ${note}</span> ${tintNote}
+
+<div>
+        ${mfTagsHTML}
+</div>
+      </div>
+<div style="height:10px;"></div>
+
+   `;
+    container.appendChild(card);
+  });
 }
 
-
-
-// --- CARD RENDER ---
-const card = document.createElement("div");
-card.className = "lens-card";
-card.innerHTML = `
-  <div class="lens-header">
-    (${design} ${dia} mm) - ${idx} ${row["PRODUCT_NAME"] || "(Unnamed Lens)"} ${clarityLabel}
-  </div>
-
-  <div class="lens-tags">
-<span class="tag brand">Brand: ${brandKey || (row["BRAND"] || "")}</span>
-    ${brandMeta}
-    <span class="tag func">Appearance: ${app} ${note}</span> 
-    ${tintNote}
-
-  </div>
-
-  <div class="lens-price">RM ${price}</div>
-`;
-
-
-  container.appendChild(card);
-});
-
-}
-
-// Buttons
+/* =========================
+   BUTTONS / WIRING
+========================= */
 document.getElementById("btnFetch").onclick = () => {
   const rx = parseRx();
   renderLensOptions(LAST_GEOM, rx);
 };
 
-// Sort button (optional)
 const btnSort = document.getElementById("btnSort");
 if (btnSort) {
   btnSort.textContent = "Sort by Price ↑";
@@ -5308,7 +5474,6 @@ if (btnSort) {
   };
 }
 
-/* ====== SEARCH INPUT WIRING (Step 3) ====== */
 const searchInput = document.getElementById("lensSearch");
 const searchCount = document.getElementById("searchCount");
 if (searchInput){
@@ -5319,15 +5484,18 @@ if (searchInput){
   }, 200));
 }
 
+const priceMinEl = document.getElementById("priceMin");
+const priceMaxEl = document.getElementById("priceMax");
+if (priceMinEl) priceMinEl.addEventListener("input", debounce(() => {
+  const rx = parseRx(); renderLensOptions(LAST_GEOM, rx);
+}, 200));
+if (priceMaxEl) priceMaxEl.addEventListener("input", debounce(() => {
+  const rx = parseRx(); renderLensOptions(LAST_GEOM, rx);
+}, 200));
 
-
-
-
-
-
-// ===========================
-// UNIVERSAL FILTER ACTIONS
-// ===========================
+/* =========================
+   UNIVERSAL FILTER ACTIONS
+========================= */
 function updateStatus(msg) {
   document.querySelectorAll(".status, #status").forEach(st => (st.textContent = msg));
 }
@@ -5335,7 +5503,6 @@ function setFilters(checked, selector = '.fl-appear, .fl-index, .fl-func, .fl-cl
   document.querySelectorAll(selector).forEach(cb => (cb.checked = checked));
 }
 
-// Shared UI toggles
 document.querySelectorAll(".btnToggleFilters").forEach(btn =>
   btn.addEventListener("click", () => {
     const allFilters = document.querySelectorAll("#singleFilters, #multifocalFilters");
@@ -5362,6 +5529,26 @@ document.getElementById("btnClearMF")?.addEventListener("click", () => {
   updateStatus("Multifocal filters cleared.");
 });
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5454,7 +5641,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btn.id = "btnToggleDesc";
     btn.className = "small-normal-btn";
     btn.type = "button";
-    btn.textContent = "▲ Hide Descriptions";
+    btn.textContent = "▲ Desc";
     row.appendChild(btn);
     host.insertBefore(row, host.firstChild);
   }
@@ -5548,7 +5735,7 @@ function setDescriptionsHidden(hide) {
 
   // Update ALL copies of the button with this id
   document.querySelectorAll('[id="btnToggleDesc"]').forEach(btn => {
-    btn.textContent = descHidden ? "▼ Show Descriptions" : "▲ Hide Descriptions";
+    btn.textContent = descHidden ? "▼ Desc" : "▲ Desc";
     // preserve your inline look in case a copy misses it
     btn.style.border = "none";
     btn.style.backgroundColor = "white";
