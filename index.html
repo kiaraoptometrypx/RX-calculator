@@ -493,6 +493,7 @@ table input {
 .fl-clarity[type="checkbox"],
 .fl-brand[type="checkbox"],
 .fl-durability[type="checkbox"],
+.fl-sv-pers[type="checkbox"],
 .fl-viewing[type="checkbox"],
 .fl-opti[type="checkbox"],
 .fl-mf-view[type="checkbox"],
@@ -519,7 +520,7 @@ table input {
 .fl-func[type="checkbox"]:checked,
 .fl-clarity[type="checkbox"]:checked,
 .fl-brand[type="checkbox"]:checked,
-
+.fl-sv-pers[type="checkbox"]:checked,
 .fl-durability[type="checkbox"]:checked,
 .fl-viewing[type="checkbox"]:checked,
 .fl-opti[type="checkbox"]:checked,
@@ -3787,18 +3788,17 @@ Bridge Size<br><i>(DBL size)</i></td>
     <div style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:10px;">
 
       <button id="btnCalc" class="normal-btn">
-        Generate with<br>Customer & Frame Details
-      </button>
+        Generate with<br>Customer & Frame Details      </button>
 
       <span>or</span>
 
-      <button id="btnLength" class="normal-btn" style="border:3px solid grey">
-        Generate with<br>Longest Edge Length (mm)
+      <button id="btnLength" class="normal-btn">
+       <span style="color:red">(Quick calculation) with</span><br>with Longest Edge Length
       </button>
 
       <label for="lengthInput" style="display:none;">Length (mm)</label>
       <input type="number" id="lengthInput" value="30" step="1"
-             style="max-width:50px; text-align:center;">
+             style="border-radius: 30px; max-width:40px; text-align:center;">(mm)
 
     </div>
   </td>
@@ -4723,8 +4723,17 @@ function parseRx(){
   </div>
 </div>
 
+  <!--  Personalisation Tier -->
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 3 of 3. Personalization :</b> Optimize optics by personalization; fitting the lenses for the frame & wearer. Wearing position of the frame will affect the optical clarity; hence personalization will maximise the clarity at the position of wear.
 
-
+ <div style="height:10px;"></div>
+    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+      <label><input type="checkbox" class="fl-sv-pers" value="Full"> Full personalization - optics are optimized for your frame and how you wear the glasses.</label>
+      <label><input type="checkbox" class="fl-sv-pers" value="Partial"> Partial personalization - optics are optimized for the frame only.</label>
+      <label><input type="checkbox" class="sv-mf-pers" value="None"> No personalization - optics are made as default and may suit or not suit the frame.</label>
+    </div>
+  </div>
 
 
 
@@ -4968,7 +4977,8 @@ function rowHaystack(row){
   return [
     row["PRODUCT_NAME"], row["BRAND"], row["LENS_DESIGN"], row["INDEX"],
     row["CLEAR_CHANGING_TINT"], row["VIEWING_STYLE"], row["EXTRA_NOTE"],
-    row["MF_VIEWING"], row["MF_SWIM"], row["MF_ZONE"], row["MF_TIER"], row["MF_PERSONALIZATION"]
+    row["MF_VIEWING"], row["MF_SWIM"], row["MF_ZONE"], row["MF_TIER"], row["MF_PERSONALIZATION"],
+    getSVPersonalization(row)
   ].map(x => (x||"").toString().toLowerCase()).join(" | ");
 }
 function matchesSearch(row, query){
@@ -5037,13 +5047,20 @@ function minPrice(prices){
   return vals.length ? Math.min(...vals) : null;
 }
 function getPriceRange(){
-  const minEl = document.getElementById("priceMin");
-  const maxEl = document.getElementById("priceMax");
-  let min = toNumber(minEl ? minEl.value : null);
-  let max = toNumber(maxEl ? maxEl.value : null);
+  const mins = Array.from(document.querySelectorAll('#priceMin'))
+    .map(el => toNumber(el.value))
+    .filter(v => v != null);
+  const maxs = Array.from(document.querySelectorAll('#priceMax'))
+    .map(el => toNumber(el.value))
+    .filter(v => v != null);
+
+  let min = mins.length ? mins[mins.length - 1] : null;
+  let max = maxs.length ? maxs[maxs.length - 1] : null;
+
   if (min != null && max != null && min > max){ const t=min; min=max; max=t; }
   return { min, max };
 }
+
 function withinPriceRange(price, min, max){
   if (price == null) return false;           // rows with no price for the checked coating are excluded
   if (min != null && price < min) return false;
@@ -5107,7 +5124,7 @@ function renderMFBadges(row){
   const VIEW_TEXT = {
     Expert:  "Expert :  Widest clear zones but most swim effect",
     Balance: "Balanced : Moderate clear zones & swim effect",
-    Entry:   "Light : Minimal swim effect but narrow clear zones"
+    Entry:   "Entry : Minimal swim effect but narrow clear zones"
   };
   const ZONE_TEXT = {
     Near:         "Near - Larger near but smaller intermediate",
@@ -5115,14 +5132,14 @@ function renderMFBadges(row){
     Equal:        "Equal - Balance size intermediate & near"
   };
   const TIER_TEXT = {
-    Double:       "Dual-surface - Both side of lenses customized for the best possible optics quality and comfort. Mostly costly production.",
-    Single:       "Single-surface - Single side of lens customized while retaining most technology. Less costly but effective.",
-    Traditional:  "Conventional - Non customized traditional optics resulting in entry level optics. Lowest production cost."
+    Double:       "Dual-surface -  Mostly costly but best possible optics quality and comfort.",
+    Single:       "Single-surface - Less costly and retaining most of the technology.",
+    Traditional:  "Conventional - Lowest production cost. Basic optics performance."
   };
   const PERS_TEXT = {
-    Full:    "Full personalization",
-    Partial: "Partial personalization",
-    None:    "No personalization"
+    Full:    "Fully custom - Made to maximise the spectacles size, shape and wearer's position",
+    Partial: "Partial custom - Made to maximise the spectacles only",
+    None:    "None - Made with nothing in consideration"
   };
 
   const uniq = a => Array.from(new Set(a.filter(Boolean)));
@@ -5183,20 +5200,127 @@ function renderMFBadges(row){
   const swim = uniq(parseTags(rawSwim).map(t=>t.trim()).filter(Boolean)).map(v=>`Swim: ${v}`);
 
   // Build HTML (only show sections that have tags)
+const sec = (k,title,arr)=> arr.length
+  ? `<div class="mf-sec" data-k="${k}">
+       <span class="mf-title">${title}:</span>
+       <div class="mf-lines">${arr.map(t=>`<span class="mf-tag">${t}</span>`).join("<br>")}</div>
+     </div>`
+  : "";
+
+
+  return `
+    <div class="mf-grid">
+        <div style="height:10px;"></div>
+----------
+        <div style="height:10px;"></div>
+
+      ${sec("tier","<b>Production Type - High production lenses makes vision as natural as possible:</b>",tier)}
+      <div style="height:10px;"></div>
+      ${sec("pers","<b>Customization Level - The more customized, the more natural your vision is:</b>",pers)}
+
+      <div style="height:10px;"></div>
+      ${sec("view","<b>Multifocal Design Choice - Adjust zones to your liking</b><br>(Choose Either One Below)",view)}
+      <div style="height:10px;"></div>
+
+      ${sec("zone","<b>Multifocal Near Choice - Adjust your Near Preference</b><br>(Choose Either One Below)",zone)}
+    </div>
+  `;
+}
+
+
+function getSVPersonalization(row){
+  // prefer dedicated SV column; fall back to MF only for display/search if SV empty
+  return String(
+    row["SV_PERSONALIZATION"] ??
+    row["SV_PERS"] ??
+    row["SV_PERSONALISATION"] ??
+    ""
+  ).trim() || String(row["MF_PERSONALIZATION"] || "").trim();
+}
+
+
+
+// Grouped SV badges -> HTML block (with Personalization like MF)
+function renderSVBadges(row){
+  const rawDesign = String(row["LENS_DESIGN"]||"").toLowerCase();
+  const rawView   = String(row["VIEWING_STYLE"]||"").toUpperCase();
+  const rawPers   = getSVPersonalization(row); // 
+
+
+  // EXACT TEXT from your questionnaire
+  const FUNC_TEXT = {
+    "Stock SV":     "Stock Single Vision - ready made single vision lenses with standard optics. No further customization.",
+    "Custom SV":    "Customized Single vision - made from scratch to your wearing needs and frame details. Can be tinted as well.",
+    "Anti-Fatigue": "Customized Dual zone vision - made from scratch and customized to your needs as well, and bottom part of lenses are further optimized for even better ergnomics."
+  };
+  const VIEW_TEXT = {
+    "SPH": "Spherical – traditional curve, natural peripheral vision and may observe some warping effect at the side.",
+    "ATO": "Atoric – ideal for astigmatism prescription as it makes your vision less tilt, more stable and wider.",
+    "ASP": "Single Aspheric – flatter front, less magnification of the eye but may notice a little peripheral swim..",
+    "DAS": "Double Aspheric – maximum aspheric optics, thinnest and most realistic magnification but may notice a little peripheral swim.."
+  };
+  const PERS_TEXT = {
+    Full:    "Fully custom - Made to maximise the spectacles size, shape and wearer's position",
+    Partial: "Partial custom - Made to maximise the spectacles only",
+    None:    "None - Made with nothing in consideration"
+  };
+
+  const func = [];
+  const isStockSV     = /\bstock\b/.test(rawDesign) && /\b(sv|single vision)\b/.test(rawDesign);
+  const isAntiFatigue = /\banti[- ]?fatigue\b|\b(relax|boost|dual\s*zone)\b/.test(rawDesign);
+  const isCustomSV    = !isStockSV && !isAntiFatigue &&
+                        /\b(sv|single vision)\b/.test(rawDesign) &&
+                        !/\b(pal|progress|multifocal|varifocal|bifocal|office|room)\b/.test(rawDesign);
+  if (isStockSV)     func.push(FUNC_TEXT["Stock SV"]);
+  if (isCustomSV)    func.push(FUNC_TEXT["Custom SV"]);
+  if (isAntiFatigue) func.push(FUNC_TEXT["Anti-Fatigue"]);
+
+  const view = [];
+  const viewTokens = (rawView ? rawView.split(/[|;,]\s*/): [rawView]).filter(Boolean);
+  viewTokens.forEach(t=>{
+    const k = String(t).trim().toUpperCase();
+    if (VIEW_TEXT[k]) view.push(VIEW_TEXT[k]);
+  });
+
+  // Personalization (reuse MF column/values)
+  const pers = [];
+  (rawPers.split(/[|;,]\s*/).filter(Boolean)).forEach(t=>{
+    const k = t.trim();
+    if (/^full/i.test(k))    pers.push(PERS_TEXT.Full);
+    if (/^partial/i.test(k)) pers.push(PERS_TEXT.Partial);
+    if (/^none/i.test(k))    pers.push(PERS_TEXT.None);
+  });
+
+  const uniq = a => Array.from(new Set(a.filter(Boolean)));
   const sec = (k,title,arr)=> arr.length
-    ? `<div class="mf-sec" data-k="${k}"><span class="mf-title">${title}:</span>${arr.map(t=>`<span class="mf-tag">${t}</span>`).join("")}</div>`
+    ? `<div class="mf-sec" data-k="${k}">
+         <span class="mf-title">${title}:</span>
+         <div class="mf-lines">${uniq(arr).map(t=>`<span class="mf-tag">${t}</span>`).join("<br>")}</div>
+       </div>`
     : "";
 
   return `
     <div class="mf-grid">
-      ${sec("view","Design Capability",view)}
-      ${sec("zone","Zone Preference",zone)}
-      ${sec("tier","Design Tier",tier)}
-      ${sec("pers","Personalization",pers)}
-      ${sec("swim","Swim Profile",swim)}
+<div style="height:10px;"></div>
+----------
+        <div style="height:10px;"></div>
+
+      ${sec("sv-view","<b>Lens Design Type - Complex lens design makes vision as natural as possible: </b>", view)}
+      ${pers.length ? `<div style="height:10px;"></div>${sec("pers","<b>Customization Level - The more customized, the more natural your vision is:</b>", pers)}` : ""}
+      <div style="height:10px;"></div>
+
+      ${sec("sv-func","<b>Single Vision Function Type - The more advanced lenses will help us see clearer and more comfortable.</b>", func)}
+
     </div>
   `;
 }
+
+
+
+
+
+
+
 
 
 
@@ -5222,6 +5346,8 @@ function renderLensOptions(geom, rx) {
   const durabilitySet = checkedValues(".fl-durability");
   const viewingSet    = checkedValues(".fl-viewing");
   const brandSet      = checkedValues(".fl-brand");
+ const svPersSet = checkedValues(".fl-sv-pers");
+
 
   // MF groups
   const mfViewSet     = checkedValues(".fl-mf-view");
@@ -5239,6 +5365,13 @@ function renderLensOptions(geom, rx) {
     const rawDesign  = String(row["LENS_DESIGN"] || "");
     const designKey  = rawDesign.toLowerCase().replace(/\s+/g, " ").trim();
     const designType = getFunctionCat(rawDesign); // "SV", "Multifocal", "Office", "Anti-fatigue"
+
+  // SV Personalization filter (uses SV_* column; never constrains MF rows)
+  if (svPersSet.length) {
+    if (designType !== "SV") return false;
+    const svPers = getSVPersonalization(row);   // reads SV_PERSONALIZATION (or fallback)
+    if (!matchesMultiField(svPers, new Set(svPersSet))) return false;
+  }
 
     // Functional filter via LENS_DESIGN keywords
     if (funcSet.length) {
@@ -5397,8 +5530,8 @@ function renderLensOptions(geom, rx) {
     "high_clarity": "Premium Ultra High Clarity"
   };
 
-  // Render (top 20)
-  matches.slice(0, 20).forEach(row => {
+  // Render (top 25)
+  matches.slice(0, 25).forEach(row => {
     const idx = (row["INDEX"] || "—").trim();
     const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
     const design = row["LENS_DESIGN"] || "—";
@@ -5418,9 +5551,9 @@ function renderLensOptions(geom, rx) {
     const tintCharge = toNumber(row["TINT_SURCHARGE"]) ?? 0;
     let tintNote = "";
     switch (tintOpt) {
-      case "Yes":     tintNote = `<span class="tag tint">Tintable (+RM${tintCharge.toFixed(0)} surcharge)</span>`; break;
-      case "Already": tintNote = `<span class="tag tint">Already tinted</span>`; break;
-      case "No":      tintNote = `<span class="tag tint">Non-tintable</span>`; break;
+      case "Yes":     tintNote = `<span>Can be tinted (+RM${tintCharge.toFixed(0)} surcharge)</span>`; break;
+      case "Already": tintNote = `<span>Already tinted</span>`; break;
+      case "No":      tintNote = `<span>Cannot be tinted</span>`; break;
       default:        tintNote = "";
     }
 
@@ -5479,9 +5612,11 @@ function renderLensOptions(geom, rx) {
 
      <div>${coatingHTML} </div>
 
-      <div style="height:10px;"></div>
-
-        <div>${renderMFBadges(row)}</div>
+<div>${
+  getFunctionCat(row["LENS_DESIGN"]||"") === "Multifocal"
+    ? renderMFBadges(row)
+    : renderSVBadges(row)   // <-- shows only Functional Lens + Viewing Preference for SV
+}</div>
 
       </div>
 
@@ -5519,14 +5654,14 @@ if (searchInput){
   }, 200));
 }
 
-const priceMinEl = document.getElementById("priceMin");
-const priceMaxEl = document.getElementById("priceMax");
-if (priceMinEl) priceMinEl.addEventListener("input", debounce(() => {
-  const rx = parseRx(); renderLensOptions(LAST_GEOM, rx);
-}, 200));
-if (priceMaxEl) priceMaxEl.addEventListener("input", debounce(() => {
-  const rx = parseRx(); renderLensOptions(LAST_GEOM, rx);
-}, 200));
+// Price inputs: re-render on change
+document.querySelectorAll('#priceMin, #priceMax').forEach(input => {
+  input.addEventListener('input', debounce(() => {
+    const rx = parseRx();
+    renderLensOptions(LAST_GEOM, rx);
+  }, 200));
+});
+
 
 /* =========================
    UNIVERSAL FILTER ACTIONS
