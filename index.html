@@ -1073,6 +1073,18 @@ function toggleSection(id) {
 
   <tbody id="deficit-rows-manual" style="display:none;">
 
+
+
+<tr><td colspan="7">
+<span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-reference">
+  ▼ FC DC Reference & Calculator
+</span>
+<div id="reference" style="display:none;">
+
+<div id="axis-dc-spot-1"></div>
+</div>
+</td></tr>
+
   <tr class="white">
 <td colspan="1"><b>Test</b></td>
 <td><b>R/L</b></td>
@@ -1083,7 +1095,6 @@ function toggleSection(id) {
 <td><b>DC</b></td>
   </tr>
 <tr class="white">
-
     <td row>FC DC Error<br>Notes</td>
 <td>R</td>
 
@@ -1229,6 +1240,18 @@ function toggleSection(id) {
 
 
   <tbody id="deficit-rows-comfort" style="display:none;">
+
+<tr><td colspan="7">
+<span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-reference2">
+  ▼ FC DC Reference & Calculator
+</span>
+<div id="reference2" style="display:none;">
+
+<div id="axis-dc-spot-2"></div>
+</div>
+</td></tr>
+
+
 
   <!-- Deficit Rows -->
   <tr class="white">
@@ -5980,7 +6003,9 @@ makeToggle("toggle-single", "singleFilters");
 makeToggle("toggle-multi", "multifocalFilters");
 makeToggle("toggle-lensMaterialCoating", "lensMaterialCoating");
 makeToggle("toggle-brand", "brand");
-makeToggle("toggle-lenstype", "lenstype")
+makeToggle("toggle-lenstype", "lenstype");
+makeToggle("toggle-reference", "reference");
+makeToggle("toggle-reference2", "reference2")
 
 
 
@@ -6028,6 +6053,230 @@ document.getElementById("resetSph").addEventListener("click", () => {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+<script>
+(function(){
+  const TEMPLATE = `
+    <div class="axis-dc-widget" style="font-size:10px;">
+      <table style="width:100%; border:none; border-collapse:collapse;">
+        <tr class="calibrator">
+          <td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td>
+          <td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td>
+          <td style="border:none;"></td>
+        </tr>
+        <tr class="white">
+          <td colspan="2" style="font-weight:bold; text-align:center;">DC Clearer Side</td>
+          ${["+1.00","+0.50","Now RX","-0.50","-1.00"].map(lbl=>`
+            <td style="text-align:center; padding:10px 5px;">
+              <span class="result-label">${lbl}</span><br>
+              <select class="dc-result-select" style="width:85%;">
+                <option>-</option>
+                <option>Green</option>
+                <option>Balance</option>
+                <option>Red</option>
+              </select>
+            </td>`).join("")}
+        </tr>
+      </table>
+
+      <!-- R/G Codes compact -->
+      <table style="width:100%; border-collapse:collapse; font-size:10px; text-align:center;">
+        <tr class="calibrator">
+          <td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td>
+          <td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td>
+        </tr>
+        <tr class="white">
+          <td colspan="2"><b> R Codes Fanchart </b></td>
+          <td style="color:#cc0000; font-weight:bold;">R0 = 90</td>
+          <td style="color:#cc0000; font-weight:bold;">R1 = 105</td>
+          <td style="color:#cc0000; font-weight:bold;">R2 = 120</td>
+          <td style="color:#cc0000; font-weight:bold;">R3 = 135</td>
+          <td style="color:#cc0000; font-weight:bold;">R4 = 150</td>
+          <td style="color:#cc0000; font-weight:bold;">R5 = 165</td>
+        </tr>
+        <tr class="white">
+          <td colspan="2"><b> G Codes Fanchart </b></td>
+          <td style="color:green; font-weight:bold;">G0 = 180</td>
+          <td style="color:green; font-weight:bold;">G1 = 15</td>
+          <td style="color:green; font-weight:bold;">G2 = 30</td>
+          <td style="color:green; font-weight:bold;">G3 = 45</td>
+          <td style="color:green; font-weight:bold;">G4 = 60</td>
+          <td style="color:green; font-weight:bold;">G5 = 75</td>
+        </tr>
+        <tr class="white">
+          <td colspan="2"><b>Clock To Axis </b></td>
+          <td style="font-weight:bold; text-align:center;">9 – 3 = 180°</td>
+          <td style="font-weight:bold; text-align:center;">10 – 4 = 30°</td>
+          <td style="font-weight:bold; text-align:center;">11 – 5 = 60°</td>
+          <td style="font-weight:bold; text-align:center;">12 – 6 = 90°</td>
+          <td style="font-weight:bold; text-align:center;">1 – 7 = 120°</td>
+          <td style="font-weight:bold; text-align:center;">2 – 8 = 150°</td>
+        </tr>
+      </table>
+
+      <!-- FC 3 Darker Lines row -->
+      <table style="width:100%; border-collapse:collapse;">
+        <tr class="calibrator">
+          <td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td>
+          <td style="border:none;"></td><td style="border:none;"></td><td style="border:none;"></td>
+          <td style="border:none;"></td>
+        </tr>
+        <tr class="white">
+          <td colspan="2"><b>FC 3 Darker Lines</b></td>
+          <td colspan="2">
+            <span class="result-label">Now RX</span>
+            <input type="text" class="fc-darker-input fc-gr-input" placeholder="—" style="width:50px;">
+          </td>
+          <td colspan="2">
+            <span class="result-label">+0.50 Cyl</span>
+            <input type="text" class="fc-darker-input fc-gr-input" placeholder="—" style="width:50px;">
+          </td>
+          <td colspan="2">
+            <span class="result-label">+1.00 Cyl</span>
+            <input type="text" class="fc-darker-input fc-gr-input" placeholder="—" style="width:50px;">
+          </td>
+        </tr>
+      </table>
+
+      <!-- Axis Average Calculator -->
+      <table style="width:100%; border:none; border-collapse:collapse;">
+        <tr class="calibrator"><td style="border:none;"></td></tr>
+        <tr class="white">
+          <td>
+            <div style="padding:6px 0; display:flex; align-items:center; gap:10px; font-weight:bold;">
+              <span>Axis Average Calculator</span>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <span>Code 1: <input type="text" class="calc1 fc-gr-input" style="width:50px;"></span>
+                <span>Code 2: <input type="text" class="calc2 fc-gr-input" style="width:50px;"></span>
+              </div>
+              <div style="display:flex; gap:20px; align-items:center;">
+                <button class="btn-calc" type="button" style="margin-left:10px;">Calculate</button>
+                <span>Average Axis: <span class="axis-avg">—</span></span>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  `;
+
+  const AxisMap = {
+    G0:180, G1:15, G2:30, G3:45, G4:60, G5:75,
+    R0:90,  R1:105, R2:120, R3:135, R4:150, R5:165
+  };
+
+  function colorizeSelect(sel){
+    const txt = sel.value;
+    sel.style.fontWeight = "bold";
+    if (txt === "Green") sel.style.color = "green";
+    else if (txt === "Red") sel.style.color = "red";
+    else sel.style.color = "black";
+  }
+
+  function wireWidget(root){
+    // colorize DC selects
+    root.querySelectorAll(".dc-result-select").forEach(sel=>{
+      sel.addEventListener("change", ()=>colorizeSelect(sel));
+      colorizeSelect(sel);
+    });
+
+// add inside wireWidget(root) after your other listeners
+function colorizeAxisField(el){
+  const raw = (el.value || "").toUpperCase().trim();
+  el.style.fontWeight = "bold";
+  // Exact code: R0–R5 or G0–G5
+  if (/^R[0-5]$/.test(raw)) { el.style.color = "#cc0000"; el.style.outline = ""; return; }
+  if (/^G[0-5]$/.test(raw)) { el.style.color = "green";   el.style.outline = ""; return; }
+  // Empty -> default
+  if (raw === "") { el.style.color = ""; el.style.outline = ""; el.style.fontWeight = ""; return; }
+  // Invalid but non-empty
+  el.style.color = "#B42318";           // warn red
+  el.style.outline = "1px dashed #B42318";
+}
+
+// Looser rule for FC darker inputs: if it contains R/G anywhere
+function colorizeFCDarker(el){
+  const raw = (el.value || "").toUpperCase();
+  el.style.fontWeight = "bold";
+  if (raw.includes("R")) { el.style.color = "#cc0000"; el.style.outline = ""; return; }
+  if (raw.includes("G")) { el.style.color = "green";   el.style.outline = ""; return; }
+  if (raw === "")        { el.style.color = ""; el.style.outline = ""; el.style.fontWeight = ""; return; }
+  el.style.color = ""; el.style.outline = "";
+}
+
+// Wire up listeners
+(root.querySelectorAll(".calc1, .calc2") || []).forEach(el=>{
+  el.addEventListener("input", ()=>colorizeAxisField(el));
+  colorizeAxisField(el);
+});
+
+(root.querySelectorAll(".fc-darker-input") || []).forEach(el=>{
+  el.addEventListener("input", ()=>colorizeFCDarker(el));
+  colorizeFCDarker(el);
+});
+
+    // DC input echo (guarded — these fields may not exist here)
+    const dcInput = root.querySelector(".dc-sph");
+    const dcText  = root.querySelector(".dc-analysis-text");
+    if (dcInput && dcText){
+      function updateDC(){
+        const v = (dcInput.value||"").trim();
+        if(!v){ dcText.textContent = "—"; return; }
+        const num = Number(v.replace(/[^\d\.\-\+]/g,""));
+        if (isNaN(num)) { dcText.textContent = "Invalid"; return; }
+        dcText.textContent = (num>=0? "+" : "") + num.toFixed(2) + " D";
+      }
+      dcInput.addEventListener("input", updateDC);
+      updateDC();
+    }
+
+    // Axis average
+    const btn = root.querySelector(".btn-calc");
+    if (btn){
+      btn.addEventListener("click", ()=>{
+        const c1 = (root.querySelector(".calc1")?.value || "").toUpperCase().trim();
+        const c2 = (root.querySelector(".calc2")?.value || "").toUpperCase().trim();
+        const a1 = AxisMap[c1], a2 = AxisMap[c2];
+        const out = root.querySelector(".axis-avg");
+        if(a1===undefined || a2===undefined){ if(out) out.textContent = "Invalid code"; return; }
+        let diff = a2 - a1;
+        if(diff > 90)  diff -= 180;
+        if(diff < -90) diff += 180;
+        let avg = a1 + diff/2;
+        if(avg < 0)   avg += 180;
+        if(avg > 180) avg -= 180;
+        if(out) out.textContent = avg.toFixed(1);
+      });
+    }
+  }
+
+  // Public init
+  window.initAxisDCWidget = function mount(selector){
+    const host = document.querySelector(selector);
+    if(!host) return;
+    host.innerHTML = TEMPLATE;
+    wireWidget(host);
+  };
+})();
+</script>
+
+
+
+<script>
+  // Example: initialize in two places
+  initAxisDCWidget('#axis-dc-spot-1');
+  initAxisDCWidget('#axis-dc-spot-2');
+</script>
 
 
 
