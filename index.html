@@ -4511,7 +4511,7 @@ function parseRx(){
 
 <div class="pane" style="padding:10px">
 <button id="btnToggleSeg1" class="small-normal-btn" style="display:none; background-color:white;">Select All</button>
-  <span id="toggle-lensMaterialCoating" style="cursor:pointer; user-select:none;">▼ 1. Choose Your Lens Material, Coating & Brand</span>
+  <span id="toggle-lensMaterialCoating" style="cursor:pointer; user-select:none;">▼ 1. Lens Material & Coating: Choose your type of lens </span>
 
 
 
@@ -4523,7 +4523,7 @@ function parseRx(){
       <!-- Appearance -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
 
-       <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 1 of 5. Type of Lens :</b> Do you want changing colour lenses? Do you want sunglasses? Do you want premium sunglasses that cuts glare (polarize)? Or just normal clear material?
+       <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 1 of 4. Type of Lens :</b> Do you want changing colour lenses? Do you want sunglasses? Do you want premium sunglasses that cuts glare (polarize)? Or just normal clear material?
 
  <div style="height:10px;"></div>
 
@@ -4543,7 +4543,7 @@ function parseRx(){
 <!-- Index -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
   
-       <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 2 of 5. Lens thick or thinness :</b> Do you prefer lighter and thinner lenses (higher index)? Or do you want normal thickness lenses that are more affordable?
+       <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 2 of 4. Lens thick or thinness :</b> Do you prefer lighter and thinner lenses (higher index)? Or do you want normal thickness lenses that are more affordable?
  <div style="height:10px;"></div>
 
 
@@ -4561,13 +4561,13 @@ function parseRx(){
       </div>
 <!-- Clarity & Coating -->
 <div style="" class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 3 of 5. Clarity & Coating :</b> Choose how clear you want your vision and how easy the lens is to clean.
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 3 of 4. Clarity & Coating :</b> Choose how clear you want your vision and how easy the lens is to clean.
  <div style="height:10px;"></div>
 
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-    <label><input type="checkbox" class="fl-clarity" value="UV_400"> Standard UV 400 – common UV400 clear lens with simple coating. Blocks UV light.</label>
-    <label><input type="checkbox" class="fl-clarity" value="UV_420_BL"> Blue Light Filter – blocks UV light & blue light from digital gadget. Slight yellow tint due to its function.</label>
-    <label><input type="checkbox" class="fl-clarity" value="high_clarity"> High Clarity – blocks UV light, blue light and increased clarity at night.</label>
+    <label><input type="checkbox" class="fl-clarity" value="UV_400"> Basic UV 400 – common UV400 clear lens with simple coating. Blocks UV light.</label>
+    <label><input type="checkbox" class="fl-clarity" value="UV_420_BL"> Premium Blue Light Filter – blocks UV light & blue light from digital gadget. Slight yellow tint due to its function.</label>
+    <label><input type="checkbox" class="fl-clarity" value="high_clarity"> Luxury High Clarity & Filter – blocks UV light, blue light and increased clarity at night.</label>
   </div>
 </div>
 
@@ -4575,77 +4575,20 @@ function parseRx(){
 <!-- Durability Preference -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
 
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 4 of 5. Durability Preference :</b> Decide between softer coatings with less reflection, or tougher ones that last longer.
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 4 of 4. Durability Preference :</b> Decide between softer coatings with less reflection, or tougher ones that last longer.
 
  <div style="height:10px;"></div>
 
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
 
-    <label><input type="checkbox" class="fl-durability" value="STANDARD"> Standard – industry standard that comes with 1 year warranty.</label>
-    <label><input type="checkbox" class="fl-durability" value="HIGH"> Tougher –2 years warranty but has more reflection. Much stronger and more durable.</label>
+    <label><input type="checkbox" class="fl-durability" value="STANDARD"> Standard – Common standard that comes with 1 year warranty.</label>
+    <label><input type="checkbox" class="fl-durability" value="HIGH"> Tougher – Coating is thicker so it's much stronger and more durable.</label>
   </div>
 </div>
 
-
-
-
-
-<!-- Brands -->
-<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 5 of 5. Brand Quality & Price :</b> Choose your preference based on optical quality, price, and origin.
-
-  <div style="height:10px;"></div>
-
-  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-
-    <label><input type="checkbox" class="fl-brand" value="Asahi"> 
-Asahi&nbsp;&nbsp; –
-  Quality = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ - 
-   Japan made. Pioneer in thin lenses.  Good choice to reduce lens thickness..</label>
-
-<label><input type="checkbox" class="fl-brand" value="Rayfilter">Rayfilter&nbsp;&nbsp; –
-    Quality = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
-    Taiwan made. Simple everyday lenses with nothing fancy. Basic and cost-focused.</label>
-
-    <label><input type="checkbox" class="fl-brand" value="Rodenstock">Rodenstock&nbsp;&nbsp; –
-    Quality = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
-    German engineered. Pioneers of many optical technologies. Excellent visual experience.</label>
-
-    <label><input type="checkbox" class="fl-brand" value="Pentax"> Pentax&nbsp;&nbsp; –
-    Quality = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰💰 ⬤ -
-    Japan optics lineage. Great coating durability.</label>
-
-    <label><input type="checkbox" class="fl-brand" value="Opto-tech">Optotech&nbsp;&nbsp; –
-    Quality = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
-    German design. Reasonable price with modern technologies.</label>
-
-    <label><input type="checkbox" class="fl-brand" value="Seiko"> Seiko&nbsp;&nbsp; –   Quality = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
-    Made in Japan. Ultra premium customised aspheric technology; thinnest possible optics..</label>
-
-    <label><input type="checkbox" class="fl-brand" value="Advance Lens"> Local&nbsp;&nbsp; –
-    Quality = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
-    Local lab with simple, durable lenses..</label>
-
-    <label><input type="checkbox" class="fl-brand" value="Meyer"> Meyer&nbsp;&nbsp; –
-    Quality = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰 ⬤ -
-    German design. Premium price with modern technologies.</label>
-
-
-  </div>
-</div>
-
-
-
-
 </div>
 
 </div>
-
-
-
-
-
-
 
 
  <div style="height:5px;"></div>
@@ -4659,7 +4602,85 @@ Asahi&nbsp;&nbsp; –
 <div class="pane" style="padding:10px">
 
 
-  <span id="toggle-single" style="cursor:pointer; user-select:none;">▼ 2. Build Your Single Vision Lens</span>
+  <span id="toggle-brand" style="cursor:pointer; user-select:none;">▼ 2. Brand Preference: Quality & Price Point</span>
+
+
+
+<div id="brand" style="display:none;">
+
+
+<!-- Brands -->
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 1 of 1. Brand Quality & Price :</b> Choose your preference based on optical quality, price, and origin.
+
+  <div style="height:10px;"></div>
+
+  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+
+<label><input type="checkbox" class="fl-brand" value="Seiko"> Seiko&nbsp;&nbsp; –
+    Technology = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
+    Made in Japan. Ultra premium customised aspheric technology; thinnest possible optics.</label>
+
+<label><input type="checkbox" class="fl-brand" value="Rodenstock">Rodenstock&nbsp;&nbsp; –
+    Technology = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
+    German engineered. Pioneers of many optical technologies. Excellent visual experience.</label>
+
+<label style="display:none"><input type="checkbox" class="fl-brand" value="Meyer"> Meyer&nbsp;&nbsp; –
+    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰💰 ⬤ -
+    German design. Premium price with modern technologies.</label>
+
+<label><input type="checkbox" class="fl-brand" value="Pentax"> Pentax&nbsp;&nbsp; –
+    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰💰 ⬤ -
+    Japan optics lineage. Great coating durability.</label>
+
+<label><input type="checkbox" class="fl-brand" value="Asahi">Asahi&nbsp;&nbsp; –
+    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
+    Japan made. Pioneer in thin lenses.  Good choice to reduce lens thickness.</label>
+
+<label><input type="checkbox" class="fl-brand" value="Opto-tech">Optotech&nbsp;&nbsp; –
+    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
+    German design. Reasonable price with modern technologies.</label>
+
+<label><input type="checkbox" class="fl-brand" value="Rayfilter">Rayfilter&nbsp;&nbsp; –
+    Technology = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
+    Taiwan made. Simple everyday lenses with nothing fancy. Basic and cost-focused.</label>
+
+<label><input type="checkbox" class="fl-brand" value="Advance Lens"> Local&nbsp;&nbsp; –
+    Technology = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
+    Local lab with simple, durable lenses.</label>
+
+
+  </div>
+</div>
+
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+ <div style="height:5px;"></div>
+
+
+
+
+<div class="pane" style="padding:10px">
+  <span id="toggle-lenstype" style="cursor:pointer; user-select:none;">▼ 3. Build your Vision: Single Vision or Multifocal</span>
+<div id="lenstype" style="display:none;">
+ <div style="height:10px;"></div>
+
+
+<div class="pane" style="padding:10px">
+
+
+  <span id="toggle-single" style="cursor:pointer; user-select:none;">▼ A. Build Your Single Vision Lens</span>
 
 
 
@@ -4679,11 +4700,11 @@ Asahi&nbsp;&nbsp; –
 
  <div style="height:10px;"></div>
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-<label><input type="checkbox" class="fl-func" value="Stock SV"> Standard single vision (stock)</label>
+<label><input type="checkbox" class="fl-func" value="Stock SV"> Stock Single Vision - ready made single vision lenses with standard optics. No further customization. </label>
 
-    <label><input type="checkbox" class="fl-func" value="Custom SV"> Single vision - for single type prescription (Far/Near/Intermediate/etc).</label>
+    <label><input type="checkbox" class="fl-func" value="Custom SV"> Customized Single vision - made from scratch to your wearing needs and frame details. Can be tinted as well.</label>
 
-    <label><input type="checkbox" class="fl-func" value="Anti-Fatigue"> Dual zone vision - bottom part of lenses are optimized for ergnomics.</label>
+    <label><input type="checkbox" class="fl-func" value="Anti-Fatigue"> Customized Dual zone vision - made from scratch and customized to your needs as well, and bottom part of lenses are further optimized for even better ergnomics.</label>
   </div>
 </div>
 
@@ -4695,8 +4716,8 @@ Asahi&nbsp;&nbsp; –
  <div style="height:10px;"></div>
 
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-    <label><input type="checkbox" class="fl-viewing" value="SPH"> Spherical – traditional curve, natural peripheral vision.</label>
-    <label><input type="checkbox" class="fl-viewing" value="ATO"> Atoric – ideal for astigmatism prescription as it makes the prescription less tilt and more stable.</label>
+    <label><input type="checkbox" class="fl-viewing" value="SPH"> Spherical – traditional curve, natural peripheral vision and may observe some warping effect at the side.</label>
+    <label><input type="checkbox" class="fl-viewing" value="ATO"> Atoric – ideal for astigmatism prescription as it makes your vision less tilt, more stable and wider.</label>
     <label><input type="checkbox" class="fl-viewing" value="ASP"> Single Aspheric – flatter front, less magnification of the eye but may notice a little peripheral swim..</label>
     <label><input type="checkbox" class="fl-viewing" value="DAS"> Double Aspheric – maximum aspheric optics, thinnest and most realistic magnification but may notice a little peripheral swim..</label>
   </div>
@@ -4720,7 +4741,7 @@ Asahi&nbsp;&nbsp; –
 <div class="pane" style="padding:10px">
 
 
-  <span id="toggle-multi" style="cursor:pointer; user-select:none;">▼ 3. Build Your Multi-Focal Vision Lens</span> 
+  <span id="toggle-multi" style="cursor:pointer; user-select:none;">▼ B. Build Your Multi-Focal Vision Lens</span> 
 
 
 
@@ -4785,8 +4806,8 @@ Asahi&nbsp;&nbsp; –
 </div>
 
 
-
-
+</div>
+</div>
 
 
 
@@ -5059,31 +5080,44 @@ function getStockAvailability(S, C, n) {
 
 /* =========================
    MF BADGES
+<style>
+.mf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px 12px;margin-top:6px}
+.mf-sec{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.mf-title{font-weight:600;font-size:12px;letter-spacing:.2px;white-space:nowrap;color:#444}
+.mf-tag{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid #e5e7eb;background:#f6f7f9}
+.mf-sec[data-k="view"] .mf-tag{background:#eef6ff;border-color:#d6e7ff}
+.mf-sec[data-k="zone"] .mf-tag{background:#f1fff0;border-color:#d6f6d4}
+.mf-sec[data-k="tier"] .mf-tag{background:#fff5f0;border-color:#ffd8c2}
+.mf-sec[data-k="pers"] .mf-tag{background:#f9f5ff;border-color:#e6d7ff}
+.mf-sec[data-k="swim"] .mf-tag{background:#fef9c3;border-color:#fde68a}
+</style>
+
+
 ========================= */
-function makeMFBadges(row){
-  const labels = [];
+
+
+// Grouped MF badges -> HTML block
+function renderMFBadges(row){
   const rawView = String(row["MF_VIEWING"]||"");
   const rawZone = String(row["MF_ZONE"]||"");
   const rawTier = String(row["MF_TIER"]||"");
   const rawPers = String(row["MF_PERSONALIZATION"]||"");
   const rawSwim = String(row["MF_SWIM"]||"");
 
-  const pushOnce = (txt)=>{ if (txt && !labels.includes(txt)) labels.push(txt); };
-
   const VIEW_TEXT = {
-    Expert:  "Expert — widest clear zones",
-    Balance: "Balanced — comfort vs clarity",
-    Entry:   "Entry — easiest adaptation"
+    Expert:  "Expert :  Widest clear zones but most swim effect",
+    Balance: "Balanced : Moderate clear zones & swim effect",
+    Entry:   "Light : Minimal swim effect but narrow clear zones"
   };
   const ZONE_TEXT = {
-    Near:         "Near-centric",
-    Intermediate: "Intermediate-centric",
-    Equal:        "Equal spread"
+    Near:         "Near - Larger near but smaller intermediate",
+    Intermediate: "Intermediate - Larger intermediate but smaller near",
+    Equal:        "Equal - Balance size intermediate & near"
   };
   const TIER_TEXT = {
-    Double:       "Dual-surface freeform",
-    Single:       "Single-surface freeform",
-    Traditional:  "Conventional design"
+    Double:       "Dual-surface - Both side of lenses customized for the best possible optics quality and comfort. Mostly costly production.",
+    Single:       "Single-surface - Single side of lens customized while retaining most technology. Less costly but effective.",
+    Traditional:  "Conventional - Non customized traditional optics resulting in entry level optics. Lowest production cost."
   };
   const PERS_TEXT = {
     Full:    "Full personalization",
@@ -5091,50 +5125,80 @@ function makeMFBadges(row){
     None:    "No personalization"
   };
 
-  if (/\bexpert\b/i.test(rawView)) pushOnce(VIEW_TEXT.Expert);
-  if (/\bbalance(?:d)?\b/i.test(rawView)) pushOnce(VIEW_TEXT.Balance);
-  if (/\bentry\b/i.test(rawView)) pushOnce(VIEW_TEXT.Entry);
-  parseTags(rawView).forEach(tok=>{
-    const t = tok.trim().toLowerCase();
-    if (t.startsWith("expert"))   pushOnce(VIEW_TEXT.Expert);
-    if (t.startsWith("balance"))  pushOnce(VIEW_TEXT.Balance);
-    if (t.startsWith("entry"))    pushOnce(VIEW_TEXT.Entry);
+  const uniq = a => Array.from(new Set(a.filter(Boolean)));
+
+  // VIEW
+  let view = [];
+  if (/\bexpert\b/i.test(rawView)) view.push(VIEW_TEXT.Expert);
+  if (/\bbalance(?:d)?\b/i.test(rawView)) view.push(VIEW_TEXT.Balance);
+  if (/\bentry\b/i.test(rawView)) view.push(VIEW_TEXT.Entry);
+  parseTags(rawView).forEach(t=>{
+    const x=t.trim().toLowerCase();
+    if (x.startsWith("expert"))  view.push(VIEW_TEXT.Expert);
+    if (x.startsWith("balance")) view.push(VIEW_TEXT.Balance);
+    if (x.startsWith("entry"))   view.push(VIEW_TEXT.Entry);
   });
+  view = uniq(view);
 
-  if (/near/i.test(rawZone))            pushOnce(ZONE_TEXT.Near);
-  if (/intermediate/i.test(rawZone))    pushOnce(ZONE_TEXT.Intermediate);
-  if (/(^|[^a-z])equal([^a-z]|$)/i.test(rawZone)) pushOnce(ZONE_TEXT.Equal);
-  parseTags(rawZone).forEach(tok=>{
-    const t = tok.trim().toLowerCase();
-    if (t.startsWith("near"))         pushOnce(ZONE_TEXT.Near);
-    if (t.startsWith("intermediate")) pushOnce(ZONE_TEXT.Intermediate);
-    if (t.startsWith("equal"))        pushOnce(ZONE_TEXT.Equal);
+  // ZONE
+  let zone = [];
+  if (/near/i.test(rawZone)) zone.push(ZONE_TEXT.Near);
+  if (/intermediate/i.test(rawZone)) zone.push(ZONE_TEXT.Intermediate);
+  if (/(^|[^a-z])equal([^a-z]|$)/i.test(rawZone)) zone.push(ZONE_TEXT.Equal);
+  parseTags(rawZone).forEach(t=>{
+    const x=t.trim().toLowerCase();
+    if (x.startsWith("near")) zone.push(ZONE_TEXT.Near);
+    if (x.startsWith("intermediate")) zone.push(ZONE_TEXT.Intermediate);
+    if (x.startsWith("equal")) zone.push(ZONE_TEXT.Equal);
   });
+  zone = uniq(zone);
 
-  if (/double/i.test(rawTier))       pushOnce(TIER_TEXT.Double);
-  if (/single/i.test(rawTier))       pushOnce(TIER_TEXT.Single);
-  if (/tradition/i.test(rawTier))    pushOnce(TIER_TEXT.Traditional);
-  parseTags(rawTier).forEach(tok=>{
-    const t = tok.trim().toLowerCase();
-    if (t.startsWith("double"))       pushOnce(TIER_TEXT.Double);
-    if (t.startsWith("single"))       pushOnce(TIER_TEXT.Single);
-    if (t.startsWith("traditional"))  pushOnce(TIER_TEXT.Traditional);
+  // TIER
+  let tier = [];
+  if (/double/i.test(rawTier)) tier.push(TIER_TEXT.Double);
+  if (/single/i.test(rawTier)) tier.push(TIER_TEXT.Single);
+  if (/tradition/i.test(rawTier)) tier.push(TIER_TEXT.Traditional);
+  parseTags(rawTier).forEach(t=>{
+    const x=t.trim().toLowerCase();
+    if (x.startsWith("double")) tier.push(TIER_TEXT.Double);
+    if (x.startsWith("single")) tier.push(TIER_TEXT.Single);
+    if (x.startsWith("traditional")) tier.push(TIER_TEXT.Traditional);
   });
+  tier = uniq(tier);
 
-  if (/full/i.test(rawPers))                 pushOnce(PERS_TEXT.Full);
-  if (/partial/i.test(rawPers))              pushOnce(PERS_TEXT.Partial);
-  if (/(^|[^a-z])none([^a-z]|$)/i.test(rawPers)) pushOnce(PERS_TEXT.None);
-  parseTags(rawPers).forEach(tok=>{
-    const t = tok.trim().toLowerCase();
-    if (t.startsWith("full"))    pushOnce(PERS_TEXT.Full);
-    if (t.startsWith("partial")) pushOnce(PERS_TEXT.Partial);
-    if (t.startsWith("none"))    pushOnce(PERS_TEXT.None);
+  // PERSONALIZATION
+  let pers = [];
+  if (/full/i.test(rawPers)) pers.push(PERS_TEXT.Full);
+  if (/partial/i.test(rawPers)) pers.push(PERS_TEXT.Partial);
+  if (/(^|[^a-z])none([^a-z]|$)/i.test(rawPers)) pers.push(PERS_TEXT.None);
+  parseTags(rawPers).forEach(t=>{
+    const x=t.trim().toLowerCase();
+    if (x.startsWith("full")) pers.push(PERS_TEXT.Full);
+    if (x.startsWith("partial")) pers.push(PERS_TEXT.Partial);
+    if (x.startsWith("none")) pers.push(PERS_TEXT.None);
   });
+  pers = uniq(pers);
 
-  parseTags(rawSwim).forEach(t => { const clean = t.trim(); if (clean) pushOnce(`Swim: ${clean}`); });
+  // SWIM (verbatim tags)
+  const swim = uniq(parseTags(rawSwim).map(t=>t.trim()).filter(Boolean)).map(v=>`Swim: ${v}`);
 
-  return labels;
+  // Build HTML (only show sections that have tags)
+  const sec = (k,title,arr)=> arr.length
+    ? `<div class="mf-sec" data-k="${k}"><span class="mf-title">${title}:</span>${arr.map(t=>`<span class="mf-tag">${t}</span>`).join("")}</div>`
+    : "";
+
+  return `
+    <div class="mf-grid">
+      ${sec("view","Design Capability",view)}
+      ${sec("zone","Zone Preference",zone)}
+      ${sec("tier","Design Tier",tier)}
+      ${sec("pers","Personalization",pers)}
+      ${sec("swim","Swim Profile",swim)}
+    </div>
+  `;
 }
+
+
 
 /* =========================
    MAIN: Render Lens Options
@@ -5307,13 +5371,13 @@ function renderLensOptions(geom, rx) {
     "advance": "Advance Lens"
   };
   const BRAND_RATINGS = {
-    "Asahi":       { optical: "⭐️⭐️⭐️⭐️⬤", price: "💰💰💰⬤⬤" },
-    "Rayfilter":   { optical: "⭐️⭐️⭐️⬤⬤", price: "💰💰⬤⬤⬤" },
-    "Rodenstock":  { optical: "⭐️⭐️⭐️⭐️⭐️", price: "💰💰💰💰💰" },
-    "Pentax":      { optical: "⭐️⭐️⭐️⭐️⬤", price: "💰💰💰💰⬤" },
-    "Opto-tech":   { optical: "⭐️⭐️⭐️⭐️⬤", price: "💰💰💰⬤⬤" },
-    "Seiko":       { optical: "⭐️⭐️⭐️⭐️⭐️", price: "💰💰💰💰💰" },
-    "Advance Lens":{ optical: "⭐️⭐️⭐️⬤⬤", price: "💰💰⬤⬤⬤" }
+"Asahi":        { optical: "(Premium ⭐️⭐️⭐️⭐️⬤)", price: "(Mid 💰💰💰⬤⬤)" },
+  "Rayfilter":    { optical: "(Good ⭐️⭐️⭐️⬤⬤)",    price: "(Budget 💰💰⬤⬤⬤)" },
+  "Rodenstock":   { optical: "(Luxury ⭐️⭐️⭐️⭐️⭐️)",  price: "(Luxury 💰💰💰💰💰)" },
+  "Pentax":       { optical: "(Premium ⭐️⭐️⭐️⭐️⬤)", price: "(Premium 💰💰💰💰⬤)" },
+  "Opto-tech":    { optical: "(Premium ⭐️⭐️⭐️⭐️⬤)", price: "(Mid 💰💰💰⬤⬤)" },
+  "Seiko":        { optical: "(Luxury ⭐️⭐️⭐️⭐️⭐️)",  price: "(Luxury 💰💰💰💰💰)" },
+  "Advance Lens": { optical: "(Good ⭐️⭐️⭐️⬤⬤)",    price: "(Budget 💰💰⬤⬤⬤)" }
   };
   function getBrandGroup(val = "") {
     const s = String(val).toLowerCase()
@@ -5348,8 +5412,7 @@ function renderLensOptions(geom, rx) {
       ? `<span class="tag meta">Quality: ${rating.optical} · Price: ${rating.price}</span>`
       : "";
 
-    const mfBadges = makeMFBadges(row);
-    const mfTagsHTML = mfBadges.map(t => `<span class="tag mf">${t}</span>`).join("");
+
 
     const tintOpt = (row["TINT_OPTION"] || "").trim();
     const tintCharge = toNumber(row["TINT_SURCHARGE"]) ?? 0;
@@ -5365,9 +5428,9 @@ function renderLensOptions(geom, rx) {
     const selectedClarity = checkedValues(".fl-clarity")[0] || null;
     let coatingHTML = "";
     const labelMap = {
-      UV_400: "UV Only Filter",
+      UV_400: "UV Filter only",
       UV_420_BL: "Blue Light Filter",
-      high_clarity: "High Clarity Coating"
+      high_clarity: "High Clarity & Filter"
     };
     const colorMap = { UV_400: "", UV_420_BL: "color:#1e66ff", high_clarity: "color:#7c3aed" };
 
@@ -5375,7 +5438,7 @@ function renderLensOptions(geom, rx) {
       const p = getPriceByClarity(row, selectedClarity);
       if (p != null){
         const style = colorMap[selectedClarity] ? ` style="${colorMap[selectedClarity]}"` : "";
-        coatingHTML = `<div class="lens-prices"><span class="tag price"${style}>${labelMap[selectedClarity]}: RM ${p}</span></div>`;
+        coatingHTML = `<div class="lens-prices"><b>Coating Choices & Total Price:</b> <span class="tag price"${style}>${labelMap[selectedClarity]}: RM ${p}</span></div>`;
       } else {
         coatingHTML = ""; // shouldn't appear due to filter
       }
@@ -5390,25 +5453,38 @@ function renderLensOptions(geom, rx) {
           parts.push(`<span class="tag price"${style}>${labelMap[k]}: RM ${v}</span>`);
         }
       });
-      coatingHTML = parts.length ? `<div class="lens-prices">${parts.join(' &nbsp;|&nbsp; ')}</div>` : "";
+      coatingHTML = parts.length ? `<div class="lens-prices"><b>Coating Choices & Total Price:</b>${parts.join('|')}</div>` : "";
     }
 
     const card = document.createElement("div");
     card.className = "lens-card";
     card.innerHTML = `
       <div class="lens-header">
-        (${design} ${dia} mm) &nbsp;|&nbsp; ${idx} &nbsp;|&nbsp; ${app} &nbsp;|&nbsp; ${row["PRODUCT_NAME"] || "(Unnamed Lens)"} &nbsp;|&nbsp; ${brandMeta}
+
+<div><b>Lens Name & Brand:</b> ${row["PRODUCT_NAME"] || "(Unnamed Lens)"} <b>by</b> ${brandKey || (row["BRAND"] || "")} </div>
+
+   <div style="height:10px"></div>
+
+        <div><b>Lens Type:</b> ${dia} mm ${idx} ${design} ${app} ${note}   </div>
+
+   <div style="height:10px"></div>
+
+        <div><b>Lens Tintability Option:</b> ${tintNote}  </div>
+
+   <div style="height:10px"></div>
+
+<div><b>Lens Rating & Price:</b> ${brandMeta}</div>
+
         <div style="height:10px;"></div>
-        ${coatingHTML}
-      </div>
+
+     <div>${coatingHTML} </div>
 
       <div style="height:10px;"></div>
-      <div class="lens-tags">
-        <span class="tag brand">Brand: ${brandKey || (row["BRAND"] || "")}</span>
-        <span class="tag func">Variation: ${note}</span> ${tintNote}
-        <div>${mfTagsHTML}</div>
+
+        <div>${renderMFBadges(row)}</div>
+
       </div>
-      <div style="height:10px;"></div>
+
     `;
     container.appendChild(card);
   });
@@ -5767,7 +5843,10 @@ makeToggle("toggle-build-your-lens","build-your-lens");
 makeToggle("toggle-lens-selector","lens-selector");
 makeToggle("toggle-single", "singleFilters");
 makeToggle("toggle-multi", "multifocalFilters");
-makeToggle("toggle-lensMaterialCoating", "lensMaterialCoating")
+makeToggle("toggle-lensMaterialCoating", "lensMaterialCoating");
+makeToggle("toggle-brand", "brand");
+makeToggle("toggle-lenstype", "lenstype")
+
 
 
 
