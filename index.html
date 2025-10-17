@@ -19,6 +19,8 @@
   display: none;
 }
 
+  .pane img { display: block; margin: 2rem auto; max-width: 95%; }
+
 .lens-card:hover {
   box-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
@@ -627,7 +629,34 @@ function setFontSize(size, btn) {
 
 </div>
 
+<div class="section">
+<span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-definition">
+  ▼ Myopia, Hyperopia, Presbyopia & Astigmatism Explained
+</span>
 
+<div id="definition" style="display:none;">
+<div style="height:10px"></div>
+
+<div class="pane" style="padding:5px 0px 5px 0px">
+
+<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Astig%20Define.png" alt="Astig Define">
+<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Astig%20Vision.png" alt="Astig Vision">
+<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Sph%20Define.png" alt="Sph Define">
+<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Sph%20Vision.png" alt="Sph Vision">
+
+<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Test%201.png" alt="Test 1">
+<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Test%202.png" alt="Test 2">
+<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Test%203.png" alt="Test 3">
+<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Test%204.png" alt="Test 4">
+<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Test%205.png" alt="Test 5">
+<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Test%206.png" alt="Test 6">
+
+
+
+
+
+</div>
+</div></div>
 
 <div class="section" >
 <div style="display:flex; justify-content:space-between; align-items:center; width:95%; margin:0px auto;">
@@ -4640,35 +4669,35 @@ function parseRx(){
 
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
 
-<label><input type="checkbox" class="fl-brand" value="Seiko"> Seiko&nbsp;&nbsp; –
+<label><input type="checkbox" class="fl-brand" value="Seiko"> Seiko&nbsp;&nbsp;:
     Technology = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
     Made in Japan. Ultra premium customised aspheric technology; thinnest possible optics.</label>
 
-<label><input type="checkbox" class="fl-brand" value="Rodenstock">Rodenstock&nbsp;&nbsp; –
+<label><input type="checkbox" class="fl-brand" value="Rodenstock">Rodenstock&nbsp;&nbsp;:
     Technology = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
     German engineered. Pioneers of many optical technologies. Excellent visual experience.</label>
 
-<label style="display:none"><input type="checkbox" class="fl-brand" value="Meyer"> Meyer&nbsp;&nbsp; –
-    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰💰 ⬤ -
+<label style="display:none"><input type="checkbox" class="fl-brand" value="Meyer"> Meyer&nbsp;&nbsp;:
+    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰💰 ⬤ 
     German design. Premium price with modern technologies.</label>
 
-<label><input type="checkbox" class="fl-brand" value="Pentax"> Pentax&nbsp;&nbsp; –
+<label><input type="checkbox" class="fl-brand" value="Pentax"> Pentax&nbsp;&nbsp;:
     Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰💰 ⬤ -
     Japan optics lineage. Great coating durability.</label>
 
-<label><input type="checkbox" class="fl-brand" value="Asahi">Asahi&nbsp;&nbsp; –
+<label><input type="checkbox" class="fl-brand" value="Asahi">Asahi&nbsp;&nbsp;:
     Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
     Japan made. Pioneer in thin lenses.  Good choice to reduce lens thickness.</label>
 
-<label><input type="checkbox" class="fl-brand" value="Opto-tech">Optotech&nbsp;&nbsp; –
+<label><input type="checkbox" class="fl-brand" value="Opto-tech">Optotech&nbsp;&nbsp;:
     Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
     German design. Reasonable price with modern technologies.</label>
 
-<label><input type="checkbox" class="fl-brand" value="Rayfilter">Rayfilter&nbsp;&nbsp; –
+<label><input type="checkbox" class="fl-brand" value="Rayfilter">Rayfilter&nbsp;&nbsp;:
     Technology = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
     Taiwan made. Simple everyday lenses with nothing fancy. Basic and cost-focused.</label>
 
-<label><input type="checkbox" class="fl-brand" value="Advance Lens"> Local&nbsp;&nbsp; –
+<label><input type="checkbox" class="fl-brand" value="Advance Lens"> Local&nbsp;&nbsp;:
     Technology = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
     Local lab with simple, durable lenses.</label>
 
@@ -5864,6 +5893,7 @@ document.addEventListener("DOMContentLoaded", () => {
   wrapLabelDescriptions("#lensMaterialCoating");
   wrapLabelDescriptions("#singleFilters");
   wrapLabelDescriptions("#multifocalFilters");
+     wrapLabelDescriptions("#brand");         
   setDescriptionsHidden(false);
 
   // Wire ALL buttons with the same id (works even if duplicated)
@@ -5877,7 +5907,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ===============================
 function wrapPaneDescriptions() {
   const panes = document.querySelectorAll(
-    "#lensMaterialCoating .pane, #singleFilters .pane, #multifocalFilters .pane"
+    "#lensMaterialCoating .pane, #singleFilters .pane, #multifocalFilters .pane, #brand .pane"
   );
   panes.forEach(pane => {
     const title = pane.querySelector("b");
@@ -6025,6 +6055,7 @@ makeToggle("toggle-brand", "brand");
 makeToggle("toggle-lenstype", "lenstype");
 makeToggle("toggle-reference", "reference");
 makeToggle("toggle-reference2", "reference2");
+makeToggle("toggle-definition", "definition");
 
 
 
