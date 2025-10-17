@@ -630,15 +630,16 @@ function setFontSize(size, btn) {
 </div>
 
 <div class="section">
-<span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-definition">
+<span style="margin-left:20px; cursor:pointer; user-select:none;" class="toggle-definition">
   ▼ Myopia, Hyperopia, Presbyopia & Astigmatism Explained
 </span>
 
-<div id="definition" style="display:none;">
+<div class="definition" style="display:none;">
 <div style="height:10px"></div>
 
-<div class="pane" style="padding:5px 0px 5px 0px">
+<div class="pane" style="padding:20px 0px 20px 0px">
 
+<table><tr><td>
 <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Astig%20Define.png" alt="Astig Define">
 <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Astig%20Vision.png" alt="Astig Vision">
 <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Sph%20Define.png" alt="Sph Define">
@@ -652,11 +653,18 @@ function setFontSize(size, btn) {
 <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Test%206.png" alt="Test 6">
 
 
-
-
+</td></tr></table>
 
 </div>
-</div></div>
+<div style="height:10px"></div>
+
+<span style="margin-left:20px; cursor:pointer; user-select:none;" class="toggle-definition">
+  ~ End ~ Click to close ~
+</span>
+<div style="height:10px"></div>
+
+</div>
+</div>
 
 <div class="section" >
 <div style="display:flex; justify-content:space-between; align-items:center; width:95%; margin:0px auto;">
@@ -5988,6 +5996,27 @@ function setDescriptionsHidden(hide) {
 
 
 
+<script>
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".toggle-definition");
+  if (!btn) return;
+
+  // 1) Preferred: the next sibling .definition (external header button)
+  let section = btn.nextElementSibling;
+  if (!(section && section.classList.contains("definition"))) {
+    // 2) Fallback: the nearest ancestor .definition (inside button)
+    section = btn.closest(".definition");
+  }
+  if (!section) return;
+
+  const hidden = getComputedStyle(section).display === "none";
+  section.style.display = hidden ? "block" : "none";
+
+  // Optional: add arrow prefix
+  const base = btn.textContent.replace(/^[▲▼]\s*/, "");
+});
+</script>
+
 
 
 
@@ -6055,7 +6084,6 @@ makeToggle("toggle-brand", "brand");
 makeToggle("toggle-lenstype", "lenstype");
 makeToggle("toggle-reference", "reference");
 makeToggle("toggle-reference2", "reference2");
-makeToggle("toggle-definition", "definition");
 
 
 
