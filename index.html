@@ -5594,7 +5594,7 @@ function renderLensOptions(geom, rx) {
       const p = getPriceByClarity(row, selectedClarity);
       if (p != null){
         const style = colorMap[selectedClarity] ? ` style="${colorMap[selectedClarity]}"` : "";
-        coatingHTML = `<div class="lens-prices"><b>Coating Choices & Total Price:</b> <span class="tag price"${style}>${labelMap[selectedClarity]}: RM ${p}</span></div>`;
+        coatingHTML = `<div class="lens-prices"><b>Price | </b> <b><span class="tag price"${style}>${labelMap[selectedClarity]}: RM ${p}</span></b></div>`;
       } else {
         coatingHTML = ""; // shouldn't appear due to filter
       }
@@ -5609,7 +5609,7 @@ function renderLensOptions(geom, rx) {
           parts.push(`<span class="tag price"${style}>${labelMap[k]}: RM ${v}</span>`);
         }
       });
-      coatingHTML = parts.length ? `<div class="lens-prices"><b>Coating Choices & Total Price:</b>${parts.join('|')}</div>` : "";
+      coatingHTML = parts.length ? `<div class="lens-prices"><b>Price&nbsp; |</b><b>${parts.join('|')}</b></div>` : "";
     }
 
     const card = document.createElement("div");
@@ -5624,6 +5624,12 @@ function renderLensOptions(geom, rx) {
         <div><b>Lens Type:</b> ${dia} mm ${idx} ${design} ${app} ${note}   </div>
 
    <div style="height:10px"></div>
+     <div>${coatingHTML} </div>
+        <div style="height:10px;"></div>
+  <span class="toggle-card-details" style="cursor:pointer; user-select:none;">▼ More Details </span> 
+<div class="card-details" style="display:none;">
+
+        <div style="height:10px;"></div>
 
         <div><b>Lens Tintability Option:</b> ${tintNote}  </div>
 
@@ -5633,8 +5639,6 @@ function renderLensOptions(geom, rx) {
 
         <div style="height:10px;"></div>
 
-     <div>${coatingHTML} </div>
-
 <div>${
   getFunctionCat(row["LENS_DESIGN"]||"") === "Multifocal"
     ? renderMFBadges(row)
@@ -5642,10 +5646,26 @@ function renderLensOptions(geom, rx) {
 }</div>
 
       </div>
-
+</div>
     `;
     container.appendChild(card);
   });
+
+if (!container.dataset.cardToggleBound) {
+  container.addEventListener("click", (e) => {
+    const btn = e.target.closest(".toggle-card-details");
+    if (!btn) return;
+    const card = btn.closest(".lens-card");
+    const section = card?.querySelector(".card-details");
+    if (!section) return;
+
+    const hidden = section.style.display === "none" || section.style.display === "";
+    section.style.display = hidden ? "block" : "none";
+    btn.textContent = (hidden ? "▲" : "▼") + " More Details";
+  });
+  container.dataset.cardToggleBound = "1";
+}
+
 }
 
 /* =========================
@@ -5988,7 +6008,6 @@ function makeToggle(buttonId, sectionId) {
 }
 
 
-// --- setup all three toggles ---
 makeToggle("toggle-manual", "exam-manual");
 makeToggle("toggle-comfy", "exam-comfy");
 makeToggle("toggle-sharpest", "exam-sharpest");
@@ -6005,7 +6024,7 @@ makeToggle("toggle-lensMaterialCoating", "lensMaterialCoating");
 makeToggle("toggle-brand", "brand");
 makeToggle("toggle-lenstype", "lenstype");
 makeToggle("toggle-reference", "reference");
-makeToggle("toggle-reference2", "reference2")
+makeToggle("toggle-reference2", "reference2");
 
 
 
