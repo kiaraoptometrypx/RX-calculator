@@ -6352,50 +6352,72 @@ function colorizeFCDarker(el){
 
 
 
-<script>
-  // Example: initialize in two places
-  initAxisDCWidget('#axis-dc-spot-1');
-  initAxisDCWidget('#axis-dc-spot-2');
-</script>
-
-
+<button onclick="generateTable()">Preview Results</button>
+<div id="resultsPreview"></div>
 <button onclick="saveToSheet()">Save to Google Sheet</button>
 
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbxvBpO4pdQzduvlymObs8-18HBxSjpaGDhyCjDCCJ9d366eos0ecqw-33fE-HJnese8/exec";
+let recordData = {};
 
 function v(id){ return document.getElementById(id)?.value || ""; }
 
-async function saveToSheet(){
-  const payload = {
-    nameInput: v("nameInput"),
-    contactInput: v("contactInput"),
-    ageInput: v("ageInput"),
-    currentWear:
+function generateTable(){
+  recordData = {
+    Name: v("nameInput"),
+    WhatsApp: v("contactInput"),
+    Age: v("ageInput"),
+    CurrentWear:
       document.getElementById("current-wear-glasses")?.checked ? "Glasses" :
       document.getElementById("current-wear-contacts")?.checked ? "Contacts" : "",
-    s1_od: v("s1_od"), c1_od: v("c1_od"), a1_od: v("a1_od"),
-    s1_os: v("s1_os"), c1_os: v("c1_os"), a1_os: v("a1_os"),
-    "extra-notes": v("extra-notes")
+    S1_OD: v("s1_od"), C1_OD: v("c1_od"), A1_OD: v("a1_od"),
+    S1_OS: v("s1_os"), C1_OS: v("c1_os"), A1_OS: v("a1_os"),
+    DC_SPH_OU_MANUAL_NOTES: v("dc-sph-ou-manual-notes"),
+    C2_OU_MANUAL_NOTES: v("c2_ou_manual_notes"),
+    A2_OU_MANUAL_NOTES: v("a2_ou_manual_notes"),
+    MANUAL_SPH_OU_OD: v("manual-sph-ou-od"),
+    MANUAL_CYL_OU_OD: v("manual-cyl-ou-od"),
+    MANUAL_AXIS_OU_OD: v("manual-axis-ou-od"),
+    MANUAL_DC_OU_OD: v("manual-dc-ou-od"),
+    MANUAL_SPH_OU_OS: v("manual-sph-ou-os"),
+    MANUAL_CYL_OU_OS: v("manual-cyl-ou-os"),
+    MANUAL_AXIS_OU_OS: v("manual-axis-ou-os"),
+    MANUAL_DC_OU_OS: v("manual-dc-ou-os"),
+    DC_SPH_OU: v("dc-sph-ou"),
+    C2_OU: v("c2_ou"),
+    A2_OU: v("a2_ou"),
+    RES_SPH_OU_RE: v("res-sph-ou-re"),
+    RES_CYL_OU_RE: v("res-cyl-ou-re"),
+    RES_AXIS_OU_RE: v("res-axis-ou-re"),
+    RES_DC_OU_RE: v("res-dc-ou-re"),
+    RES_SPH_OU_LE: v("res-sph-ou-le"),
+    RES_CYL_OU_LE: v("res-cyl-ou-le"),
+    RES_AXIS_OU_LE: v("res-axis-ou-le"),
+    RES_DC_OU_LE: v("res-dc-ou-le"),
+    EXTRA_NOTES: v("extra-notes")
   };
 
+  let html = "<table border='1' style='border-collapse:collapse;'><tr><th>Field</th><th>Value</th></tr>";
+  for (const [key, value] of Object.entries(recordData)) {
+    html += `<tr><td>${key}</td><td>${value || "-"}</td></tr>`;
+  }
+  html += "</table>";
+  document.getElementById("resultsPreview").innerHTML = html;
+}
+
+async function saveToSheet(){
+  if (!recordData.Name) return alert("Please fill Name and Preview first.");
   try {
     const formData = new FormData();
-    formData.append("data", JSON.stringify(payload));
+    formData.append("data", JSON.stringify(recordData));
 
-    const res = await fetch(SHEET_URL, {
-      method: "POST",
-      mode: "no-cors",
-      body: formData
-    });
-
-    alert("✅ Sent! Check your Google Sheet in 5 seconds.");
+    await fetch(SHEET_URL, { method: "POST", mode: "no-cors", body: formData });
+    alert("✅ Data sent! Check Google Sheet in a few seconds.");
   } catch (err) {
     alert("❌ Error: " + err.message);
   }
 }
 </script>
-
 
 
 
