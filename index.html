@@ -6437,7 +6437,23 @@ async function saveToSheet(){
 
 
 
+  <button onclick="saveToSheet()">Send test</button>
 
+<script>
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbxgIZH67EMQ3Q6pWfOXQVOBwVd8Sy1isvLzdBrciq2wWSe4O-cydxVyLQbNpVbC1_6tOQ/exec";
+
+async function saveToSheet(){
+  const payload = { TestHeader: "HelloWorld" };
+  const body = new URLSearchParams({ data: JSON.stringify(payload) });
+  await fetch(SHEET_URL, {
+    method: "POST",
+    headers: { "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
+    mode: "no-cors",
+    body
+  });
+  alert("sent");
+}
+</script>
 
 
 
@@ -6460,6 +6476,7 @@ async function saveToSheet(){
 
 </body>
 </html>
+
 
 
 
