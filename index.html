@@ -6407,7 +6407,17 @@ function generateTable(){
 }
 
 async function saveToSheet(){
-  if (!recordData.Name) return alert("Please fill Name and Preview first.");
+  const table = document.querySelector("#resultsPreview table");
+  if (!table) return alert("Preview first.");
+
+  // Build data directly from the table (Field → Value)
+  const rows = [...table.querySelectorAll("tr")].slice(1); // skip header row
+  const recordData = {};
+  rows.forEach(row=>{
+    const cells = row.querySelectorAll("td");
+    recordData[cells[0].textContent.trim()] = cells[1].textContent.trim();
+  });
+
   try {
     const body = new URLSearchParams({ data: JSON.stringify(recordData) });
     await fetch(SHEET_URL, {
@@ -6417,10 +6427,11 @@ async function saveToSheet(){
       body
     });
     alert("✅ Sent. Wait a few seconds, then refresh your sheet.");
-  } catch (err) {
+  } catch(err){
     alert("❌ Error: " + err.message);
   }
 }
+
 
 
 </script>
@@ -6449,6 +6460,7 @@ async function saveToSheet(){
 
 </body>
 </html>
+
 
 
 
