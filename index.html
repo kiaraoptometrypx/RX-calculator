@@ -6357,39 +6357,42 @@ function colorizeFCDarker(el){
 <button onclick="saveToSheet()">Save to Google Sheet</button>
 <div id="resultsPreview" style="margin-top:10px"></div>
 
+
 <script>
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbwTWisroz7nXlA-JUmswY7phY31fo2wJGDOopRq5KmDFl3LsbjtDC6CHGW5SYdpzN3_/exec";
-let recordData = {};
-
-function v(id){ return document.getElementById(id)?.value || ""; }
 
 function generateTable(){
-  recordData = {
-    Name:"Jay", WhatsApp:"0123456789", Age:"30",
-    S1_OD:"-1.00", C1_OD:"-0.50", A1_OD:"180",
-    EXTRA_NOTES:"Testing save"
+  const record = {
+    Name:"Jay",
+    Age:"30",
+    Notes:"Final clean test"
   };
-
   let html = "<table border='1' style='border-collapse:collapse'><tr><th>Field</th><th>Value</th></tr>";
-  for (const [key,value] of Object.entries(recordData)){
-    html += `<tr><td>${key}</td><td>${value||"-"}</td></tr>`;
-  }
+  for (const [k,v] of Object.entries(record)) html += `<tr><td>${k}</td><td>${v}</td></tr>`;
   html += "</table>";
   document.getElementById("resultsPreview").innerHTML = html;
 }
 
 async function saveToSheet(){
-  const payload = { Test: "Hello World" };
+  const table = document.querySelector("#resultsPreview table");
+  if(!table){alert("Preview first");return;}
+
+  const rows = [...table.querySelectorAll("tr")].slice(1);
+  const payload = {};
+  for(const r of rows){
+    const t=r.querySelectorAll("td");
+    payload[t[0].textContent.trim()] = t[1].textContent.trim();
+  }
+
   const body = "data=" + encodeURIComponent(JSON.stringify(payload));
-  const res = await fetch(SHEET_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+  const res = await fetch(SHEET_URL,{
+    method:"POST",
+    headers:{ "Content-Type":"application/x-www-form-urlencoded" },
     body
   });
   alert("Sent");
 }
 </script>
-
 
 
 
@@ -6413,6 +6416,7 @@ async function saveToSheet(){
 
 </body>
 </html>
+
 
 
 
