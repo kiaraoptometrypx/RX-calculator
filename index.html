@@ -6408,10 +6408,10 @@ function generateTable(){
 async function saveToSheet(){
   if (!recordData.Name) return alert("Please fill Name and Preview first.");
   try {
-    const formData = new FormData();
-    formData.append("data", JSON.stringify(recordData));
+const formData = new FormData();
+formData.append("data", JSON.stringify(recordData));
+await fetch(SHEET_URL, { method: "POST", mode: "no-cors", body: formData });
 
-    await fetch(SHEET_URL, { method: "POST", mode: "no-cors", body: formData });
     alert("✅ Data sent! Check Google Sheet in a few seconds.");
   } catch (err) {
     alert("❌ Error: " + err.message);
