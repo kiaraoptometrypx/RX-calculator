@@ -669,11 +669,13 @@ function setFontSize(size, btn) {
 </div>
 
 <div class="section" >
+<div style="display:flex; justify-content:space-between; align-items:center; width:95%; margin:0px auto;">
   
-  <span id="toggle-settings-block" style="cursor:pointer; user-select:none; margin-left:20px;">
+  <span id="toggle-settings-block" style="cursor:pointer; user-select:none;">
    ▼ Eye Exam & Algorithm Guide
   </span>
-<div style="height:5px"></div>
+
+</div>
 
 
 
@@ -4951,7 +4953,7 @@ function parseRx(){
 
 </div>
 
-</div>
+
 
 
 
@@ -6362,153 +6364,6 @@ function colorizeFCDarker(el){
 
 
 
-
-
-
-
-<button id="btnSave">Save (Airtable)</button>
-<div id="saveStatus" style="font-size:12px; margin-top:6px;"></div>
-
-<script defer>
-const WEBHOOK_URL = "https://hooks.airtable.com/workflows/v1/genericWebhook/appyw1TCMIcIbhG4c/wfl4fowN1Eat9axD4/wtrBKF4XJ8nk1WHYs";
-
-const getEl = id => document.getElementById(id);
-const getVal = id => {
-  const el = getEl(id);
-  if (!el) return "";
-  if (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT") return el.value ?? "";
-  return (el.textContent || "").trim();
-};
-const getNumOrNull = id => {
-  const s = (getEl(id)?.value ?? "").trim();
-  if (s === "") return null;
-  const n = Number(s);
-  return Number.isFinite(n) ? n : null;
-};
-const getNotes = () => {
-  const els = Array.from(document.querySelectorAll("#extra-notes"));
-  const vis = els.find(e => e.offsetParent !== null);
-  return (vis || els[0] || { value:"" }).value || "";
-};
-
-async function saveAirtable(){
-  const status = getEl("saveStatus");
-  status.textContent = "Saving…";
-  const payload = {
-    Timestamp: new Date().toISOString(),
-    nameInput:   getVal("nameInput"),
-    contactInput:getVal("contactInput"),
-    ageInput:    getNumOrNull("ageInput"),
-    "current-wear-glasses":  !!getEl("current-wear-glasses")?.checked,
-    "current-wear-contacts": !!getEl("current-wear-contacts")?.checked,
-    s1_od:getVal("s1_od"), c1_od:getVal("c1_od"), a1_od:getVal("a1_od"),
-    s1_os:getVal("s1_os"), c1_os:getVal("c1_os"), a1_os:getVal("a1_os"),
-    "dc-sph-ou-manual-notes": getVal("dc-sph-ou-manual-notes"),
-    "c2_ou_manual_notes":     getVal("c2_ou_manual_notes"),
-    "a2_ou_manual_notes":     getVal("a2_ou_manual_notes"),
-    "manual-sph-ou-od":  getVal("manual-sph-ou-od"),
-    "manual-cyl-ou-od":  getVal("manual-cyl-ou-od"),
-    "manual-axis-ou-od": getVal("manual-axis-ou-od"),
-    "manual-dc-ou-od":   getVal("manual-dc-ou-od"),
-    "manual-sph-ou-os":  getVal("manual-sph-ou-os"),
-    "manual-cyl-ou-os":  getVal("manual-cyl-ou-os"),
-    "manual-axis-ou-os": getVal("manual-axis-ou-os"),
-    "manual-dc-ou-os":   getVal("manual-dc-ou-os"),
-    "dc-sph-ou": getVal("dc-sph-ou"),
-    "c2_ou":     getVal("c2_ou"),
-    "a2_ou":     getVal("a2_ou"),
-    "res-sph-ou-re": getVal("res-sph-ou-re"),
-    "res-cyl-ou-re": getVal("res-cyl-ou-re"),
-    "res-axis-ou-re":getVal("res-axis-ou-re"),
-    "res-dc-ou-re":  getVal("res-dc-ou-re"),
-    "res-sph-ou-le": getVal("res-sph-ou-le"),
-    "res-cyl-ou-le": getVal("res-cyl-ou-le"),
-    "res-axis-ou-le":getVal("res-axis-ou-le"),
-    "res-dc-ou-le":  getVal("res-dc-ou-le"),
-    "extra-notes": getNotes()
-  };
-
-  try{
-    const r = await fetch(WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    const text = await r.text(); // useful if non-200
-    if (!r.ok) throw new Error(`HTTP ${r.status} ${text}`);
-    status.textContent = "Saved ✅";
-  }catch(e){
-    console.error(e);
-    status.textContent = "Save error ❌ " + e.message;
-  }
-}
-
-// ensure it’s callable
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("btnSave").addEventListener("click", saveAirtable);
-  // also expose to console:
-  window.saveAirtable = saveAirtable;
-});
-</script>
-
-
-
-
-
-
-
-
-
-
-<!-- Minimal webhook test -->
-<div style="padding:10px;border:1px solid #ccc;max-width:520px">
-  <button id="btnSave">Save (Airtable Webhook)</button>
-  <div id="saveStatus" style="margin-top:8px;font:12px system-ui"></div>
-  <pre id="saveLog" style="margin-top:8px;background:#f7f7f7;padding:8px;max-height:200px;overflow:auto"></pre>
-</div>
-
-<script defer>
-const WEBHOOK_URL = "https://hooks.airtable.com/workflows/v1/genericWebhook/appyw1TCMIcIbhG4c/wfl4fowN1Eat9axD4/wtrBKF4XJ8nk1WHYs";
-
-const S = id => document.getElementById(id);
-function log(msg){ S("saveLog").textContent += msg + "\n"; }
-
-async function saveAirtable(){
-  S("saveStatus").textContent = "Saving…";
-  log("click fired; sending fetch…");
-
-  const payload = {
-    Timestamp: new Date().toISOString(),
-    nameInput: "Test Name",
-    contactInput: "60123456789",
-    ageInput: 30,
-    "current-wear-glasses": true,
-    s1_od: "+0.00"
-  };
-
-  try {
-    const r = await fetch(WEBHOOK_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-    const txt = await r.text();
-    log("response status: " + r.status);
-    log("response body: " + txt);
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    S("saveStatus").textContent = "Saved ✅";
-  } catch (e) {
-    console.error(e);
-    S("saveStatus").textContent = "Save error ❌ " + e.message;
-    log("error: " + e.message);
-  }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  S("btnSave").addEventListener("click", saveAirtable);
-  log("DOMContentLoaded: handler attached");
-});
-</script>
 
 
 
