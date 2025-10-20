@@ -6379,31 +6379,14 @@ function generateTable(){
 }
 
 async function saveToSheet(){
-  const table = document.querySelector("#resultsPreview table");
-  if (!table){ alert("Preview first."); return; }
-
-  // Build payload from table
-  const rows = [...table.querySelectorAll("tr")].slice(1);
-  const payload = {};
-  for (const r of rows){
-    const tds = r.querySelectorAll("td");
-    if (tds.length >= 2){
-      const k = (tds[0].textContent || "").trim();
-      const v = (tds[1].textContent || "").trim() || "-";
-      if (k) payload[k] = v;
-    }
-  }
-
-  // Send as proper POST body (no FormData)
+  const payload = { Test: "Hello World" };
   const body = "data=" + encodeURIComponent(JSON.stringify(payload));
-
-  await fetch(SHEET_URL, {
+  const res = await fetch(SHEET_URL, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
-    body: body
+    body
   });
-
-  alert("✅ Sent. Check Google Sheet.");
+  alert("Sent");
 }
 </script>
 
@@ -6430,6 +6413,7 @@ async function saveToSheet(){
 
 </body>
 </html>
+
 
 
 
