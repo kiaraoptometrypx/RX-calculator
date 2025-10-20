@@ -4956,7 +4956,17 @@ function parseRx(){
 
 
 
-<div class="section"><div class="pane"><button onclick="saveToSheet()">Save to Google Sheet</button>
+<div class="section"><div class="pane">
+
+
+
+
+<button onclick="saveToAirtable()">Save to Airtable</button>
+
+
+
+
+
 </div></div>
 
 
@@ -6361,8 +6371,11 @@ function colorizeFCDarker(el){
 
 
 
+
+
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxFcR4m3V3sGP2u-GmoieNE_pSOLMwm9XSNu8lIxvNF2iMHehflDuhVmJzCmJ2dfaMP/exec";
+const AIR_URL = "https://api.airtable.com/v0/appd2026M7bPyNbVS/Patient%20Exam"; // or .../tbljHTV5uiW9wsMFo
+const AIR_TOKEN = "YOUR_PERSONAL_ACCESS_TOKEN"; // keep private if possible
 
 function v(id){
   const el = document.getElementById(id);
@@ -6377,77 +6390,89 @@ function wearType(){
   if (c && c.checked) return "Contacts";
   return "";
 }
-function notesVisible(){
-  const els = Array.from(document.querySelectorAll("#extra-notes"));
-  const vis = els.find(e => e.offsetParent !== null);
-  return (vis || els[0] || { value: "" }).value || "";
-}
 
-async function saveToSheet(){
-  const row = [
-    new Date().toISOString(),            // 1 Timestamp
-    v("nameInput"),                      // 2 Name
-    v("contactInput"),                   // 3 WhatsApp
-    v("ageInput"),                       // 4 Age
-    wearType(),                          // 5 Current Wear
+async function saveToAirtable(){
+  const fields = {
+    Timestamp: new Date().toISOString(),
+    Name: v("nameInput"),
+    WhatsApp: v("contactInput"),
+    Age: v("ageInput"),
+    CurrentWear: wearType(),
 
     // Current RX
-    v("s1_od"), v("c1_od"), v("a1_od"),  // 6–8 OD
-    v("s1_os"), v("c1_os"), v("a1_os"),  // 9–11 OS
+    CurrSph_OD: v("s1_od"), CurrCyl_OD: v("c1_od"), CurrAxis_OD: v("a1_od"),
+    CurrSph_OS: v("s1_os"), CurrCyl_OS: v("c1_os"), CurrAxis_OS: v("a1_os"),
 
     // Manual Notes (OU)
-    v("dc-sph-ou-manual-notes"),         // 12
-    v("c2_ou_manual_notes"),             // 13
-    v("a2_ou_manual_notes"),             // 14
+    ManualNotes_Sph:  v("dc-sph-ou-manual-notes"),
+    ManualNotes_Cyl:  v("c2_ou_manual_notes"),
+    ManualNotes_Axis: v("a2_ou_manual_notes"),
 
     // Manual Final RX
-    v("manual-sph-ou-od"),               // 15
-    v("manual-cyl-ou-od"),               // 16
-    v("manual-axis-ou-od"),              // 17
-    v("manual-dc-ou-od"),                // 18
-    v("manual-sph-ou-os"),               // 19
-    v("manual-cyl-ou-os"),               // 20
-    v("manual-axis-ou-os"),              // 21
-    v("manual-dc-ou-os"),                // 22
+    FinalMan_Sph_OD:  v("manual-sph-ou-od"),
+    FinalMan_Cyl_OD:  v("manual-cyl-ou-od"),
+    FinalMan_Axis_OD: v("manual-axis-ou-od"),
+    FinalMan_DC_OD:   v("manual-dc-ou-od"),
+    FinalMan_Sph_OS:  v("manual-sph-ou-os"),
+    FinalMan_Cyl_OS:  v("manual-cyl-ou-os"),
+    FinalMan_Axis_OS: v("manual-axis-ou-os"),
+    FinalMan_DC_OS:   v("manual-dc-ou-os"),
 
-    // Comfy – Adjusted FC/DC (OU)
-    v("dc-sph-ou"),                      // 23
-    v("c2_ou"),                          // 24
-    v("a2_ou"),                          // 25
+    // Comfy Adjusted (OU)
+    Adj_Sph_OU:  v("dc-sph-ou"),
+    Adj_Cyl_OU:  v("c2_ou"),
+    Adj_Axis_OU: v("a2_ou"),
 
     // Comfy Final (Results)
-    v("res-sph-ou-re"),                  // 26
-    v("res-cyl-ou-re"),                  // 27
-    v("res-axis-ou-re"),                 // 28
-    v("res-dc-ou-re"),                   // 29
-    v("res-sph-ou-le"),                  // 30
-    v("res-cyl-ou-le"),                  // 31
-    v("res-axis-ou-le"),                 // 32
-    v("res-dc-ou-le"),                   // 33
+    Res_Sph_RE:  v("res-sph-ou-re"),
+    Res_Cyl_RE:  v("res-cyl-ou-re"),
+    Res_Axis_RE: v("res-axis-ou-re"),
+    Res_DC_RE:   v("res-dc-ou-re"),
+    Res_Sph_LE:  v("res-sph-ou-le"),
+    Res_Cyl_LE:  v("res-cyl-ou-le"),
+    Res_Axis_LE: v("res-axis-ou-le"),
+    Res_DC_LE:   v("res-dc-ou-le"),
 
-    // Notes
-    notesVisible()                       // 34
-  ];
+    ExtraNotes:  (document.querySelector("#extra-notes")?.value || "")
+  };
 
-  try{
-    const r = await fetch(WEB_APP_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(row)
-    });
-    const txt = await r.text();
-    alert(r.ok ? "Saved ✅" : ("Save failed ❌: " + txt));
-  }catch(err){
-    alert("Save error ❌: " + err.message);
-  }
+  const res = await fetch(AIR_URL, {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + AIR_TOKEN,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ fields })
+  });
+  const out = await res.json();
+  if (!res.ok) throw new Error(JSON.stringify(out));
+  alert("Saved to Airtable ✅ (id: " + out.id + ")");
 }
 </script>
 
 
+<script>
+async function loadLatestByWhatsApp(contact){
+  const url = new URL(AIR_URL);
+  url.searchParams.set("filterByFormula", `{WhatsApp}='${contact}'`);
+  url.searchParams.set("maxRecords", "1");
+  url.searchParams.set("pageSize", "1");
+  url.searchParams.append("sort[0][field]", "Timestamp");
+  url.searchParams.append("sort[0][direction]", "desc");
 
+  const res = await fetch(url, { headers: { "Authorization": "Bearer " + AIR_TOKEN }});
+  const data = await res.json();
+  const rec = data.records?.[0]?.fields;
+  if (!rec) { alert("No record"); return; }
 
-
-
+  // Example: fill a few inputs (repeat for all you need)
+  document.getElementById("nameInput").value = rec.Name || "";
+  document.getElementById("contactInput").value = rec.WhatsApp || "";
+  document.getElementById("ageInput").value = rec.Age || "";
+  document.getElementById("s1_od").value = rec.CurrSph_OD || "";
+  // ...
+}
+</script>
 
 
 
