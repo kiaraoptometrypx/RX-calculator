@@ -6359,6 +6359,13 @@ function colorizeFCDarker(el){
 
 
 
+
+
+
+
+
+
+
 <button id="btnSave">Save (Airtable)</button>
 <div id="saveStatus" style="font-size:12px; margin-top:6px;"></div>
 
@@ -6443,6 +6450,68 @@ document.addEventListener("DOMContentLoaded", () => {
   window.saveAirtable = saveAirtable;
 });
 </script>
+
+
+
+
+
+
+
+
+
+
+<!-- Minimal webhook test -->
+<div style="padding:10px;border:1px solid #ccc;max-width:520px">
+  <button id="btnSave">Save (Airtable Webhook)</button>
+  <div id="saveStatus" style="margin-top:8px;font:12px system-ui"></div>
+  <pre id="saveLog" style="margin-top:8px;background:#f7f7f7;padding:8px;max-height:200px;overflow:auto"></pre>
+</div>
+
+<script defer>
+const WEBHOOK_URL = "https://hooks.airtable.com/workflows/v1/genericWebhook/appyw1TCMIcIbhG4c/wfl4fowN1Eat9axD4/wtrBKF4XJ8nk1WHYs";
+
+const S = id => document.getElementById(id);
+function log(msg){ S("saveLog").textContent += msg + "\n"; }
+
+async function saveAirtable(){
+  S("saveStatus").textContent = "Saving…";
+  log("click fired; sending fetch…");
+
+  const payload = {
+    Timestamp: new Date().toISOString(),
+    nameInput: "Test Name",
+    contactInput: "60123456789",
+    ageInput: 30,
+    "current-wear-glasses": true,
+    s1_od: "+0.00"
+  };
+
+  try {
+    const r = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const txt = await r.text();
+    log("response status: " + r.status);
+    log("response body: " + txt);
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    S("saveStatus").textContent = "Saved ✅";
+  } catch (e) {
+    console.error(e);
+    S("saveStatus").textContent = "Save error ❌ " + e.message;
+    log("error: " + e.message);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  S("btnSave").addEventListener("click", saveAirtable);
+  log("DOMContentLoaded: handler attached");
+});
+</script>
+
+
+
 
 
 
