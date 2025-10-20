@@ -6405,36 +6405,53 @@ function generateTable(){
   html += "</table>";
   document.getElementById("resultsPreview").innerHTML = html;
 }
+</script>
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+<script>
 async function saveToSheet(){
   const table = document.querySelector("#resultsPreview table");
-  if (!table) return alert("Preview first.");
+  if (!table){ alert("Preview first."); return; }
 
-  // Build data directly from the table (Field → Value)
+  // Build payload directly from the table
   const rows = [...table.querySelectorAll("tr")].slice(1); // skip header row
-  const recordData = {};
-  rows.forEach(row=>{
-    const cells = row.querySelectorAll("td");
-    recordData[cells[0].textContent.trim()] = cells[1].textContent.trim();
+  const payload = {};
+  for (const r of rows){
+    const tds = r.querySelectorAll("td");
+    if (tds.length >= 2){
+      const k = (tds[0].textContent || "").trim();
+      const v = (tds[1].textContent || "").trim() || "-";
+      if (k) payload[k] = v;
+    }
+  }
+
+  // Send as form-urlencoded (what your working test uses)
+  const body = new URLSearchParams({ data: JSON.stringify(payload) });
+
+  await fetch(SHEET_URL, {
+    method: "POST",
+    headers: { "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
+    mode: "cors",
+    body
   });
 
-  try {
-    const body = new URLSearchParams({ data: JSON.stringify(recordData) });
-    await fetch(SHEET_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
-      body
-    });
-    alert("✅ Sent. Wait a few seconds, then refresh your sheet.");
-  } catch(err){
-    alert("❌ Error: " + err.message);
-  }
+  alert("Sent.");
 }
-
-
-
 </script>
+
 
 
 
@@ -6460,6 +6477,7 @@ async function saveToSheet(){
 
 </body>
 </html>
+
 
 
 
