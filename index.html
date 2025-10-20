@@ -6409,6 +6409,8 @@ async function saveToSheet(){
   try {
     const res = await fetch(SHEET_URL, {
       method: "POST",
+		  mode: "no-cors",
+
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
@@ -6444,6 +6446,7 @@ async function saveToSheet(){
 
 </body>
 </html>
+
 
 
 
