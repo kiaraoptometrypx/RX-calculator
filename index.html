@@ -6380,26 +6380,29 @@ function generateTable(){
 
 async function saveToSheet(){
   const table = document.querySelector("#resultsPreview table");
-  if(!table){ alert("Preview first."); return; }
+  if (!table){ alert("Preview first."); return; }
 
+  // Build payload from table
   const rows = [...table.querySelectorAll("tr")].slice(1);
   const payload = {};
-  for(const r of rows){
+  for (const r of rows){
     const tds = r.querySelectorAll("td");
-    if(tds.length>=2){
-      const k = tds[0].textContent.trim();
-      const v = tds[1].textContent.trim() || "-";
-      if(k) payload[k] = v;
+    if (tds.length >= 2){
+      const k = (tds[0].textContent || "").trim();
+      const v = (tds[1].textContent || "").trim() || "-";
+      if (k) payload[k] = v;
     }
   }
 
-  const body = new URLSearchParams({ data: JSON.stringify(payload) });
-  await fetch(SHEET_URL,{
-    method:"POST",
-    mode:"no-cors",
-    headers:{ "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
-    body
+  // Send as proper POST body (no FormData)
+  const body = "data=" + encodeURIComponent(JSON.stringify(payload));
+
+  await fetch(SHEET_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8" },
+    body: body
   });
+
   alert("✅ Sent. Check Google Sheet.");
 }
 </script>
@@ -6427,6 +6430,7 @@ async function saveToSheet(){
 
 </body>
 </html>
+
 
 
 
