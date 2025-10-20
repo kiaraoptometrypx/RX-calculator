@@ -6362,23 +6362,22 @@ function colorizeFCDarker(el){
 
 
 <script>
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzR-LuWhrpkNKguYTvFV9pBSfhqY3kr7rilOEoRPNoYadS8d4xx23g8gdKxgyh0p94/exec"; // your Apps Script web app URL
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxFcR4m3V3sGP2u-GmoieNE_pSOLMwm9XSNu8lIxvNF2iMHehflDuhVmJzCmJ2dfaMP/exec";
 
-function val(id){
+function v(id){
   const el = document.getElementById(id);
   if(!el) return "";
   if (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT") return el.value ?? "";
   return el.textContent?.trim() ?? "";
 }
-function radioWear(){
+function wearType(){
   const g = document.getElementById("current-wear-glasses");
   const c = document.getElementById("current-wear-contacts");
   if (g && g.checked) return "Glasses";
   if (c && c.checked) return "Contacts";
   return "";
 }
-function extraNotes(){
-  // handle duplicate id="extra-notes" by choosing the visible one
+function notesVisible(){
   const els = Array.from(document.querySelectorAll("#extra-notes"));
   const vis = els.find(e => e.offsetParent !== null);
   return (vis || els[0] || { value: "" }).value || "";
@@ -6386,48 +6385,48 @@ function extraNotes(){
 
 async function saveToSheet(){
   const row = [
-    new Date().toISOString(),                 // 1 Timestamp
-    val("nameInput"),                         // 2 Name
-    val("contactInput"),                      // 3 WhatsApp
-    val("ageInput"),                          // 4 Age
-    radioWear(),                              // 5 Current Wear
+    new Date().toISOString(),            // 1 Timestamp
+    v("nameInput"),                      // 2 Name
+    v("contactInput"),                   // 3 WhatsApp
+    v("ageInput"),                       // 4 Age
+    wearType(),                          // 5 Current Wear
 
-    // Current RX (OD / OS)
-    val("s1_od"), val("c1_od"), val("a1_od"), // 6–8
-    val("s1_os"), val("c1_os"), val("a1_os"), // 9–11
+    // Current RX
+    v("s1_od"), v("c1_od"), v("a1_od"),  // 6–8 OD
+    v("s1_os"), v("c1_os"), v("a1_os"),  // 9–11 OS
 
     // Manual Notes (OU)
-    val("dc-sph-ou-manual-notes"),            // 12
-    val("c2_ou_manual_notes"),                // 13
-    val("a2_ou_manual_notes"),                // 14
+    v("dc-sph-ou-manual-notes"),         // 12
+    v("c2_ou_manual_notes"),             // 13
+    v("a2_ou_manual_notes"),             // 14
 
     // Manual Final RX
-    val("manual-sph-ou-od"),                  // 15
-    val("manual-cyl-ou-od"),                  // 16
-    val("manual-axis-ou-od"),                 // 17
-    val("manual-dc-ou-od"),                   // 18
-    val("manual-sph-ou-os"),                  // 19
-    val("manual-cyl-ou-os"),                  // 20
-    val("manual-axis-ou-os"),                 // 21
-    val("manual-dc-ou-os"),                   // 22
+    v("manual-sph-ou-od"),               // 15
+    v("manual-cyl-ou-od"),               // 16
+    v("manual-axis-ou-od"),              // 17
+    v("manual-dc-ou-od"),                // 18
+    v("manual-sph-ou-os"),               // 19
+    v("manual-cyl-ou-os"),               // 20
+    v("manual-axis-ou-os"),              // 21
+    v("manual-dc-ou-os"),                // 22
 
     // Comfy – Adjusted FC/DC (OU)
-    val("dc-sph-ou"),                         // 23
-    val("c2_ou"),                             // 24
-    val("a2_ou"),                             // 25
+    v("dc-sph-ou"),                      // 23
+    v("c2_ou"),                          // 24
+    v("a2_ou"),                          // 25
 
     // Comfy Final (Results)
-    val("res-sph-ou-re"),                     // 26
-    val("res-cyl-ou-re"),                     // 27
-    val("res-axis-ou-re"),                    // 28
-    val("res-dc-ou-re"),                      // 29
-    val("res-sph-ou-le"),                     // 30
-    val("res-cyl-ou-le"),                     // 31
-    val("res-axis-ou-le"),                    // 32
-    val("res-dc-ou-le"),                      // 33
+    v("res-sph-ou-re"),                  // 26
+    v("res-cyl-ou-re"),                  // 27
+    v("res-axis-ou-re"),                 // 28
+    v("res-dc-ou-re"),                   // 29
+    v("res-sph-ou-le"),                  // 30
+    v("res-cyl-ou-le"),                  // 31
+    v("res-axis-ou-le"),                 // 32
+    v("res-dc-ou-le"),                   // 33
 
     // Notes
-    extraNotes()                              // 34 Extra Notes
+    notesVisible()                       // 34
   ];
 
   try{
