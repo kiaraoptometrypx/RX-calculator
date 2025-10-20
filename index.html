@@ -6354,6 +6354,7 @@ function colorizeFCDarker(el){
 
 <button onclick="generateTable()">Preview Results</button>
 <button onclick="saveToSheet()">Save to Google Sheet</button>
+
 <div id="resultsPreview"></div>
 
 <script>
@@ -6408,15 +6409,19 @@ function generateTable(){
 async function saveToSheet(){
   if (!recordData.Name) return alert("Please fill Name and Preview first.");
   try {
-const formData = new FormData();
-formData.append("data", JSON.stringify(recordData));
-await fetch(SHEET_URL, { method: "POST", mode: "no-cors", body: formData });
-
+    const body = new URLSearchParams({ data: JSON.stringify(recordData) });
+    await fetch(SHEET_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
+      body
+    });
     alert("✅ Data sent! Check Google Sheet in a few seconds.");
   } catch (err) {
     alert("❌ Error: " + err.message);
   }
 }
+
 </script>
 
 
@@ -6443,7 +6448,6 @@ await fetch(SHEET_URL, { method: "POST", mode: "no-cors", body: formData });
 
 </body>
 </html>
-
 
 
 
