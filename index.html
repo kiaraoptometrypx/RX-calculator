@@ -6416,11 +6416,12 @@ async function saveToSheet(){
       headers: { "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
       body
     });
-    alert("✅ Data sent! Check Google Sheet in a few seconds.");
+    alert("✅ Sent. Wait a few seconds, then refresh your sheet.");
   } catch (err) {
     alert("❌ Error: " + err.message);
   }
 }
+
 
 </script>
 
@@ -6448,6 +6449,7 @@ async function saveToSheet(){
 
 </body>
 </html>
+
 
 
 
