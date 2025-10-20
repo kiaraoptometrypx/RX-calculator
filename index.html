@@ -6370,18 +6370,17 @@ function colorizeFCDarker(el){
 </script>
 
 
-
-
-
 <script>
-const AIR_URL = "https://api.airtable.com/v0/appd2026M7bPyNbVS/tbljHTV5uiW9wsMFo";
-const AIR_TOKEN = "patQr6jFxsptmvrlJ"
+/* ========= CONFIG ========= */
+const AIR_URL   = "https://api.airtable.com/v0/appd2026M7bPyNbVS/tbljHTV5uiW9wsMFo"; 
+const AIR_TOKEN = "pata0isnOxswnSoHy.d17c8c9c71e02f7787e1559bbc00d7188d4f58ae3d988a300f1e7b2a9a41ed36";
 
+/* ========= HELPERS ========= */
 function v(id){
   const el = document.getElementById(id);
-  if(!el) return "";
+  if (!el) return "";
   if (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT") return el.value ?? "";
-  return el.textContent?.trim() ?? "";
+  return (el.textContent || "").trim();
 }
 function wearType(){
   const g = document.getElementById("current-wear-glasses");
@@ -6390,7 +6389,28 @@ function wearType(){
   if (c && c.checked) return "Contacts";
   return "";
 }
+function notesVisible(){
+  const els = Array.from(document.querySelectorAll("#extra-notes"));
+  const vis = els.find(e => e.offsetParent !== null);
+  return (vis || els[0] || { value:"" }).value || "";
+}
+async function airFetch(url, opts={}){
+  const res = await fetch(url, {
+    ...opts,
+    headers: {
+      "Authorization": "Bearer " + AIR_TOKEN,
+      ...(opts.headers || {})
+    }
+  });
+  const json = await res.json().catch(()=> ({}));
+  if (!res.ok) {
+    const msg = json?.error?.message || JSON.stringify(json) || ("HTTP " + res.status);
+    throw new Error(msg);
+  }
+  return json;
+}
 
+/* ========= SAVE ========= */
 async function saveToAirtable(){
   const fields = {
     Timestamp: new Date().toISOString(),
@@ -6433,49 +6453,62 @@ async function saveToAirtable(){
     Res_Axis_LE: v("res-axis-ou-le"),
     Res_DC_LE:   v("res-dc-ou-le"),
 
-    ExtraNotes:  (document.querySelector("#extra-notes")?.value || "")
+    ExtraNotes: notesVisible()
   };
 
-  const res = await fetch(AIR_URL, {
-    method: "POST",
-    headers: {
-      "Authorization": "Bearer " + AIR_TOKEN,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ fields })
-  });
-  const out = await res.json();
-  if (!res.ok) throw new Error(JSON.stringify(out));
-  alert("Saved to Airtable ✅ (id: " + out.id + ")");
+  try{
+    const out = await airFetch(AIR_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fields })
+    });
+    alert("Saved ✅  id: " + out.id);
+    return out.id;
+  }catch(err){
+    alert("Save failed ❌ " + err.message);
+  }
 }
-</script>
 
-
-<script>
+/* ========= LOAD (latest by WhatsApp) ========= */
 async function loadLatestByWhatsApp(contact){
+  if (!contact) { alert("Enter WhatsApp to load"); return; }
+  // escape single quotes in formula
+  const safe = String(contact).replace(/'/g, "\\'");
   const url = new URL(AIR_URL);
-  url.searchParams.set("filterByFormula", `{WhatsApp}='${contact}'`);
+  url.searchParams.set("filterByFormula", `{WhatsApp}='${safe}'`);
   url.searchParams.set("maxRecords", "1");
-  url.searchParams.set("pageSize", "1");
   url.searchParams.append("sort[0][field]", "Timestamp");
   url.searchParams.append("sort[0][direction]", "desc");
 
-  const res = await fetch(url, { headers: { "Authorization": "Bearer " + AIR_TOKEN }});
-  const data = await res.json();
-  const rec = data.records?.[0]?.fields;
-  if (!rec) { alert("No record"); return; }
+  try{
+    const data = await airFetch(url);
+    const rec = data.records?.[0]?.fields;
+    if (!rec) { alert("No record"); return; }
 
-  // Example: fill a few inputs (repeat for all you need)
-  document.getElementById("nameInput").value = rec.Name || "";
-  document.getElementById("contactInput").value = rec.WhatsApp || "";
-  document.getElementById("ageInput").value = rec.Age || "";
-  document.getElementById("s1_od").value = rec.CurrSph_OD || "";
-  // ...
+    // Fill a subset (expand as needed)
+    document.getElementById("nameInput").value  = rec.Name || "";
+    document.getElementById("contactInput").value = rec.WhatsApp || "";
+    document.getElementById("ageInput").value   = rec.Age || "";
+
+    // Current RX
+    document.getElementById("s1_od").value = rec.CurrSph_OD || "";
+    document.getElementById("c1_od").value = rec.CurrCyl_OD || "";
+    document.getElementById("a1_od").value = rec.CurrAxis_OD || "";
+    document.getElementById("s1_os").value = rec.CurrSph_OS || "";
+    document.getElementById("c1_os").value = rec.CurrCyl_OS || "";
+    document.getElementById("a1_os").value = rec.CurrAxis_OS || "";
+
+    // add more assigns if you want them prefilled as well...
+    alert("Loaded latest ✅");
+  }catch(err){
+    alert("Load failed ❌ " + err.message);
+  }
 }
+
+/* expose to buttons if needed */
+window.saveToAirtable = saveToAirtable;
+window.loadLatestByWhatsApp = loadLatestByWhatsApp;
 </script>
-
-
-
 
 
 
