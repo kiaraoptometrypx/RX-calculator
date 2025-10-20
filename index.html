@@ -6398,59 +6398,41 @@ function generateTable(){
     EXTRA_NOTES: v("extra-notes")
   };
 
-  let html = "<table border='1' style='border-collapse:collapse;'><tr><th>Field</th><th>Value</th></tr>";
+  let html = "<table border='1' style='border-collapse:collapse'><tr><th>Field</th><th>Value</th></tr>";
   for (const [key, value] of Object.entries(recordData)) {
     html += `<tr><td>${key}</td><td>${value || "-"}</td></tr>`;
   }
   html += "</table>";
   document.getElementById("resultsPreview").innerHTML = html;
 }
-</script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-	
-<script>
 async function saveToSheet(){
   const table = document.querySelector("#resultsPreview table");
   if (!table){ alert("Preview first."); return; }
 
-  // Build payload from preview table (left = header, right = value)
+  // Parse left = header, right = value
   const rows = [...table.querySelectorAll("tr")].slice(1);
   const payload = {};
   for (const r of rows){
     const tds = r.querySelectorAll("td");
     if (tds.length >= 2){
-      const k = (tds[0].textContent || "").trim();
-      const v = (tds[1].textContent || "").trim();
-      if (k) payload[k] = v === "" ? "-" : v;
+      const header = (tds[0].textContent || "").trim();
+      const value  = (tds[1].textContent || "").trim();
+      if (header) payload[header] = value === "" ? "-" : value;
     }
   }
 
-  // Send EXACTLY like your working test page
+  // Send as URL encoded text
   const body = new URLSearchParams({ data: JSON.stringify(payload) });
-
   await fetch(SHEET_URL, {
     method: "POST",
     mode: "no-cors",
     headers: { "Content-Type":"application/x-www-form-urlencoded;charset=UTF-8" },
     body
   });
-
-  alert("Sent.");
+  alert("✅ Sent.");
 }
-</script>
+</script>v
 
 
 
@@ -6478,7 +6460,6 @@ async function saveToSheet(){
 
 </body>
 </html>
-
 
 
 
