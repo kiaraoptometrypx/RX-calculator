@@ -4953,21 +4953,11 @@ function parseRx(){
 
 </div>
 
+</div>
 
 
+<button onclick="saveAirtable()">Save (Airtable)</button>
 
-<div class="section"><div class="pane">
-
-
-
-
-<button onclick="saveToAirtable()">Save to Airtable</button>
-
-
-
-
-
-</div></div>
 
 
 
@@ -6370,145 +6360,99 @@ function colorizeFCDarker(el){
 </script>
 
 
-<script>
-/* ========= CONFIG ========= */
-const AIR_URL   = "https://api.airtable.com/v0/appd2026M7bPyNbVS/tbljHTV5uiW9wsMFo"; 
-const AIR_TOKEN = "pata0isnOxswnSoHy.d17c8c9c71e02f7787e1559bbc00d7188d4f58ae3d988a300f1e7b2a9a41ed36";
 
-/* ========= HELPERS ========= */
-function v(id){
-  const el = document.getElementById(id);
+
+
+<script>
+const WEBHOOK_URL = "https://hooks.airtable.com/workflows/v1/genericWebhook/appyw1TCMIcIbhG4c/wfl4fowN1Eat9axD4/wtrBKF4XJ8nk1WHYs"; // Automation → “When webhook received”
+
+/* helpers */
+const getEl = id => document.getElementById(id);
+const getVal = id => {
+  const el = getEl(id);
   if (!el) return "";
   if (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT") return el.value ?? "";
   return (el.textContent || "").trim();
-}
-function wearType(){
-  const g = document.getElementById("current-wear-glasses");
-  const c = document.getElementById("current-wear-contacts");
-  if (g && g.checked) return "Glasses";
-  if (c && c.checked) return "Contacts";
-  return "";
-}
-function notesVisible(){
+};
+const getNumOrNull = id => {
+  const s = (getEl(id)?.value ?? "").trim();
+  if (s === "") return null;
+  const n = Number(s);
+  return Number.isFinite(n) ? n : null;
+};
+const getNotes = () => {
   const els = Array.from(document.querySelectorAll("#extra-notes"));
   const vis = els.find(e => e.offsetParent !== null);
   return (vis || els[0] || { value:"" }).value || "";
-}
-async function airFetch(url, opts={}){
-  const res = await fetch(url, {
-    ...opts,
-    headers: {
-      "Authorization": "Bearer " + AIR_TOKEN,
-      ...(opts.headers || {})
-    }
-  });
-  const json = await res.json().catch(()=> ({}));
-  if (!res.ok) {
-    const msg = json?.error?.message || JSON.stringify(json) || ("HTTP " + res.status);
-    throw new Error(msg);
-  }
-  return json;
-}
+};
 
-/* ========= SAVE ========= */
-async function saveToAirtable(){
-  const fields = {
+async function saveAirtable(){
+  const payload = {
     Timestamp: new Date().toISOString(),
-    Name: v("nameInput"),
-    WhatsApp: v("contactInput"),
-    Age: v("ageInput"),
-    CurrentWear: wearType(),
 
-    // Current RX
-    CurrSph_OD: v("s1_od"), CurrCyl_OD: v("c1_od"), CurrAxis_OD: v("a1_od"),
-    CurrSph_OS: v("s1_os"), CurrCyl_OS: v("c1_os"), CurrAxis_OS: v("a1_os"),
+    /* === your IDs, unchanged === */
+    nameInput:   getVal("nameInput"),
+    contactInput:getVal("contactInput"),
+    ageInput:    getNumOrNull("ageInput"),   // number or null
 
-    // Manual Notes (OU)
-    ManualNotes_Sph:  v("dc-sph-ou-manual-notes"),
-    ManualNotes_Cyl:  v("c2_ou_manual_notes"),
-    ManualNotes_Axis: v("a2_ou_manual_notes"),
+    "current-wear-glasses":   !!getEl("current-wear-glasses")?.checked,
+    "current-wear-contacts":  !!getEl("current-wear-contacts")?.checked,
 
-    // Manual Final RX
-    FinalMan_Sph_OD:  v("manual-sph-ou-od"),
-    FinalMan_Cyl_OD:  v("manual-cyl-ou-od"),
-    FinalMan_Axis_OD: v("manual-axis-ou-od"),
-    FinalMan_DC_OD:   v("manual-dc-ou-od"),
-    FinalMan_Sph_OS:  v("manual-sph-ou-os"),
-    FinalMan_Cyl_OS:  v("manual-cyl-ou-os"),
-    FinalMan_Axis_OS: v("manual-axis-ou-os"),
-    FinalMan_DC_OS:   v("manual-dc-ou-os"),
+    s1_od: getVal("s1_od"),
+    c1_od: getVal("c1_od"),
+    a1_od: getVal("a1_od"),
+    s1_os: getVal("s1_os"),
+    c1_os: getVal("c1_os"),
+    a1_os: getVal("a1_os"),
 
-    // Comfy Adjusted (OU)
-    Adj_Sph_OU:  v("dc-sph-ou"),
-    Adj_Cyl_OU:  v("c2_ou"),
-    Adj_Axis_OU: v("a2_ou"),
+    "dc-sph-ou-manual-notes": getVal("dc-sph-ou-manual-notes"),
+    "c2_ou_manual_notes":     getVal("c2_ou_manual_notes"),
+    "a2_ou_manual_notes":     getVal("a2_ou_manual_notes"),
 
-    // Comfy Final (Results)
-    Res_Sph_RE:  v("res-sph-ou-re"),
-    Res_Cyl_RE:  v("res-cyl-ou-re"),
-    Res_Axis_RE: v("res-axis-ou-re"),
-    Res_DC_RE:   v("res-dc-ou-re"),
-    Res_Sph_LE:  v("res-sph-ou-le"),
-    Res_Cyl_LE:  v("res-cyl-ou-le"),
-    Res_Axis_LE: v("res-axis-ou-le"),
-    Res_DC_LE:   v("res-dc-ou-le"),
+    "manual-sph-ou-od":  getVal("manual-sph-ou-od"),
+    "manual-cyl-ou-od":  getVal("manual-cyl-ou-od"),
+    "manual-axis-ou-od": getVal("manual-axis-ou-od"),
+    "manual-dc-ou-od":   getVal("manual-dc-ou-od"),
+    "manual-sph-ou-os":  getVal("manual-sph-ou-os"),
+    "manual-cyl-ou-os":  getVal("manual-cyl-ou-os"),
+    "manual-axis-ou-os": getVal("manual-axis-ou-os"),
+    "manual-dc-ou-os":   getVal("manual-dc-ou-os"),
 
-    ExtraNotes: notesVisible()
+    "dc-sph-ou": getVal("dc-sph-ou"),
+    "c2_ou":     getVal("c2_ou"),
+    "a2_ou":     getVal("a2_ou"),
+
+    "res-sph-ou-re": getVal("res-sph-ou-re"),
+    "res-cyl-ou-re": getVal("res-cyl-ou-re"),
+    "res-axis-ou-re":getVal("res-axis-ou-re"),
+    "res-dc-ou-re":  getVal("res-dc-ou-re"),
+    "res-sph-ou-le": getVal("res-sph-ou-le"),
+    "res-cyl-ou-le": getVal("res-cyl-ou-le"),
+    "res-axis-ou-le":getVal("res-axis-ou-le"),
+    "res-dc-ou-le":  getVal("res-dc-ou-le"),
+
+    "extra-notes": getNotes()
   };
 
   try{
-    const out = await airFetch(AIR_URL, {
+    const r = await fetch(WEBHOOK_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ fields })
+      body: JSON.stringify(payload)
     });
-    alert("Saved ✅  id: " + out.id);
-    return out.id;
-  }catch(err){
-    alert("Save failed ❌ " + err.message);
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    alert("Saved ✅");
+  }catch(e){
+    alert("Save error ❌ " + e.message);
   }
 }
-
-/* ========= LOAD (latest by WhatsApp) ========= */
-async function loadLatestByWhatsApp(contact){
-  if (!contact) { alert("Enter WhatsApp to load"); return; }
-  // escape single quotes in formula
-  const safe = String(contact).replace(/'/g, "\\'");
-  const url = new URL(AIR_URL);
-  url.searchParams.set("filterByFormula", `{WhatsApp}='${safe}'`);
-  url.searchParams.set("maxRecords", "1");
-  url.searchParams.append("sort[0][field]", "Timestamp");
-  url.searchParams.append("sort[0][direction]", "desc");
-
-  try{
-    const data = await airFetch(url);
-    const rec = data.records?.[0]?.fields;
-    if (!rec) { alert("No record"); return; }
-
-    // Fill a subset (expand as needed)
-    document.getElementById("nameInput").value  = rec.Name || "";
-    document.getElementById("contactInput").value = rec.WhatsApp || "";
-    document.getElementById("ageInput").value   = rec.Age || "";
-
-    // Current RX
-    document.getElementById("s1_od").value = rec.CurrSph_OD || "";
-    document.getElementById("c1_od").value = rec.CurrCyl_OD || "";
-    document.getElementById("a1_od").value = rec.CurrAxis_OD || "";
-    document.getElementById("s1_os").value = rec.CurrSph_OS || "";
-    document.getElementById("c1_os").value = rec.CurrCyl_OS || "";
-    document.getElementById("a1_os").value = rec.CurrAxis_OS || "";
-
-    // add more assigns if you want them prefilled as well...
-    alert("Loaded latest ✅");
-  }catch(err){
-    alert("Load failed ❌ " + err.message);
-  }
-}
-
-/* expose to buttons if needed */
-window.saveToAirtable = saveToAirtable;
-window.loadLatestByWhatsApp = loadLatestByWhatsApp;
 </script>
+
+
+
+
+
+
 
 
 
