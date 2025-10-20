@@ -6376,45 +6376,20 @@ async function saveToSheet(){
       document.getElementById("current-wear-contacts")?.checked ? "Contacts" : "",
     s1_od: v("s1_od"), c1_od: v("c1_od"), a1_od: v("a1_od"),
     s1_os: v("s1_os"), c1_os: v("c1_os"), a1_os: v("a1_os"),
-
-    "dc-sph-ou-manual-notes": v("dc-sph-ou-manual-notes"),
-    "c2_ou_manual_notes": v("c2_ou_manual_notes"),
-    "a2_ou_manual_notes": v("a2_ou_manual_notes"),
-
-    "manual-sph-ou-od": v("manual-sph-ou-od"),
-    "manual-cyl-ou-od": v("manual-cyl-ou-od"),
-    "manual-axis-ou-od": v("manual-axis-ou-od"),
-    "manual-dc-ou-od": v("manual-dc-ou-od"),
-    "manual-sph-ou-os": v("manual-sph-ou-os"),
-    "manual-cyl-ou-os": v("manual-cyl-ou-os"),
-    "manual-axis-ou-os": v("manual-axis-ou-os"),
-    "manual-dc-ou-os": v("manual-dc-ou-os"),
-
-    "dc-sph-ou": v("dc-sph-ou"),
-    "c2_ou": v("c2_ou"),
-    "a2_ou": v("a2_ou"),
-
-    "res-sph-ou-re": v("res-sph-ou-re"),
-    "res-cyl-ou-re": v("res-cyl-ou-re"),
-    "res-axis-ou-re": v("res-axis-ou-re"),
-    "res-dc-ou-re": v("res-dc-ou-re"),
-    "res-sph-ou-le": v("res-sph-ou-le"),
-    "res-cyl-ou-le": v("res-cyl-ou-le"),
-    "res-axis-ou-le": v("res-axis-ou-le"),
-    "res-dc-ou-le": v("res-dc-ou-le"),
-
     "extra-notes": v("extra-notes")
   };
 
   try {
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(payload));
+
     const res = await fetch(SHEET_URL, {
       method: "POST",
-		  mode: "no-cors",
-
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      mode: "no-cors",
+      body: formData
     });
-    alert(res.ok ? "✅ Saved to Google Sheet" : "❌ Save failed (" + res.status + ")");
+
+    alert("✅ Sent! Check your Google Sheet in 5 seconds.");
   } catch (err) {
     alert("❌ Error: " + err.message);
   }
@@ -6446,7 +6421,6 @@ async function saveToSheet(){
 
 </body>
 </html>
-
 
 
 
