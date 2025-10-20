@@ -278,7 +278,7 @@ table {
 
 th, td { 
   border:1px solid #999; 
-  padding:5px; 
+  padding:10px 5px 10px 5px; 
   text-align:center; 
   vertical-align: middle;
   white-space: normal;   /* allow line wrapping */
@@ -473,7 +473,7 @@ table input {
   background:#fff;
   border:1px solid var(--line);
   border-radius:10px;
-  padding:5px;
+  padding:10px 5px 10px 5px;
 }
 
   .pane h4{margin:0 0 8px;font-size:10px}
@@ -1202,7 +1202,7 @@ function toggleSection(id) {
   <!-- If you don't actually want per-eye SE shown, you can remove this cell; code guards it. -->
   <td>—</td>
   <td>
-<select id="manual-dc-ou-od" class="dc-select">
+<select id="manual-dc-ou-os" class="dc-select">
   <option value="BAL">BAL</option>
   <option value="R1">R1</option>
   <option value="R2">R2</option>
@@ -4956,7 +4956,8 @@ function parseRx(){
 
 
 
-
+<div class="section"><div class="pane"><button onclick="saveToSheet()">Save to Google Sheet</button>
+</div></div>
 
 
 
@@ -6360,6 +6361,88 @@ function colorizeFCDarker(el){
 
 
 
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwQU2_ZH3sVluG9aX3C7wzD0VqDwqmqR4aELuDBRxLAIoEmCAUINzthwv1XbjCW2U7-/exec"; // your Apps Script web app URL
+
+function val(id){
+  const el = document.getElementById(id);
+  if(!el) return "";
+  if (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.tagName === "SELECT") return el.value ?? "";
+  return el.textContent?.trim() ?? "";
+}
+function radioWear(){
+  const g = document.getElementById("current-wear-glasses");
+  const c = document.getElementById("current-wear-contacts");
+  if (g && g.checked) return "Glasses";
+  if (c && c.checked) return "Contacts";
+  return "";
+}
+function extraNotes(){
+  // handle duplicate id="extra-notes" by choosing the visible one
+  const els = Array.from(document.querySelectorAll("#extra-notes"));
+  const vis = els.find(e => e.offsetParent !== null);
+  return (vis || els[0] || { value: "" }).value || "";
+}
+
+async function saveToSheet(){
+  const row = [
+    new Date().toISOString(),                 // 1 Timestamp
+    val("nameInput"),                         // 2 Name
+    val("contactInput"),                      // 3 WhatsApp
+    val("ageInput"),                          // 4 Age
+    radioWear(),                              // 5 Current Wear
+
+    // Current RX (OD / OS)
+    val("s1_od"), val("c1_od"), val("a1_od"), // 6–8
+    val("s1_os"), val("c1_os"), val("a1_os"), // 9–11
+
+    // Manual Notes (OU)
+    val("dc-sph-ou-manual-notes"),            // 12
+    val("c2_ou_manual_notes"),                // 13
+    val("a2_ou_manual_notes"),                // 14
+
+    // Manual Final RX
+    val("manual-sph-ou-od"),                  // 15
+    val("manual-cyl-ou-od"),                  // 16
+    val("manual-axis-ou-od"),                 // 17
+    val("manual-dc-ou-od"),                   // 18
+    val("manual-sph-ou-os"),                  // 19
+    val("manual-cyl-ou-os"),                  // 20
+    val("manual-axis-ou-os"),                 // 21
+    val("manual-dc-ou-os"),                   // 22
+
+    // Comfy – Adjusted FC/DC (OU)
+    val("dc-sph-ou"),                         // 23
+    val("c2_ou"),                             // 24
+    val("a2_ou"),                             // 25
+
+    // Comfy Final (Results)
+    val("res-sph-ou-re"),                     // 26
+    val("res-cyl-ou-re"),                     // 27
+    val("res-axis-ou-re"),                    // 28
+    val("res-dc-ou-re"),                      // 29
+    val("res-sph-ou-le"),                     // 30
+    val("res-cyl-ou-le"),                     // 31
+    val("res-axis-ou-le"),                    // 32
+    val("res-dc-ou-le"),                      // 33
+
+    // Notes
+    extraNotes()                              // 34 Extra Notes
+  ];
+
+  try{
+    const r = await fetch(WEB_APP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(row)
+    });
+    const txt = await r.text();
+    alert(r.ok ? "Saved ✅" : ("Save failed ❌: " + txt));
+  }catch(err){
+    alert("Save error ❌: " + err.message);
+  }
+}
+</script>
 
 
 
