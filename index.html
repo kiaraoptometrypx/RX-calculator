@@ -15,9 +15,6 @@
   transition: all 0.0s ease;
 }
 
-.hidden-stock {
-  display: none;
-}
 
   .pane img { display: block; margin: 2rem auto; max-width: 95%; }
 
@@ -182,10 +179,42 @@ margin-top: 5px;
   .filters{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 2px}
   .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border:1px solid var(--line);border-radius:4px;background:#fff}
 
-  @media(max-width:1200px){
-    .row{flex-direction:column;align-items:flex-start}
-    .bar-block{min-width:100px}
+
+
+@media print {
+  /* make sure colors and backgrounds appear */
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    transform: scale(0.85);          /* adjust print scale here */
+    transform-origin: top center;    /* center the scaled content */
   }
+
+  /* hide everything outside reportArea */
+  body * { visibility: hidden; }
+  #reportArea, #reportArea * { visibility: visible; }
+
+  /* ✅ hide only rows/cells you mark as .noprint */
+  #reportArea tr.noprint,
+  #reportArea td.noprint,
+  #reportArea .noprint {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* optional: skip hidden sections */
+  .skip { display: none !important; }
+
+  /* layout fix */
+  #reportArea {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+  }
+}
+
+
 
 .bar-block {
   position: relative;
@@ -278,7 +307,7 @@ table {
 
 th, td { 
   border:1px solid #999; 
-  padding:10px 5px 10px 5px; 
+  padding:5px 5px 5px 5px; 
   text-align:center; 
   vertical-align: middle;
   white-space: normal;   /* allow line wrapping */
@@ -294,7 +323,7 @@ th {   background:#d9d9d9;
   color: black;}
 
 input {   width:80px;
-  height:30px; 
+  height:20px; 
   padding:2px; 
   text-align:center; 
   box-sizing: border-box;}
@@ -323,6 +352,14 @@ input {   width:80px;
   user-select: none;      /* prevent text highlight */
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none;    /* Firefox */
+}
+
+#fc-dc-images {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  transform-origin: top center;
 }
 
 
@@ -448,10 +485,12 @@ table input {
   box-sizing: border-box;
   padding: 3px 3px;
   font-size: 10px;
-  border-radius: 4px;
-  border: 1px solid #999;
+  border: none;                     /* remove all borders */
+  border-bottom: 1px dashed #888;   /* add only bottom dotted line */
+  background-color: transparent;
   text-align: center;
 }
+
 
 .fixed-label {
   font-size: 12px !important;   /* stays fixed regardless */
@@ -629,7 +668,6 @@ function setFontSize(size, btn) {
     Welcome to Kiara Optometry's Algorithm Refraction
   </span>
 <br><br>
-<button id="btnCapture">📸 Save as PDF</button>
 
 
 </div>
@@ -909,7 +947,6 @@ function toggleSection(id) {
 <br>
 
 <div class="pane" style="padding:10px;">
-<div id="reportArea">
 
 <div style="display:flex; justify-content:center;">
   <b><span
@@ -918,6 +955,7 @@ function toggleSection(id) {
     ▼ Customer Details & Eye exam
   </span></b>
 </div>
+<div id="reportArea">
 
 
 
@@ -925,7 +963,6 @@ function toggleSection(id) {
 <div style="height:10px;"></div>
 
 <div class="pane">
-
 
 
 
@@ -1026,14 +1063,14 @@ function toggleSection(id) {
 
 
 
-<tr><td colspan="7" style="padding:5px; border:none;"></td></tr>
 
   <tbody class="toggle-section-near-rx" style="display:none;">
+<tr><td colspan="7" style="padding:5px; border:none;"></td></tr>
 
 <tr class="white">
     <td><b>Current Add</b></td>
-    <td colspan="3"><b>Phone Length (cm) & Add Needed</b></td>
-    <td colspan="3"><b>Screen Length (cm) & Add Needed</b></td>
+    <td colspan="3"><b>Phone Length (cm) & Estimated Add</b></td>
+    <td colspan="3"><b>Screen Length (cm) & Estimated Add</b></td>
 </tr>
 <tr>
 
@@ -1059,22 +1096,24 @@ function toggleSection(id) {
   <td style="display:none;">Current Eye Strength: <span id="aaOutput">–</span>
 </td>
 </tr>
-<tr><td colspan="7" style="padding:5px; border:none;"></td></tr>
 
 </table>
 </tbody>
-
 </div>
+
+
+
 
 <div style="height:10px;"></div>
 
     <div class="pane" style="padding:0 0 10px 0;">
 
 <table>
-<tr class="calibrator">
+
+<tr class="calibrator noprint">
   <td style="border:none;"></td>
 </tr>
-<tr class="white">
+<tr class="white noprint">
 <td colspan="1"><b>Eye Exam Types</b></td>
 <td style="border-right:none">
 <span id="toggle-manual" style="cursor:pointer; font-weight:bold; user-select:none;">
@@ -1094,7 +1133,6 @@ function toggleSection(id) {
 </tr>
 </table>
 
-
 <div id="exam-manual" style="display:none;">
 
 <table>
@@ -1107,7 +1145,7 @@ function toggleSection(id) {
   <td style="border:none;"></td>
   <td style="border:none;"></td>
 </tr>
-<tr class="paleblue">
+<tr class="paleblue noprint">
   <td colspan="2" style="padding:10px; color: #241D0C; text-align:left; border-right:none;">
 <b>Manual Input Rx</b></td>
 <td colspan="2" style="text-align:left; border-left:none;">
@@ -1132,7 +1170,7 @@ function toggleSection(id) {
 
 
 
-<tr><td colspan="7">
+<tr class="noprint"><td colspan="7">
 <span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-reference">
   ▼ FC DC Reference & Calculator
 </span>
@@ -1190,6 +1228,12 @@ function toggleSection(id) {
     <td id="def-se-diff-os-notes">—</td>
     <td id="now-dc-os-notes">BAL</td> 
   </tr>
+
+
+</td></tr>
+
+
+
 
 
 <tbody class="toggle-section-manual-rx" style="display:none;">
@@ -1270,14 +1314,14 @@ function toggleSection(id) {
   <td rowspan="2" colspan="1"><b>Extra Notes:</b></td>
   <td colspan="6" rowspan="2">
     <textarea id="extra-notes-manual" rows="2" placeholder="Type anything here..." 
-  style="width:95%; height:40px; box-sizing:border-box;"></textarea>
+  style="width:95%; height:60px; box-sizing:border-box;"></textarea>
 
   </td>
 </tr>
 <tr></tr>
 
 
-<tr class="paleblue">
+<tr class="paleblue noprint">
   <td colspan="7" style="padding:2px;"><i>~ End ~</i></td>
 </tr>
 </tbody>
@@ -1298,7 +1342,7 @@ function toggleSection(id) {
   <td style="border:none;"></td>
   <td style="border:none;"></td>
 </tr>
-<tr class="comfort">
+<tr class="comfort noprint">
     <td colspan="2" style="padding:10px; color: #241D0C; text-align:left; border-right:none;">
 <b>Comfy Clearer Rx</b></td>
 <td colspan="2" style="text-align:left; border-left:none;">
@@ -1328,7 +1372,7 @@ function toggleSection(id) {
 
   <tbody id="deficit-rows-comfort" style="display:none;">
 
-<tr><td colspan="7">
+<tr class="noprint"><td colspan="7">
 <span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-reference2">
   ▼ FC DC Reference & Calculator
 </span>
@@ -1350,7 +1394,7 @@ function toggleSection(id) {
 <td><b>SE Diff</b></td>
 <td><b>DC</b></td>
  
-<tr class="white">
+<tr class="white noprint">
     <td rowspan="1">FC DC Error<br>Notes</td>
 <td>B</td>
 
@@ -1371,7 +1415,7 @@ function toggleSection(id) {
     <td id="dc-ou">—</td>
   </tr>
 
-<tr class="now">
+<tr class="now noprint">
   <td rowspan="2">FC DC<br>Balance</td>
 <td>R</td>
   <td id="final-sph-ou-re">0.00</td>
@@ -1381,7 +1425,7 @@ function toggleSection(id) {
   <td id="bypass-final-ou">—</td>
   <td id="final-dc-ou-re">—</td>
 </tr>
-<tr class="now">
+<tr class="now noprint">
  <td>L</td>
 
   <td id="final-sph-ou-le">0.00</td>
@@ -1442,7 +1486,7 @@ function toggleSection(id) {
     <td >—</td>
     <td id="res-dc-ou-le">BAL</td>
   </tr>
-<tr class="adjustments">
+<tr class="adjustments noprint">
 <td colspan="7">
 <span onclick="toggleRow('adjustments-row-1')" 
    style="cursor:pointer; color:black; user-select:none; margin:0px 30px;">
@@ -1459,7 +1503,7 @@ function toggleSection(id) {
 
 
 
-<tr class="adjustments" id="adjustments-row-1" style="display:none;">
+<tr class="adjustments noprint" id="adjustments-row-1" style="display:none;">
   <td>Adjustments</td>
   <td>B</td>
   <td colspan="5" style="padding:0px; text-align:left;">
@@ -1490,13 +1534,13 @@ function toggleSection(id) {
   <td rowspan="2" colspan="1"><b>Extra Notes:</b></td>
   <td colspan="6" rowspan="2">
     <textarea id="extra-notes-comfy" rows="2" placeholder="Type anything here..." 
-  style="width:95%; height:100px; box-sizing:border-box;"></textarea>  </td>
+  style="width:95%; height:60px; box-sizing:border-box;"></textarea>  </td>
 </tr>
 
 
 <tr></tr>
 
-<tr class="comfort">
+<tr class="comfort noprint">
   <td colspan="7" style="padding:2px;"><i>~ End ~</i></td>
 </tr>
 
@@ -1524,7 +1568,6 @@ function toggleSection(id) {
 </div>
 
 </div>
-
 
 
 
@@ -1771,7 +1814,7 @@ function toggleSection(id) {
   <td rowspan="2" colspan="1"><b>Extra Notes:</b></td>
   <td colspan="6" rowspan="2">
     <textarea id="extra-notes-sharper" rows="2" placeholder="Type anything here..." 
-  style="width:95%; height:100px; box-sizing:border-box;"></textarea>
+  style="width:95%; height:60px; box-sizing:border-box;"></textarea>
 
   </td>
 </tr>
@@ -1792,7 +1835,6 @@ function toggleSection(id) {
 </tbody>
 </table>
 
-</div>
 </div>
 
 
@@ -3772,7 +3814,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 </div>
 </div>
 </div>
-
+</div>
 
 
 
@@ -6416,55 +6458,6 @@ document.getElementById("fc-dc-error").value
 </script>
 
 
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-<script>
-document.getElementById("btnCapture").addEventListener("click", async () => {
-  const area = document.getElementById("reportArea");
-
-  // Hide placeholders
-  area.querySelectorAll("input[placeholder]").forEach(el => {
-    el.setAttribute("data-oldph", el.placeholder);
-    el.placeholder = "";
-  });
-
-  const canvas = await html2canvas(area, { scale: 1.5 });
-  const imgData = canvas.toDataURL("image/jpeg", 1);
-
-  // Restore placeholders
-  area.querySelectorAll("input[data-oldph]").forEach(el => {
-    el.placeholder = el.getAttribute("data-oldph");
-    el.removeAttribute("data-oldph");
-  });
-
-  const pdf = new jspdf.jsPDF("p", "mm", "a4");
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  const imgProps = pdf.getImageProperties(imgData);
-  const imgHeight = (imgProps.height * pageWidth) / imgProps.width;
-
-  let y = 0;
-  while (y < imgHeight) {
-    pdf.addImage(imgData, "JPEG", 0, -y, pageWidth, imgHeight);
-    if (y + pdf.internal.pageSize.getHeight() < imgHeight) pdf.addPage();
-    y += pdf.internal.pageSize.getHeight();
-  }
-
-  pdf.save("Prescription_Report.pdf");
-});
-
-</script>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -6512,18 +6505,217 @@ extra-notes-manual
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 -->
+
+
+
+
+<button id="btnPrint">🖨️ Print / Save as PDF</button>
+
+<script>
+document.getElementById("btnPrint").addEventListener("click", () => {
+  const area = document.getElementById("reportArea");
+
+  // temporarily clear placeholders
+  area.querySelectorAll("input[placeholder]").forEach(el => {
+    el.setAttribute("data-oldph", el.placeholder);
+    el.placeholder = "";
+  });
+
+  window.print();
+
+  // restore placeholders
+  setTimeout(() => {
+    area.querySelectorAll("input[data-oldph]").forEach(el => {
+      el.placeholder = el.getAttribute("data-oldph");
+      el.removeAttribute("data-oldph");
+    });
+  }, 500);
+});
+</script>
+
+
+
+
+
+<script>
+(function () {
+  // === Image base folders ===
+  const DC_BASE = "https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/DC%20Defect/";
+  const FC_BASE = "https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/FC%20Defect/";
+
+  // === Image lookups ===
+  const DC_MAP = {
+    red: DC_BASE + "Red.png",
+    green: DC_BASE + "Green.png",
+    same: DC_BASE + "Same.png",
+  };
+
+  // === Nearest fan-chart file by axis (round to 15°) ===
+function nearestAxisImg(axisVal) {
+  if (isNaN(axisVal)) return "";
+  // Shift by 90° (wrap around if >180)
+  let shifted = axisVal + 90;
+  if (shifted > 180) shifted -= 180;
+
+  const angles = [15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180];
+  const closest = angles.reduce((a, b) =>
+    Math.abs(b - shifted) < Math.abs(a - shifted) ? b : a
+  );
+  return FC_BASE + closest + ".png";
+}
+
+
+  // === DOM prep ===
+  const selectMode = document.getElementById("fc-dc-error");
+  const table = selectMode.closest("table");
+
+  // add display row once
+  let row = document.getElementById("fc-dc-visuals");
+  if (!row) {
+    row = document.createElement("tr");
+    row.id = "fc-dc-visuals";
+    row.innerHTML = `
+
+      <td colspan="7" style="text-align:center; padding:10px;">
+  
+  <input type="range" id="zoomRange" min="50" max="200" value="100" step="10">
+  <span id="zoomVal">100%</span>
+
+        <div id="fc-dc-title" style="font-weight:bold; margin-bottom:8px;"></div>
+        <div id="fc-dc-images"
+             style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; flex-direction:row;">
+        </div>
+      </td>`;
+    const lRow = document.getElementById("a2_os_manual_notes")?.closest("tr");
+    if (lRow && lRow.nextSibling) lRow.parentNode.insertBefore(row, lRow.nextSibling);
+    else table.appendChild(row);
+  }
+
+  const titleEl = row.querySelector("#fc-dc-title");
+  const imgBox = row.querySelector("#fc-dc-images");
+
+
+
+  // === Image-block helper ===
+function makeImgBlock(label, src, awaiting = false) {
+  return `
+    <div style="
+      display:inline-block;
+      vertical-align:top;
+      text-align:center;
+      margin:8px 12px;
+      padding:8px 10px 6px;
+      background:#fafafa;
+      border-radius:8px;
+      box-shadow:0 1px 3px rgba(0,0,0,0.08);
+      min-width:150px;
+      line-height:1.2;
+    ">
+      <div style="font-weight:600; font-size:12px; margin-bottom:4px; color:#222;">
+        ${label}
+      </div>
+      ${
+        awaiting
+          ? `<div style="font-style:italic; color:#888;">Awaiting input...</div>`
+          : `<img src="${src}" 
+                   style="max-width:250px; height:auto; border:1px solid #ddd;
+                          border-radius:6px; display:block; margin:0 auto;">`
+      }
+    </div>`;
+}
+
+function updateImages() {
+  const mode = selectMode.value.trim();
+  imgBox.innerHTML = "";
+
+  if (!mode) return;
+
+  // === BE mode (Binocular) ===
+  if (mode.includes("BE")) {
+    const dcVal = parseFloat(document.getElementById("dc-sph-ou-manual-notes")?.value || 0);
+    const axisVal = parseFloat(document.getElementById("a2_ou_manual_notes")?.value || NaN);
+
+    let dcImg = DC_MAP.same;
+    if (!isNaN(dcVal)) {
+      if (dcVal > 0) dcImg = DC_MAP.green;
+      else if (dcVal < 0) dcImg = DC_MAP.red;
+    }
+    const fcImg = !isNaN(axisVal) ? nearestAxisImg(axisVal) : "";
+
+    imgBox.innerHTML += makeImgBlock("Both Eyes — DC Defect", dcImg, !dcImg);
+    imgBox.innerHTML += makeImgBlock("Both Eyes — Fan Chart Defect", fcImg, !fcImg);
+  }
+
+  // === Mono mode (Right & Left) ===
+  else if (mode.includes("Mono")) {
+    const sides = [
+      { label: "Right Eye", sph: "dc-sph-od-manual-notes", axis: "a2_od_manual_notes" },
+      { label: "Left Eye",  sph: "dc-sph-os-manual-notes", axis: "a2_os_manual_notes" }
+    ];
+
+    for (const s of sides) {
+      const dcVal = parseFloat(document.getElementById(s.sph)?.value || 0);
+      const axisVal = parseFloat(document.getElementById(s.axis)?.value || NaN);
+
+      let dcImg = DC_MAP.same;
+      if (!isNaN(dcVal)) {
+        if (dcVal > 0) dcImg = DC_MAP.green;
+        else if (dcVal < 0) dcImg = DC_MAP.red;
+      }
+      const fcImg = !isNaN(axisVal) ? nearestAxisImg(axisVal) : "";
+
+      imgBox.innerHTML += makeImgBlock(`${s.label} — DC Defect`, dcImg, !dcImg);
+      imgBox.innerHTML += makeImgBlock(`${s.label} — Fan Chart Defect`, fcImg, !fcImg);
+    }
+  }
+}
+
+
+  // === Live updates ===
+  selectMode.addEventListener("change", updateImages);
+  [
+    "dc-sph-ou-manual-notes",
+    "a2_ou_manual_notes",
+    "dc-sph-od-manual-notes",
+    "a2_od_manual_notes",
+    "dc-sph-os-manual-notes",
+    "a2_os_manual_notes",
+  ].forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener("input", updateImages);
+    el.addEventListener("change", updateImages);
+  });
+})();
+
+const zoomSlider = document.getElementById("zoomRange");
+const zoomVal = document.getElementById("zoomVal");
+const imageContainer = document.getElementById("fc-dc-images");
+
+zoomSlider?.addEventListener("input", e => {
+  const scale = e.target.value / 100;
+  zoomVal.textContent = e.target.value + "%";
+  imageContainer.style.transform = `scale(${scale})`;
+  imageContainer.style.transformOrigin = "top center";
+  imageContainer.style.transition = "transform 0.2s ease";
+});
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
