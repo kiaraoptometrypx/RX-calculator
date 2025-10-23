@@ -628,6 +628,9 @@ function setFontSize(size, btn) {
         style="user-select:none; font-weight:bold; display:inline-block;">
     Welcome to Kiara Optometry's Algorithm Refraction
   </span>
+<br><br>
+<button id="btnCapture">📸 Save as PDF</button>
+
 
 </div>
 
@@ -906,6 +909,7 @@ function toggleSection(id) {
 <br>
 
 <div class="pane" style="padding:10px;">
+<div id="reportArea">
 
 <div style="display:flex; justify-content:center;">
   <b><span
@@ -1147,16 +1151,46 @@ function toggleSection(id) {
 <td><b>SE Diff</b></td>
 <td><b>DC</b></td>
   </tr>
+
 <tr class="white">
-    <td row>FC DC Error<br>Notes</td>
-<td>R</td>
+    <td rowspan="3">
+  FC DC Error<br>Notes<br>
+  <select id="fc-dc-error" style="margin-top:4px; width:90px;">
+    <option value="">Select One</option>
+    <option>BE Bino</option>
+    <option>R&L Mono</option>
+  </select>
+</td>
+
+<td>BE</td>
 
     <td><input id="dc-sph-ou-manual-notes" placeholder="+0.00"></td>
     <td><input id="c2_ou_manual_notes" placeholder="+0.00"></td>
     <td><input id="a2_ou_manual_notes" placeholder="0"></td>
-    <td id="def-se-diff-ou-notes">—</td>
+    <td id="def-se-diff-oU-notes">—</td>
     <td id="now-dc-ou-notes">BAL</td> 
   </tr>
+
+<tr class="white">
+<td>R</td>
+
+    <td><input id="dc-sph-od-manual-notes" placeholder="+0.00"></td>
+    <td><input id="c2_od_manual_notes" placeholder="+0.00"></td>
+    <td><input id="a2_od_manual_notes" placeholder="0"></td>
+    <td id="def-se-diff-od-notes">—</td>
+    <td id="now-dc-od-notes">BAL</td> 
+  </tr>
+
+<tr class="white">
+<td>L</td>
+
+    <td><input id="dc-sph-os-manual-notes" placeholder="+0.00"></td>
+    <td><input id="c2_os_manual_notes" placeholder="+0.00"></td>
+    <td><input id="a2_os_manual_notes" placeholder="0"></td>
+    <td id="def-se-diff-os-notes">—</td>
+    <td id="now-dc-os-notes">BAL</td> 
+  </tr>
+
 
 <tbody class="toggle-section-manual-rx" style="display:none;">
 
@@ -1235,7 +1269,7 @@ function toggleSection(id) {
   <!-- This cell spans 2 rows -->
   <td rowspan="2" colspan="1"><b>Extra Notes:</b></td>
   <td colspan="6" rowspan="2">
-    <textarea id="extra-notes" rows="2" placeholder="Type anything here..." 
+    <textarea id="extra-notes-manual" rows="2" placeholder="Type anything here..." 
   style="width:95%; height:40px; box-sizing:border-box;"></textarea>
 
   </td>
@@ -1455,7 +1489,7 @@ function toggleSection(id) {
 <tr class="comfort">
   <td rowspan="2" colspan="1"><b>Extra Notes:</b></td>
   <td colspan="6" rowspan="2">
-    <textarea id="extra-notes" rows="2" placeholder="Type anything here..." 
+    <textarea id="extra-notes-comfy" rows="2" placeholder="Type anything here..." 
   style="width:95%; height:100px; box-sizing:border-box;"></textarea>  </td>
 </tr>
 
@@ -1736,7 +1770,7 @@ function toggleSection(id) {
 <tr class="paleviolet">
   <td rowspan="2" colspan="1"><b>Extra Notes:</b></td>
   <td colspan="6" rowspan="2">
-    <textarea id="extra-notes" rows="2" placeholder="Type anything here..." 
+    <textarea id="extra-notes-sharper" rows="2" placeholder="Type anything here..." 
   style="width:95%; height:100px; box-sizing:border-box;"></textarea>
 
   </td>
@@ -2081,10 +2115,19 @@ function attachNoteHandlers() {
     // --- OD / OS ---
     "dc-sph-od-notes", "c2_od_notes", "a2_od_notes",
     "dc-sph-os-notes", "c2_os_notes", "a2_os_notes",
+
+
     // --- OU (regular) ---
     "dc-sph-ou-notes", "c2_ou_notes", "a2_ou_notes",
+    "dc-sph-od-notes", "c2_od_notes", "a2_od_notes",
+    "dc-sph-os-notes", "c2_os_notes", "a2_os_notes",
+
+
     // --- OU (manual) ---
-    "dc-sph-ou-manual-notes", "c2_ou_manual_notes", "a2_ou_manual_notes","add-ou"
+    "dc-sph-ou-manual-notes", "c2_ou_manual_notes", "a2_ou_manual_notes","add-ou",
+    "dc-sph-od-manual-notes", "c2_od_manual_notes", "a2_od_manual_notes","add-od",
+    "dc-sph-os-manual-notes", "c2_os_manual_notes", "a2_os_manual_notes","add-os",
+
   ];
 
   ids.forEach(id => {
@@ -3728,7 +3771,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 </div>
 </div>
-
+</div>
 
 
 
@@ -6362,48 +6405,126 @@ function colorizeFCDarker(el){
     wireWidget(host);
   };
 })();
+
+window.addEventListener("DOMContentLoaded", () => {
+  initAxisDCWidget("#axis-dc-spot-1");
+});
+</script>
+
+<script>
+document.getElementById("fc-dc-error").value
 </script>
 
 
-<a href="https://wa.me/60105533911" 
-   target="_blank" 
-   style="display:inline-block; background:#25D366; color:white; padding:8px 14px; border-radius:6px; text-decoration:none; font-weight:600;">
-   💬 Send via WhatsApp
-</a>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+document.getElementById("btnCapture").addEventListener("click", async () => {
+  const area = document.getElementById("reportArea");
+
+  // Hide placeholders
+  area.querySelectorAll("input[placeholder]").forEach(el => {
+    el.setAttribute("data-oldph", el.placeholder);
+    el.placeholder = "";
+  });
+
+  const canvas = await html2canvas(area, { scale: 1.5 });
+  const imgData = canvas.toDataURL("image/jpeg", 1);
+
+  // Restore placeholders
+  area.querySelectorAll("input[data-oldph]").forEach(el => {
+    el.placeholder = el.getAttribute("data-oldph");
+    el.removeAttribute("data-oldph");
+  });
+
+  const pdf = new jspdf.jsPDF("p", "mm", "a4");
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const imgProps = pdf.getImageProperties(imgData);
+  const imgHeight = (imgProps.height * pageWidth) / imgProps.width;
+
+  let y = 0;
+  while (y < imgHeight) {
+    pdf.addImage(imgData, "JPEG", 0, -y, pageWidth, imgHeight);
+    if (y + pdf.internal.pageSize.getHeight() < imgHeight) pdf.addPage();
+    y += pdf.internal.pageSize.getHeight();
+  }
+
+  pdf.save("Prescription_Report.pdf");
+});
+
+</script>
 
 
 
 
 
-<!---  IDS FOR RECORDS
 
-    S1_OD: v("s1_od"), C1_OD: v("c1_od"), A1_OD: v("a1_od"),
-    S1_OS: v("s1_os"), C1_OS: v("c1_os"), A1_OS: v("a1_os"),
-    DC_SPH_OU_MANUAL_NOTES: v("dc-sph-ou-manual-notes"),
-    C2_OU_MANUAL_NOTES: v("c2_ou_manual_notes"),
-    A2_OU_MANUAL_NOTES: v("a2_ou_manual_notes"),
-    MANUAL_SPH_OU_OD: v("manual-sph-ou-od"),
-    MANUAL_CYL_OU_OD: v("manual-cyl-ou-od"),
-    MANUAL_AXIS_OU_OD: v("manual-axis-ou-od"),
-    MANUAL_DC_OU_OD: v("manual-dc-ou-od"),
-    MANUAL_SPH_OU_OS: v("manual-sph-ou-os"),
-    MANUAL_CYL_OU_OS: v("manual-cyl-ou-os"),
-    MANUAL_AXIS_OU_OS: v("manual-axis-ou-os"),
-    MANUAL_DC_OU_OS: v("manual-dc-ou-os"),
-    DC_SPH_OU: v("dc-sph-ou"),
-    C2_OU: v("c2_ou"),
-    A2_OU: v("a2_ou"),
-    RES_SPH_OU_RE: v("res-sph-ou-re"),
-    RES_CYL_OU_RE: v("res-cyl-ou-re"),
-    RES_AXIS_OU_RE: v("res-axis-ou-re"),
-    RES_DC_OU_RE: v("res-dc-ou-re"),
-    RES_SPH_OU_LE: v("res-sph-ou-le"),
-    RES_CYL_OU_LE: v("res-cyl-ou-le"),
-    RES_AXIS_OU_LE: v("res-axis-ou-le"),
-    RES_DC_OU_LE: v("res-dc-ou-le"),
-    EXTRA_NOTES: v("extra-notes")
- 
---->
+
+
+
+
+
+
+
+
+
+
+
+<!-- ===============================
+     REFRACTION DATA FIELD MAP
+=================================== -->
+
+<!-- 
+
+🔸 FC / DC Errors
+dc-sph-ou-manual-notes
+c2_ou_manual_notes
+a2_ou_manual_notes
+
+dc-sph-od-manual-notes
+c2_od_manual_notes
+a2_od_manual_notes
+
+dc-sph-os-manual-notes
+c2_os_manual_notes
+a2_os_manual_notes
+
+🔸 Final Results
+manual-ou-wear-glasses   ← (radio)
+manual-ou-wear-contacts  ← (radio)
+
+manual-sph-ou-od
+manual-cyl-ou-od
+manual-axis-ou-od
+
+manual-sph-ou-os
+manual-cyl-ou-os
+manual-axis-ou-os
+
+manual-se-diff-ou
+
+manual-dc-ou-od
+manual-dc-ou-os
+
+extra-notes-manual
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-->
+
 
 
 
