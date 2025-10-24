@@ -1030,10 +1030,20 @@ function toggleSection(id) {
 
   <!-- Now RX -->
   <tr>
-<td style="border-bottom:none;">
+<td rowspan="2">
   <div class="choice-group">
     <input type="radio" id="current-wear-glasses" name="current-wearType" value="glasses">
     <label for="current-wear-glasses">Glasses</label>
+</div>
+<div style="height:3px"></div>
+
+  <div class="choice-group">
+    <input type="radio" id="current-wear-contacts" name="current-wearType" value="contacts">
+    <label for="current-wear-contacts">Contacts</label>
+  </div>
+<div style="height:3px"></div>
+<div>BVD
+  <input type="number" id="bvdInput" value="13" step="0.5" min="5" max="20" style="width:20px; text-align:center;"> mm
 </div>
 </td>
     <td>R</td>
@@ -1050,11 +1060,7 @@ function toggleSection(id) {
   </tr>
 
   <tr>
-<td style="border-top:none;">
-  <div class="choice-group">
-    <input type="radio" id="current-wear-contacts" name="current-wearType" value="contacts">
-    <label for="current-wear-contacts">Contacts</label>
-  </div>
+
     <td>L</td>
     <td><input id="s1_os" placeholder="+0.00"></td>
     <td><input id="c1_os" placeholder="+0.00"></td>
@@ -1190,9 +1196,9 @@ function toggleSection(id) {
 <td><b>DC</b></td>
   </tr>
 
-<tr class="white">
+<tr class="now">
     <td rowspan="3">
-  FC DC Error<br>Notes<br>
+    <b>Adjusted<br>FC DC Error<b><br>
   <select id="fc-dc-error" style="margin-top:4px; width:90px;">
     <option value="">Select One</option>
     <option>BE Bino</option>
@@ -1209,7 +1215,7 @@ function toggleSection(id) {
     <td id="now-dc-ou-notes">BAL</td> 
   </tr>
 
-<tr class="white">
+<tr class="now">
 <td>R</td>
 
     <td><input id="dc-sph-od-manual-notes" placeholder="+0.00"></td>
@@ -1219,7 +1225,7 @@ function toggleSection(id) {
     <td id="now-dc-od-notes">BAL</td> 
   </tr>
 
-<tr class="white">
+<tr class="now">
 <td>L</td>
 
     <td><input id="dc-sph-os-manual-notes" placeholder="+0.00"></td>
@@ -1228,10 +1234,20 @@ function toggleSection(id) {
     <td id="def-se-diff-os-notes">—</td>
     <td id="now-dc-os-notes">BAL</td> 
   </tr>
-
-
+</td></tr>
+<tr><td colspan="7">
+<span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-fc-dc-chart1">
+  ▼ FC DC Chart
+</span>
+<div id="fc-dc-chart1" style="display:none;">
+<div id="fc-dc-chart"></div>
+</div>
 </td></tr>
 
+
+
+
+</tbody>
 
 
 
@@ -1396,7 +1412,7 @@ function toggleSection(id) {
  
 <tr class="white noprint">
     <td rowspan="1">FC DC Error<br>Notes</td>
-<td>B</td>
+<td>BE</td>
 
     <td><input id="dc-sph-ou-notes" placeholder="+0.00"></td>
     <td><input id="c2_ou_notes" placeholder="+0.00"></td>
@@ -1407,13 +1423,25 @@ function toggleSection(id) {
 
 <tr class="now">
     <td><b>Adjusted<br>FC DC Error<b></td>
-<td>B</td>
+<td>BE</td>
     <td><input id="dc-sph-ou" placeholder="+0.00"></td>
     <td><input id="c2_ou" placeholder="+0.00"></td>
     <td><input id="a2_ou" placeholder="0"></td>
     <td id="def-se-diff-ou">—</td>
     <td id="dc-ou">—</td>
   </tr>
+
+
+<tr><td colspan="7">
+<span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-fc-dc-chart2">
+  ▼ FC DC Chart
+</span>
+<div id="fc-dc-chart2" style="display:none">
+<div id="fc-dc-chart-comfy"></div>
+</div>
+</td></tr>
+
+
 
 <tr class="now noprint">
   <td rowspan="2">FC DC<br>Balance</td>
@@ -1657,7 +1685,7 @@ function toggleSection(id) {
 
   <tr class="now">
     <td rowspan="2"><B>Adjusted<br>FC DC Error</b></td>
-<td>Right</td>
+<td>R</td>
 
     <td><input id="dc-sph-od" placeholder="+0.00"></td>
     <td><input id="c2_od" placeholder="+0.00"></td>
@@ -1667,7 +1695,7 @@ function toggleSection(id) {
   </tr>
 
   <tr class="now">
-<td>Left</td>
+<td>L</td>
 
     <td><input id="dc-sph-os" placeholder="+0.00"></td>
     <td><input id="c2_os" placeholder="+0.00"></td>
@@ -2564,40 +2592,81 @@ const axisLE_OU = (Math.abs(LE_ou.C) < 0.001) ? "—" : (LE_ou.A === 0 ? "180" :
 setIf("res-axis-ou-le", axisLE_OU);
 setIf("res-se-ou-le", formatSEforDisplay(LE_ou.SE));
 
+
+
+
+
+
+
+
+
 // --- Glasses vs Contact Lens Conversion ---
 const currentWear = document.querySelector('input[name="current-wearType"]:checked')?.value; // "glasses" or "contacts"
-const targetWear  = document.querySelector('input[name="wearType"]:checked')?.value;        // "glasses" or "contacts"
+const targetWear  = document.querySelector('input[name="wearType"]:checked')?.value;         // "glasses" or "contacts"
 
-// Conversion functions
-function glassesToCL(sph) {
-  const d = 0.012; // 12mm vertex distance
-  const s = parseFloat(sph) || 0;
-  return s / (1 - d * s);
+// Conversion helpers (same as your working formula)
+function glassesToCL(power) {
+  const d = 0.01; // 10 mm vertex distance
+  const F = parseFloat(power) || 0;
+  return F / (1 - d * F);
 }
-function clToGlasses(sph) {
+function clToGlasses(power) {
   const d = 0.012;
-  const s = parseFloat(sph) || 0;
-  return s / (1 + d * s);
+  const F = parseFloat(power) || 0;
+  return F / (1 + d * F);
 }
 
 // Apply conversion only if current and target differ
 if (currentWear && targetWear && currentWear !== targetWear) {
+  const toCL = currentWear === "glasses" && targetWear === "contacts";
+
+  // --- SPHERE conversion (your original logic) ---
   ["res-sph-ou-re", "res-sph-ou-le"].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
     const sph = parseFloat(el.textContent) || 0;
 
-    const newSph = (currentWear === "glasses" && targetWear === "contacts")
-      ? glassesToCL(sph)
-      : clToGlasses(sph);
-
+    const newSph = toCL ? glassesToCL(sph) : clToGlasses(sph);
     el.textContent = formatValueForDisplay(newSph);
+  });
+
+  // --- CYLINDER + AXIS conversion (now observes res-cyl-ou-*) ---
+  ["re", "le"].forEach(side => {
+    const sphEl  = document.getElementById(`res-sph-ou-${side}`);
+    const cylEl  = document.getElementById(`res-cyl-ou-${side}`);
+    const axisEl = document.getElementById(`res-axis-ou-${side}`);
+
+    if (!sphEl || !cylEl) return;
+
+    const sVal   = parseFloat(sphEl.textContent)  || 0;
+    const cVal   = parseFloat(cylEl.textContent)  || 0;
+    const axisVal = parseFloat(axisEl?.textContent) || 0;
+
+    // total (stronger) meridian
+    const total = sVal + cVal;
+
+    // apply same formula depending on direction
+    const convSphere = toCL ? glassesToCL(sVal) : clToGlasses(sVal);
+    const convTotal  = toCL ? glassesToCL(total) : clToGlasses(total);
+
+    // new cyl = difference between converted meridians
+    const newCyl = convTotal - convSphere;
+
+    // update display
+    cylEl.textContent  = formatValueForDisplay(newCyl);
+    axisEl.textContent = axisVal;
   });
 }
 
+// --- Auto update when radio changes ---
 document.querySelectorAll('input[name="current-wearType"], input[name="wearType"]').forEach(radio => {
   radio.addEventListener("change", combineAll);
 });
+
+
+
+
+
 
 
 
@@ -6185,6 +6254,8 @@ makeToggle("toggle-brand", "brand");
 makeToggle("toggle-lenstype", "lenstype");
 makeToggle("toggle-reference", "reference");
 makeToggle("toggle-reference2", "reference2");
+makeToggle("toggle-fc-dc-chart1", "fc-dc-chart1");
+makeToggle("toggle-fc-dc-chart2", "fc-dc-chart2");
 
 
 
@@ -6539,19 +6610,18 @@ document.getElementById("btnPrint").addEventListener("click", () => {
 
 
 <script>
-(function () {
+(function() {
   // === Image base folders ===
   const DC_BASE = "https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/DC%20Defect/";
   const FC_BASE = "https://raw.githubusercontent.com/kiaraoptometrypx/RX-calculator/main/FC%20Defect/";
 
-  // === Image lookups ===
   const DC_MAP = {
-    red: DC_BASE + "Red.png",
+    red:   DC_BASE + "Red.png",
     green: DC_BASE + "Green.png",
-    same: DC_BASE + "Same.png",
+    same:  DC_BASE + "Same.png",
   };
 
-  // === Nearest fan-chart file by axis (round to 15°) ===
+  // === Helper: Find nearest fan-chart image (90° shift, rounded to 15°) ===
   function nearestAxisImg(axisVal) {
     if (isNaN(axisVal)) return "";
     let shifted = axisVal + 90;
@@ -6563,45 +6633,20 @@ document.getElementById("btnPrint").addEventListener("click", () => {
     return FC_BASE + closest + ".png";
   }
 
-  // === DOM prep ===
-  const selectMode = document.getElementById("fc-dc-error");
-  const table = selectMode.closest("table");
-  let row = document.getElementById("fc-dc-visuals");
-
-  if (!row) {
-    row = document.createElement("tr");
-    row.id = "fc-dc-visuals";
-    row.innerHTML = `
-      <td colspan="7" style="text-align:center; padding:10px;">
-        <div id="fc-dc-title" style="font-weight:bold; margin-bottom:8px;"></div>
-        <div id="fc-dc-images"
-             style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; flex-direction:row;">
-        </div>
-      </td>`;
-    const lRow = document.getElementById("a2_os_manual_notes")?.closest("tr");
-    if (lRow && lRow.nextSibling) lRow.parentNode.insertBefore(row, lRow.nextSibling);
-    else table.appendChild(row);
-  }
-
-  const titleEl = row.querySelector("#fc-dc-title");
-  const imgBox = row.querySelector("#fc-dc-images");
-
-  // === Image-block helper ===
+  // === Helper: Create image block ===
   function makeImgBlock(label, src, awaiting = false) {
     return `
       <div style="
         display:inline-block;
         vertical-align:top;
         text-align:center;
-        margin:8px 8px;
-        padding:8px 10px 6px;
+        margin:3px;
+        padding:5px;
         background:#fafafa;
         border-radius:8px;
-        box-shadow:0 1px 3px rgba(0,0,0,0.08);
-        min-width:150px;
-        line-height:1.2;
+        line-height:1.4;
       ">
-        <div style="font-weight:600; font-size:10px; margin-bottom:4px; color:#222;">
+        <div style="font-weight:600; font-size:10px; margin-bottom:3px; color:#222;">
           ${label}
         </div>
         ${
@@ -6615,114 +6660,174 @@ document.getElementById("btnPrint").addEventListener("click", () => {
       </div>`;
   }
 
-function updateImages() {
-  const mode = selectMode.value.trim();
-  imgBox.innerHTML = "";
-  if (!mode) return;
+  // === Main rendering function ===
+  function renderFCDC(opts) {
+    const {
+      containerId,
+      modeSourceId = "",
+      dcPrefix,
+      axisPrefix,
+      type = "manual"
+    } = opts;
 
-  // === Binocular Mode ===
-  if (mode.includes("BE")) {
-    const dcVal = parseFloat(document.getElementById("dc-sph-ou-manual-notes")?.value || 0);
-    const axisVal = parseFloat(document.getElementById("a2_ou_manual_notes")?.value || NaN);
+    const container = document.getElementById(containerId);
+    if (!container) return;
 
-    let dcImg = DC_MAP.same;
-    if (!isNaN(dcVal)) {
-      if (dcVal > 0) dcImg = DC_MAP.green;
-      else if (dcVal < 0) dcImg = DC_MAP.red;
-    }
-    const fcImg = !isNaN(axisVal) ? nearestAxisImg(axisVal) : "";
-
-    imgBox.innerHTML += `
-      <div style="
-        background:#f3f3f3;
-        border-radius:10px;
-        padding:5px 5px;
-        margin:12px 0;
-        width:95%;
-      ">
-        <div style="font-size:10px; font-weight:700; color:#333; margin-bottom:8px;">
-          Binocular Current Status
-        </div>
-        <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center;">
-          ${makeImgBlock("Duochrome", dcImg, !dcImg)}
-          ${makeImgBlock("Fan Chart", fcImg, !fcImg)}
+    // prepare structure
+    container.innerHTML = `
+      <div id="${containerId}-container">
+        <div id="${containerId}-images"
+             style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center;">
         </div>
       </div>`;
-  }
+    const imgBox = document.getElementById(`${containerId}-images`);
 
-  // === Monocular Mode ===
-  else if (mode.includes("Mono")) {
-    const sides = [
-      { title: "Right Eye", sph: "dc-sph-od-manual-notes", axis: "a2_od_manual_notes" },
-      { title: "Left Eye",  sph: "dc-sph-os-manual-notes", axis: "a2_os_manual_notes" }
-    ];
+    function update() {
+      imgBox.innerHTML = "";
 
-    for (const s of sides) {
-      const dcVal = parseFloat(document.getElementById(s.sph)?.value || 0);
-      const axisVal = parseFloat(document.getElementById(s.axis)?.value || NaN);
+      if (type === "manual") {
+        const mode = document.getElementById(modeSourceId)?.value?.trim() || "";
+        if (!mode) return;
 
-      let dcImg = DC_MAP.same;
-      if (!isNaN(dcVal)) {
-        if (dcVal > 0) dcImg = DC_MAP.green;
-        else if (dcVal < 0) dcImg = DC_MAP.red;
+        // === Binocular Mode ===
+        if (mode.includes("BE")) {
+          const dcVal = parseFloat(document.getElementById(`${dcPrefix}-ou-manual-notes`)?.value || 0);
+          const axisVal = parseFloat(document.getElementById(`${axisPrefix}_ou_manual_notes`)?.value || NaN);
+
+let dcImg = DC_MAP.same;
+if (!isNaN(dcVal)) {
+  if (dcVal > 0) dcImg = DC_MAP.green;
+  else if (dcVal < 0) dcImg = DC_MAP.red;
+}
+
+
+          const fcImg = !isNaN(axisVal) ? nearestAxisImg(axisVal) : "";
+
+          imgBox.innerHTML += `
+            <div style="background:#f3f3f3; border-radius:10px; padding:10px; margin:3px; width:95%;">
+              <div style="font-size:10px; font-weight:700; color:#333; margin-bottom:8px;">
+                Binocular Current Status
+              </div>
+              <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center;">
+                ${makeImgBlock("Duochrome", dcImg, !dcImg)}
+                ${makeImgBlock("Fan Chart", fcImg, !fcImg)}
+              </div>
+            </div>`;
+        }
+
+        // === Monocular Mode ===
+        else if (mode.includes("Mono")) {
+          const sides = [
+            { title: "Right Eye", sph: `${dcPrefix}-od-manual-notes`, axis: `${axisPrefix}_od_manual_notes` },
+            { title: "Left Eye",  sph: `${dcPrefix}-os-manual-notes`, axis: `${axisPrefix}_os_manual_notes` }
+          ];
+
+          for (const s of sides) {
+            const dcVal = parseFloat(document.getElementById(s.sph)?.value || 0);
+            const axisVal = parseFloat(document.getElementById(s.axis)?.value || NaN);
+
+            let dcImg = DC_MAP.same;
+            if (!isNaN(dcVal)) {
+              if (dcVal > 0) dcImg = DC_MAP.green;
+              else if (dcVal < 0) dcImg = DC_MAP.red;
+            }
+            const fcImg = !isNaN(axisVal) ? nearestAxisImg(axisVal) : "";
+
+            imgBox.innerHTML += `
+              <div style="background:#f3f3f3; border-radius:10px; padding:10px; margin:3px; width:95%;">
+                <div style="font-size:10px; font-weight:700; color:#333; margin-bottom:8px;">
+                  ${s.title} Current Status
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center;">
+                  ${makeImgBlock("Duochrome", dcImg, !dcImg)}
+                  ${makeImgBlock("Fan Chart", fcImg, !fcImg)}
+                </div>
+              </div>`;
+          }
+        }
       }
-      const fcImg = !isNaN(axisVal) ? nearestAxisImg(axisVal) : "";
 
-      imgBox.innerHTML += `
-        <div style="
-          background:#f3f3f3;
-          border-radius:10px;
-          padding:5px 5px;
-          margin:12px 0;
-          width:95%;
-        ">
-          <div style="font-size:10px; font-weight:700; color:#333; margin-bottom:8px;">
-            ${s.title} Current Status
-          </div>
-          <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center;">
-            ${makeImgBlock("Duochrome", dcImg, !dcImg)}
-            ${makeImgBlock("Fan Chart", fcImg, !fcImg)}
-          </div>
-        </div>`;
+      // === Binocular-only version (Comfy RX) ===
+      else if (type === "binocular") {
+        const dcVal = parseFloat(document.getElementById(`${dcPrefix}`)?.value || 0);
+        const axisVal = parseFloat(document.getElementById(`${axisPrefix}`)?.value || NaN);
+
+        let dcImg = DC_MAP.same;
+        if (!isNaN(dcVal)) {
+          if (dcVal > 0) dcImg = DC_MAP.green;
+          else if (dcVal < 0) dcImg = DC_MAP.red;
+        }
+        const fcImg = !isNaN(axisVal) ? nearestAxisImg(axisVal) : "";
+
+        imgBox.innerHTML += `
+          <div style="background:#f3f3f3; border-radius:10px; padding:10px; width:95%; margin:3px auto;">
+            <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center;">
+              ${makeImgBlock("Duochrome", dcImg, !dcImg)}
+              ${makeImgBlock("Fan Chart", fcImg, !fcImg)}
+            </div>
+          </div>`;
+      }
+
+      // === Click-to-enlarge ===
+      imgBox.querySelectorAll(".clickable-img").forEach(img => {
+        img.addEventListener("click", () => {
+          img.classList.toggle("enlarged");
+        });
+      });
     }
+
+    // === Attach listeners ===
+    const inputs = type === "manual"
+      ? [
+          `${dcPrefix}-ou-manual-notes`, `${axisPrefix}_ou_manual_notes`,
+          `${dcPrefix}-od-manual-notes`, `${axisPrefix}_od_manual_notes`,
+          `${dcPrefix}-os-manual-notes`, `${axisPrefix}_os_manual_notes`
+        ]
+      : [`${dcPrefix}`, `${axisPrefix}`];
+
+    inputs.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.addEventListener("input", update);
+      el.addEventListener("change", update);
+    });
+
+    // For manual, watch mode selector too
+    if (type === "manual" && modeSourceId) {
+      const modeEl = document.getElementById(modeSourceId);
+      if (modeEl) modeEl.addEventListener("change", update);
+    }
+
+    update(); // initial render
   }
 
-  // === Enable click-to-enlarge ===
-  imgBox.querySelectorAll(".clickable-img").forEach(img => {
-    img.addEventListener("click", () => {
-      img.classList.toggle("enlarged");
-    });
+  // === Run both ===
+  renderFCDC({
+    containerId: "fc-dc-chart",
+    modeSourceId: "fc-dc-error",
+    dcPrefix: "dc-sph",
+    axisPrefix: "a2",
+    type: "manual"
   });
-}
 
-
-  // === Live updates ===
-  selectMode.addEventListener("change", updateImages);
-  [
-    "dc-sph-ou-manual-notes",
-    "a2_ou_manual_notes",
-    "dc-sph-od-manual-notes",
-    "a2_od_manual_notes",
-    "dc-sph-os-manual-notes",
-    "a2_os_manual_notes",
-  ].forEach((id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.addEventListener("input", updateImages);
-    el.addEventListener("change", updateImages);
+  renderFCDC({
+    containerId: "fc-dc-chart-comfy",
+    dcPrefix: "dc-sph-ou",
+    axisPrefix: "a2_ou",
+    type: "binocular"
   });
+
+  // === Click enlarge styling ===
+  const style = document.createElement("style");
+  style.textContent = `
+  .clickable-img.enlarged {
+    transform: scale(1.8);
+    z-index: 999;
+    position: relative;
+  }`;
+  document.head.appendChild(style);
+
 })();
-
-// === Simple enlarge style ===
-const style = document.createElement("style");
-style.textContent = `
-.clickable-img.enlarged {
-  transform: scale(1.8);
-  z-index: 999;
-  position: relative;
-}
-`;
-document.head.appendChild(style);
 </script>
 
 
