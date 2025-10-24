@@ -6552,36 +6552,27 @@ document.getElementById("btnPrint").addEventListener("click", () => {
   };
 
   // === Nearest fan-chart file by axis (round to 15°) ===
-function nearestAxisImg(axisVal) {
-  if (isNaN(axisVal)) return "";
-  // Shift by 90° (wrap around if >180)
-  let shifted = axisVal + 90;
-  if (shifted > 180) shifted -= 180;
-
-  const angles = [15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180];
-  const closest = angles.reduce((a, b) =>
-    Math.abs(b - shifted) < Math.abs(a - shifted) ? b : a
-  );
-  return FC_BASE + closest + ".png";
-}
-
+  function nearestAxisImg(axisVal) {
+    if (isNaN(axisVal)) return "";
+    let shifted = axisVal + 90;
+    if (shifted > 180) shifted -= 180;
+    const angles = [15, 30, 45, 60, 75, 90, 105, 120, 135, 150, 165, 180];
+    const closest = angles.reduce((a, b) =>
+      Math.abs(b - shifted) < Math.abs(a - shifted) ? b : a
+    );
+    return FC_BASE + closest + ".png";
+  }
 
   // === DOM prep ===
   const selectMode = document.getElementById("fc-dc-error");
   const table = selectMode.closest("table");
-
-  // add display row once
   let row = document.getElementById("fc-dc-visuals");
+
   if (!row) {
     row = document.createElement("tr");
     row.id = "fc-dc-visuals";
     row.innerHTML = `
-
       <td colspan="7" style="text-align:center; padding:10px;">
-  
-  <input type="range" id="zoomRange" min="50" max="200" value="100" step="10">
-  <span id="zoomVal">100%</span>
-
         <div id="fc-dc-title" style="font-weight:bold; margin-bottom:8px;"></div>
         <div id="fc-dc-images"
              style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center; flex-direction:row;">
@@ -6595,43 +6586,41 @@ function nearestAxisImg(axisVal) {
   const titleEl = row.querySelector("#fc-dc-title");
   const imgBox = row.querySelector("#fc-dc-images");
 
-
-
   // === Image-block helper ===
-function makeImgBlock(label, src, awaiting = false) {
-  return `
-    <div style="
-      display:inline-block;
-      vertical-align:top;
-      text-align:center;
-      margin:8px 12px;
-      padding:8px 10px 6px;
-      background:#fafafa;
-      border-radius:8px;
-      box-shadow:0 1px 3px rgba(0,0,0,0.08);
-      min-width:150px;
-      line-height:1.2;
-    ">
-      <div style="font-weight:600; font-size:12px; margin-bottom:4px; color:#222;">
-        ${label}
-      </div>
-      ${
-        awaiting
-          ? `<div style="font-style:italic; color:#888;">Awaiting input...</div>`
-          : `<img src="${src}" 
-                   style="max-width:250px; height:auto; border:1px solid #ddd;
-                          border-radius:6px; display:block; margin:0 auto;">`
-      }
-    </div>`;
-}
+  function makeImgBlock(label, src, awaiting = false) {
+    return `
+      <div style="
+        display:inline-block;
+        vertical-align:top;
+        text-align:center;
+        margin:8px 8px;
+        padding:8px 10px 6px;
+        background:#fafafa;
+        border-radius:8px;
+        box-shadow:0 1px 3px rgba(0,0,0,0.08);
+        min-width:150px;
+        line-height:1.2;
+      ">
+        <div style="font-weight:600; font-size:10px; margin-bottom:4px; color:#222;">
+          ${label}
+        </div>
+        ${
+          awaiting
+            ? `<div style="font-style:italic; color:#888;">Awaiting input...</div>`
+            : `<img src="${src}" class="clickable-img"
+                     style="max-width:250px; height:auto; border:1px solid #ddd;
+                            border-radius:6px; display:block; margin:0 auto;
+                            cursor:pointer; transition:transform 0.25s ease;">`
+        }
+      </div>`;
+  }
 
 function updateImages() {
   const mode = selectMode.value.trim();
   imgBox.innerHTML = "";
-
   if (!mode) return;
 
-  // === BE mode (Binocular) ===
+  // === Binocular Mode ===
   if (mode.includes("BE")) {
     const dcVal = parseFloat(document.getElementById("dc-sph-ou-manual-notes")?.value || 0);
     const axisVal = parseFloat(document.getElementById("a2_ou_manual_notes")?.value || NaN);
@@ -6643,15 +6632,29 @@ function updateImages() {
     }
     const fcImg = !isNaN(axisVal) ? nearestAxisImg(axisVal) : "";
 
-    imgBox.innerHTML += makeImgBlock("Both Eyes — DC Defect", dcImg, !dcImg);
-    imgBox.innerHTML += makeImgBlock("Both Eyes — Fan Chart Defect", fcImg, !fcImg);
+    imgBox.innerHTML += `
+      <div style="
+        background:#f3f3f3;
+        border-radius:10px;
+        padding:5px 5px;
+        margin:12px 0;
+        width:95%;
+      ">
+        <div style="font-size:10px; font-weight:700; color:#333; margin-bottom:8px;">
+          Binocular Current Status
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center;">
+          ${makeImgBlock("Duochrome", dcImg, !dcImg)}
+          ${makeImgBlock("Fan Chart", fcImg, !fcImg)}
+        </div>
+      </div>`;
   }
 
-  // === Mono mode (Right & Left) ===
+  // === Monocular Mode ===
   else if (mode.includes("Mono")) {
     const sides = [
-      { label: "Right Eye", sph: "dc-sph-od-manual-notes", axis: "a2_od_manual_notes" },
-      { label: "Left Eye",  sph: "dc-sph-os-manual-notes", axis: "a2_os_manual_notes" }
+      { title: "Right Eye", sph: "dc-sph-od-manual-notes", axis: "a2_od_manual_notes" },
+      { title: "Left Eye",  sph: "dc-sph-os-manual-notes", axis: "a2_os_manual_notes" }
     ];
 
     for (const s of sides) {
@@ -6665,10 +6668,31 @@ function updateImages() {
       }
       const fcImg = !isNaN(axisVal) ? nearestAxisImg(axisVal) : "";
 
-      imgBox.innerHTML += makeImgBlock(`${s.label} — DC Defect`, dcImg, !dcImg);
-      imgBox.innerHTML += makeImgBlock(`${s.label} — Fan Chart Defect`, fcImg, !fcImg);
+      imgBox.innerHTML += `
+        <div style="
+          background:#f3f3f3;
+          border-radius:10px;
+          padding:5px 5px;
+          margin:12px 0;
+          width:95%;
+        ">
+          <div style="font-size:10px; font-weight:700; color:#333; margin-bottom:8px;">
+            ${s.title} Current Status
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:14px; justify-content:center;">
+            ${makeImgBlock("Duochrome", dcImg, !dcImg)}
+            ${makeImgBlock("Fan Chart", fcImg, !fcImg)}
+          </div>
+        </div>`;
     }
   }
+
+  // === Enable click-to-enlarge ===
+  imgBox.querySelectorAll(".clickable-img").forEach(img => {
+    img.addEventListener("click", () => {
+      img.classList.toggle("enlarged");
+    });
+  });
 }
 
 
@@ -6689,21 +6713,18 @@ function updateImages() {
   });
 })();
 
-const zoomSlider = document.getElementById("zoomRange");
-const zoomVal = document.getElementById("zoomVal");
-const imageContainer = document.getElementById("fc-dc-images");
-
-zoomSlider?.addEventListener("input", e => {
-  const scale = e.target.value / 100;
-  zoomVal.textContent = e.target.value + "%";
-  imageContainer.style.transform = `scale(${scale})`;
-  imageContainer.style.transformOrigin = "top center";
-  imageContainer.style.transition = "transform 0.2s ease";
-});
-
-
-
+// === Simple enlarge style ===
+const style = document.createElement("style");
+style.textContent = `
+.clickable-img.enlarged {
+  transform: scale(1.8);
+  z-index: 999;
+  position: relative;
+}
+`;
+document.head.appendChild(style);
 </script>
+
 
 
 
