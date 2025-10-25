@@ -125,6 +125,38 @@ flex-direction:column;gap:0px;min-width:70px}
   z-index: 0;           /* behind main lens bar */
 }
 
+
+
+
+
+
+#imgGallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  max-width: 100%;
+}
+
+#imgGallery img {
+  width: 100px;
+  height: auto;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+}
+
+#imgGallery img.enlarged {
+  width: 400px;
+  z-index: 5;
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+}
+
+
+
+
 .bar-track {
   position: relative;
   height: 10px;
@@ -682,33 +714,27 @@ function setFontSize(size, btn) {
 
 <div class="pane" style="padding:20px 0px 20px 0px">
 
-<table><tr><td>
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Astig%20Define.png" alt="Astig Define">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Astig%20Vision.png" alt="Astig Vision">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Sph%20Define.png" alt="Sph Define">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Sph%20Vision.png" alt="Sph Vision">
-
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Dual%20Zone%20Define.png" alt="Dual Zone Define">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Presbyopia%20Define.png" alt="Presbyopia Define">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Presbyopia%20Lens%202.png" alt="Presbyopia Lens 2">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Presbyopia%20Lens.png" alt="Presbyopia Lens">
-
-
-
-	
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%201.png" alt="Test 1">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%202.png" alt="Test 2">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%203.png" alt="Test 3">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%204.png" alt="Test 4">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%205.png" alt="Test 5">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%206.png" alt="Test 6">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%207.png" alt="Test 7">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%208.png" alt="Test 8">
-<img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%209.png" alt="Test 9">
-
-
-
+<table><tr><td id="imgGallery">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Astig%20Define.png" alt="Astig Define">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Astig%20Vision.png" alt="Astig Vision">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Sph%20Define.png" alt="Sph Define">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Sph%20Vision.png" alt="Sph Vision">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Dual%20Zone%20Define.png" alt="Dual Zone Define">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Presbyopia%20Define.png" alt="Presbyopia Define">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Presbyopia%20Lens%202.png" alt="Presbyopia Lens 2">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Presbyopia%20Lens.png" alt="Presbyopia Lens">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%201.png" alt="Test 1">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%202.png" alt="Test 2">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%203.png" alt="Test 3">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%204.png" alt="Test 4">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%205.png" alt="Test 5">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%206.png" alt="Test 6">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%207.png" alt="Test 7">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%208.png" alt="Test 8">
+  <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%209.png" alt="Test 9">
 </td></tr></table>
+
+
 
 </div>
 <div style="height:10px"></div>
@@ -730,7 +756,13 @@ function setFontSize(size, btn) {
 
 </div>
 
-
+<script>
+document.querySelectorAll('#imgGallery img').forEach(img=>{
+  img.addEventListener('click',()=>{
+    img.classList.toggle('enlarged');
+  });
+});
+</script>
 
 
 <div id="settings-block" style="display:none; margin:20px;">
@@ -6863,7 +6895,6 @@ if (!isNaN(dcVal)) {
 
 </body>
 </html>
-
 
 
 
