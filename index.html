@@ -133,9 +133,12 @@ flex-direction:column;gap:0px;min-width:70px}
 #imgGallery {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 20px;
   justify-content: center;
-  max-width: 100%;
+  align-items: flex-start;  /* keeps all rows tight */
+  padding: 0;
+  margin: 0;
+  line-height: 0;           /* removes vertical gaps from inline images */
 }
 
 #imgGallery img {
@@ -143,17 +146,42 @@ flex-direction:column;gap:0px;min-width:70px}
   height: auto;
   border-radius: 6px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: transform 1s ease;
   box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  display: block;           /* prevents baseline spacing */
 }
 
-#imgGallery img.enlarged {
-  width: 400px;
-  z-index: 5;
-  transform: scale(1.02);
-  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+#imgGallery img:hover {
+  transform: scale(1.05);
 }
 
+/* Lightbox overlay */
+#imgZoom {
+  position: fixed; inset: 0;
+  display: none;
+  background: rgba(0,0,0,.8);
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  cursor: zoom-out;
+}
+#imgZoom.open { display: flex; }
+
+#imgZoom img {
+  max-width: 120vw;
+  max-height: 120vh;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.5);
+}
+#imgZoom .hint {
+  position: absolute;
+  bottom: 0px;
+  color: #eee;
+  font-size: 10px;
+  text-align: center;
+  width: 100%;
+  pointer-events: none;
+}
 
 
 
@@ -714,7 +742,10 @@ function setFontSize(size, btn) {
 
 <div class="pane" style="padding:20px 0px 20px 0px">
 
-<table><tr><td id="imgGallery">
+<table style="border:none"><tr style="border:none"><td style="border:none">
+
+
+<div id="imgGallery">
   <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Astig%20Define.png" alt="Astig Define">
   <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Astig%20Vision.png" alt="Astig Vision">
   <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/Sph%20Define.png" alt="Sph Define">
@@ -732,6 +763,30 @@ function setFontSize(size, btn) {
   <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%207.png" alt="Test 7">
   <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%208.png" alt="Test 8">
   <img src="https://raw.githubusercontent.com/kiaraoptometrypx/OL-selector/main/~Test%209.png" alt="Test 9">
+</div>
+
+<!-- Lightbox overlay -->
+<div id="imgZoom">
+  <div class="inner">
+    <img id="zoomedImg" src="" alt="">
+    <div class="hint">Click anywhere to close</div>
+  </div>
+</div>
+
+<script>
+const zoom = document.getElementById('imgZoom');
+const zoomImg = document.getElementById('zoomedImg');
+
+document.querySelectorAll('#imgGallery img').forEach(img=>{
+  img.addEventListener('click',()=>{
+    zoomImg.src = img.src;
+    zoom.classList.add('open');
+  });
+});
+zoom.addEventListener('click',()=> zoom.classList.remove('open'));
+</script>
+
+
 </td></tr></table>
 
 
@@ -756,13 +811,6 @@ function setFontSize(size, btn) {
 
 </div>
 
-<script>
-document.querySelectorAll('#imgGallery img').forEach(img=>{
-  img.addEventListener('click',()=>{
-    img.classList.toggle('enlarged');
-  });
-});
-</script>
 
 
 <div id="settings-block" style="display:none; margin:20px;">
