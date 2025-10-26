@@ -5900,28 +5900,18 @@ function renderLensOptions(geom, rx) {
     card.innerHTML = `
       <div class="lens-header">
 
-<div><b>Lens Name & Brand:</b> ${row["PRODUCT_NAME"] || "(Unnamed Lens)"} <b>by</b> ${brandKey || (row["BRAND"] || "")} </div>
-
-   <div style="height:10px"></div>
-
-        <div><b>Lens Type:</b> ${dia} mm ${idx} ${design} ${app} ${note}   </div>
+<div>${brandKey || (row["BRAND"] || "")}
+        ${dia} mm ${idx} ${design} ${app} ${note}   </div>
 
    <div style="height:10px"></div>
      <div>${coatingHTML} </div>
         <div style="height:10px;"></div>
   <span class="toggle-card-details" style="cursor:pointer; user-select:none;">▼ More Details </span> 
 <div class="card-details" style="display:none;">
-
-        <div style="height:10px;"></div>
-
+<div style="height:10px"></div>
+<div><b>Lens Product Name:</b>${row["PRODUCT_NAME"] || "(Unnamed Lens)"}</div>
         <div><b>Lens Tintability Option:</b> ${tintNote}  </div>
-
-   <div style="height:10px"></div>
-
 <div><b>Lens Rating & Price:</b> ${brandMeta}</div>
-
-        <div style="height:10px;"></div>
-
 <div>${
   getFunctionCat(row["LENS_DESIGN"]||"") === "Multifocal"
     ? renderMFBadges(row)
