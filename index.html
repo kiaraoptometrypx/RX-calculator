@@ -579,6 +579,11 @@ table input {
 
   .section{background:var(--pale);border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0;}
 
+#lensResults {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
 
 
 /* Colorize each option individually */
@@ -5836,8 +5841,8 @@ function renderLensOptions(geom, rx) {
     "high_clarity": "Premium Ultra High Clarity"
   };
 
-  // Render (top 25)
-  matches.slice(0, 25).forEach(row => {
+  // Render (top 24)
+  matches.slice(0, 24).forEach(row => {
     const idx = (row["INDEX"] || "—").trim();
     const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
     const design = row["LENS_DESIGN"] || "—";
@@ -5871,13 +5876,13 @@ function renderLensOptions(geom, rx) {
       UV_420_BL: "Blue Light Filter",
       high_clarity: "High Clarity & Filter"
     };
-    const colorMap = { UV_400: "", UV_420_BL: "color:#1e66ff", high_clarity: "color:#7c3aed" };
+    const colorMap = { UV_400: "color:#174063", UV_420_BL: "color:#1B2B8C", high_clarity: "color:#A81448" };
 
     if (selectedClarity){
       const p = getPriceByClarity(row, selectedClarity);
       if (p != null){
         const style = colorMap[selectedClarity] ? ` style="${colorMap[selectedClarity]}"` : "";
-        coatingHTML = `<div class="lens-prices"><b>Price | </b> <b><span class="tag price"${style}>${labelMap[selectedClarity]}: RM ${p}</span></b></div>`;
+        coatingHTML = `<div class="lens-prices"><span class="tag price"${style}>${labelMap[selectedClarity]}: RM ${p}</span></div>`;
       } else {
         coatingHTML = ""; // shouldn't appear due to filter
       }
@@ -5892,7 +5897,7 @@ function renderLensOptions(geom, rx) {
           parts.push(`<span class="tag price"${style}>${labelMap[k]}: RM ${v}</span>`);
         }
       });
-      coatingHTML = parts.length ? `<div class="lens-prices"><b>Price&nbsp; |</b><b>${parts.join('|')}</b></div>` : "";
+      coatingHTML = parts.length ? `<div class="lens-prices">${parts.join('<br>')}</div>` : "";
     }
 
     const card = document.createElement("div");
@@ -5906,7 +5911,7 @@ function renderLensOptions(geom, rx) {
    <div style="height:10px"></div>
      <div>${coatingHTML} </div>
         <div style="height:10px;"></div>
-  <span class="toggle-card-details" style="cursor:pointer; user-select:none;">▼ More Details </span> 
+  <span class="toggle-card-details" style="cursor:pointer; user-select:none;">▼ Info </span> 
 <div class="card-details" style="display:none;">
 <div style="height:10px"></div>
 <div><b>Lens Product Name:</b>${row["PRODUCT_NAME"] || "(Unnamed Lens)"}</div>
@@ -5934,7 +5939,7 @@ if (!container.dataset.cardToggleBound) {
 
     const hidden = section.style.display === "none" || section.style.display === "";
     section.style.display = hidden ? "block" : "none";
-    btn.textContent = (hidden ? "▲" : "▼") + " More Details";
+    btn.textContent = (hidden ? "▲" : "▼") + " Info ";
   });
   container.dataset.cardToggleBound = "1";
 }
