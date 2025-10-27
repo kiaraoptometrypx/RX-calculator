@@ -728,7 +728,8 @@ function setFontSize(size, btn) {
 
 <div class="wrap">
 <div class="section" style="text-align:center;">
-  <span class="fixed-label"
+<br>
+ <span class="fixed-label"
         style="user-select:none; font-weight:bold; display:inline-block;">
     Welcome to Kiara Optometry's Algorithm Refraction
   </span>
@@ -818,15 +819,10 @@ zoom.addEventListener('click',()=> zoom.classList.remove('open'));
 
 
 
-<div id="settings-block" style="display:none; margin:20px;">
-<a href="https://kiaraoptometrypx.github.io/test/" target="_blank">
-  https://kiaraoptometrypx.github.io/test/
-</a>
+<div id="settings-block" style="display:none; margin:0px;">
+
 <table>
-<tr>
-  <td colspan="2" style="padding:0px; border:1px solid lightgrey;">
-</td>
-</tr>
+
 <tr class="offwhite">
 	<td colspan="2" style="color: grey; border:none; padding:0px;">
 
@@ -1031,7 +1027,7 @@ function toggleSection(id) {
 
 <br>
 
-<div class="pane" style="padding:10px;">
+<div class="pane" style="padding:30px 10px 30px 10px;">
 
 <div style="display:flex; justify-content:center;">
   <b><span
@@ -3995,7 +3991,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 
-  <div class="pane" style="padding:10px;">
+  <div class="pane" style="padding:30px 10px 30px 10px;">
 
 
 <div style="display:flex; justify-content:center;">
@@ -4808,7 +4804,7 @@ function parseRx(){
  <div style="height:12px;"></div>
 
 
-<div class="pane" style="align-items:center; padding:10px 10px 10px 10px;">
+<div class="pane" style="align-items:center; padding:30px 10px 30px 10px;">
 
 <div style="display:flex; justify-content:center;">
  <b><span   id="toggle-lens-selector"    style="cursor:pointer; user-select:none; text-align:center;">
@@ -5062,7 +5058,7 @@ function parseRx(){
 
 
 
-<div class="pane" style="padding:10px">
+<div class="pane" style="padding:10px; margin-bottom:10px">
 
 
   <span id="toggle-multi" style="cursor:pointer; user-select:none;">▼ B. Build Your Multi-Focal Vision Lens</span> 
@@ -5139,7 +5135,7 @@ function parseRx(){
 
 
 
- <div style="height:15px;"></div>
+ <div style="height:30px;"></div>
 
      <!-- Price -->
 
@@ -6236,7 +6232,11 @@ function setDescriptionsHidden(hide) {
     btn.style.border = "none";
     btn.style.backgroundColor = "white";
   });
+
+
 }
+
+
 </script>
 
 
@@ -6260,6 +6260,11 @@ document.addEventListener("click", (e) => {
   // Optional: add arrow prefix
   const base = btn.textContent.replace(/^[▲▼]\s*/, "");
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  setDescriptionsHidden(true); // hide all descriptions by default
+});
+
 </script>
 
 
