@@ -1041,7 +1041,7 @@ function toggleSection(id) {
 
 
 <div id="customer-details" style="display:none;">
-<div style="height:10px;"></div>
+<div style="height:30px;"></div>
 
 <div class="pane">
 
@@ -4003,7 +4003,7 @@ window.addEventListener("DOMContentLoaded", updateMergedPlan);
 
 
 <div id="frame-lens-details" style="display:none;">
-<div style="height:10px;"></div>
+<div style="height:30px;"></div>
 
 <div class="pane">
     <table>
@@ -4814,13 +4814,13 @@ function parseRx(){
 </div>
 
 <div id="lens-selector" style="display:none;">
- <div style="height:10px;"></div>
+ <div style="height:30px;"></div>
 
 
 
 
 
-<div class="pane" style="padding:10px">
+<div class="pane" style="padding:20px">
 <button id="btnToggleSeg1" class="small-normal-btn" style="display:none; background-color:white;">Select All</button>
   <span id="toggle-lensMaterialCoating" style="cursor:pointer; user-select:none;">▼ 1. Lens Material & Coating: Choose your type of lens </span>
 
@@ -4886,14 +4886,14 @@ function parseRx(){
 <!-- Durability Preference -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
 
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 4 of 4. Durability Preference :</b> Decide between softer coatings with less reflection, or tougher ones that last longer.
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 4 of 4. Safety Preference :</b> Decide between normal material or safety material such as polycarb, trivex and etc. While safety materials provide impact resistance, their coatings are slightly prone to wear and tear.
 
  <div style="height:10px;"></div>
 
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
 
-    <label><input type="checkbox" class="fl-durability" value="STANDARD"> Standard – Common standard that comes with 1 year warranty.</label>
-    <label><input type="checkbox" class="fl-durability" value="HIGH"> Tougher – Coating is thicker so it's much stronger and more durable.</label>
+    <label><input type="checkbox" class="fl-durability" value="STANDARD"> Standard – Common standard material.</label>
+    <label><input type="checkbox" class="fl-durability" value="HIGH"> Safety – Safety material that is more impact resistant..</label>
   </div>
 </div>
 
@@ -4902,7 +4902,7 @@ function parseRx(){
 </div>
 
 
- <div style="height:5px;"></div>
+ <div style="height:20px;"></div>
 
 
 
@@ -4910,7 +4910,7 @@ function parseRx(){
 
 
 
-<div class="pane" style="padding:10px">
+<div class="pane" style="display:none; padding:20px">
 
 
   <span id="toggle-brand" style="cursor:pointer; user-select:none;">▼ 2. Brand Preference: Quality & Price Point</span>
@@ -4977,13 +4977,13 @@ function parseRx(){
 
 
 
- <div style="height:5px;"></div>
+ <div style="display:none; height:20px;"></div>
 
 
 
 
-<div class="pane" style="padding:10px">
-  <span id="toggle-lenstype" style="cursor:pointer; user-select:none;">▼ 3. Build your Vision: Single Vision or Multifocal</span>
+<div class="pane" style="padding:20px">
+  <span id="toggle-lenstype" style="cursor:pointer; user-select:none;">▼ 2. Build your Vision: Single Vision or Multifocal</span>
 <div id="lenstype" style="display:none;">
  <div style="height:10px;"></div>
 
@@ -4997,9 +4997,10 @@ function parseRx(){
 
 
 
+
 <div id="singleFilters" style="display:none;">
 
-<button id="btnToggleSeg2" class="small-normal-btn" style="display:none; margin-left:10px; border:none; background-color:white;">Select All</button>
+
 
 
 
@@ -5053,7 +5054,7 @@ function parseRx(){
       </div>
 </div>
 
- <div style="height:5px;"></div>
+ <div style="height:20px;"></div>
 
 
 
@@ -5065,11 +5066,11 @@ function parseRx(){
 
 
 
+
+
 <!-- Multifocal Filters -->
 <div id="multifocalFilters" style="display:none;">
 
-
-<button id="btnToggleSeg3" class="small-normal-btn" style="display:none; margin-left:10px; border:none; background-color: white;">Select All</button>
 
   <!--  Multifocal Design -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
@@ -5167,16 +5168,23 @@ function parseRx(){
 
 </div>
 
+
+
+
+   
+
+
+
 <!-- Price Range -->
-<div class="pane" style="padding:5 0 5px 0px">
+<div class="pane" style="padding:5px 0 5px 0px">
   <span style="margin-left:5px;"><b>Price Range (RM):</b></span>
   <input id="priceMin" type="number" placeholder="Min"
          style="width:80px; border:1px solid #ccc; border-radius:30px; height:25px; padding:4px 8px; margin-left:10px">
   <span>–</span>
   <input id="priceMax" type="number" placeholder="Max"
          style="width:80px; border:1px solid #ccc; border-radius:30px; height:25px; padding:4px 8px; margin-left:6px">
+<span><button id="btnToggleSeg2" class="small-normal-btn" style="margin-left:10px">Show Single Vision Only</button><button id="btnToggleSeg3" class="small-normal-btn" style="margin-left:10px">Show Multifocals Only</button></span>
 </div>
-
 
 
 
@@ -5185,10 +5193,17 @@ function parseRx(){
   <input id="lensSearch" type="text" placeholder="Type brand, model, design, index…" 
          style="width:280px; border:1px solid #ccc; border-radius:30px; height:28px; padding:4px 8px; margin-left:4px;">
   <span id="searchCount" class="tiny muted" style="display:none; margin-left:8px;"></span>
+<button id="btnMirror" class="small-normal-btn">Quick Dia</button>
+
 <span><button id="btnFetch" class="small-normal-btn">Search</button>
 </span> 
   <button id="btnSort" class="small-normal-btn">Sort by Price</button>
 
+<script>
+document.getElementById("btnMirror").addEventListener("click", () => {
+  document.getElementById("btnLength").click();
+});
+</script>
 </div>
 
 
@@ -5196,6 +5211,7 @@ function parseRx(){
 
 
   <div id="lensResults">
+
     <div class="muted">Generate thickness first to see lenses choices.</div>
   </div>
 </div>
@@ -5212,7 +5228,7 @@ function parseRx(){
 
 
 
-
+<!--- xxx --->
 
 
 <script>
@@ -5608,7 +5624,7 @@ function renderSVBadges(row){
 
   return `
     <div class="mf-grid">
-<div style="height:10px;"></div>
+<div style="height:5px;"></div>
 ----------
         <div style="height:10px;"></div>
 
@@ -5623,6 +5639,84 @@ function renderSVBadges(row){
 }
 
 
+
+
+function getLensScore(row) {
+  // ---------- PART 1: Universal ----------
+  let part1 = 0;
+  const index = parseFloat(row["INDEX"]) || 0;
+  if (index >= 1.74) part1 = 3;
+  else if (index >= 1.67) part1 = 2;
+  else if (index >= 1.60) part1 = 1;
+  else part1 = 0;
+
+  // ---------- Determine lens type ----------
+  const designRaw = (row["LENS_DESIGN"] || "").toLowerCase();
+  const isMF = /(pal|progress|multi|varifocal|bifocal)/.test(designRaw);
+
+// ---------- PART 2: Single Vision ----------
+let part2 = 0;
+if (!isMF) {
+  const designRaw = (row["LENS_DESIGN"] || "").toLowerCase();
+  const view = (row["VIEWING_STYLE"] || "").toLowerCase();
+  const svPers = getSVPersonalization(row).toLowerCase().trim();
+
+  // === Function type ===
+  let funcScore = 0;
+  if (/\b(stock)\b/.test(designRaw)) funcScore = 0;
+  else if (/\b(custom)\b/.test(designRaw)) funcScore = 1;
+  if (/\b(dual|anti[- ]?fatigue|relax|boost)\b/.test(designRaw)) funcScore = 2;
+  part2 += funcScore;
+
+  // === Viewing geometry ===
+  let geomScore = 0;
+  if (view.includes("double") || view.includes("das")) geomScore = 3;
+  else if (view.includes("ator") || view.includes("ato")) geomScore = 2;
+  else if (view.includes("aspheric") || view.includes("asp")) geomScore = 1;
+  part2 += geomScore;
+
+  // === Personalization ===
+  let persScore = 0;
+  if (svPers.includes("full")) persScore = 2;
+  else if (svPers.includes("partial")) persScore = 1;
+  part2 += persScore;
+
+  console.log("🔍 DEBUG SV SCORING", {
+    name: row["PRODUCT_NAME"],
+    designRaw,
+    view,
+    svPers,
+    funcScore,
+    geomScore,
+    persScore,
+    part2
+  });
+}
+
+
+  // ---------- PART 3: Multifocal ----------
+  let part3 = 0;
+  if (isMF) {
+    const view = (row["MF_VIEWING"] || "").toLowerCase();
+    if (view.includes("expert")) part3 += 2;
+    else if (view.includes("balan")) part3 += 1;
+
+    const zone = (row["MF_ZONE"] || "").toLowerCase();
+    if (zone.includes("equal")) part3 += 2;
+    else if (zone.includes("near")) part3 += 1;
+
+    const tier = (row["MF_TIER"] || "").toLowerCase();
+    if (tier.includes("double")) part3 += 2;
+    else if (tier.includes("single")) part3 += 1;
+
+    const pers = (row["MF_PERSONALIZATION"] || "").toLowerCase();
+    if (pers.includes("full")) part3 += 2;
+    else if (pers.includes("partial")) part3 += 1;
+  }
+
+  const total = part1 + (isMF ? part3 : part2);
+  return { total, part1, part2, part3, isMF };
+}
 
 
 
@@ -5666,6 +5760,8 @@ function renderLensOptions(geom, rx) {
   const cap = toNumber(document.getElementById("priceCap")?.value) || 0;
 
   const { min: priceMin, max: priceMax } = getPriceRange();
+
+
 
   // Filter
   const matches = PRODUCTS.filter(row => {
@@ -5852,6 +5948,18 @@ function renderLensOptions(geom, rx) {
       ? `<span class="tag meta">Quality: ${rating.optical} · Price: ${rating.price}</span>`
       : "";
 
+// --- Scoring ---
+const score = getLensScore(row);
+const scoreHTML = `
+  <div class="lens-score" style="margin:6px 0; font-size:10px;">
+<span>
+  Thinness Score: ${score.part1} out of 3<br>
+  Design Score: ${score.isMF ? `${score.part3} out of 8` : `${score.part2} out of 6`}<br>
+  Total Score: ${score.total} out of ${score.isMF ? 11 : 9}
+</span>
+
+  </div>`;
+
 
 
     const tintOpt = (row["TINT_OPTION"] || "").trim();
@@ -5901,16 +6009,15 @@ function renderLensOptions(geom, rx) {
     card.innerHTML = `
       <div class="lens-header">
 
-<div>${brandKey || (row["BRAND"] || "")}
-        ${dia} mm ${idx} ${design} ${app} ${note}   </div>
-
+<div>${row["PRODUCT_NAME"] || "(Unnamed Lens)"} ${idx} ${design} ${app}</div>
+<div>    ${scoreHTML} </div>
    <div style="height:10px"></div>
      <div>${coatingHTML} </div>
-        <div style="height:10px;"></div>
-  <span class="toggle-card-details" style="cursor:pointer; user-select:none;">▼ Info </span> 
 <div class="card-details" style="display:none;">
-<div style="height:10px"></div>
-<div><b>Lens Product Name:</b>${row["PRODUCT_NAME"] || "(Unnamed Lens)"}</div>
+<div>
+<div style="height:20px"></div>
+<b>Lens Brand Maker:</b> ${brandKey || (row["BRAND"] || "")}</div>
+<div><b>Lens Details:</b> ${row["PRODUCT_NAME"] || "(Unnamed Lens)"} ${dia} mm ${idx} ${design} ${app} ${note}
         <div><b>Lens Tintability Option:</b> ${tintNote}  </div>
 <div><b>Lens Rating & Price:</b> ${brandMeta}</div>
 <div>${
@@ -5925,20 +6032,86 @@ function renderLensOptions(geom, rx) {
     container.appendChild(card);
   });
 
-if (!container.dataset.cardToggleBound) {
-  container.addEventListener("click", (e) => {
-    const btn = e.target.closest(".toggle-card-details");
-    if (!btn) return;
-    const card = btn.closest(".lens-card");
-    const section = card?.querySelector(".card-details");
-    if (!section) return;
 
-    const hidden = section.style.display === "none" || section.style.display === "";
-    section.style.display = hidden ? "block" : "none";
-    btn.textContent = (hidden ? "▲" : "▼") + " Info ";
+
+
+
+
+// === Overlay Lightbox for Lens Details (one click for all) ===
+const overlay = document.createElement("div");
+overlay.id = "lensOverlay";
+overlay.style.cssText = `
+  position: fixed;
+  inset: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+`;
+overlay.innerHTML = `
+  <div id="lensOverlayContent" style="
+    background: #fff;
+    color: #000;
+    max-width: 750px;
+    width: 90%;
+    max-height: 90vh;
+    overflow: auto;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  "></div>
+`;
+document.body.appendChild(overlay);
+const overlayContent = overlay.querySelector("#lensOverlayContent");
+
+function openOverlay(card) {
+  const clone = card.cloneNode(true);
+  const hidden = clone.querySelector(".card-details");
+  if (hidden) hidden.style.display = "block";
+
+  overlayContent.innerHTML = clone.innerHTML;
+  overlay.style.display = "flex";
+  overlay.style.opacity = "0";
+  overlayContent.style.transform = "scale(0.9)";
+  overlayContent.style.transition = "transform 0.25s ease";
+  overlay.style.transition = "opacity 0.25s ease";
+  requestAnimationFrame(() => {
+    overlay.style.opacity = "1";
+    overlayContent.style.transform = "scale(1)";
   });
-  container.dataset.cardToggleBound = "1";
 }
+
+function closeOverlay() {
+  overlay.style.opacity = "0";
+  overlayContent.style.transform = "scale(0.9)";
+  setTimeout(() => {
+    overlay.style.display = "none";
+    overlayContent.innerHTML = "";
+  }, 250);
+}
+
+// === Attach click handler to each card directly ===
+function bindLensCards() {
+  document.querySelectorAll(".lens-card").forEach(card => {
+    card.addEventListener("click", (e) => {
+      if (overlay.style.display === "flex") return; // ignore if already open
+      e.stopPropagation();
+      openOverlay(card);
+    }, { once: false });
+  });
+}
+
+// Run after cards are rendered
+bindLensCards();
+
+// === Click outside overlay content to close ===
+overlay.addEventListener("click", (e) => {
+  if (!e.target.closest("#lensOverlayContent")) closeOverlay();
+});
+
+
+
 
 }
 
@@ -6091,8 +6264,61 @@ function initToggleButton(btnId, rootSel) {
 
 // init 3 segment toggles
 initToggleButton('btnToggleSeg1', '#lensMaterialCoating');
-initToggleButton('btnToggleSeg2', '#singleFilters');
-initToggleButton('btnToggleSeg3', '#multifocalFilters');
+
+// special rule for single-vision filters
+document.getElementById('btnToggleSeg2')?.addEventListener('click', () => {
+  // only tick specific ones
+  const wanted = ['Stock SV', 'Custom SV', 'Anti-Fatigue'];
+  document.querySelectorAll('#singleFilters input[type="checkbox"]').forEach(cb => {
+    if (wanted.includes(cb.value)) cb.checked = true;
+  });
+});
+
+// --- Multifocal: select only these two ---
+document.getElementById('btnToggleSeg3')?.addEventListener('click', () => {
+  const wanted = ['Expert', 'Balance','Entry']; // add/remove as you like
+  document.querySelectorAll('#multifocalFilters input[type="checkbox"]').forEach(cb => {
+    cb.checked = wanted.includes(cb.value);
+  });
+});
+
+
+
+// --- helper to check only specific boxes within a section ---
+function setChecked(selector, wantedValues) {
+  document.querySelectorAll(selector).forEach(cb => {
+    cb.checked = wantedValues.includes(cb.value);
+  });
+}
+
+// --- helper to clear all checkboxes within a section ---
+function clearAll(selector) {
+  document.querySelectorAll(selector).forEach(cb => (cb.checked = false));
+}
+
+// --- Single Vision button ---
+document.getElementById('btnToggleSeg2')?.addEventListener('click', () => {
+  // clear multifocal first
+  clearAll('#multifocalFilters input[type="checkbox"]');
+  // check only SV ones
+  setChecked('#singleFilters input[type="checkbox"]', [
+    'Stock SV',
+    'Custom SV',
+    'Anti-Fatigue'
+  ]);
+});
+
+// --- Multifocal button ---
+document.getElementById('btnToggleSeg3')?.addEventListener('click', () => {
+  // clear single vision first
+  clearAll('#singleFilters input[type="checkbox"]');
+  // check only MF ones
+  setChecked('#multifocalFilters input[type="checkbox"]', [
+    'Expert',
+    'Balance',
+    'Entry'
+  ]);
+});
 </script>
 
 
@@ -6661,7 +6887,7 @@ extra-notes-manual
 
 
 
-<button id="btnPrint">🖨️ Print / Save as PDF</button>
+<button style="display:none" id="btnPrint">🖨️ Print / Save as PDF</button>
 
 <script>
 document.getElementById("btnPrint").addEventListener("click", () => {
