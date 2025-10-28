@@ -988,6 +988,76 @@ The small error in one eye <b>does not affect daily vision</b>.<br><br><i><b>- E
 9. Tolerance is linked to <b>accommodation</b> (the eye’s focusing ability).<br>
 10. <b>Younger patients</b> generally adapt better to larger SE Diff changes.<br><br><i><b>- End of Sharpest Ever -</b></i><br><br>--- --- --- --- ---<br><br>
 
+ <span id="toggle-brand" style="cursor:pointer; user-select:none;">▼ 2. Brand Preference: Quality & Price Point</span>
+
+
+
+<div id="brand">
+
+
+<!-- Brands -->
+<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
+      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 1 of 1. Brand Quality & Price :</b> Choose your preference based on optical quality, price, and origin.
+
+  <div style="height:10px;"></div>
+
+  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+
+<label><input type="checkbox" class="fl-brand" value="Seiko"> Seiko&nbsp;&nbsp;:
+    Technology = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
+    Made in Japan. Ultra premium customised aspheric technology; thinnest possible optics.</label>
+
+<label><input type="checkbox" class="fl-brand" value="Rodenstock">Rodenstock&nbsp;&nbsp;:
+    Technology = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
+    German engineered. Pioneers of many optical technologies. Excellent visual experience.</label>
+
+<label style="display:none"><input type="checkbox" class="fl-brand" value="Meyer"> Meyer&nbsp;&nbsp;:
+    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰💰 ⬤ 
+    German design. Premium price with modern technologies.</label>
+
+<label><input type="checkbox" class="fl-brand" value="Pentax"> Pentax&nbsp;&nbsp;:
+    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰💰 ⬤ -
+    Japan optics lineage. Great coating durability.</label>
+
+<label><input type="checkbox" class="fl-brand" value="Asahi">Asahi&nbsp;&nbsp;:
+    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
+    Japan made. Pioneer in thin lenses.  Good choice to reduce lens thickness.</label>
+
+<label><input type="checkbox" class="fl-brand" value="Opto-tech">Optotech&nbsp;&nbsp;:
+    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
+    German design. Reasonable price with modern technologies.</label>
+
+<label><input type="checkbox" class="fl-brand" value="Rayfilter">Rayfilter&nbsp;&nbsp;:
+    Technology = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
+    Taiwan made. Simple everyday lenses with nothing fancy. Basic and cost-focused.</label>
+
+<label><input type="checkbox" class="fl-brand" value="Advance Lens"> Local&nbsp;&nbsp;:
+    Technology = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
+    Local lab with simple, durable lenses.</label>
+
+
+  </div>
+</div>
+
+</div>
+
+<script>
+function setDefaultBrands() {
+  document.querySelectorAll('.fl-brand').forEach(cb => {
+    const brand = cb.value.toLowerCase();
+    // hide Seiko & Pentax
+    if (brand === 'seiko' || brand === 'pentax') {
+      cb.closest('label').style.display = 'none';
+      cb.checked = false;
+    } else {
+      cb.closest('label').style.display = '';
+      cb.checked = true;
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', setDefaultBrands);
+</script>
 
 
 
@@ -4913,58 +4983,7 @@ function parseRx(){
 <div class="pane" style="display:none; padding:20px">
 
 
-  <span id="toggle-brand" style="cursor:pointer; user-select:none;">▼ 2. Brand Preference: Quality & Price Point</span>
-
-
-
-<div id="brand" style="display:none;">
-
-
-<!-- Brands -->
-<div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 1 of 1. Brand Quality & Price :</b> Choose your preference based on optical quality, price, and origin.
-
-  <div style="height:10px;"></div>
-
-  <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-
-<label><input type="checkbox" class="fl-brand" value="Seiko"> Seiko&nbsp;&nbsp;:
-    Technology = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
-    Made in Japan. Ultra premium customised aspheric technology; thinnest possible optics.</label>
-
-<label><input type="checkbox" class="fl-brand" value="Rodenstock">Rodenstock&nbsp;&nbsp;:
-    Technology = ⭐️⭐️⭐️⭐️⭐️ · Price = 💰💰💰💰💰 -
-    German engineered. Pioneers of many optical technologies. Excellent visual experience.</label>
-
-<label style="display:none"><input type="checkbox" class="fl-brand" value="Meyer"> Meyer&nbsp;&nbsp;:
-    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰💰 ⬤ 
-    German design. Premium price with modern technologies.</label>
-
-<label><input type="checkbox" class="fl-brand" value="Pentax"> Pentax&nbsp;&nbsp;:
-    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰💰 ⬤ -
-    Japan optics lineage. Great coating durability.</label>
-
-<label><input type="checkbox" class="fl-brand" value="Asahi">Asahi&nbsp;&nbsp;:
-    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
-    Japan made. Pioneer in thin lenses.  Good choice to reduce lens thickness.</label>
-
-<label><input type="checkbox" class="fl-brand" value="Opto-tech">Optotech&nbsp;&nbsp;:
-    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
-    German design. Reasonable price with modern technologies.</label>
-
-<label><input type="checkbox" class="fl-brand" value="Rayfilter">Rayfilter&nbsp;&nbsp;:
-    Technology = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
-    Taiwan made. Simple everyday lenses with nothing fancy. Basic and cost-focused.</label>
-
-<label><input type="checkbox" class="fl-brand" value="Advance Lens"> Local&nbsp;&nbsp;:
-    Technology = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
-    Local lab with simple, durable lenses.</label>
-
-
-  </div>
-</div>
-
-</div>
+ 
 </div>
 
 
