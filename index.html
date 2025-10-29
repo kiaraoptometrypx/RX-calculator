@@ -4615,6 +4615,90 @@ display:${(window.showStockBars && stockUsableOS) ? 'block' : 'none'};
     wrapper.appendChild(leftBox);
     diagram.appendChild(wrapper);
 
+// === Populate external table outside diagram (baseline=Stock 1.56, max=RX 1.74) ===
+const tableContainer = document.getElementById("thicknessTable");
+if (tableContainer) {
+  const yOD = (mode === "length") ? lenOverride : geom.semiOD;
+  const yOS = (mode === "length") ? lenOverride : geom.semiOS;
+
+  const FhOD = effectivePower(rx.OD.S, rx.OD.C, rx.OD.Ax);
+  const FhOS = effectivePower(rx.OS.S, rx.OS.C, rx.OS.Ax);
+  const isPlusOD = FhOD >= 0;
+  const isPlusOS = FhOS >= 0;
+
+  // helpers to get thickness for any index
+  const tODat = n => (isPlusOD
+    ? plusThickness(rx.OD.S, rx.OD.C, rx.OD.Ax, n, yOD)
+    : minusThickness(rx.OD.S, rx.OD.C, rx.OD.Ax, n, yOD));
+  const tOSat = n => (isPlusOS
+    ? plusThickness(rx.OS.S, rx.OS.C, rx.OS.Ax, n, yOS)
+    : minusThickness(rx.OS.S, rx.OS.C, rx.OS.Ax, n, yOS));
+
+  // baselines (ALWAYS these two)
+  const baseStockIdx = 1.56;
+  const maxRxIdx     = 1.74;
+
+  // stock 1.56 = RX@1.56 × stockFactor(1.56)
+  const stock1p56_OD = tODat(baseStockIdx) * stockFactor(baseStockIdx, isPlusOD);
+  const stock1p56_OS = tOSat(baseStockIdx) * stockFactor(baseStockIdx, isPlusOS);
+
+  // max shrink uses RX @ 1.74 (no stock factor)
+  const rx1p74_OD = tODat(maxRxIdx);
+  const rx1p74_OS = tOSat(maxRxIdx);
+
+  // build table
+  let html = `
+    <table id="thicknessDataTable"
+           style="border-collapse:collapse;width:100%;margin-top:12px;text-align:center;font-size:12px;">
+      <tr style="background:#eee;">
+        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Index</th>
+        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Right RX (mm)</th>
+        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Left RX (mm)</th>
+        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Right Stock 1.56 (mm)</th>
+        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Left Stock 1.56 (mm)</th>
+        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Right RX 1.74 (mm)</th>
+        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Left RX 1.74 (mm)</th>
+        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Right Δ vs Stock1.56 (mm)</th>
+        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Left Δ vs Stock1.56 (mm)</th>
+        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Right Max Δ (to 1.74) (mm)</th>
+        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Left Max Δ (to 1.74) (mm)</th>
+      </tr>
+  `;
+
+  // your canonical indices
+  (INDICES || [1.56,1.60,1.67,1.74]).forEach(n => {
+    const rxN_OD = tODat(n);
+    const rxN_OS = tOSat(n);
+
+    const currDeltaOD = stock1p56_OD - rxN_OD;          // current shrink vs stock 1.56
+    const currDeltaOS = stock1p56_OS - rxN_OS;
+
+    const maxDeltaOD  = Math.max(0, stock1p56_OD - rx1p74_OD); // max shrink reachable
+    const maxDeltaOS  = Math.max(0, stock1p56_OS - rx1p74_OS);
+
+    html += `
+      <tr>
+        <td style="padding:6px;border:1px solid #ddd;">${n.toFixed(2)}</td>
+        <td style="padding:6px;border:1px solid #ddd;">${rxN_OD.toFixed(2)}</td>
+        <td style="padding:6px;border:1px solid #ddd;">${rxN_OS.toFixed(2)}</td>
+        <td style="padding:6px;border:1px solid #ddd;">${stock1p56_OD.toFixed(2)}</td>
+        <td style="padding:6px;border:1px solid #ddd;">${stock1p56_OS.toFixed(2)}</td>
+        <td style="padding:6px;border:1px solid #ddd;">${rx1p74_OD.toFixed(2)}</td>
+        <td style="padding:6px;border:1px solid #ddd;">${rx1p74_OS.toFixed(2)}</td>
+        <td style="padding:6px;border:1px solid #ddd;">${currDeltaOD.toFixed(2)}</td>
+        <td style="padding:6px;border:1px solid #ddd;">${currDeltaOS.toFixed(2)}</td>
+        <td style="padding:6px;border:1px solid #ddd;">${maxDeltaOD.toFixed(2)}</td>
+        <td style="padding:6px;border:1px solid #ddd;">${maxDeltaOS.toFixed(2)}</td>
+      </tr>`;
+  });
+
+  html += `</table>`;
+  tableContainer.innerHTML = html;
+}
+
+
+
+
 // --- bar frame toggle inside renderBars ---
 const frameToggleBtn = document.getElementById("toggle-bar-frame");
 if (frameToggleBtn) {
@@ -4856,11 +4940,16 @@ function parseRx(){
 
 
 
-<!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR ---><!--- LENS SELECTOR --->
+<!--- LENS SELECTOR --->
 
 
 
 <div class="section">
+<div style="display:none" id="thicknessTable"></div>
+
+
+
+
 <span style="margin-left:20px; cursor:pointer; user-select:none;" id="toggle-build-your-lens">
   ▼ How to Build your Lens
 </span>
@@ -5047,6 +5136,7 @@ function parseRx(){
  <div style="height:10px;"></div>
 
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
+    <label><input type="checkbox" class="fl-viewing" value="NONE"> None – mass produced for economical purpose. Lens is functional but no 'wow' factor.</label>
     <label><input type="checkbox" class="fl-viewing" value="SPH"> Spherical – traditional curve, natural peripheral vision and may observe some warping effect at the side.</label>
     <label><input type="checkbox" class="fl-viewing" value="ATO"> Atoric – ideal for astigmatism prescription as it makes your vision less tilt, more stable and wider.</label>
     <label><input type="checkbox" class="fl-viewing" value="ASP"> Single Aspheric – flatter front, less magnification of the eye but may notice a little peripheral swim..</label>
@@ -5207,6 +5297,15 @@ function parseRx(){
 
 
 
+<div class="pane" id="scoreButtons" style="margin:12px 0;">
+  <b>Lens Score:</b>
+  <button class="small-normal-btn" data-min="1" data-max="3">Entry (1–3)</button>
+  <button class="small-normal-btn" data-min="4" data-max="6">Middle (4–6)</button>
+  <button class="small-normal-btn" data-min="7" data-max="9">Premium (7–9)</button>
+  <button class="small-normal-btn" data-min="10" data-max="12">Luxury (10–12)</button>
+</div>
+
+
       <div class="pane" style="padding:10px; margin:5px 0px 5px 0px;">
   <b>Search :</b>
   <input id="lensSearch" type="text" placeholder="Type brand, model, design, index…" 
@@ -5227,6 +5326,7 @@ document.getElementById("btnMirror").addEventListener("click", () => {
 
 
 
+<div style="height:10px"></div>
 
 
   <div id="lensResults">
@@ -5315,6 +5415,118 @@ function matchesMultiField(cell, wanted){
 
 let LENS_SEARCH_TERM = "";
 
+
+
+// --- Read one row from your live thickness table (built by renderBars) ---
+function getThicknessRow(indexVal) {
+  const table = document.getElementById("thicknessTable");
+  if (!table) return null;
+
+  // rows: [Index, Right RX, Right Stock, Left RX, Left Stock]
+  const rows = Array.from(table.querySelectorAll("tr")).slice(1); // skip header
+  for (const r of rows) {
+    const idx = parseFloat(r.cells?.[0]?.textContent);
+    if (idx === parseFloat(indexVal)) {
+      return {
+        index: idx,
+        rightRX:   parseFloat(r.cells?.[1]?.textContent) || 0,
+        rightStock:parseFloat(r.cells?.[2]?.textContent) || 0,
+        leftRX:    parseFloat(r.cells?.[3]?.textContent) || 0,
+        leftStock: parseFloat(r.cells?.[4]?.textContent) || 0,
+      };
+    }
+  }
+  return null;
+}
+
+// --- Build the Thinness Efficiency HTML for a lens card (reads from table only) ---
+function buildEfficiencyHTML(row){
+  // detect stock vs rx by design
+  const designLower = String(row["LENS_DESIGN"]||"").toLowerCase();
+  const isStock = /\bstock\b/.test(designLower);
+
+  const idxNum = parseFloat(row["INDEX"]);
+  const t = getThicknessRow(idxNum);
+  if (!t || !isFinite(idxNum)) return ""; // table not ready or index not present
+
+  // Efficiency = (MaxShrink - ActualShrink) / MaxShrink = (Stock - Current)/Stock
+  // For RX lenses: Current = RX thickness; Max = Stock thickness
+  // For Stock lenses: Current = Stock, so efficiency is 0% (no shrink vs max)
+  const rEff = isStock || !t.rightStock ? 0 : Math.max(0, Math.round((1 - (t.rightRX / t.rightStock)) * 100));
+  const lEff = isStock || !t.leftStock  ? 0 : Math.max(0, Math.round((1 - (t.leftRX  / t.leftStock )) * 100));
+
+  const rShrink = isStock || !t.rightStock ? 0 : Math.max(0, t.rightStock - t.rightRX);
+  const lShrink = isStock || !t.leftStock  ? 0 : Math.max(0, t.leftStock  - t.leftRX);
+
+  const rMax = t.rightStock || 0;
+  const lMax = t.leftStock  || 0;
+
+  return `
+    <div style="margin-top:6px;font-size:10px;line-height:1.25;">
+      <b>Thinness Efficiency ${isStock ? "(Stock)" : "(Rx)"}</b><br>
+      Right : ${rEff}% (${rShrink.toFixed(2)} mm ; max ${rMax.toFixed(2)} mm)<br>
+      Left&nbsp;&nbsp;: ${lEff}% (${lShrink.toFixed(2)} mm ; max ${lMax.toFixed(2)} mm)
+    </div>`;
+}
+
+const CANON = [1.56, 1.60, 1.67, 1.74];
+function canonicalIndex(raw){
+  const n = parseFloat(raw);
+  if (!Number.isFinite(n)) return null;
+  let best = CANON[0], d0 = Math.abs(n - CANON[0]);
+  for (let i=1;i<CANON.length;i++){
+    const d = Math.abs(n - CANON[i]);
+    if (d < d0 || (d === d0 && CANON[i] > best)) { best = CANON[i]; d0 = d; }
+  }
+  return best;
+}
+
+// Read a row from thicknessDataTable by canonical index
+function getThicknessRow(indexVal){
+  const tbl = document.getElementById("thicknessDataTable");
+  if (!tbl) return null;
+  const rows = Array.from(tbl.querySelectorAll("tr")).slice(1);
+  for (const r of rows){
+    const idx = parseFloat(r.cells?.[0]?.textContent);
+    if (idx === parseFloat(indexVal)) {
+      return {
+        index: idx,
+        rRx:   parseFloat(r.cells[1].textContent) || 0,
+        lRx:   parseFloat(r.cells[2].textContent) || 0,
+        rStock156: parseFloat(r.cells[3].textContent) || 0,
+        lStock156: parseFloat(r.cells[4].textContent) || 0,
+        rRx174: parseFloat(r.cells[5].textContent) || 0,
+        lRx174: parseFloat(r.cells[6].textContent) || 0,
+        rDeltaCurr: parseFloat(r.cells[7].textContent) || 0,
+        lDeltaCurr: parseFloat(r.cells[8].textContent) || 0,
+        rDeltaMax:  parseFloat(r.cells[9].textContent) || 0,
+        lDeltaMax:  parseFloat(r.cells[10].textContent) || 0,
+      };
+    }
+  }
+  return null;
+}
+
+// Build lens-card “Thinness Efficiency” block (1 decimal, format you wanted)
+function buildEfficiencyHTML(row){
+  const canonIdx = canonicalIndex(row["INDEX"]);
+  const t = getThicknessRow(canonIdx);
+  if (!t) return "";
+
+  const rEff = t.rDeltaMax > 0 ? Math.max(0, (t.rDeltaCurr / t.rDeltaMax) * 100) : 0;
+  const lEff = t.lDeltaMax > 0 ? Math.max(0, (t.lDeltaCurr / t.lDeltaMax) * 100) : 0;
+
+  return `
+    <div style="margin-top:6px;font-size:10px;line-height:1.25;">
+      <b>Thinness Efficiency</b><br>
+      Right: ${rEff.toFixed(1)}% (${t.rDeltaCurr.toFixed(1)}mm ; max ${t.rDeltaMax.toFixed(1)}mm)<br>
+      Left:&nbsp;&nbsp;${lEff.toFixed(1)}% (${t.lDeltaCurr.toFixed(1)}mm ; max ${t.lDeltaMax.toFixed(1)}mm)
+    </div>`;
+}
+
+
+
+
 function rowHaystack(row){
   return [
     row["PRODUCT_NAME"], row["BRAND"], row["LENS_DESIGN"], row["INDEX"],
@@ -5363,6 +5575,9 @@ function checkedValues(selector){
     .map(i=>i.value);
 }
 function withinCap(price, cap){ if(!cap) return true; return Number(price) <= cap * 1.20; }
+
+
+
 
 /* =========================
    PRICE HELPERS
@@ -5596,6 +5811,7 @@ function renderSVBadges(row){
     "Anti-Fatigue": "Customized Dual zone vision - made from scratch and customized to your needs as well, and bottom part of lenses are further optimized for even better ergnomics."
   };
   const VIEW_TEXT = {
+    "NONE": "None – mass produced for economical purpose. Lens is functional but no 'wow' factor.",
     "SPH": "Spherical – traditional curve, natural peripheral vision and may observe some warping effect at the side.",
     "ATO": "Atoric – ideal for astigmatism prescription as it makes your vision less tilt, more stable and wider.",
     "ASP": "Single Aspheric – flatter front, less magnification of the eye but may notice a little peripheral swim..",
@@ -5660,82 +5876,72 @@ function renderSVBadges(row){
 
 
 
-function getLensScore(row) {
-  // ---------- PART 1: Universal ----------
-  let part1 = 0;
-  const index = parseFloat(row["INDEX"]) || 0;
-  if (index >= 1.74) part1 = 3;
-  else if (index >= 1.67) part1 = 2;
-  else if (index >= 1.60) part1 = 1;
-  else part1 = 0;
+// Tunable geometry weights (SV)
+const GEO_POINTS = { NONE:1,SPH: 2, ASP:3, ATO: 4, DAS: 5 };
 
-  // ---------- Determine lens type ----------
-  const designRaw = (row["LENS_DESIGN"] || "").toLowerCase();
+function geometryPoints(viewStr = "") {
+  const v = viewStr.trim().toLowerCase();
+  if (v === "none") return GEO_POINTS.NONE;
+  if (v.includes("double") || v.includes("das")) return GEO_POINTS.DAS;
+  if (v.includes("ator")  || v.includes("ato"))  return GEO_POINTS.ATO;
+  if (v.includes("aspheric") || v.includes("asp")) return GEO_POINTS.ASP;
+  if (v.includes("sph")) return GEO_POINTS.SPH;
+  return 0;
+}
+
+
+function getLensScore(row){
+  const designRaw = String(row["LENS_DESIGN"]||"").toLowerCase();
   const isMF = /(pal|progress|multi|varifocal|bifocal)/.test(designRaw);
 
-// ---------- PART 2: Single Vision ----------
-let part2 = 0;
-if (!isMF) {
-  const designRaw = (row["LENS_DESIGN"] || "").toLowerCase();
-  const view = (row["VIEWING_STYLE"] || "").toLowerCase();
-  const svPers = getSVPersonalization(row).toLowerCase().trim();
+  // ---- Single Vision (0–8), index excluded ----
+  let part2 = 0;
+  if (!isMF){
+    const view   = String(row["VIEWING_STYLE"]||"");
+    const svPers = String(getSVPersonalization(row)||"").toLowerCase();
 
-  // === Function type ===
-  let funcScore = 0;
-  if (/\b(stock)\b/.test(designRaw)) funcScore = 0;
-  else if (/\b(custom)\b/.test(designRaw)) funcScore = 1;
-  if (/\b(dual|anti[- ]?fatigue|relax|boost)\b/.test(designRaw)) funcScore = 2;
-  part2 += funcScore;
+    if (/(dual|anti[- ]?fatigue|relax|boost)/.test(designRaw)) part2 += 2;
+    else if (/\bcustom\b/.test(designRaw))                    part2 += 1;
 
-  // === Viewing geometry ===
-  let geomScore = 0;
-  if (view.includes("double") || view.includes("das")) geomScore = 3;
-  else if (view.includes("ator") || view.includes("ato")) geomScore = 2;
-  else if (view.includes("aspheric") || view.includes("asp")) geomScore = 1;
-  part2 += geomScore;
+    part2 += geometryPoints(view); // uses your GEO_POINTS
 
-  // === Personalization ===
-  let persScore = 0;
-  if (svPers.includes("full")) persScore = 2;
-  else if (svPers.includes("partial")) persScore = 1;
-  part2 += persScore;
-
-  console.log("🔍 DEBUG SV SCORING", {
-    name: row["PRODUCT_NAME"],
-    designRaw,
-    view,
-    svPers,
-    funcScore,
-    geomScore,
-    persScore,
-    part2
-  });
-}
-
-
-  // ---------- PART 3: Multifocal ----------
-  let part3 = 0;
-  if (isMF) {
-    const view = (row["MF_VIEWING"] || "").toLowerCase();
-    if (view.includes("expert")) part3 += 2;
-    else if (view.includes("balan")) part3 += 1;
-
-    const zone = (row["MF_ZONE"] || "").toLowerCase();
-    if (zone.includes("equal")) part3 += 2;
-    else if (zone.includes("near")) part3 += 1;
-
-    const tier = (row["MF_TIER"] || "").toLowerCase();
-    if (tier.includes("double")) part3 += 2;
-    else if (tier.includes("single")) part3 += 1;
-
-    const pers = (row["MF_PERSONALIZATION"] || "").toLowerCase();
-    if (pers.includes("full")) part3 += 2;
-    else if (pers.includes("partial")) part3 += 1;
+    if (svPers.includes("full"))         part2 += 2;
+    else if (svPers.includes("partial")) part2 += 1;
   }
 
-  const total = part1 + (isMF ? part3 : part2);
-  return { total, part1, part2, part3, isMF };
+  // ---- Multifocal (0–9), index excluded ----
+  let part3 = 0;
+  if (isMF){
+    const view = String(row["MF_VIEWING"]||"").toLowerCase();
+    const zone = String(row["MF_ZONE"]||"").toLowerCase();
+    const tier = String(row["MF_TIER"]||"").toLowerCase();
+    const pers = String(row["MF_PERSONALIZATION"]||"").toLowerCase();
+
+    // Viewing profile: Entry/Balance/Expert → 0/1/2
+    if (view.includes("expert"))      part3 += 2;
+    else if (view.includes("balan"))  part3 += 1;
+
+    // Near/Intermediate zone: Intermediate/Near/Equal → 0/1/2
+    if (zone.includes("equal"))       part3 += 2;
+    else if (zone.includes("near"))   part3 += 1;
+
+    // Production tier: Traditional/Single/Double → 1/2/3
+    if (tier.includes("double"))      part3 += 3;
+    else if (tier.includes("single")) part3 += 2;
+    else if (tier.includes("tradit")) part3 += 1;
+
+    // Personalization: None/Partial/Full → 0/1/2
+    if (pers.includes("full"))        part3 += 2;
+    else if (pers.includes("partial"))part3 += 1;
+  }
+
+  const total = isMF ? part3 : part2;
+  const max   = isMF ? 9 : 8;
+  return { total, max, part2, part3, isMF };
 }
+
+
+
 
 
 
@@ -5784,6 +5990,8 @@ function renderLensOptions(geom, rx) {
 
   // Filter
   const matches = PRODUCTS.filter(row => {
+	const s = getLensScore(row);
+	if (s.total < SCORE_MIN || s.total > SCORE_MAX) return false;
     const rawDesign  = String(row["LENS_DESIGN"] || "");
     const designKey  = rawDesign.toLowerCase().replace(/\s+/g, " ").trim();
     const designType = getFunctionCat(rawDesign); // "SV", "Multifocal", "Office", "Anti-fatigue"
@@ -5883,9 +6091,22 @@ function renderLensOptions(geom, rx) {
     return matchesSearch(row, LENS_SEARCH_TERM);
   });
 
+
+
+// ✅ Remove duplicate products (same name + index + design)
+const seen = new Set();
+const unique = matches.filter(row => {
+  const key = (row["PRODUCT_NAME"] + "|" + row["INDEX"] + "|" + row["LENS_DESIGN"]).toLowerCase().trim();
+  if (seen.has(key)) return false;
+  seen.add(key);
+  return true;
+});
+
+
+
   // SORT — by selected coating price; otherwise by cheapest available coating
   const claritySetNow = checkedValues(".fl-clarity");
-  matches.sort((a, b) => {
+unique.sort((a, b) => {
     let pa, pb;
     if (claritySetNow.length){
       const k = claritySetNow[0];
@@ -5953,7 +6174,7 @@ function renderLensOptions(geom, rx) {
   };
 
   // Render (top 24)
-  matches.slice(0, 24).forEach(row => {
+unique.slice(0, 24).forEach(row => {
     const idx = (row["INDEX"] || "—").trim();
     const app   = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
     const design = row["LENS_DESIGN"] || "—";
@@ -5971,13 +6192,15 @@ function renderLensOptions(geom, rx) {
 const score = getLensScore(row);
 const scoreHTML = `
   <div class="lens-score" style="margin:6px 0; font-size:10px;">
-<span>
-  Thinness Score: ${score.part1} out of 3<br>
-  Design Score: ${score.isMF ? `${score.part3} out of 8` : `${score.part2} out of 6`}<br>
-  Total Score: ${score.total} out of ${score.isMF ? 11 : 9}
-</span>
-
+    <span>Design Score: ${score.total} / ${score.max}</span>
   </div>`;
+
+
+
+const efficiencyHTML = buildEfficiencyHTML(row);
+
+
+
 
 
 
@@ -6029,7 +6252,9 @@ const scoreHTML = `
       <div class="lens-header">
 
 <div>${row["PRODUCT_NAME"] || "(Unnamed Lens)"} ${idx} ${design} ${app}</div>
-<div>    ${scoreHTML} </div>
+<div>${scoreHTML}${efficiencyHTML}</div>
+
+
    <div style="height:10px"></div>
      <div>${coatingHTML} </div>
 <div class="card-details" style="display:none;">
@@ -6214,9 +6439,43 @@ document.getElementById("btnClearMF")?.addEventListener("click", () => {
 
 
 
+<script>
+let SCORE_MIN = 0, SCORE_MAX = 8;
 
+document.querySelectorAll("#scoreButtons .small-normal-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    SCORE_MIN = parseInt(btn.dataset.min);
+    SCORE_MAX = parseInt(btn.dataset.max);
 
+    // highlight active
+    document.querySelectorAll("#scoreButtons .small-normal-btn").forEach(b => {
+      b.style.background = "";
+      b.style.color = "";
+    });
+    btn.style.background = "#155e75";
+    btn.style.color = "#fff";
 
+    const rx = parseRx();
+    renderLensOptions(LAST_GEOM, rx);
+  });
+});
+</script>
+
+<script>
+// === Highlight active SV/MF buttons ===
+document.querySelectorAll("#btnToggleSeg2, #btnToggleSeg3").forEach(btn => {
+  btn.addEventListener("click", () => {
+    // clear highlights
+    document.querySelectorAll("#btnToggleSeg2, #btnToggleSeg3").forEach(b => {
+      b.style.background = "";
+      b.style.color = "";
+    });
+    // set active highlight
+    btn.style.background = "#155e75";
+    btn.style.color = "#fff";
+  });
+});
+</script>
 
 
 
