@@ -1016,23 +1016,23 @@ The small error in one eye <b>does not affect daily vision</b>.<br><br><i><b>- E
     German design. Premium price with modern technologies.</label>
 
 <label><input type="checkbox" class="fl-brand" value="Pentax"> Pentax&nbsp;&nbsp;:
-    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰💰 ⬤ -
+    Technology = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰💰💰 ⬤ -
     Japan optics lineage. Great coating durability.</label>
 
 <label><input type="checkbox" class="fl-brand" value="Asahi">Asahi&nbsp;&nbsp;:
-    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
+    Technology = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
     Japan made. Pioneer in thin lenses.  Good choice to reduce lens thickness.</label>
 
 <label><input type="checkbox" class="fl-brand" value="Opto-tech">Optotech&nbsp;&nbsp;:
-    Technology = ⭐️⭐️⭐️⭐️ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
+    Technology = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰💰 ⬤ ⬤ -
     German design. Reasonable price with modern technologies.</label>
 
 <label><input type="checkbox" class="fl-brand" value="Rayfilter">Rayfilter&nbsp;&nbsp;:
-    Technology = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
+    Technology = ⭐️⭐️ ⬤ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
     Taiwan made. Simple everyday lenses with nothing fancy. Basic and cost-focused.</label>
 
 <label><input type="checkbox" class="fl-brand" value="Advance Lens"> Local&nbsp;&nbsp;:
-    Technology = ⭐️⭐️⭐️ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
+    Technology = ⭐️ ⬤ ⬤ ⬤ ⬤ · Price = 💰💰 ⬤ ⬤ ⬤ -
     Local lab with simple, durable lenses.</label>
 
 
@@ -4615,86 +4615,195 @@ display:${(window.showStockBars && stockUsableOS) ? 'block' : 'none'};
     wrapper.appendChild(leftBox);
     diagram.appendChild(wrapper);
 
-// === Populate external table outside diagram (baseline=Stock 1.56, max=RX 1.74) ===
-const tableContainer = document.getElementById("thicknessTable");
-if (tableContainer) {
-  const yOD = (mode === "length") ? lenOverride : geom.semiOD;
-  const yOS = (mode === "length") ? lenOverride : geom.semiOS;
 
-  const FhOD = effectivePower(rx.OD.S, rx.OD.C, rx.OD.Ax);
-  const FhOS = effectivePower(rx.OS.S, rx.OS.C, rx.OS.Ax);
-  const isPlusOD = FhOD >= 0;
-  const isPlusOS = FhOS >= 0;
+// === build the external thickness table from whatever the bars show ===
+buildThicknessTableFromBars();   // <-- keep this call right after diagram.appendChild(wrapper)
 
-  // helpers to get thickness for any index
-  const tODat = n => (isPlusOD
-    ? plusThickness(rx.OD.S, rx.OD.C, rx.OD.Ax, n, yOD)
-    : minusThickness(rx.OD.S, rx.OD.C, rx.OD.Ax, n, yOD));
-  const tOSat = n => (isPlusOS
-    ? plusThickness(rx.OS.S, rx.OS.C, rx.OS.Ax, n, yOS)
-    : minusThickness(rx.OS.S, rx.OS.C, rx.OS.Ax, n, yOS));
+// -----------------------------
+// SCRAPE BARS → BUILD TABLE
+// -----------------------------
+function buildThicknessTableFromBars() {
+  const tableContainer = document.getElementById("thicknessTable");
+  if (!tableContainer) return;
 
-  // baselines (ALWAYS these two)
-  const baseStockIdx = 1.56;
-  const maxRxIdx     = 1.74;
+  // Find the two boxes we just rendered (Right first, Left second)
+  const boxes = document.querySelectorAll("#thicknessDiagram .bar-side-box");
+  if (boxes.length < 2) {
+    tableContainer.innerHTML = "";
+    return;
+  }
+  const rightBox = boxes[0];
+  const leftBox  = boxes[1];
 
-  // stock 1.56 = RX@1.56 × stockFactor(1.56)
-  const stock1p56_OD = tODat(baseStockIdx) * stockFactor(baseStockIdx, isPlusOD);
-  const stock1p56_OS = tOSat(baseStockIdx) * stockFactor(baseStockIdx, isPlusOS);
+  // Parse one box into a map: index -> { rx: number|null, stock: number|null }
+  function parseBox(boxEl){
+    const map = new Map();
+    const rows = boxEl.querySelectorAll(".bar-row");
+    rows.forEach(r => {
+      const idxTxt = (r.querySelector(".bar-label")?.textContent || "").trim();
+      const index = parseFloat(idxTxt);
+      if (!Number.isFinite(index)) return;
 
-  // max shrink uses RX @ 1.74 (no stock factor)
-  const rx1p74_OD = tODat(maxRxIdx);
-  const rx1p74_OS = tOSat(maxRxIdx);
+      const label = (r.querySelector(".bar-text")?.textContent || "")
+        .replace(/\s+/g, " ")
+        .trim();
 
-  // build table
+      // Expect patterns like: "RX 3.4 , Stock 5.6" OR "RX 2.8 , Stock -"
+      const rxMatch    = label.match(/RX\s*([0-9.]+|-)/i);
+      const stockMatch = label.match(/Stock\s*([0-9.]+|-)/i);
+
+      const rxVal    = rxMatch ? (rxMatch[1] === "-" ? null : parseFloat(rxMatch[1])) : null;
+      const stockVal = stockMatch ? (stockMatch[1] === "-" ? null : parseFloat(stockMatch[1])) : null;
+
+      map.set(index, { rx: Number.isFinite(rxVal) ? rxVal : null, stock: Number.isFinite(stockVal) ? stockVal : null });
+    });
+    return map;
+  }
+
+  const rightMap = parseBox(rightBox);
+  const leftMap  = parseBox(leftBox);
+
+  // Baselines:
+  // Thickest baseline = Stock 1.56, fallback to RX 1.56 if stock is dash
+  // Thinnest baseline = RX 1.74 (if dash → maxDelta = 0)
+  const BASE_THICK_INDEX = 1.56;
+  const THIN_THICK_INDEX = 1.74;
+
+  const baseR_stock = rightMap.get(BASE_THICK_INDEX)?.stock ?? null;
+  const baseR_rx    = rightMap.get(BASE_THICK_INDEX)?.rx    ?? null;
+  const baseL_stock = leftMap.get(BASE_THICK_INDEX)?.stock  ?? null;
+  const baseL_rx    = leftMap.get(BASE_THICK_INDEX)?.rx     ?? null;
+
+  const thickBaseR = (baseR_stock != null ? baseR_stock : baseR_rx);
+  const thickBaseL = (baseL_stock != null ? baseL_stock : baseL_rx);
+
+  const thinR_rx = rightMap.get(THIN_THICK_INDEX)?.rx ?? null;
+  const thinL_rx = leftMap.get(THIN_THICK_INDEX)?.rx  ?? null;
+
+  // Efficiency helpers (NEVER invent numbers)
+  function effBlock(curr, thickBase, thinRx) {
+    if (thickBase == null) {
+      // No baseline at all → everything 0
+      return { textVal: "–", pct: 0, shrink: 0, maxShrink: 0 };
+    }
+    const valueText = (curr == null) ? "–" : curr.toFixed(2);
+    const maxShrink = (thinRx != null) ? Math.max(0, thickBase - thinRx) : 0;
+    const shrinkNow = (curr != null)    ? Math.max(0, thickBase - curr)   : 0;
+    const pct = maxShrink > 0 ? (shrinkNow / maxShrink) * 100 : 0;
+    return {
+      textVal: valueText,
+      pct: pct,
+      shrink: shrinkNow,
+      maxShrink: maxShrink
+    };
+  }
+
+  function wrapCell(txt){
+    return `style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;text-align:center;"`;
+  }
+
+  // Build table (Index | - | Right RX | Right Stock | Left RX | Left Stock)
   let html = `
     <table id="thicknessDataTable"
-           style="border-collapse:collapse;width:100%;margin-top:12px;text-align:center;font-size:12px;">
+           style="border-collapse:collapse;width:100%;margin-top:12px;font-size:12px;">
       <tr style="background:#eee;">
-        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Index</th>
-        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Right RX (mm)</th>
-        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Left RX (mm)</th>
-        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Right Stock 1.56 (mm)</th>
-        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Left Stock 1.56 (mm)</th>
-        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Right RX 1.74 (mm)</th>
-        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Left RX 1.74 (mm)</th>
-        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Right Δ vs Stock1.56 (mm)</th>
-        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Left Δ vs Stock1.56 (mm)</th>
-        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Right Max Δ (to 1.74) (mm)</th>
-        <th style="padding:6px;border:1px solid #ddd;white-space:normal;word-break:break-word;">Left Max Δ (to 1.74) (mm)</th>
+        <th ${wrapCell("")}>Index</th>
+        <th ${wrapCell("")}>-</th>
+        <th ${wrapCell("")}>Right RX (mm)</th>
+        <th ${wrapCell("")}>Right Stock (mm)</th>
+        <th ${wrapCell("")}>Left RX (mm)</th>
+        <th ${wrapCell("")}>Left Stock (mm)</th>
       </tr>
   `;
 
-  // your canonical indices
-  (INDICES || [1.56,1.60,1.67,1.74]).forEach(n => {
-    const rxN_OD = tODat(n);
-    const rxN_OS = tOSat(n);
+  const indices = (typeof INDICES !== "undefined" && Array.isArray(INDICES) && INDICES.length)
+    ? INDICES.slice()
+    : [1.56, 1.60, 1.67, 1.74];
 
-    const currDeltaOD = stock1p56_OD - rxN_OD;          // current shrink vs stock 1.56
-    const currDeltaOS = stock1p56_OS - rxN_OS;
+  indices.forEach(n => {
+    const r = rightMap.get(n) || { rx:null, stock:null };
+    const l = leftMap.get(n)  || { rx:null, stock:null };
 
-    const maxDeltaOD  = Math.max(0, stock1p56_OD - rx1p74_OD); // max shrink reachable
-    const maxDeltaOS  = Math.max(0, stock1p56_OS - rx1p74_OS);
+    const rightRX   = effBlock(r.rx,    thickBaseR, thinR_rx);
+    const rightStock= effBlock(r.stock, thickBaseR, thinR_rx);
+    const leftRX    = effBlock(l.rx,    thickBaseL, thinL_rx);
+    const leftStock = effBlock(l.stock, thickBaseL, thinL_rx);
+
+    function cellText(block){
+      // Always show the displayed value (or "–"), then the bracket
+      return `${block.textVal} (${Math.round(block.pct)}%, ${block.shrink.toFixed(2)} mm; max ${block.maxShrink.toFixed(2)} mm)`;
+    }
 
     html += `
       <tr>
-        <td style="padding:6px;border:1px solid #ddd;">${n.toFixed(2)}</td>
-        <td style="padding:6px;border:1px solid #ddd;">${rxN_OD.toFixed(2)}</td>
-        <td style="padding:6px;border:1px solid #ddd;">${rxN_OS.toFixed(2)}</td>
-        <td style="padding:6px;border:1px solid #ddd;">${stock1p56_OD.toFixed(2)}</td>
-        <td style="padding:6px;border:1px solid #ddd;">${stock1p56_OS.toFixed(2)}</td>
-        <td style="padding:6px;border:1px solid #ddd;">${rx1p74_OD.toFixed(2)}</td>
-        <td style="padding:6px;border:1px solid #ddd;">${rx1p74_OS.toFixed(2)}</td>
-        <td style="padding:6px;border:1px solid #ddd;">${currDeltaOD.toFixed(2)}</td>
-        <td style="padding:6px;border:1px solid #ddd;">${currDeltaOS.toFixed(2)}</td>
-        <td style="padding:6px;border:1px solid #ddd;">${maxDeltaOD.toFixed(2)}</td>
-        <td style="padding:6px;border:1px solid #ddd;">${maxDeltaOS.toFixed(2)}</td>
-      </tr>`;
+        <td ${wrapCell("")}>${n.toFixed(2)}</td>
+        <td ${wrapCell("")}>—</td>
+        <td ${wrapCell("")}>${cellText(rightRX)}</td>
+        <td ${wrapCell("")}>${cellText(rightStock)}</td>
+        <td ${wrapCell("")}>${cellText(leftRX)}</td>
+        <td ${wrapCell("")}>${cellText(leftStock)}</td>
+      </tr>
+    `;
   });
 
   html += `</table>`;
   tableContainer.innerHTML = html;
 }
+
+// ----------------------------------------
+// READER HELPERS (for lens cards to reuse)
+// ----------------------------------------
+const CANON = [1.56, 1.60, 1.67, 1.74];
+function canonicalIndex(raw){
+  const n = parseFloat(raw);
+  if (!Number.isFinite(n)) return null;
+  let best = CANON[0], d0 = Math.abs(n - CANON[0]);
+  for (let i=1;i<CANON.length;i++){
+    const d = Math.abs(n - CANON[i]);
+    if (d < d0 || (d === d0 && CANON[i] > best)) { best = CANON[i]; d0 = d; }
+  }
+  return parseFloat(best.toFixed(2));
+}
+
+// Read a row from the built table by canonical index
+function getThicknessRowFromTable(indexVal){
+  const tbl = document.getElementById("thicknessDataTable");
+  if (!tbl) return null;
+  const rows = Array.from(tbl.querySelectorAll("tr")).slice(1);
+
+  for (const r of rows){
+    const idx = parseFloat((r.cells?.[0]?.textContent || "").trim());
+    if (idx === parseFloat(indexVal)) {
+      // Cells contain "VALUE (PCT%, SHRINK mm; max MAX mm)"
+      const parseCell = (td) => {
+        const raw = (td?.textContent || "").trim();
+        const valMatch = raw.match(/^([0-9.\-]+|–)/);
+        const pctMatch = raw.match(/([0-9.]+)%/);
+        const dMatch   = raw.match(/,\s*([0-9.\-]+)\s*mm/i);
+        const mMatch   = raw.match(/max\s*([0-9.\-]+)\s*mm/i);
+        return {
+          value: (valMatch && valMatch[1] !== "–") ? parseFloat(valMatch[1]) : null,
+          pct:   pctMatch ? parseFloat(pctMatch[1]) : 0,
+          delta: dMatch   ? parseFloat(dMatch[1])   : 0,
+          max:   mMatch   ? parseFloat(mMatch[1])   : 0
+        };
+      };
+
+      const rightRX    = parseCell(r.cells?.[2]);
+      const rightStock = parseCell(r.cells?.[3]);
+      const leftRX     = parseCell(r.cells?.[4]);
+      const leftStock  = parseCell(r.cells?.[5]);
+
+      return {
+        index: idx,
+        rightRX, rightStock,
+        leftRX,  leftStock
+      };
+    }
+  }
+  return null;
+}
+
 
 
 
@@ -4966,14 +5075,25 @@ function parseRx(){
 <div class="pane" style="align-items:center; padding:30px 10px 30px 10px;">
 
 <div style="display:flex; justify-content:center;">
- <b><span   id="toggle-lens-selector"    style="cursor:pointer; user-select:none; text-align:center;">
-    ▼ Build Your Lens
+ <b><span   id="toggle-lens-chooser"    style="cursor:pointer; user-select:none; text-align:center;">
+    ▼ Choose Your Lens
   </span></b>
 
 </div>
+<div id="lens-chooser" style="display:none;">
+ <div style="height:30px;"></div>
+
+
+
+
+<div class="pane">
+ <b><span   id="toggle-lens-selector"    style="cursor:pointer; user-select:none; text-align:center; margin-left:10px;">
+    ▼ Build Your Lens
+  </span></b>
 
 <div id="lens-selector" style="display:none;">
- <div style="height:30px;"></div>
+ <div style="height:20px;"></div>
+
 
 
 
@@ -5021,7 +5141,6 @@ function parseRx(){
 
 
 <label><input type="checkbox" class="fl-index" value="1.5"> Standard (1.5) – normal thickness and curvy lens for everyday use.</label>
-<label><input type="checkbox" class="fl-index" value="Safety"> Safety – impact-resistant material for tougher protection.</label>
 <label><input type="checkbox" class="fl-index" value="1.6"> Thin (1.6) – lighter, flatter lens that looks neater.</label>
 <label><input type="checkbox" class="fl-index" value="1.67"> Extra Thin (1.67) - even slimmer, even lighter and even flatter for stable optics.</label>
 <label><input type="checkbox" class="fl-index" value="1.74"> Ultra Thin (1.74) – utmost thinnest, lightest, flattest lens for most stable optics.</label>
@@ -5116,45 +5235,44 @@ function parseRx(){
 
 <!-- Functional Lens -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 1 of 2. Functional Lens :</b> High technological lenses understands that not every part should be the same prescription in order to maintain natural and relaxed vision. Dual zone single vision maximises functionality.
+  <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>
+  <b>Question 1 of 2. Functional Lens :</b> High technological lenses understands that not every part should be the same prescription in order to maintain natural and relaxed vision. Dual zone single vision maximises functionality.
+  <div style="height:10px;"></div>
 
- <div style="height:10px;"></div>
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-<label><input type="checkbox" class="fl-func" value="Stock SV"> Stock Single Vision - ready made single vision lenses with standard optics. No further customization. </label>
-
-    <label><input type="checkbox" class="fl-func" value="Custom SV"> Customized Single vision - made from scratch to your wearing needs and frame details. Can be tinted as well.</label>
-
-    <label><input type="checkbox" class="fl-func" value="Anti-Fatigue"> Customized Dual zone vision - made from scratch and customized to your needs as well, and bottom part of lenses are further optimized for even better ergnomics.</label>
+    <label><input type="checkbox" class="fl-func" value="Stock SV"> Stock Single Vision (Score 1/3) - ready made single vision lenses with standard optics. No further customization.</label>
+    <label><input type="checkbox" class="fl-func" value="Custom SV"> Customized Single vision (Score 2/3) - made from scratch to your wearing needs and frame details. Can be tinted as well.</label>
+    <label><input type="checkbox" class="fl-func" value="Anti-Fatigue"> Customized Dual zone vision (Score 3/3) - made from scratch, customized to your needs with further ergnomics optimization.</label>
   </div>
 </div>
-
-
 
 <!-- Viewing Preference -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 2 of 2. Viewing Preference :</b> Pick your preferred look and view balance – wider vision or slimmer design.
- <div style="height:10px;"></div>
+  <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>
+  <b>Question 2 of 2. Viewing Preference :</b> Pick your preferred look and view balance – wider vision or slimmer design.
+  <div style="height:10px;"></div>
 
   <div style="display:flex; flex-direction:column; flex-wrap:wrap; gap:10px; align-items:flex-start;">
-    <label><input type="checkbox" class="fl-viewing" value="NONE"> None – mass produced for economical purpose. Lens is functional but no 'wow' factor.</label>
-    <label><input type="checkbox" class="fl-viewing" value="SPH"> Spherical – traditional curve, natural peripheral vision and may observe some warping effect at the side.</label>
-    <label><input type="checkbox" class="fl-viewing" value="ATO"> Atoric – ideal for astigmatism prescription as it makes your vision less tilt, more stable and wider.</label>
-    <label><input type="checkbox" class="fl-viewing" value="ASP"> Single Aspheric – flatter front, less magnification of the eye but may notice a little peripheral swim..</label>
-    <label><input type="checkbox" class="fl-viewing" value="DAS"> Double Aspheric – maximum aspheric optics, thinnest and most realistic magnification but may notice a little peripheral swim..</label>
+    <label><input type="checkbox" class="fl-viewing" value="NONE"> None (Score 1/5) – mass produced for economical purpose. Lens is functional but no 'wow' factor.</label>
+    <label><input type="checkbox" class="fl-viewing" value="SPH"> Spherical (Score 2/5) – traditional curve, natural peripheral vision and may observe some stretching effect at the side.</label>
+    <label><input type="checkbox" class="fl-viewing" value="ASP"> Single Aspheric (Score 3/5) – flatter front, less magnification of the eye but may notice a little peripheral swim..</label>
+    <label><input type="checkbox" class="fl-viewing" value="ATO"> Atoric (Score 4/5) – ideal for astigmatism prescription as it makes your vision less tilt, more stable and wider.</label>
+    <label><input type="checkbox" class="fl-viewing" value="DAS"> Double Aspheric (Score 5/5) – maximum aspheric optics, thinnest and most realistic magnification but may notice a little peripheral swim..</label>
   </div>
 </div>
 
-  <!--  Personalisation Tier -->
+<!-- Personalisation Tier -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 3 of 3. Personalization :</b> Optimize optics by personalization; fitting the lenses for the frame & wearer. Wearing position of the frame will affect the optical clarity; hence personalization will maximise the clarity at the position of wear.
+  <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>
+  <b>Question 3 of 3. Personalization :</b> Optimize optics by personalization; fitting the lenses for the frame & wearer. Wearing position of the frame will affect the optical clarity; hence personalization will maximise the clarity at the position of wear.
+  <div style="height:10px;"></div>
 
- <div style="height:10px;"></div>
-    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-sv-pers" value="Full"> Full personalization - optics are optimized for your frame and how you wear the glasses.</label>
-      <label><input type="checkbox" class="fl-sv-pers" value="Partial"> Partial personalization - optics are optimized for the frame only.</label>
-      <label><input type="checkbox" class="sv-mf-pers" value="None"> No personalization - optics are made as default and may suit or not suit the frame.</label>
-    </div>
+  <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+    <label><input type="checkbox" class="fl-sv-pers" value="Full"> Fully custom (Score 3/3) - Lenses are optimised for the spectacles size, shape and wearer's position. Experience the best possible optics at the moment.</label>
+    <label><input type="checkbox" class="fl-sv-pers" value="Partial"> Partial custom (Score 2/3) - Lenses are optimised for the spectacles size and shape. Experience better optics than basic.</label>
+    <label><input type="checkbox" class="fl-sv-pers" value="None"> None (Score 1/3) - Lenses are made with default setting and fit for functional purpose.</label>
   </div>
+</div>
 
 
 
@@ -5183,50 +5301,60 @@ function parseRx(){
 
   <!--  Multifocal Design -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 1 of 4. Multifocal Design :</b> Choose the type of multifocal design you prefer. Every design has pros and cons. Wider clear zones and swim effect is related. If one is increased the other will follow suit. <div style="height:10px;"></div>
+  <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>
+  <b>Question 1 of 4. Multifocal Overall Design :</b>
+  Choose the type of multifocal design you prefer. Every design has pros and cons. Wider clear zones and swim effect is related. If one is increased the other will follow suit.
+  <div style="height:10px;"></div>
 
-    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-view" value="Expert"> Expert - wider clear zones but swim is more obvious; requires prior experience with multifocal.</label>
-      <label><input type="checkbox" class="fl-mf-view" value="Balance">Balanced - smaller clear zones but swim effect reduced; making it more comfortable to use.</label>
-      <label><input type="checkbox" class="fl-mf-view" value="Entry"> Entry - softest and minimal swim but clear zones are narrow; good for first time adaptation.</label>
-    </div>
+  <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+    <label><input type="checkbox" class="fl-mf-view" value="Expert"> Expert (Score 3/3) -  Widest clear zones, suitable for seasoned wearers.</label>
+    <label><input type="checkbox" class="fl-mf-view" value="Balance"> Medium (Score 2/3) - Moderate clear zones &amp; swim effect.</label>
+    <label><input type="checkbox" class="fl-mf-view" value="Entry"> Entry (Score 1/3) - Narrow clear zones. Suitable for first time wearers to adapt.</label>
   </div>
+</div>
 
-
-  <!--  Zone Enhancement -->
+<!--  Zone Enhancement -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 2 of 4. Zone Enhancement :</b> Emphasize near or intermediate. Near vision range defined as less than 45cm; hand distance, phone, books etc. Intermediate vision range defined as  more than 45cm; PC, laptop, tablets etc.
- <div style="height:10px;"></div>
+  <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>
+  <b>Question 2 of 4. Zone Enhancement :</b>
+  Emphasize near or intermediate. Near vision range defined as less than 45cm; hand distance, phone, books etc. Intermediate vision range defined as more than 45cm; PC, laptop, tablets etc.
+  <div style="height:10px;"></div>
 
-    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-zone" value="Near"> Near preferred – larger reading zone but less intermediate zone.</label>
-      <label><input type="checkbox" class="fl-mf-zone" value="Intermediate"> Intermediate preferred - larger intermediate but smaller near.</label>
-<label><input type="checkbox" class="fl-mf-zone" value="Equal"> Equal both - both are equally spread.</label>
-    </div>
+  <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+    <label><input type="checkbox" class="fl-mf-zone" value="Near"> Near (Score 2/3) - Larger near but smaller intermediate. Good for reading but not so good for computer.</label>
+    <label><input type="checkbox" class="fl-mf-zone" value="Intermediate"> Intermediate (Score 1/3) - Small near and intermediate zone. Good for light use.</label>
+    <label><input type="checkbox" class="fl-mf-zone" value="Equal"> Equal (Score 3/3) - Balance size intermediate &amp; near. Good for all day use..</label>
   </div>
+</div>
 
-  <!--  Design Technology Tier -->
+<!--  Design Technology Tier -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 3 of 4. Design Tier :</b> Select the optical design sophistication. The more sophisticated the better the optics performance are but they come at a higher price. The recommended add and design is based on past customer's satisfactory level. Higher add has more complicated optics and hence sophisticated designs help. 
- <div style="height:10px;"></div>
-    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-tier" value="Double"> Double Surface – maximum optics & comfort. Overall huge reduction in distortion. Suitable for all add power.</label>
-      <label><input type="checkbox" class="fl-mf-tier" value="Single"> Single Surface – standard choice for balance between cost and performance. Suitable for add +2.00 and below. </label>
-      <label><input type="checkbox" class="fl-mf-tier" value="Traditional"> Traditional – old fashioned optics performance, cost priority. Suitable for add +1.50 and below.</label>
-    </div>
-  </div>
+  <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>
+  <b>Question 3 of 4. Design Tier :</b>
+  Select the optical design sophistication. The more sophisticated the better the optics performance are but they come at a higher price. The recommended add and design is based on past customer's satisfactory level. Higher add has more complicated optics and hence sophisticated designs help.
+  <div style="height:10px;"></div>
 
-  <!--  Personalisation Tier -->
+  <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+    <label><input type="checkbox" class="fl-mf-tier" value="Double"> Dual surface (Score 3/3) -  Best possible optics quality. Perfect for complicated prescription such as high add (Add above +2.00) and hyperopia (+ power).</label>
+    <label><input type="checkbox" class="fl-mf-tier" value="Single"> Single surface (Score 2/3) - Balanced between cost and optics quality. Perfect for moderate prescription such as medium add (Add below +2.00).</label>
+    <label><input type="checkbox" class="fl-mf-tier" value="Traditional"> Conventional (Score 1/3) - Lowest production cost for basic optics quality. Perfect for simple prescription such as low add (Add below +1.50) and myopia (- power).</label>
+  </div>
+</div>
+
+<!--  Personalisation Tier -->
 <div class="pane" style="padding:10px; margin:15px 0px 15px 0px">
-      <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>  <b>Question 4 of 4. Personalization :</b> Optimize optics by personalization; fitting the lenses for the frame & wearer. Wearing position of the frame will affect the optical clarity; hence personalization will maximise the clarity at the position of wear.
+  <button id="btnToggleDesc" class="small-normal-btn">▲ Desc</button><br>
+  <b>Question 4 of 4. Personalization :</b>
+  Optimize optics by personalization; fitting the lenses for the frame & wearer. Wearing position of the frame will affect the optical clarity; hence personalization will maximise the clarity at the position of wear.
+  <div style="height:10px;"></div>
 
- <div style="height:10px;"></div>
-    <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
-      <label><input type="checkbox" class="fl-mf-pers" value="Full"> Full personalization - optics are optimized for your frame and how you wear the glasses.</label>
-      <label><input type="checkbox" class="fl-mf-pers" value="Partial"> Partial personalization - optics are optimized for the frame only.</label>
-      <label><input type="checkbox" class="fl-mf-pers" value="None"> No personalization - optics are made as default and may suit or not suit the frame.</label>
-    </div>
+  <div style="display:flex; flex-direction:column; gap:10px; align-items:flex-start;">
+    <label><input type="checkbox" class="fl-mf-pers" value="Full"> Fully custom (Score 3/3) - Lenses are optimised for the spectacles size, shape and wearer's position. Experience the best possible optics at the moment.</label>
+    <label><input type="checkbox" class="fl-mf-pers" value="Partial"> Partial custom (Score 2/3) - Lenses are optimised for the spectacles size and shape. Experience better optics than basic.</label>
+    <label><input type="checkbox" class="fl-mf-pers" value="None"> None (Score 1/3) - Lenses are made with default setting and fit for functional purpose.</label>
   </div>
+</div>
+
 
 
 
@@ -5238,16 +5366,15 @@ function parseRx(){
 
 </div>
 </div>
+</div>
+</div>
 
 
 
 
 
+ <div style="height:15px;"></div>
 
-
- <div style="height:30px;"></div>
-
-     <!-- Price -->
 
       <div class="pane" style="display:none; padding:5 0 5px 0px;">
     <span style="display:none" id="status" class="tiny muted"></span>&nbsp;
@@ -5280,53 +5407,152 @@ function parseRx(){
 
 
 
-   
+     <!-- LENS SEARCH -->
+<div class="pane" style="padding:10px; margin:5px 0;">
+  <!-- Search -->
+  <div style="margin:px 0;">
+    <span style="margin-left:5px;"><b>Search:</b></span>
+    <input id="lensSearch" type="text" placeholder="Type brand, model, design, index…"
+           style="width:280px; border:1px solid #ccc; border-radius:30px; height:28px; padding:4px 8px; margin-left:4px;">
+    <span id="searchCount" class="tiny muted" style="display:none; margin-left:8px;"></span>
+    <button id="btnMirror" class="small-normal-btn" style="color:#c62828">Quick Generate</button>
+    <button id="btnFetch" class="small-normal-btn">Search</button>
+  </div>
+  <hr style="border:none; border-top:1px solid var(--line,#ddd); margin:8px 0;">
 
+  <!-- Price Range -->
+  <div style="margin:8px 0;">
+    <span style="margin-left:5px;"><b>Price Range (RM):</b></span>
+    <input id="priceMin" type="number" placeholder="Min"
+           style="width:80px; border:1px solid #ccc; border-radius:30px; height:25px; padding:4px 8px; margin-left:10px">
+    <span>–</span>
+    <input id="priceMax" type="number" placeholder="Max"
+           style="width:80px; border:1px solid #ccc; border-radius:30px; height:25px; padding:4px 8px; margin-left:6px">
+    <button id="btnSort" class="small-normal-btn">Sort by Price</button>
+  </div>
+  <hr style="border:none; border-top:1px solid var(--line,#ddd); margin:8px 0;">
 
+  <!-- Vision Type -->
+  <div style="margin:8px 0;">
+    <span style="margin-left:5px;"><b>Vision Type:</b></span>
+    <button id="btnShowSV" class="small-normal-btn" style="margin-left:10px;">Show Single Vision Only</button>
+    <button id="btnShowMF" class="small-normal-btn" style="margin-left:10px;">Show Multi focals Only</button>
+  </div>
+  <hr style="border:none; border-top:1px solid var(--line,#ddd); margin:8px 0;">
 
-<!-- Price Range -->
-<div class="pane" style="padding:5px 0 5px 0px">
-  <span style="margin-left:5px;"><b>Price Range (RM):</b></span>
-  <input id="priceMin" type="number" placeholder="Min"
-         style="width:80px; border:1px solid #ccc; border-radius:30px; height:25px; padding:4px 8px; margin-left:10px">
-  <span>–</span>
-  <input id="priceMax" type="number" placeholder="Max"
-         style="width:80px; border:1px solid #ccc; border-radius:30px; height:25px; padding:4px 8px; margin-left:6px">
-<span><button id="btnToggleSeg2" class="small-normal-btn" style="margin-left:10px">Show Single Vision Only</button><button id="btnToggleSeg3" class="small-normal-btn" style="margin-left:10px">Show Multifocals Only</button></span>
+  <!-- Design Score -->
+  <div id="scoreButtons" style="margin:8px 0;">
+    <span style="margin-left:5px;"><b>Design Score:</b></span>
+    <button class="small-normal-btn" style="margin-left:10px;" data-min="0"  data-max="49">Basic (0 - 50%)</button>
+    <button class="small-normal-btn" style="margin-left:10px;" data-min="50" data-max="74">Good (50 - 75%)</button>
+    <button class="small-normal-btn" style="margin-left:10px;" data-min="75" data-max="84">Premium (75 - 85%)</button>
+    <button class="small-normal-btn" style="margin-left:10px;" data-min="85" data-max="100">Luxury (85 - 100%)</button>
+  </div>
+  <hr style="border:none; border-top:1px solid var(--line,#ddd); margin:8px 0;">
+
+  <!-- Thinness -->
+  <div id="thinButtons" style="margin:8px 0;">
+    <span style="margin-left:5px;"><b>Thinness Percentage:</b></span>
+    <button class="small-normal-btn" style="margin-left:10px;" data-min="0"  data-max="49">Basic (0 - 50%)</button>
+    <button class="small-normal-btn" style="margin-left:10px;" data-min="50" data-max="69">Standard (50 - 70%)</button>
+    <button class="small-normal-btn" style="margin-left:10px;" data-min="70" data-max="84">Thinner (70 - 85%)</button>
+    <button class="small-normal-btn" style="margin-left:10px;" data-min="85" data-max="100">Ultra (85 - 100%)</button>
+  </div>
+
+  <script>
+    // Mirror to existing length button (kept as you had it)
+    document.getElementById("btnMirror").addEventListener("click", () => {
+      document.getElementById("btnLength")?.click();
+    });
+  </script>
 </div>
 
-
-
-<div class="pane" id="scoreButtons" style="margin:12px 0;">
-  <b>Lens Score:</b>
-  <button class="small-normal-btn" data-min="1" data-max="3">Entry (1–3)</button>
-  <button class="small-normal-btn" data-min="4" data-max="6">Middle (4–6)</button>
-  <button class="small-normal-btn" data-min="7" data-max="9">Premium (7–9)</button>
-  <button class="small-normal-btn" data-min="10" data-max="12">Luxury (10–12)</button>
-</div>
-
-
-      <div class="pane" style="padding:10px; margin:5px 0px 5px 0px;">
-  <b>Search :</b>
-  <input id="lensSearch" type="text" placeholder="Type brand, model, design, index…" 
-         style="width:280px; border:1px solid #ccc; border-radius:30px; height:28px; padding:4px 8px; margin-left:4px;">
-  <span id="searchCount" class="tiny muted" style="display:none; margin-left:8px;"></span>
-<button id="btnMirror" class="small-normal-btn">Quick Dia</button>
-
-<span><button id="btnFetch" class="small-normal-btn">Search</button>
-</span> 
-  <button id="btnSort" class="small-normal-btn">Sort by Price</button>
-
-<script>
-document.getElementById("btnMirror").addEventListener("click", () => {
-  document.getElementById("btnLength").click();
-});
-</script>
-</div>
 
 
 
 <div style="height:10px"></div>
+
+<section id="compareWrapper" style="margin:10px 0;">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+    <div style="font-weight:700;">Compare (max 2)</div>
+    <div id="compareCount" style="font-size:12px;color:#466;">0/2 selected</div>
+  </div>
+
+  <div id="compareSlots" class="compare-grid">
+    <div class="compare-slot empty">Click a lens card to add here</div>
+    <div class="compare-slot empty">Click a second lens card to add here</div>
+  </div>
+</section>
+
+<section id="compareAnalysis" style="margin:10px 0;"></section>
+
+
+<style>
+#compareAnalysis .analysis-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:10px}
+#compareAnalysis .pill{display:inline-block;font-size:11px;padding:3px 8px;border-radius:999px;color:#fff;margin-right:6px}
+#compareAnalysis .pill-1{background:#155e75}
+#compareAnalysis .pill-2{background:#15803d}
+#compareAnalysis .k{color:#374151;font-weight:600}
+#compareAnalysis .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px;font-size:12px}
+#compareAnalysis .c1{border-left:3px solid #155e75;padding-left:6px}
+#compareAnalysis .c2{border-left:3px solid #15803d;padding-left:6px}
+
+  .compare-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px
+  }
+  .compare-slot{
+    min-height:120px;
+    background:#fff;
+    border:1px solid #e5e7eb;
+    border-radius:10px;
+    padding:8px;
+  }
+  .compare-slot.empty{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#6b7280;
+    font-size:12px;
+    font-style:italic;
+  }
+
+  /* lens-card selection highlights */
+  .lens-card.selected-1{
+    outline:2px solid #155e75!important;
+    box-shadow:0 0 0 3px rgba(21,94,117,.15)!important;
+  }
+  .lens-card.selected-2{
+    outline:2px solid #15803d!important;
+    box-shadow:0 0 0 3px rgba(21,128,61,.15)!important;
+  }
+
+  /* optional: subtle badge you can add inside compare entries */
+  .compare-badge{
+    display:inline-block;
+    font-size:10px;
+    line-height:1;
+    padding:4px 6px;
+    border-radius:6px;
+    margin-bottom:6px;
+    color:#fff;
+  }
+  .badge-1{ background:#155e75; }
+  .badge-2{ background:#15803d; }
+/* No transparency. Solid, darker highlights. */
+.compare-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:8px}
+.compare-1{ border-color:#155e75; box-shadow:0 0 0 2px #155e75; }
+.compare-2{ border-color:#15803d; box-shadow:0 0 0 2px #15803d; }
+
+
+/* small label */
+.compare-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;font-weight:600}
+.dot{width:10px;height:10px;border-radius:999px;display:inline-block}
+.dot-1{background:#155e75}
+.dot-2{background:#15803d}
+
+</style>
 
 
   <div id="lensResults">
@@ -5337,7 +5563,7 @@ document.getElementById("btnMirror").addEventListener("click", () => {
 
 </div>
 </div>
-
+</div>
 
 
 
@@ -5414,115 +5640,6 @@ function matchesMultiField(cell, wanted){
 }
 
 let LENS_SEARCH_TERM = "";
-
-
-
-// --- Read one row from your live thickness table (built by renderBars) ---
-function getThicknessRow(indexVal) {
-  const table = document.getElementById("thicknessTable");
-  if (!table) return null;
-
-  // rows: [Index, Right RX, Right Stock, Left RX, Left Stock]
-  const rows = Array.from(table.querySelectorAll("tr")).slice(1); // skip header
-  for (const r of rows) {
-    const idx = parseFloat(r.cells?.[0]?.textContent);
-    if (idx === parseFloat(indexVal)) {
-      return {
-        index: idx,
-        rightRX:   parseFloat(r.cells?.[1]?.textContent) || 0,
-        rightStock:parseFloat(r.cells?.[2]?.textContent) || 0,
-        leftRX:    parseFloat(r.cells?.[3]?.textContent) || 0,
-        leftStock: parseFloat(r.cells?.[4]?.textContent) || 0,
-      };
-    }
-  }
-  return null;
-}
-
-// --- Build the Thinness Efficiency HTML for a lens card (reads from table only) ---
-function buildEfficiencyHTML(row){
-  // detect stock vs rx by design
-  const designLower = String(row["LENS_DESIGN"]||"").toLowerCase();
-  const isStock = /\bstock\b/.test(designLower);
-
-  const idxNum = parseFloat(row["INDEX"]);
-  const t = getThicknessRow(idxNum);
-  if (!t || !isFinite(idxNum)) return ""; // table not ready or index not present
-
-  // Efficiency = (MaxShrink - ActualShrink) / MaxShrink = (Stock - Current)/Stock
-  // For RX lenses: Current = RX thickness; Max = Stock thickness
-  // For Stock lenses: Current = Stock, so efficiency is 0% (no shrink vs max)
-  const rEff = isStock || !t.rightStock ? 0 : Math.max(0, Math.round((1 - (t.rightRX / t.rightStock)) * 100));
-  const lEff = isStock || !t.leftStock  ? 0 : Math.max(0, Math.round((1 - (t.leftRX  / t.leftStock )) * 100));
-
-  const rShrink = isStock || !t.rightStock ? 0 : Math.max(0, t.rightStock - t.rightRX);
-  const lShrink = isStock || !t.leftStock  ? 0 : Math.max(0, t.leftStock  - t.leftRX);
-
-  const rMax = t.rightStock || 0;
-  const lMax = t.leftStock  || 0;
-
-  return `
-    <div style="margin-top:6px;font-size:10px;line-height:1.25;">
-      <b>Thinness Efficiency ${isStock ? "(Stock)" : "(Rx)"}</b><br>
-      Right : ${rEff}% (${rShrink.toFixed(2)} mm ; max ${rMax.toFixed(2)} mm)<br>
-      Left&nbsp;&nbsp;: ${lEff}% (${lShrink.toFixed(2)} mm ; max ${lMax.toFixed(2)} mm)
-    </div>`;
-}
-
-const CANON = [1.56, 1.60, 1.67, 1.74];
-function canonicalIndex(raw){
-  const n = parseFloat(raw);
-  if (!Number.isFinite(n)) return null;
-  let best = CANON[0], d0 = Math.abs(n - CANON[0]);
-  for (let i=1;i<CANON.length;i++){
-    const d = Math.abs(n - CANON[i]);
-    if (d < d0 || (d === d0 && CANON[i] > best)) { best = CANON[i]; d0 = d; }
-  }
-  return best;
-}
-
-// Read a row from thicknessDataTable by canonical index
-function getThicknessRow(indexVal){
-  const tbl = document.getElementById("thicknessDataTable");
-  if (!tbl) return null;
-  const rows = Array.from(tbl.querySelectorAll("tr")).slice(1);
-  for (const r of rows){
-    const idx = parseFloat(r.cells?.[0]?.textContent);
-    if (idx === parseFloat(indexVal)) {
-      return {
-        index: idx,
-        rRx:   parseFloat(r.cells[1].textContent) || 0,
-        lRx:   parseFloat(r.cells[2].textContent) || 0,
-        rStock156: parseFloat(r.cells[3].textContent) || 0,
-        lStock156: parseFloat(r.cells[4].textContent) || 0,
-        rRx174: parseFloat(r.cells[5].textContent) || 0,
-        lRx174: parseFloat(r.cells[6].textContent) || 0,
-        rDeltaCurr: parseFloat(r.cells[7].textContent) || 0,
-        lDeltaCurr: parseFloat(r.cells[8].textContent) || 0,
-        rDeltaMax:  parseFloat(r.cells[9].textContent) || 0,
-        lDeltaMax:  parseFloat(r.cells[10].textContent) || 0,
-      };
-    }
-  }
-  return null;
-}
-
-// Build lens-card “Thinness Efficiency” block (1 decimal, format you wanted)
-function buildEfficiencyHTML(row){
-  const canonIdx = canonicalIndex(row["INDEX"]);
-  const t = getThicknessRow(canonIdx);
-  if (!t) return "";
-
-  const rEff = t.rDeltaMax > 0 ? Math.max(0, (t.rDeltaCurr / t.rDeltaMax) * 100) : 0;
-  const lEff = t.lDeltaMax > 0 ? Math.max(0, (t.lDeltaCurr / t.lDeltaMax) * 100) : 0;
-
-  return `
-    <div style="margin-top:6px;font-size:10px;line-height:1.25;">
-      <b>Thinness Efficiency</b><br>
-      Right: ${rEff.toFixed(1)}% (${t.rDeltaCurr.toFixed(1)}mm ; max ${t.rDeltaMax.toFixed(1)}mm)<br>
-      Left:&nbsp;&nbsp;${lEff.toFixed(1)}% (${t.lDeltaCurr.toFixed(1)}mm ; max ${t.lDeltaMax.toFixed(1)}mm)
-    </div>`;
-}
 
 
 
@@ -5625,10 +5742,13 @@ function withinPriceRange(price, min, max){
   return true;
 }
 
-/* =========================
-   STOCK LENS AVAILABILITY
-========================= */
-function getStockAvailability(S, C, n) {
+// =========================
+// STOCK LENS AVAILABILITY
+// (now normalizes 1.59 -> 1.60, 1.53 -> 1.5 bucket, etc.)
+// =========================
+function getStockAvailability(S, C, nRaw) {
+  const n = canonicalIndex(nRaw); // normalize to 1.56 / 1.60 / 1.67 / 1.74
+
   if (S > 2.00) return { available: false, maxDia: null };
   if (C < -2.00) return { available: false, maxDia: null };
 
@@ -5651,6 +5771,7 @@ function getStockAvailability(S, C, n) {
   }
   return { available: false, maxDia: null };
 }
+
 
 /* =========================
    MF BADGES
@@ -5679,24 +5800,24 @@ function renderMFBadges(row){
   const rawSwim = String(row["MF_SWIM"]||"");
 
   const VIEW_TEXT = {
-    Expert:  "Expert :  Widest clear zones but most swim effect",
-    Balance: "Balanced : Moderate clear zones & swim effect",
-    Entry:   "Entry : Minimal swim effect but narrow clear zones"
+    Expert:  "Expert (Score: 3/3) :  Widest clear zones, suitable for seasoned wearers.",
+    Balance: "Medium (Score: 2/3) : Moderate clear zones & swim effect.",
+    Entry:   "Entry (Score: 1/3) : Narrow clear zones. Suitable for first time wearers to adapt."
   };
   const ZONE_TEXT = {
-    Near:         "Near - Larger near but smaller intermediate",
-    Intermediate: "Intermediate - Larger intermediate but smaller near",
-    Equal:        "Equal - Balance size intermediate & near"
+    Near:         "Near (Score 2/3) - Larger near but smaller intermediate. Good for reading but not so good for computer.",
+    Intermediate: "Intermediate (Score 1/3) - Small near and intermediate zone. Good for light use.",
+    Equal:        "Equal (Score 3/3) - Balance size intermediate & near. Good for all day use.."
   };
   const TIER_TEXT = {
-    Double:       "Dual-surface -  Mostly costly but best possible optics quality and comfort.",
-    Single:       "Single-surface - Less costly and retaining most of the technology.",
-    Traditional:  "Conventional - Lowest production cost. Basic optics performance."
+    Double:       "Dual-surface (Score 3/3) -  Best possible optics quality. Perfect for complicated prescription such as high add (Add above +2.00) and hyperopia (+ power).",
+    Single:       "Single-surface (Score 2/3) - Balanced between cost and optics quality. Perfect for moderate prescription such as medium add (Add below +2.00).",
+    Traditional:  "Conventional (Score 1/3) - Lowest production cost for basic optics quality. Perfect for simple prescription such as low add (Add below +1.50) and myopia (- power)."
   };
   const PERS_TEXT = {
-    Full:    "Fully custom - Made to maximise the spectacles size, shape and wearer's position",
-    Partial: "Partial custom - Made to maximise the spectacles only",
-    None:    "None - Made with nothing in consideration"
+    Full:    "Fully custom (Score 3/3) - Lenses are optimised for the spectacles size, shape and wearer's position. Experience the best possible optics at the moment.",
+    Partial: "Partial custom (Score 2/3) - Lenses are optimised for the spectacles size and shape. Experience better optics than basic.",
+    None:    "None (Score 1/3) - Lenses are made with default setting and fit for functional purpose."
   };
 
   const uniq = a => Array.from(new Set(a.filter(Boolean)));
@@ -5771,15 +5892,15 @@ const sec = (k,title,arr)=> arr.length
 ----------
         <div style="height:10px;"></div>
 
-      ${sec("tier","<b>Production Type - High production lenses makes vision as natural as possible:</b>",tier)}
+      ${sec("tier","<b>Production Type - High production lenses makes vision as natural as possible</b>",tier)}
       <div style="height:10px;"></div>
-      ${sec("pers","<b>Customization Level - The more customized, the more natural your vision is:</b>",pers)}
+      ${sec("pers","<b>Customization Level - The more customized, the more natural your vision is</b>",pers)}
 
       <div style="height:10px;"></div>
-      ${sec("view","<b>Multifocal Design Choice - Adjust zones to your liking</b><br>(Choose Either One Below)",view)}
+      ${sec("view","<b>Multifocal Overall Design Style - Premium lenses offers wider zones by using high tech manufacturing and optics calculation</b>",view)}
       <div style="height:10px;"></div>
 
-      ${sec("zone","<b>Multifocal Near Choice - Adjust your Near Preference</b><br>(Choose Either One Below)",zone)}
+      ${sec("zone","<b>Near Viewing Style - Premium lenses offers wider zones for both intermediate and near while trying to minimize distortion</b>",zone)}
     </div>
   `;
 }
@@ -5806,21 +5927,21 @@ function renderSVBadges(row){
 
   // EXACT TEXT from your questionnaire
   const FUNC_TEXT = {
-    "Stock SV":     "Stock Single Vision - ready made single vision lenses with standard optics. No further customization.",
-    "Custom SV":    "Customized Single vision - made from scratch to your wearing needs and frame details. Can be tinted as well.",
-    "Anti-Fatigue": "Customized Dual zone vision - made from scratch and customized to your needs as well, and bottom part of lenses are further optimized for even better ergnomics."
+    "Stock SV":     "Stock Single Vision (Score 1/3) - ready made single vision lenses with standard optics. No further customization.",
+    "Custom SV":    "Customized Single vision (Score 2/3) - made from scratch to your wearing needs and frame details. Can be tinted as well.",
+    "Anti-Fatigue": "Customized Dual zone vision (Score 3/3) - made from scratch, customized to your needs with further ergnomics optimization."
   };
   const VIEW_TEXT = {
-    "NONE": "None – mass produced for economical purpose. Lens is functional but no 'wow' factor.",
-    "SPH": "Spherical – traditional curve, natural peripheral vision and may observe some warping effect at the side.",
-    "ATO": "Atoric – ideal for astigmatism prescription as it makes your vision less tilt, more stable and wider.",
-    "ASP": "Single Aspheric – flatter front, less magnification of the eye but may notice a little peripheral swim..",
-    "DAS": "Double Aspheric – maximum aspheric optics, thinnest and most realistic magnification but may notice a little peripheral swim.."
+    "NONE": "None (Score 1/5) – mass produced for economical purpose. Lens is functional but no 'wow' factor.",
+    "SPH": "Spherical (Score 2/5) – traditional curve, natural peripheral vision and may observe some stretching effect at the side.",
+    "ATO": "Atoric (Score 4/5) – ideal for astigmatism prescription as it makes your vision less tilt, more stable and wider.",
+    "ASP": "Single Aspheric (Score 3/5) – flatter front, less magnification of the eye but may notice a little peripheral swim..",
+    "DAS": "Double Aspheric (Score 5/5) – maximum aspheric optics, thinnest and most realistic magnification but may notice a little peripheral swim.."
   };
   const PERS_TEXT = {
-    Full:    "Fully custom - Made to maximise the spectacles size, shape and wearer's position",
-    Partial: "Partial custom - Made to maximise the spectacles only",
-    None:    "None - Made with nothing in consideration"
+Full:    "Fully custom (Score 3/3) - Lenses are optimised for the spectacles size, shape and wearer's position. Experience the best possible optics at the moment.",
+    Partial: "Partial custom (Score 2/3) - Lenses are optimised for the spectacles size and shape. Experience better optics than basic.",
+    None:    "None (Score 1/3) - Lenses are made with default setting and fit for functional purpose."
   };
 
   const func = [];
@@ -5876,8 +5997,10 @@ function renderSVBadges(row){
 
 
 
+// ===============================
 // Tunable geometry weights (SV)
-const GEO_POINTS = { NONE:1,SPH: 2, ASP:3, ATO: 4, DAS: 5 };
+// ===============================
+const GEO_POINTS = { NONE:1, SPH:2, ASP:3, ATO:4, DAS:5 };
 
 function geometryPoints(viewStr = "") {
   const v = viewStr.trim().toLowerCase();
@@ -5886,58 +6009,126 @@ function geometryPoints(viewStr = "") {
   if (v.includes("ator")  || v.includes("ato"))  return GEO_POINTS.ATO;
   if (v.includes("aspheric") || v.includes("asp")) return GEO_POINTS.ASP;
   if (v.includes("sph")) return GEO_POINTS.SPH;
-  return 0;
+  return GEO_POINTS.NONE; // always start at 1 minimum
 }
 
+// --- Normalize brand to a canonical key used in our quality map ---
+const BRAND_ALIASES = {
+  "asahi": "Asahi",
+  "asahi lens": "Asahi",
+  "asahi optical": "Asahi",
+  "rayfilter": "Rayfilter",
+  "rodenstock": "Rodenstock",
+  "pentax": "Pentax",
+  "opto-tech": "Opto-tech",
+  "opto tech": "Opto-tech",
+  "optotech": "Opto-tech",
+  "seiko": "Seiko",
+  "advance lens": "Advance Lens",
+  "advance": "Advance Lens"
+};
 
-function getLensScore(row){
-  const designRaw = String(row["LENS_DESIGN"]||"").toLowerCase();
+// --- Pure optical quality stars (ignore price), 1..5 ---
+const BRAND_QUALITY = {
+  "Asahi":         3, 
+  "Rayfilter":     2, 
+  "Rodenstock":    5, 
+  "Pentax":        3, 
+  "Opto-tech":     3, 
+  "Seiko":         5, 
+  "Advance Lens":  1  
+};
+
+function getBrandGroup(val = "") {
+  const s = String(val).toLowerCase()
+    .replace(/\./g, "")
+    .replace(/\b(lens|optical|co|co ltd|ltd|gmbh|inc|corp|corporation)\b/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+  for (const key in BRAND_ALIASES) {
+    if (s.includes(key)) return BRAND_ALIASES[key];
+  }
+  return s ? s.replace(/\b\w/g, m => m.toUpperCase()) : "";
+}
+
+function getBrandQualityScore(row){
+  const key = getBrandGroup(row["BRAND"] || "");
+  return BRAND_QUALITY[key] ?? 3; // sensible default if unknown
+}
+
+// ===============================
+// Lens Scoring Function (with brand quality)
+// ===============================
+function getLensScore(row) {
+  const designRaw = String(row["LENS_DESIGN"] || "").toLowerCase();
   const isMF = /(pal|progress|multi|varifocal|bifocal)/.test(designRaw);
 
-  // ---- Single Vision (0–8), index excluded ----
+  // ---- Single Vision (1–11), index excluded ----
   let part2 = 0;
-  if (!isMF){
-    const view   = String(row["VIEWING_STYLE"]||"");
-    const svPers = String(getSVPersonalization(row)||"").toLowerCase();
+  if (!isMF) {
+    const view   = String(row["VIEWING_STYLE"] || "");
+    const svPers = String(getSVPersonalization(row) || "").toLowerCase();
 
-    if (/(dual|anti[- ]?fatigue|relax|boost)/.test(designRaw)) part2 += 2;
-    else if (/\bcustom\b/.test(designRaw))                    part2 += 1;
+    // Function type: Stock=1, Custom=2, Anti-fatigue=3
+    let funcScore = 1;
+    if (/(dual|anti[- ]?fatigue|relax|boost)/.test(designRaw)) funcScore = 3;
+    else if (/\bcustom\b/.test(designRaw))                    funcScore = 2;
 
-    part2 += geometryPoints(view); // uses your GEO_POINTS
+    // Viewing geometry (None–DAS = 1–5)
+    const geoScore = geometryPoints(view);
 
-    if (svPers.includes("full"))         part2 += 2;
-    else if (svPers.includes("partial")) part2 += 1;
+    // Personalization: None=1, Partial=2, Full=3
+    let persScore = 1;
+    if (svPers.includes("full"))         persScore = 3;
+    else if (svPers.includes("partial")) persScore = 2;
+
+    // Total SV design score (no index)
+    part2 = funcScore + geoScore + persScore; // 1..11
   }
 
-  // ---- Multifocal (0–9), index excluded ----
+  // ---- Multifocal (1–12), index excluded ----
   let part3 = 0;
-  if (isMF){
-    const view = String(row["MF_VIEWING"]||"").toLowerCase();
-    const zone = String(row["MF_ZONE"]||"").toLowerCase();
-    const tier = String(row["MF_TIER"]||"").toLowerCase();
-    const pers = String(row["MF_PERSONALIZATION"]||"").toLowerCase();
+  if (isMF) {
+    const view = String(row["MF_VIEWING"] || "").toLowerCase();
+    const zone = String(row["MF_ZONE"] || "").toLowerCase();
+    const tier = String(row["MF_TIER"] || "").toLowerCase();
+    const pers = String(row["MF_PERSONALIZATION"] || "").toLowerCase();
 
-    // Viewing profile: Entry/Balance/Expert → 0/1/2
-    if (view.includes("expert"))      part3 += 2;
-    else if (view.includes("balan"))  part3 += 1;
+    // Viewing profile: Narrow/Balance/Wide → 1/2/3
+    let viewScore = 1;
+    if (view.includes("wide") || view.includes("expert")) viewScore = 3;
+    else if (view.includes("balan"))                      viewScore = 2;
 
-    // Near/Intermediate zone: Intermediate/Near/Equal → 0/1/2
-    if (zone.includes("equal"))       part3 += 2;
-    else if (zone.includes("near"))   part3 += 1;
+    // Zone design: Narrow/Balance/Wide → 1/2/3
+    let zoneScore = 1;
+    if (zone.includes("wide") || zone.includes("equal"))  zoneScore = 3;
+    else if (zone.includes("near") || zone.includes("balan")) zoneScore = 2;
 
     // Production tier: Traditional/Single/Double → 1/2/3
-    if (tier.includes("double"))      part3 += 3;
-    else if (tier.includes("single")) part3 += 2;
-    else if (tier.includes("tradit")) part3 += 1;
+    let tierScore = 1;
+    if (tier.includes("double"))      tierScore = 3;
+    else if (tier.includes("single")) tierScore = 2;
 
-    // Personalization: None/Partial/Full → 0/1/2
-    if (pers.includes("full"))        part3 += 2;
-    else if (pers.includes("partial"))part3 += 1;
+    // Personalization: None/Partial/Full → 1/2/3
+    let persScore = 1;
+    if (pers.includes("full"))         persScore = 3;
+    else if (pers.includes("partial")) persScore = 2;
+
+    // Total MF design score (no index)
+    part3 = viewScore + zoneScore + tierScore + persScore; // 1..12
   }
 
-  const total = isMF ? part3 : part2;
-  const max   = isMF ? 9 : 8;
-  return { total, max, part2, part3, isMF };
+  // ---- Brand quality (1..5) ----
+  const quality = getBrandQualityScore(row); // from stars
+
+  // ---- Finalize ----
+  const designOnly = isMF ? part3 : part2;
+  const designMax  = isMF ? 12 : 11;
+  const total      = designOnly + quality;     // add brand quality
+  const max        = designMax + 5;            // +5 for brand stars
+  const pct        = Math.round((total / max) * 100);
+
+  return { total, max, part2, part3, isMF, pct, quality }; // expose 'quality' for UI if needed
 }
 
 
@@ -5945,7 +6136,123 @@ function getLensScore(row){
 
 
 
+// -----------------------------
+// Thinness Efficiency (from table only) – NO recalculation
+// -----------------------------
+const CANON = [1.56, 1.60, 1.67, 1.74];
+function canonicalIndex(raw){
+  const n = parseFloat(raw);
+  if (!Number.isFinite(n)) return null;
+  let best = CANON[0], d0 = Math.abs(n - CANON[0]);
+  for (let i=1;i<CANON.length;i++){
+    const d = Math.abs(n - CANON[i]);
+    if (d < d0 || (d === d0 && CANON[i] > best)) { best = CANON[i]; d0 = d; }
+  }
+  return best;
+}
 
+// Parse a cell that looks like:
+// "–"  OR  "(36%, 0.29 mm; max 0.82 mm)"  OR  "12.3 (36%, 0.29 mm; max 0.82 mm)"
+function parseEffCell(txt){
+  if (!txt) return null;
+  const s = String(txt).trim();
+  if (s === "–" || s === "-" || s === "—") return null;
+  const m = s.match(/\((\d+)%[^,]*,\s*([\d.]+)\s*mm\s*;\s*max\s*([\d.]+)\s*mm\)/i);
+  if (!m) return null;
+  return {
+    pct:   Number(m[1]) || 0,
+    delta: Number(m[2]) || 0,
+    max:   Number(m[3]) || 0
+  };
+}
+
+// Read one index row from your live table (#thicknessDataTable)
+function getThicknessRowFromTable(indexVal){
+  const tbl = document.getElementById("thicknessDataTable");
+  if (!tbl) return null;
+  const rows = Array.from(tbl.querySelectorAll("tr")).slice(1); // skip header
+  for (const r of rows){
+    const idx = parseFloat(r.cells?.[0]?.textContent);
+    if (idx === parseFloat(indexVal)) {
+      // Columns per your latest table:
+      // 0 Index | 1 "-" | 2 Right RX | 3 Right Stock | 4 Left RX | 5 Left Stock
+      return {
+        index: idx,
+        rightRX:   parseEffCell(r.cells?.[2]?.textContent),
+        rightStock:parseEffCell(r.cells?.[3]?.textContent),
+        leftRX:    parseEffCell(r.cells?.[4]?.textContent),
+        leftStock: parseEffCell(r.cells?.[5]?.textContent),
+      };
+    }
+  }
+  return null;
+}
+
+// Build the Thinness block for a lens card (match to product: stock uses Stock; others use RX)
+function buildEfficiencyHTML(row){
+  const idx = canonicalIndex(row["INDEX"]);
+  const t = getThicknessRowFromTable(idx);
+  if (!t) return "";
+
+  const isStock = /\bstock\b/i.test(String(row["LENS_DESIGN"]||""));
+
+  const r = isStock ? t.rightStock : t.rightRX;
+  const l = isStock ? t.leftStock  : t.leftRX;
+
+  // If either side missing, show nothing (no guesses)
+  if (!r && !l) return "";
+
+const fmt = (obj, side) => {
+  if (!obj) return `${side}: –`;
+  const pct = Number.isFinite(obj.pct) ? `${Math.round(obj.pct)}%` : "–";
+  const dlt = Number.isFinite(obj.delta) ? `${obj.delta.toFixed(1)} mm` : "–";
+  const mx  = Number.isFinite(obj.max)   ? `${obj.max.toFixed(1)} mm`   : "–";
+  return `<b>${side}:</b> ${pct} (${dlt} ; max ${mx})`;
+};
+
+
+  return `
+    <div style="margin-top:6px;font-size:10px;line-height:1.25;">
+      <b>Thinness Efficiency:</b><br>
+      ${fmt(r, "Right")}<br>
+      ${fmt(l, "Left")}
+    </div>`;
+}
+
+
+
+
+function getProductThinPct(row){
+  const idx = canonicalIndex(row["INDEX"]);
+  const t = getThicknessRowFromTable(idx);
+  if (!t) return null;
+
+  const isStock = /\bstock\b/i.test(String(row["LENS_DESIGN"]||""));
+  const r = isStock ? t.rightStock : t.rightRX;
+  const l = isStock ? t.leftStock  : t.leftRX;
+
+  const vals = [];
+  if (r && Number.isFinite(r.pct)) vals.push(r.pct);
+  if (l && Number.isFinite(l.pct)) vals.push(l.pct);
+  if (!vals.length) return null;
+
+  return vals.reduce((a,b)=>a+b,0) / vals.length; // average of R/L
+}
+
+// Build a "Ready in X days" badge from the CSV LEAD_TIME column.
+// If LEAD_TIME is missing/invalid, show nothing.
+function buildLeadHTML(row){
+  const raw = row?.["LEAD_TIME"];
+  const n = (typeof toNumber === "function") ? toNumber(raw) : parseFloat(raw);
+  if (!Number.isFinite(n) || n <= 0) return "";
+const days = Math.round(n);
+const label = days === 1 ? "1 working day" : `${days} working days`;
+return `<div class="lens-lead" style="margin:6px 0; font-size:10px;">
+  <strong>Lead Time:</strong> ${label}
+</div>`;
+
+
+}
 
 
 
@@ -5954,6 +6261,12 @@ function getLensScore(row){
    MAIN: Render Lens Options
 ========================= */
 let sortAsc = true;
+
+// ====== Global toggle state for SV/MF buttons ======
+let FILTER_MODE = "all"; // "sv", "mf", or "all"
+let THIN_ON = false;
+let THIN_MIN = 0, THIN_MAX = 100;
+
 
 function renderLensOptions(geom, rx) {
   const container = document.getElementById("lensResults");
@@ -5991,10 +6304,24 @@ function renderLensOptions(geom, rx) {
   // Filter
   const matches = PRODUCTS.filter(row => {
 	const s = getLensScore(row);
-	if (s.total < SCORE_MIN || s.total > SCORE_MAX) return false;
+const pct = Math.round((s.total / s.max) * 100);
+if (pct < SCORE_MIN || pct > SCORE_MAX) return false;
     const rawDesign  = String(row["LENS_DESIGN"] || "");
     const designKey  = rawDesign.toLowerCase().replace(/\s+/g, " ").trim();
     const designType = getFunctionCat(rawDesign); // "SV", "Multifocal", "Office", "Anti-fatigue"
+
+// --- Apply SV/MF toggle filter (use getFunctionCat so MF button works) ---
+const cat = getFunctionCat(rawDesign); // "SV" | "Multifocal" | "Office" | "Anti-fatigue"
+
+// Treat Anti-fatigue as SV for the toggle
+const isSV = (cat === "SV" || cat === "Anti-fatigue");
+const isMF = (cat === "Multifocal");
+
+if (FILTER_MODE === "sv" && !isSV) return false;
+if (FILTER_MODE === "mf" && !isMF) return false;
+
+
+
 
   // SV Personalization filter (uses SV_* column; never constrains MF rows)
   if (svPersSet.length) {
@@ -6027,13 +6354,21 @@ function renderLensOptions(geom, rx) {
       if (!withinPriceRange(p, priceMin, priceMax)) return false;
     } else {
       // No coating selected: show product if it has ANY price.
-      const all = getAllPrices(row);
-      const available = Object.values(all).filter(v => v != null);
-      if (available.length === 0) return false;                      // hide rows with no price at all
-      if (priceMin != null || priceMax != null) {
-        const anyInRange = available.some(v => withinPriceRange(v, priceMin, priceMax));
-        if (!anyInRange) return false;
-      }
+// No coating selected: show product if it has ANY price.
+// Allow Safety rows to appear even if prices are missing.
+const all = getAllPrices(row);
+const available = Object.values(all).filter(v => v != null);
+const isSafety = getIndexGroup(row["INDEX"] || "") === "Safety";
+
+if (available.length === 0 && !isSafety) return false;
+
+if (priceMin != null || priceMax != null) {
+  const anyInRange = available.length
+    ? available.some(v => withinPriceRange(v, priceMin, priceMax))
+    : isSafety; // if Safety with no prices, still allow through
+  if (!anyInRange) return false;
+}
+
     }
 
     // Shared filters (only apply if selected)
@@ -6087,20 +6422,37 @@ function renderLensOptions(geom, rx) {
       if (mfPersSet.length && !matchesMultiField(mfPers, new Set(mfPersSet))) return false;
     }
 
+  // === Thinness Efficiency filter (MUST be inside this callback) ===
+  if (THIN_ON) {
+    const thinPct = getProductThinPct(row);
+    if (thinPct != null && (thinPct < THIN_MIN || thinPct > THIN_MAX)) return false;
+
+  }
+
+
     // Global search
     return matchesSearch(row, LENS_SEARCH_TERM);
   });
 
 
 
-// ✅ Remove duplicate products (same name + index + design)
+
+// ✅ De-duplicate more conservatively so 1.59 "Safety" variants aren't collapsed
 const seen = new Set();
 const unique = matches.filter(row => {
-  const key = (row["PRODUCT_NAME"] + "|" + row["INDEX"] + "|" + row["LENS_DESIGN"]).toLowerCase().trim();
+  const key = [
+    String(row["PRODUCT_NAME"] || "").toLowerCase().trim(),
+    String(row["INDEX"] || "").trim(),                          // 1.59 stays distinct
+    String(row["LENS_DESIGN"] || "").toLowerCase().trim(),      // SV / Stock SV / etc.
+    getAppearance(row["CLEAR_CHANGING_TINT"] || ""),            // Clear / Photochromic / Polarized / Tinted
+    String(row["VIEWING_STYLE"] || "").toLowerCase().trim()     // SPH/ASP/ATO/DAS/None
+  ].join("|");
+
   if (seen.has(key)) return false;
   seen.add(key);
   return true;
 });
+
 
 
 
@@ -6147,13 +6499,13 @@ unique.sort((a, b) => {
     "advance": "Advance Lens"
   };
   const BRAND_RATINGS = {
-"Asahi":        { optical: "(Premium ⭐️⭐️⭐️⭐️⬤)", price: "(Mid 💰💰💰⬤⬤)" },
-  "Rayfilter":    { optical: "(Good ⭐️⭐️⭐️⬤⬤)",    price: "(Budget 💰💰⬤⬤⬤)" },
+"Asahi":        { optical: "(Premium ⭐️⭐️⭐️⬤⬤)", price: "(Mid 💰💰💰⬤⬤)" },
+  "Rayfilter":    { optical: "(Good ⭐️⭐️⬤⬤⬤)",    price: "(Budget 💰💰⬤⬤⬤)" },
   "Rodenstock":   { optical: "(Luxury ⭐️⭐️⭐️⭐️⭐️)",  price: "(Luxury 💰💰💰💰💰)" },
-  "Pentax":       { optical: "(Premium ⭐️⭐️⭐️⭐️⬤)", price: "(Premium 💰💰💰💰⬤)" },
-  "Opto-tech":    { optical: "(Premium ⭐️⭐️⭐️⭐️⬤)", price: "(Mid 💰💰💰⬤⬤)" },
+  "Pentax":       { optical: "(Premium ⭐️⭐️⭐️⬤⬤)", price: "(Premium 💰💰💰💰⬤)" },
+  "Opto-tech":    { optical: "(Premium ⭐️⭐️⭐️⬤⬤)", price: "(Mid 💰💰💰⬤⬤)" },
   "Seiko":        { optical: "(Luxury ⭐️⭐️⭐️⭐️⭐️)",  price: "(Luxury 💰💰💰💰💰)" },
-  "Advance Lens": { optical: "(Good ⭐️⭐️⭐️⬤⬤)",    price: "(Budget 💰💰⬤⬤⬤)" }
+  "Advance Lens": { optical: "(Good ⭐️⬤⬤⬤⬤)",    price: "(Budget 💰💰⬤⬤⬤)" }
   };
   function getBrandGroup(val = "") {
     const s = String(val).toLowerCase()
@@ -6192,10 +6544,11 @@ unique.slice(0, 24).forEach(row => {
 const score = getLensScore(row);
 const scoreHTML = `
   <div class="lens-score" style="margin:6px 0; font-size:10px;">
-    <span>Design Score: ${score.total} / ${score.max}</span>
+<span><b>Design Score:</b> ${score.pct}%</span>
   </div>`;
 
 
+const leadHTML = buildLeadHTML(row);
 
 const efficiencyHTML = buildEfficiencyHTML(row);
 
@@ -6251,8 +6604,8 @@ const efficiencyHTML = buildEfficiencyHTML(row);
     card.innerHTML = `
       <div class="lens-header">
 
-<div>${row["PRODUCT_NAME"] || "(Unnamed Lens)"} ${idx} ${design} ${app}</div>
-<div>${scoreHTML}${efficiencyHTML}</div>
+<div><b>${row["PRODUCT_NAME"] || "(Unnamed Lens)"}<br> ${idx} ${design} ${app}</b></div>
+<div>${leadHTML}${scoreHTML}${efficiencyHTML}</div>
 
 
    <div style="height:10px"></div>
@@ -6274,90 +6627,256 @@ const efficiencyHTML = buildEfficiencyHTML(row);
 </div>
     `;
     container.appendChild(card);
+card.__row = row;   // <-- attach the source row to this card
+
   });
 
-
-
-
-
-
-// === Overlay Lightbox for Lens Details (one click for all) ===
-const overlay = document.createElement("div");
-overlay.id = "lensOverlay";
-overlay.style.cssText = `
-  position: fixed;
-  inset: 0;
-  display: none;
-  background: rgba(0, 0, 0, 0.75);
-  z-index: 10000;
-  align-items: center;
-  justify-content: center;
-`;
-overlay.innerHTML = `
-  <div id="lensOverlayContent" style="
-    background: #fff;
-    color: #000;
-    max-width: 750px;
-    width: 90%;
-    max-height: 90vh;
-    overflow: auto;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  "></div>
-`;
-document.body.appendChild(overlay);
-const overlayContent = overlay.querySelector("#lensOverlayContent");
-
-function openOverlay(card) {
-  const clone = card.cloneNode(true);
-  const hidden = clone.querySelector(".card-details");
-  if (hidden) hidden.style.display = "block";
-
-  overlayContent.innerHTML = clone.innerHTML;
-  overlay.style.display = "flex";
-  overlay.style.opacity = "0";
-  overlayContent.style.transform = "scale(0.9)";
-  overlayContent.style.transition = "transform 0.25s ease";
-  overlay.style.transition = "opacity 0.25s ease";
-  requestAnimationFrame(() => {
-    overlay.style.opacity = "1";
-    overlayContent.style.transform = "scale(1)";
-  });
 }
 
-function closeOverlay() {
-  overlay.style.opacity = "0";
-  overlayContent.style.transform = "scale(0.9)";
-  setTimeout(() => {
-    overlay.style.display = "none";
-    overlayContent.innerHTML = "";
-  }, 250);
+
+
+
+
+
+
+
+
+
+/* =========================
+   Compare: State + Helpers
+========================= */
+
+// Global compare state (max 2)
+window.COMPARE = [];
+
+// Capture full visible content from a lens card (header + expanded details)
+function captureCardHTML(card){
+  const headerHTML  = card.querySelector(".lens-header")?.innerHTML || "";
+  const detailsNode = card.querySelector(".card-details")?.cloneNode(true);
+  let detailsHTML = "";
+  if (detailsNode){
+    detailsNode.style.display = "block";
+    detailsHTML = detailsNode.innerHTML;
+  }
+  return `
+    <div class="compare-full" style="font-size:11px;line-height:1.4;">
+      <div class="lens-header">${headerHTML}</div>
+      <div class="card-details" style="display:block;margin-top:8px">${detailsHTML}</div>
+    </div>`;
 }
 
-// === Attach click handler to each card directly ===
-function bindLensCards() {
-  document.querySelectorAll(".lens-card").forEach(card => {
-    card.addEventListener("click", (e) => {
-      if (overlay.style.display === "flex") return; // ignore if already open
-      e.stopPropagation();
-      openOverlay(card);
-    }, { once: false });
+// ONE source of truth for grid highlights (selected-1 = Blue, selected-2 = Green)
+function applyCompareHighlights(){
+  const grid = document.getElementById("lensResults");
+  if (!grid) return;
+  const order = new Map((window.COMPARE || []).map((e,i)=>[e.row, i]));
+
+  grid.querySelectorAll(".lens-card").forEach(card=>{
+    card.classList.remove("selected","selected-1","selected-2");
+
+    const row = card.__row || (()=>{
+      const t = card.querySelector(".lens-header b") || card.querySelector("b");
+      const name = (t?.innerText || t?.textContent || "").split("\n")[0].trim();
+      return (window.PRODUCTS || []).find(r => String(r["PRODUCT_NAME"]||"").trim() === name);
+    })();
+    if (!row) return;
+
+    if (order.has(row)){
+      const i = order.get(row);
+      card.classList.add("selected");
+      if (i === 0) card.classList.add("selected-1"); // Blue
+      if (i === 1) card.classList.add("selected-2"); // Green
+    }
   });
 }
 
-// Run after cards are rendered
-bindLensCards();
-
-// === Click outside overlay content to close ===
-overlay.addEventListener("click", (e) => {
-  if (!e.target.closest("#lensOverlayContent")) closeOverlay();
-});
-
-
-
-
+// Update "0/2 selected"
+function updateCompareCount(){
+  const cnt = (window.COMPARE || []).length;
+  const cc = document.getElementById('compareCount');
+  if (cc) cc.textContent = `${cnt}/2 selected`;
 }
+
+/** Render comparison pane; mirror colors (compare-1 = Blue, compare-2 = Green); NO remove buttons */
+function renderComparePane(){
+  const pane = document.getElementById("compareSlots");
+  if (!pane) return;
+
+  pane.innerHTML = "";
+  const comps = (window.COMPARE || []);
+
+  comps.forEach((entry, i)=>{
+    const { row, html } = entry;
+
+    const fallback = (() => {
+      const s = getLensScore(row);
+      const thin = getProductThinPct(row);
+      const idx = (row["INDEX"] || "—").trim();
+      const brand = row["BRAND"] || "";
+      const app = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
+      const design = row["LENS_DESIGN"] || "";
+      return `
+        <b>${row["PRODUCT_NAME"] || "(Unnamed Lens)"}</b><br>
+        ${brand} ${idx} ${app}<br>
+        <b>Design:</b> ${design}<br>
+        <b>Score:</b> ${s.pct}%<br>
+        <b>Thinness:</b> ${thin ? thin.toFixed(1) + "%" : "–"}
+      `;
+    })();
+
+    const div = document.createElement("div");
+    // i=0 -> compare-1 (Blue), i=1 -> compare-2 (Green)
+    div.className = `compare-card compare-${i+1}`;
+    div.style.cssText = "background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:8px;";
+    div.innerHTML = `${html || fallback}`;
+    pane.appendChild(div);
+  });
+
+  // Keep placeholders so there are always 2 slots
+  for (let j = comps.length; j < 2; j++){
+    const ph = document.createElement("div");
+    ph.className = "compare-slot empty";
+    ph.textContent = j === 0 ? "Click a lens card to add here" : "Click a second lens card to add here";
+    pane.appendChild(ph);
+  }
+
+  updateCompareCount();
+  applyCompareHighlights();
+  renderCompareAnalysis();   // analysis below
+}
+
+// Toggle from a lens card click (max 2)
+function toggleCompareFromCard(card, row){
+  const existing = (window.COMPARE || []).find(e => e.row === row);
+  if (existing){
+    window.COMPARE = window.COMPARE.filter(e => e.row !== row);
+    renderComparePane();
+    return;
+  }
+
+  const entry = { row, html: captureCardHTML(card) };
+  if (!window.COMPARE || window.COMPARE.length === 0){
+    window.COMPARE = [entry];
+  } else if (window.COMPARE.length === 1){
+    window.COMPARE = [window.COMPARE[0], entry];
+  } else {
+    window.COMPARE = [window.COMPARE[0], entry]; // replace 2nd
+  }
+
+  renderComparePane();
+}
+
+/* =========================
+   Wiring
+========================= */
+// Event delegation on the grid of lens results
+(function initCompareClick(){
+  const host = document.getElementById("lensResults");
+  if (!host) return;
+
+  host.addEventListener("click", (e)=>{
+    const card = e.target.closest(".lens-card");
+    if (!card) return;
+
+    const row = card.__row || (()=>{
+      const title = card.querySelector(".lens-header b") || card.querySelector("b");
+      const firstLine = (title?.innerText || title?.textContent || "").split("\n")[0].trim();
+      return (window.PRODUCTS || []).find(r => String(r["PRODUCT_NAME"]||"").trim() === firstLine);
+    })();
+    if (!row) return;
+
+    const idx = window.COMPARE.findIndex(e => e.row === row);
+    if (idx >= 0){
+      window.COMPARE.splice(idx,1);
+      card.classList.remove("selected");
+    } else {
+      if (window.COMPARE.length >= 2) return; // full
+      window.COMPARE.push({ row, html: captureCardHTML(card) });
+      card.classList.add("selected");
+    }
+
+    renderComparePane();
+    applyCompareHighlights();
+  });
+})();
+
+// Re-apply highlights after any re-render of #lensResults
+(function observeLensList(){
+  const grid = document.getElementById("lensResults");
+  if (!grid) return;
+  const mo = new MutationObserver(()=> applyCompareHighlights());
+  mo.observe(grid, { childList: true });
+  applyCompareHighlights();
+})();
+
+/* =========================
+   Analysis (Design Score → Thinness)
+========================= */
+
+// helpers used by analysis (assumes your existing functions exist)
+function thinPct(row){ const p = getProductThinPct(row); return (p==null)? null : Math.round(p); }
+
+// Renders into: <section id="compareAnalysis"></section>
+function renderCompareAnalysis(){
+  const host = document.getElementById("compareAnalysis");
+  if (!host) return;
+
+  const list = window.COMPARE || [];
+  if (list.length < 2){ host.innerHTML = ""; return; }
+
+  const A = list[0].row; // Blue
+  const B = list[1].row; // Green
+
+  const sA = getLensScore(A)?.pct ?? 0;
+  const sB = getLensScore(B)?.pct ?? 0;
+  const tA = thinPct(A);
+  const tB = thinPct(B);
+
+  const nameA = (A.PRODUCT_NAME||"Lens A");
+  const nameB = (B.PRODUCT_NAME||"Lens B");
+
+  // Decide: design first (±1% = tie), then thinness if both present
+  const designClose = Math.abs(sA - sB) <= 1;
+  let verdict;
+  if (!designClose){
+    verdict = (sA > sB) ? `Winner: ${nameA} (Blue) by Design` : `Winner: ${nameB} (Green) by Design`;
+  } else if (Number.isFinite(tA) && Number.isFinite(tB) && tA !== tB){
+    verdict = (tA > tB) ? `Winner: ${nameA} (Blue) by Thinness` : `Winner: ${nameB} (Green) by Thinness`;
+  } else {
+    verdict = "Tie — Design is effectively equal; Thinness also not decisive.";
+  }
+
+  host.innerHTML = `
+    <div class="analysis-card" style="border:1px solid #e5e7eb;border-radius:10px;padding:8px;background:#fff">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="display:inline-block;font-size:10px;line-height:1;padding:4px 8px;border-radius:999px;color:#fff;background:#155e75">Blue</span>
+        <span style="display:inline-block;font-size:10px;line-height:1;padding:4px 8px;border-radius:999px;color:#fff;background:#15803d">Green</span>
+        <span style="font-weight:600;font-size:12px;letter-spacing:.2px;color:#444">Quick Analysis</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:start">
+        <div>
+          <div style="font-weight:600">${nameA}</div>
+          <div style="font-size:12px;color:#444">Design score: ${sA}%</div>
+          <div style="font-size:12px;color:#444">Thinness: ${Number.isFinite(tA)? tA+"%":"–"}</div>
+        </div>
+        <div style="font-size:12px;align-self:center">vs</div>
+        <div>
+          <div style="font-weight:600">${nameB}</div>
+          <div style="font-size:12px;color:#444">Design score: ${sB}%</div>
+          <div style="font-size:12px;color:#444">Thinness: ${Number.isFinite(tB)? tB+"%":"–"}</div>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;font-size:12px;">
+        <span style="font-weight:600;color:#444">Verdict:</span> ${verdict}
+      </div>
+    </div>
+  `;
+}
+
+
+
 
 
 
@@ -6401,6 +6920,8 @@ document.querySelectorAll('#priceMin, #priceMax').forEach(input => {
 });
 
 
+
+
 /* =========================
    UNIVERSAL FILTER ACTIONS
 ========================= */
@@ -6435,50 +6956,128 @@ document.getElementById("btnClearMF")?.addEventListener("click", () => {
   setFilters(false, "#multifocalFilters input[type='checkbox']");
   updateStatus("Multifocal filters cleared.");
 });
+
+// ====== SV / MF filter buttons (clear cross-category subfilters) ======
+document.querySelectorAll("#btnShowSV, #btnShowMF").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const id = btn.id;
+
+    // Toggle filter mode
+    if (id === "btnShowSV") {
+      FILTER_MODE = (FILTER_MODE === "sv") ? "all" : "sv";
+
+      // Clear MF-only filters so they don't hide SV results
+      document.querySelectorAll(".fl-mf-view, .fl-mf-swim, .fl-mf-zone, .fl-mf-tier, .fl-mf-pers")
+        .forEach(cb => (cb.checked = false));
+
+    } else if (id === "btnShowMF") {
+      FILTER_MODE = (FILTER_MODE === "mf") ? "all" : "mf";
+
+      // Clear SV-only filters so they don't hide MF results
+      document.querySelectorAll(".fl-func, .fl-viewing, .fl-sv-pers")
+        .forEach(cb => (cb.checked = false));
+    }
+
+    // Reset both buttons to default color
+    document.querySelectorAll("#btnShowSV, #btnShowMF").forEach(b => {
+      b.style.background = "";
+      b.style.color = "";
+    });
+
+    // Highlight active button (if any)
+    if (FILTER_MODE === "sv") {
+      const svBtn = document.getElementById("btnShowSV");
+      svBtn.style.background = "#155e75";
+      svBtn.style.color = "#fff";
+    } else if (FILTER_MODE === "mf") {
+      const mfBtn = document.getElementById("btnShowMF");
+      mfBtn.style.background = "#155e75";
+      mfBtn.style.color = "#fff";
+    }
+
+    // Refresh results
+    const rx = parseRx();
+    renderLensOptions(LAST_GEOM, rx);
+  });
+});
+
+
+
 </script>
 
 
 
 <script>
-let SCORE_MIN = 0, SCORE_MAX = 8;
+let SCORE_MIN = 0, SCORE_MAX = 100;
 
+// ====== Lens Score Buttons (toggle + live update) ======
 document.querySelectorAll("#scoreButtons .small-normal-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-    SCORE_MIN = parseInt(btn.dataset.min);
-    SCORE_MAX = parseInt(btn.dataset.max);
+    const newMin = parseInt(btn.dataset.min);
+    const newMax = parseInt(btn.dataset.max);
 
-    // highlight active
+    // --- Toggle logic ---
+    const isSame = (SCORE_MIN === newMin && SCORE_MAX === newMax);
+    if (isSame) {
+      // turn off (reset to show all)
+      SCORE_MIN = 0;
+      SCORE_MAX = 100;
+    } else {
+      // activate new range
+      SCORE_MIN = newMin;
+      SCORE_MAX = newMax;
+    }
+
+    // --- Button highlight ---
     document.querySelectorAll("#scoreButtons .small-normal-btn").forEach(b => {
       b.style.background = "";
       b.style.color = "";
     });
-    btn.style.background = "#155e75";
-    btn.style.color = "#fff";
+    if (!isSame) {
+      btn.style.background = "#155e75";
+      btn.style.color = "#fff";
+    }
+
+    // --- Refresh lens list ---
+    const rx = parseRx();
+    renderLensOptions(LAST_GEOM, rx);
+  });
+});
+
+
+// ====== Thinness Efficiency Buttons (toggle + live update) ======
+document.querySelectorAll("#thinButtons .small-normal-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const newMin = parseInt(btn.dataset.min);
+    const newMax = parseInt(btn.dataset.max);
+
+    // Toggle: clicking the same active range turns it OFF
+    const same = (THIN_ON && THIN_MIN === newMin && THIN_MAX === newMax);
+    if (same) {
+      THIN_ON = false;
+    } else {
+      THIN_ON = true;
+      THIN_MIN = newMin;
+      THIN_MAX = newMax;
+    }
+
+    // Highlight current button (same look as score buttons)
+    document.querySelectorAll("#thinButtons .small-normal-btn").forEach(b => {
+      b.style.background = "";
+      b.style.color = "";
+    });
+    if (THIN_ON) {
+      btn.style.background = "#155e75";
+      btn.style.color = "#fff";
+    }
 
     const rx = parseRx();
     renderLensOptions(LAST_GEOM, rx);
   });
 });
+
+
 </script>
-
-<script>
-// === Highlight active SV/MF buttons ===
-document.querySelectorAll("#btnToggleSeg2, #btnToggleSeg3").forEach(btn => {
-  btn.addEventListener("click", () => {
-    // clear highlights
-    document.querySelectorAll("#btnToggleSeg2, #btnToggleSeg3").forEach(b => {
-      b.style.background = "";
-      b.style.color = "";
-    });
-    // set active highlight
-    btn.style.background = "#155e75";
-    btn.style.color = "#fff";
-  });
-});
-</script>
-
-
-
 
 
 
@@ -6840,6 +7439,8 @@ makeToggle("toggle-reference", "reference");
 makeToggle("toggle-reference2", "reference2");
 makeToggle("toggle-fc-dc-chart1", "fc-dc-chart1");
 makeToggle("toggle-fc-dc-chart2", "fc-dc-chart2");
+makeToggle("toggle-lens-chooser","lens-chooser");
+
 
 
 
