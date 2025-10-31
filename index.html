@@ -6647,7 +6647,8 @@ const efficiencyHTML = buildEfficiencyHTML(row);
     card.innerHTML = `
       <div class="lens-header">
 
-<div><b>${row["PRODUCT_NAME"] || "(Unnamed Lens)"} ${idx} ${design} ${app}<br><br> ${coatingHTML}</b></div>
+<div><b>${row["PRODUCT_NAME"] || "(Unnamed Lens)"} ${idx} ${design} ${app}</b> ${scoreHTML}     ${efficiencyHTML}
+  <br> <b>${coatingHTML}</b> </div>
 
 <div class="card-details" style="display:none;">
 <div style="height:20px"></div>
@@ -6678,17 +6679,334 @@ card.__row = row;   // <-- attach the source row to this card
 
 
 
+
+
+
+/* =========================
+   Compare: constants
+========================= */
+const COLOR_BLUE  = "#2563eb";
+const COLOR_GREEN = "#16a34a";
+const DOT = c => `<span style="display:inline-block;width:10px;height:10px;border-radius:999px;background:${c};margin-right:8px;"></span>`;
+
+/* =========================
+   Compare Analysis (direction-aware)
+   Default: Green vs Blue (B − A). Click "Reverse" to flip.
+========================= */
+
+// "GvB" = Green vs Blue (B − A)  |  "BvG" = Blue vs Green (A − B)
+window.COMPARE_DIR = window.COMPARE_DIR || "GvB";
+
+/* --- Type detectors & levels --- */
+function isMultifocalRow(row){
+  return /(pal|progress|multi|varifocal|bifocal)/i.test(String(row?.LENS_DESIGN||""));
+}
+
+// Geometry ladder: NONE:1, SPH:2, ASP:3, ATO:4, DAS:5
+function svGeometryLevel(viewStr=""){
+  const v = String(viewStr).toLowerCase();
+  if (v.includes("double") || v.includes("das")) return 5;
+  if (v.includes("ator")  || v.includes("ato"))  return 4;
+  if (v.includes("aspheric") || v.includes("asp")) return 3;
+  if (v.includes("sph")) return 2;
+  return 1; // NONE
+}
+
+// Personalization: None=1, Partial=2, Full=3
+function svPersonalizationLevel(row){
+  const p = String(getSVPersonalization(row)||"").toLowerCase();
+  if (p.includes("full"))    return 3;
+  if (p.includes("partial")) return 2;
+  return 1;
+}
+
+// SV function bucket & numeric ladder (for +/- score)
+function svFunctionBucket(row){
+  const d = String(row["LENS_DESIGN"]||"").toLowerCase();
+  if (/(dual|anti[- ]?fatigue|relax|boost)/.test(d)) return "dual";
+  if (/\bcustom\b/.test(d)) return "custom";
+  return "stock";
+}
+function svFunctionLevel(bucket){
+  return bucket === "dual" ? 3 : bucket === "custom" ? 2 : 1; // stock=1, custom=2, dual=3
+}
+
+/* --- Direction helpers --- */
+function dirIsGvB(){ return window.COMPARE_DIR === "GvB"; }
+function deltaByDir(a, b){ return dirIsGvB() ? (b - a) : (a - b); }  // GvB = B−A, BvG = A−B
+
+/* --- Price diff (same coating only), sign per direction --- */
+function priceNum(x){ const n = parseFloat(String(x).replace(/[^\d.\-]/g,"")); return Number.isFinite(n)? n : null; }
+function priceDiffLine(label, a, b){ // a=Blue(A), b=Green(B)
+  const A = priceNum(a), B = priceNum(b);
+  if (A==null || B==null) return `${label}: Not available`;
+  const diff = dirIsGvB() ? (B - A) : (A - B);
+  const sign = diff>0? "+" : "";
+  return `${label}: Difference RM ${sign}${diff}`;
+}
+
+/* --- Thinness shrinkage (mm) parsing from captured HTML --- */
+/* Expects pattern like: "(2.3 mm ; max 3.0mm)" — we extract the first mm value. */
+function extractThinMmFromHTML(html){
+  if (!html) return null;
+  const m = String(html).match(/\(\s*([\d.]+)\s*mm\s*;[^)]*\)/i);
+  const val = m ? parseFloat(m[1]) : NaN;
+  return Number.isFinite(val) ? val : null;
+}
+
+/* --- Thinness diff (mm) line, per direction --- */
+function thinnessMmLine(entryA, entryB){
+  const mmA = extractThinMmFromHTML(entryA?.html);
+  const mmB = extractThinMmFromHTML(entryB?.html);
+  if (mmA == null || mmB == null) return "Thinness: comparison not available";
+  const raw = dirIsGvB() ? (mmA - mmB) : (mmB - mmA); // thicker = minus, thinner = plus
+  if (raw > 0)  return `-${Math.abs(raw).toFixed(1)}mm : Lens is thicker`;
+  if (raw < 0)  return `+${Math.abs(raw).toFixed(1)}mm : Lens is thinner`;
+  return `0.0mm : No thickness difference`;
+}
+
+/* --- SV sentences --- */
+function sentenceGeometry(delta){
+  if (delta > 0){
+    if (delta === 1) return "+1: Slightly smoother, more stable, and thinner by design.";
+    if (delta === 2) return "+2: Noticeably smoother, more stable, and thinner by design.";
+    return `+${delta}: Significantly smoother, more stable, and thinner by design.`;
+  } else if (delta < 0){
+    if (delta === -1) return "-1: Vision may feel slightly wavy, especially at the edges.";
+    if (delta === -2) return "-2: Vision may feel noticeably wavy, especially at the edges.";
+    return `${delta}: Vision may feel significantly wavy, especially at the edges.`;
+  }
+  return "0: Design geometry is equivalent; no stability/thinness change expected.";
+}
+function sentencePersonalization(delta){
+  if (delta > 0){
+    if (delta === 1) return "+1: Vision is sharper and clearer all around.";
+    if (delta === 2) return "+2: Vision is noticeably sharper and clearer all around.";
+    return `+${delta}: Vision is significantly sharper and clearer all around.`;
+  } else if (delta < 0){
+    if (delta === -1) return "-1: Vision is clear but not crystal clear.";
+    if (delta === -2) return "-2: Vision is clear but noticeably short of crystal clear.";
+    return `${delta}: Vision is clear but significantly short of crystal clear.`;
+  }
+  return "0: Personalization level is equivalent.";
+}
+function sentenceFunctionTypeWithScore(aBucket, bBucket){
+  if (aBucket === bBucket) return "0: Function type is the same.";
+  const aL = svFunctionLevel(aBucket);
+  const bL = svFunctionLevel(bBucket);
+  const delta = deltaByDir(aL, bL);
+  let sentence;
+  const from = dirIsGvB() ? aBucket : bBucket;
+  const to   = dirIsGvB() ? bBucket : aBucket;
+
+  if (from !== "dual" && to === "dual") {
+    sentence = "Eyes and head feel less tired; relaxed for near work.";
+  } else if (from === "dual" && to !== "dual") {
+    sentence = "Traditional design, not optimized for today’s visual lifestyle.";
+  } else if (from === "stock" && to === "custom") {
+    sentence = "Vision is customized to improve the optics, making vision more natural.";
+  } else if (from === "custom" && to === "stock") {
+    sentence = "Vision is clear but may not feel natural; object sizes may differ from real.";
+  } else {
+    sentence = "Function update applied.";
+  }
+  const sign = delta>0 ? `+${delta}` : `${delta}`;
+  return `${sign}: ${sentence}`;
+}
+
+/* ======== MF ladders (1..3) ======== */
+function mfViewLevel(row){
+  const s = String(row?.MF_VIEWING||"").toLowerCase();
+  if (/\bexpert|wide\b/.test(s)) return 3;
+  if (/\bbalance|balanced\b/.test(s)) return 2;
+  return 1; // entry / narrow
+}
+function mfZoneLevel(row){
+  const s = String(row?.MF_ZONE||"").toLowerCase();
+  if (/\bequal|balance|balanced\b/.test(s)) return 3;
+  if (/\bnear\b/.test(s)) return 2;
+  return 1; // intermediate
+}
+function mfTierLevel(row){
+  const s = String(row?.MF_TIER||"").toLowerCase();
+  if (/\bdouble\b/.test(s)) return 3;
+  if (/\bsingle\b/.test(s)) return 2;
+  return 1; // traditional
+}
+function mfPersLevel(row){
+  const s = String(row?.MF_PERSONALIZATION||"").toLowerCase();
+  if (/\bfull\b/.test(s)) return 3;
+  if (/\bpartial\b/.test(s)) return 2;
+  return 1; // none
+}
+function mfSwimLevel(row){
+  const s = String(row?.MF_SWIM||"").toLowerCase();
+  if (/\bnone|low\b/.test(s)) return 1;
+  if (/\bmedium|moderate\b/.test(s)) return 2;
+  if (/\bhigh|strong|severe\b/.test(s)) return 3;
+  return 2; // default medium
+}
+
+/* ======== MF sentences ======== */
+function sentenceMfProfile(delta){
+  if (delta>0)  return `+${delta}: Wider clear zones; easier, more natural scanning.`;
+  if (delta<0)  return `${delta}: Narrower clear zones; more head turn needed.`;
+  return "0: Overall profile similar.";
+}
+function sentenceMfZone(delta){
+  if (delta>0)  return `+${delta}: Better balance for desk/phone tasks.`;
+  if (delta<0)  return `${delta}: Less convenient for desk/phone tasks.`;
+  return "0: Near/intermediate balance similar.";
+}
+function sentenceMfTier(delta){
+  if (delta>0)  return `+${delta}: Higher-precision optics (smoother transitions).`;
+  if (delta<0)  return `${delta}: More basic optics (narrower comfort window).`;
+  return "0: Production tier equivalent.";
+}
+function sentenceMfPersonalization(delta){
+  if (delta>0)  return `+${delta}: Sharper, more tailored across the lens.`;
+  if (delta<0)  return `${delta}: Clear but less tailored; small compromises.`;
+  return "0: Personalization level equivalent.";
+}
+function sentenceMfSwim(delta){
+  if (delta>0)  return `+${delta}: Lower swim/instability; steadier walking/turning.`;
+  if (delta<0)  return `${delta}: Higher swim/instability; may feel wavier.`;
+  return "0: Comfort/stability similar.";
+}
+
+/* --- Renders into <div id="compareAnalysis"></div> --- */
+function renderCompareAnalysis(){
+  const host = document.getElementById("compareAnalysis");
+  if (!host) return;
+
+  const list = window.COMPARE || [];
+  if (list.length < 2){ host.innerHTML = ""; return; }
+
+  // entry objects carry {row, html}
+  const entryA = list[0]; // Blue
+  const entryB = list[1]; // Green
+  const A = entryA.row;
+  const B = entryB.row;
+
+  const leftIsGreen = dirIsGvB();  // GvB: left=Green, right=Blue
+  const leftLabel  = leftIsGreen
+    ? `${DOT(COLOR_GREEN)}Green (${B.PRODUCT_NAME||"Lens B"})`
+    : `${DOT(COLOR_BLUE)}Blue (${A.PRODUCT_NAME||"Lens A"})`;
+  const headTitle = `${leftLabel} is:`;
+
+  const svA = !isMultifocalRow(A);
+  const svB = !isMultifocalRow(B);
+
+  let bodyHTML = "";
+  let priceHTML = "";
+
+  if (svA && svB){
+    // SINGLE VISION — deltas respect direction
+    const gA = svGeometryLevel(A.VIEWING_STYLE||"");
+    const gB = svGeometryLevel(B.VIEWING_STYLE||"");
+    const dG = deltaByDir(gA, gB); // geometry Δ
+
+    const pA = svPersonalizationLevel(A);
+    const pB = svPersonalizationLevel(B);
+    const dP = deltaByDir(pA, pB); // personalization Δ
+
+    const fA = svFunctionBucket(A);
+    const fB = svFunctionBucket(B);
+    const funcLine = sentenceFunctionTypeWithScore(fA, fB);
+
+    bodyHTML = `
+      <div class="sv-lines" style="display:grid;gap:6px; margin-left:10px">
+        <div><b>Peripheral:</b> ${sentenceGeometry(dG)}</div>
+        <div><b>Clarity:</b> ${sentencePersonalization(dP)}</div>
+        <div><b>Ergonomic:</b> ${funcLine}</div>
+        <div><b>Thinness:</b> ${thinnessMmLine(entryA, entryB)}</div>
+      </div>
+    `;
+
+    priceHTML = `
+      <div style="display:grid;gap:6px;">
+        <div>${priceDiffLine("UV400", A.UV_400_PRICE_RM, B.UV_400_PRICE_RM)}</div>
+        <div>${priceDiffLine("UV420/BL", A.UV_420_BL_PRICE_RM, B.UV_420_BL_PRICE_RM)}</div>
+        <div>${priceDiffLine("High-Clarity", A.HIGH_CLARITY_COATING_PRICE_RM, B.HIGH_CLARITY_COATING_PRICE_RM)}</div>
+      </div>
+    `;
+
+  } else if (!svA && !svB){
+    // MULTIFOCAL ONLY — direction-aware deltas
+    const vA = mfViewLevel(A),  vB = mfViewLevel(B);
+    const zA = mfZoneLevel(A),  zB = mfZoneLevel(B);
+    const tA = mfTierLevel(A),  tB = mfTierLevel(B);
+    const rA = mfPersLevel(A),  rB = mfPersLevel(B);
+    const sA = mfSwimLevel(A),  sB = mfSwimLevel(B);
+
+    const dV = deltaByDir(vA, vB);
+    const dZ = deltaByDir(zA, zB);
+    const dT = deltaByDir(tA, tB);
+    const dR = deltaByDir(rA, rB);
+    const dS = deltaByDir(sA, sB);
+
+    bodyHTML = `
+      <div class="mf-lines" style="display:grid;gap:6px; margin-left:10px">
+        <div><b>Overall Profile (Entry/Balance/Expert):</b> ${sentenceMfProfile(dV)}</div>
+        <div><b>Near–Intermediate Balance:</b> ${sentenceMfZone(dZ)}</div>
+        <div><b>Production Tier (Trad/Single/Double):</b> ${sentenceMfTier(dT)}</div>
+        <div><b>Personalization (None/Partial/Full):</b> ${sentenceMfPersonalization(dR)}</div>
+        <div><b>Comfort / “Swim” stability:</b> ${sentenceMfSwim(dS)}</div>
+        <div><b>Thinness:</b> ${thinnessMmLine(entryA, entryB)}</div>
+      </div>
+    `;
+
+    priceHTML = `
+      <div style="display:grid;gap:6px;">
+        <div>${priceDiffLine("UV400", A.UV_400_PRICE_RM, B.UV_400_PRICE_RM)}</div>
+        <div>${priceDiffLine("UV420/BL", A.UV_420_BL_PRICE_RM, B.UV_420_BL_PRICE_RM)}</div>
+        <div>${priceDiffLine("High-Clarity", A.HIGH_CLARITY_COATING_PRICE_RM, B.HIGH_CLARITY_COATING_PRICE_RM)}</div>
+      </div>
+    `;
+
+  } else {
+    // MIXED TYPES — not comparable
+    bodyHTML = `
+      <div class="compare-notice" style="padding:10px;border:1px solid #fde68a;background:#fffbeb;border-radius:8px;">
+        Comparison not possible: Single vision vs multifocal.
+      </div>
+    `;
+    priceHTML = "";
+  }
+
+  // Render with Reverse button
+  host.innerHTML = `
+    <div class="analysis-card" style="border:none;border-radius:12px;padding:12px;display:grid;gap:12px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <div style="font-weight:800">${headTitle}</div>
+        <button type="button" class="small-normal-btn" id="compareReverseBtn">Reverse</button>
+      </div>
+      ${bodyHTML}
+      ${priceHTML ? `
+        <div style="padding:8px;background:#f9fafb;border:1px dashed #e5e7eb;border-radius:10px;">
+          <div style="font-weight:700;margin-bottom:6px;">Price (same-coating comparison)</div>
+          ${priceHTML}
+        </div>
+      ` : ""}
+    </div>
+  `;
+
+  // Wire reverse button
+  const btn = document.getElementById("compareReverseBtn");
+  if (btn){
+    btn.onclick = () => {
+      window.COMPARE_DIR = dirIsGvB() ? "BvG" : "GvB";
+      renderCompareAnalysis();
+    };
+  }
+}
+
 /* =========================
    Compare: State + Helpers
 ========================= */
 
 // Global compare state (max 2)
-window.COMPARE = [];
-
-const COLOR_BLUE  = "#2563eb";
-const COLOR_GREEN = "#16a34a";
-const DOT = c => `<span style="display:inline-block;width:10px;height:10px;border-radius:999px;background:${c};margin-right:8px;"></span>`;
-
+window.COMPARE = window.COMPARE || [];
 
 // Capture full visible content from a lens card (header + expanded details)
 function captureCardHTML(card){
@@ -6738,7 +7056,7 @@ function updateCompareCount(){
   if (cc) cc.textContent = `${cnt}/2 selected`;
 }
 
-/** Render comparison pane; mirror colors (compare-1 = Blue, compare-2 = Green); NO remove buttons */
+/** Render comparison pane; mirror colors (compare-1 = Blue, compare-2 = Green) */
 function renderComparePane(){
   const pane = document.getElementById("compareSlots");
   if (!pane) return;
@@ -6750,18 +7068,18 @@ function renderComparePane(){
     const { row, html } = entry;
 
     const fallback = (() => {
-      const s = getLensScore(row);
-      const thin = getProductThinPct(row);
+      const s = typeof getLensScore === "function" ? getLensScore(row) : { pct:"—" };
+      const thin = typeof getProductThinPct === "function" ? getProductThinPct(row) : null;
       const idx = (row["INDEX"] || "—").trim();
       const brand = row["BRAND"] || "";
-      const app = getAppearance(row["CLEAR_CHANGING_TINT"] || "");
+      const app = typeof getAppearance === "function" ? getAppearance(row["CLEAR_CHANGING_TINT"] || "") : (row["CLEAR_CHANGING_TINT"]||"");
       const design = row["LENS_DESIGN"] || "";
       return `
         <b>${row["PRODUCT_NAME"] || "(Unnamed Lens)"}</b><br>
         ${brand} ${idx} ${app}<br>
         <b>Design:</b> ${design}<br>
-        <b>Score:</b> ${s.pct}%<br>
-        <b>Thinness:</b> ${thin ? thin.toFixed(1) + "%" : "–"}
+        <b>Score:</b> ${s.pct ?? s}%<br>
+        <b>Thinness:</b> ${thin != null ? (Number.isFinite(thin)? thin.toFixed(1): thin) + "%" : "–"}
       `;
     })();
 
@@ -6806,7 +7124,6 @@ function renderComparePane(){
     applyCompareHighlights();
   });
 })();
-
 
 // Toggle from a lens card click (max 2)
 function toggleCompareFromCard(card, row){
@@ -6871,296 +7188,6 @@ function toggleCompareFromCard(card, row){
   mo.observe(grid, { childList: true });
   applyCompareHighlights();
 })();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* =========================
-   Compare Analysis (direction-aware)
-   Default: Green vs Blue (B − A). Click "Reverse" to flip.
-========================= */
-
-/* --- Global direction flag (persist during session) --- */
-// "GvB" = Green vs Blue (B − A)  |  "BvG" = Blue vs Green (A − B)
-window.COMPARE_DIR = window.COMPARE_DIR || "GvB";
-
-/* --- Type detectors & levels --- */
-function isMultifocalRow(row){
-  return /(pal|progress|multi|varifocal|bifocal)/i.test(String(row?.LENS_DESIGN||""));
-}
-
-// Geometry ladder: NONE:1, SPH:2, ASP:3, ATO:4, DAS:5
-function svGeometryLevel(viewStr=""){
-  const v = String(viewStr).toLowerCase();
-  if (v.includes("double") || v.includes("das")) return 5;
-  if (v.includes("ator")  || v.includes("ato"))  return 4;
-  if (v.includes("aspheric") || v.includes("asp")) return 3;
-  if (v.includes("sph")) return 2;
-  return 1; // NONE
-}
-
-// Personalization: None=1, Partial=2, Full=3
-function svPersonalizationLevel(row){
-  const p = String(getSVPersonalization(row)||"").toLowerCase();
-  if (p.includes("full"))    return 3;
-  if (p.includes("partial")) return 2;
-  return 1;
-}
-
-// SV function bucket & numeric ladder (for +/- score)
-function svFunctionBucket(row){
-  const d = String(row["LENS_DESIGN"]||"").toLowerCase();
-  if (/(dual|anti[- ]?fatigue|relax|boost)/.test(d)) return "dual";
-  if (/\bcustom\b/.test(d)) return "custom";
-  return "stock";
-}
-function svFunctionLevel(bucket){
-  return bucket === "dual" ? 3 : bucket === "custom" ? 2 : 1; // stock=1, custom=2, dual=3
-}
-
-/* --- Direction helpers --- */
-function dirIsGvB(){ return window.COMPARE_DIR === "GvB"; }
-function deltaByDir(a, b){ return dirIsGvB() ? (b - a) : (a - b); }  // GvB = B−A, BvG = A−B
-function labelDir(){ return dirIsGvB() ? "Green − Blue" : "Blue − Green"; }
-
-/* --- Price diff (same coating only), sign per direction --- */
-function priceNum(x){ const n = parseFloat(String(x).replace(/[^\d.\-]/g,"")); return Number.isFinite(n)? n : null; }
-function priceDiffLine(label, a, b){ // a=Blue(A), b=Green(B)
-  const A = priceNum(a), B = priceNum(b);
-  if (A==null || B==null) return `${label}: Not available`;
-  const diff = dirIsGvB() ? (B - A) : (A - B);
-  const sign = diff>0? "+" : "";
-  return `${label}: Difference RM ${sign}${diff}`;
-}
-
-/* --- Thinness shrinkage (mm) parsing from captured HTML --- */
-/* Expects pattern like: "(2.3 mm ; max 3.0mm)" — we extract the first mm value. */
-function extractThinMmFromHTML(html){
-  if (!html) return null;
-  const m = String(html).match(/\(\s*([\d.]+)\s*mm\s*;[^)]*\)/i);
-  const val = m ? parseFloat(m[1]) : NaN;
-  return Number.isFinite(val) ? val : null;
-}
-
-/* --- Approved sentence maps --- */
-// 2A Geometry — "+/-N: …"
-function sentenceGeometry(delta){
-  if (delta > 0){
-    if (delta === 1) return "+1: Slightly smoother, more stable, and thinner by design.";
-    if (delta === 2) return "+2: Noticeably smoother, more stable, and thinner by design.";
-    return `+${delta}: Significantly smoother, more stable, and thinner by design.`;
-  } else if (delta < 0){
-    if (delta === -1) return "-1: Vision may feel slightly wavy, especially at the edges.";
-    if (delta === -2) return "-2: Vision may feel noticeably wavy, especially at the edges.";
-    return `${delta}: Vision may feel significantly wavy, especially at the edges.`;
-  }
-  return "0: Design geometry is equivalent; no stability/thinness change expected.";
-}
-
-// 2B Personalization — "+/-N: …"
-function sentencePersonalization(delta){
-  if (delta > 0){
-    if (delta === 1) return "+1: Vision is sharper and clearer all around.";
-    if (delta === 2) return "+2: Vision is noticeably sharper and clearer all around.";
-    return `+${delta}: Vision is significantly sharper and clearer all around.`;
-  } else if (delta < 0){
-    if (delta === -1) return "-1: Vision is clear but not crystal clear.";
-    if (delta === -2) return "-2: Vision is clear but noticeably short of crystal clear.";
-    return `${delta}: Vision is clear but significantly short of crystal clear.`;
-  }
-  return "0: Personalization level is equivalent.";
-}
-
-// 2C Function type — show direction sentence AND +/- score based on ladder
-function sentenceFunctionTypeWithScore(aBucket, bBucket){
-  if (aBucket === bBucket) return "0: Function type is the same.";
-
-  const aL = svFunctionLevel(aBucket);
-  const bL = svFunctionLevel(bBucket);
-  const delta = deltaByDir(aL, bL); // respects direction
-
-  let sentence;
-  const from = dirIsGvB() ? aBucket : bBucket; // narrative stays aligned with the visible direction
-  const to   = dirIsGvB() ? bBucket : aBucket;
-
-  if (from !== "dual" && to === "dual") {
-    sentence = "Eyes and head feel less tired; relaxed for near work.";
-  } else if (from === "dual" && to !== "dual") {
-    sentence = "Traditional design, not optimized for today’s visual lifestyle.";
-  } else if (from === "stock" && to === "custom") {
-    sentence = "Vision is customized to improve the optics, making vision more natural.";
-  } else if (from === "custom" && to === "stock") {
-    sentence = "Vision is clear but may not feel natural; object sizes may differ from real.";
-  } else {
-    sentence = "Function update applied.";
-  }
-
-  const sign = delta>0 ? `+${delta}` : `${delta}`;
-  return `${sign}: ${sentence}`;
-}
-
-/* --- Thinness diff (mm) line, per direction --- */
-function thinnessMmLine(entryA, entryB){
-  const mmA = extractThinMmFromHTML(entryA?.html);
-  const mmB = extractThinMmFromHTML(entryB?.html);
-  if (mmA == null || mmB == null) return "Thinness: comparison not available";
-
-  // Directional diff (same as before), but sign output rule: thicker = minus, thinner = plus
-  const raw = dirIsGvB() ? (mmA - mmB) : (mmB - mmA);
-
-  if (raw > 0)  return `-${Math.abs(raw).toFixed(1)}mm : Lens is thicker`;
-  if (raw < 0)  return `+${Math.abs(raw).toFixed(1)}mm : Lens is thinner`;
-  return `0.0mm : No thickness difference`;
-}
-
-
-
-/* --- Renders into <div id="compareAnalysis"></div> --- */
-function renderCompareAnalysis(){
-  const host = document.getElementById("compareAnalysis");
-  if (!host) return;
-
-  const list = window.COMPARE || [];
-  if (list.length < 2){ host.innerHTML = ""; return; }
-
-  // entry objects carry {row, html}
-  const entryA = list[0]; // Blue
-  const entryB = list[1]; // Green
-  const A = entryA.row;
-  const B = entryB.row;
-
-  // Header text based on direction
-const leftIsGreen = dirIsGvB();  // GvB: left=Green, right=Blue
-const leftLabel  = leftIsGreen
-  ? `${DOT(COLOR_GREEN)}Green (${B.PRODUCT_NAME||"Lens B"})`
-  : `${DOT(COLOR_BLUE)}Blue (${A.PRODUCT_NAME||"Lens A"})`;
-const rightLabel = leftIsGreen
-  ? `${DOT(COLOR_BLUE)}Blue (${A.PRODUCT_NAME||"Lens A"})`
-  : `${DOT(COLOR_GREEN)}Green (${B.PRODUCT_NAME||"Lens B"})`;
-const headTitle = `${leftLabel} is:`;
-
-
-  const svA = !isMultifocalRow(A);
-  const svB = !isMultifocalRow(B);
-
-  let bodyHTML = "";
-  let priceHTML = "";
-
-  if (svA && svB){
-    // SINGLE VISION — deltas respect direction
-    const gA = svGeometryLevel(A.VIEWING_STYLE||"");
-    const gB = svGeometryLevel(B.VIEWING_STYLE||"");
-    const dG = deltaByDir(gA, gB); // geometry Δ
-
-    const pA = svPersonalizationLevel(A);
-    const pB = svPersonalizationLevel(B);
-    const dP = deltaByDir(pA, pB); // personalization Δ
-
-    const fA = svFunctionBucket(A);
-    const fB = svFunctionBucket(B);
-    const funcLine = sentenceFunctionTypeWithScore(fA, fB);
-
-bodyHTML = `
-  <div class="sv-lines" style="display:grid;gap:6px; margin-left:10px">
-    <div><b>Peripheral:</b> ${sentenceGeometry(dG)}</div>
-    <div><b>Clarity:</b> ${sentencePersonalization(dP)}</div>
-    <div><b>Ergonomic:</b> ${funcLine}</div>
-    <div><b>Thinness:</b> ${thinnessMmLine(entryA, entryB)}</div>
-  </div>
-`;
-
-
-    priceHTML = `
-<div style="display:grid;gap:6px; ">
-
-        <div>${priceDiffLine("UV400", A.UV_400_PRICE_RM, B.UV_400_PRICE_RM)}</div>
-        <div>${priceDiffLine("UV420/BL", A.UV_420_BL_PRICE_RM, B.UV_420_BL_PRICE_RM)}</div>
-        <div>${priceDiffLine("High-Clarity", A.HIGH_CLARITY_COATING_PRICE_RM, B.HIGH_CLARITY_COATING_PRICE_RM)}</div>
- </div>
-    `;
-
-  } else if (!svA && !svB){
-    // MULTIFOCAL ONLY — placeholder
-    bodyHTML = `
-      <div class="mf-notes" style="display:grid;gap:6px; margin-left:10px">
-        <div><b>Profile (Entry/Balance/Expert):</b> —</div>
-        <div><b>Zone (Near/Intermediate/Equal):</b> —</div>
-        <div><b>Production Tier (Traditional/Single/Double):</b> —</div>
-        <div><b>Personalization (None/Partial/Full):</b> —</div>
-        <div><b>Comfort/Swim/Stability remarks:</b> —</div>
-        <div><b>Near task performance (phone/desk):</b> —</div>
-        <div><b>Adaptation expectation:</b> —</div>
-      </div>
-    `;
-
-    priceHTML = `
-<div style="display:grid;gap:6px; ">
-        <div>${priceDiffLine("UV400", A.UV_400_PRICE_RM, B.UV_400_PRICE_RM)}</div>
-        <div>${priceDiffLine("UV420/BL", A.UV_420_BL_PRICE_RM, B.UV_420_BL_PRICE_RM)}</div>
-        <div>${priceDiffLine("High-Clarity", A.HIGH_CLARITY_COATING_PRICE_RM, B.HIGH_CLARITY_COATING_PRICE_RM)}</div>
-  </div>
-    `;
-
-  } else {
-    // MIXED TYPES — not comparable
-    bodyHTML = `
-      <div class="compare-notice" style="padding:10px;border:1px solid #fde68a;background:#fffbeb;border-radius:8px;">
-        Comparison not possible: Single vision vs multifocal.
-      </div>
-    `;
-    priceHTML = "";
-  }
-
-  // Render with Reverse button
-  host.innerHTML = `
-    <div class="analysis-card" style="border:none;border-radius:12px;padding:12px;display:grid;gap:12px;">
-<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
-  <div style="font-weight:800">${headTitle}</div>
-  <button type="button" class="small-normal-btn" id="compareReverseBtn">Reverse</button>
-</div>
-
-
-      ${bodyHTML}
-
-
-      ${priceHTML ? `
-        <div style="padding:8px;background:#f9fafb;border:1px dashed #e5e7eb;border-radius:10px;">
-          <div style="font-weight:700;margin-bottom:6px;">Price (same-coating comparison)</div>
-          ${priceHTML}
-        </div>
-      ` : ""}
-    </div>
-  `;
-
-  // Wire reverse button
-  const btn = document.getElementById("compareReverseBtn");
-  if (btn){
-    btn.onclick = () => {
-      window.COMPARE_DIR = dirIsGvB() ? "BvG" : "GvB";
-      renderCompareAnalysis();
-    };
-  }
-}
-
-
-
-
-
-
-
-
-
 
 
 
