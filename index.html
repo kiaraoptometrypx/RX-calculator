@@ -5484,18 +5484,13 @@ function parseRx(){
   </div>
 </section>
 
-<section id="compareAnalysis" style="margin:10px 0;"></section>
+<div style="height:10px"></div>
 
+<div class="pane" id="compareAnalysis"></div>
+
+<div style="height:20px"></div>
 
 <style>
-#compareAnalysis .analysis-card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:10px}
-#compareAnalysis .pill{display:inline-block;font-size:11px;padding:3px 8px;border-radius:999px;color:#fff;margin-right:6px}
-#compareAnalysis .pill-1{background:#155e75}
-#compareAnalysis .pill-2{background:#15803d}
-#compareAnalysis .k{color:#374151;font-weight:600}
-#compareAnalysis .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px;font-size:12px}
-#compareAnalysis .c1{border-left:3px solid #155e75;padding-left:6px}
-#compareAnalysis .c2{border-left:3px solid #15803d;padding-left:6px}
 
   .compare-grid{
     display:grid;
@@ -5528,16 +5523,7 @@ function parseRx(){
     box-shadow:0 0 0 3px rgba(21,128,61,.15)!important;
   }
 
-  /* optional: subtle badge you can add inside compare entries */
-  .compare-badge{
-    display:inline-block;
-    font-size:10px;
-    line-height:1;
-    padding:4px 6px;
-    border-radius:6px;
-    margin-bottom:6px;
-    color:#fff;
-  }
+
   .badge-1{ background:#155e75; }
   .badge-2{ background:#15803d; }
 /* No transparency. Solid, darker highlights. */
@@ -6725,10 +6711,16 @@ function renderComparePane(){
     })();
 
     const div = document.createElement("div");
-    // i=0 -> compare-1 (Blue), i=1 -> compare-2 (Green)
     div.className = `compare-card compare-${i+1}`;
     div.style.cssText = "background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:8px;";
-    div.innerHTML = `${html || fallback}`;
+
+    div.innerHTML = `
+      <div class="compare-card-head" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-size:12px;opacity:.7">${i===0 ? "Blue" : "Green"}</span>
+        <button type="button" class="small-normal-btn remove-compare" data-index="${i}">Remove</button>
+      </div>
+      ${html || fallback}
+    `;
     pane.appendChild(div);
   });
 
@@ -6742,8 +6734,24 @@ function renderComparePane(){
 
   updateCompareCount();
   applyCompareHighlights();
-  renderCompareAnalysis();   // analysis below
+  renderCompareAnalysis();
 }
+
+// Handle "Remove" in compare pane
+(function initCompareRemove(){
+  const pane = document.getElementById("compareSlots");
+  if (!pane) return;
+  pane.addEventListener("click", (e)=>{
+    const btn = e.target.closest(".remove-compare.small-normal-btn");
+    if (!btn) return;
+    const idx = Number(btn.dataset.index);
+    if (!Number.isInteger(idx)) return;
+    window.COMPARE.splice(idx, 1);
+    renderComparePane();
+    applyCompareHighlights();
+  });
+})();
+
 
 // Toggle from a lens card click (max 2)
 function toggleCompareFromCard(card, row){
@@ -6816,7 +6824,7 @@ function toggleCompareFromCard(card, row){
 // helpers used by analysis (assumes your existing functions exist)
 function thinPct(row){ const p = getProductThinPct(row); return (p==null)? null : Math.round(p); }
 
-// Renders into: <section id="compareAnalysis"></section>
+// Renders into: <div class="pane" id="compareAnalysis"></div>
 function renderCompareAnalysis(){
   const host = document.getElementById("compareAnalysis");
   if (!host) return;
@@ -6847,31 +6855,32 @@ function renderCompareAnalysis(){
   }
 
   host.innerHTML = `
-    <div class="analysis-card" style="border:1px solid #e5e7eb;border-radius:10px;padding:8px;background:#fff">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-        <span style="display:inline-block;font-size:10px;line-height:1;padding:4px 8px;border-radius:999px;color:#fff;background:#155e75">Blue</span>
-        <span style="display:inline-block;font-size:10px;line-height:1;padding:4px 8px;border-radius:999px;color:#fff;background:#15803d">Green</span>
-        <span style="font-weight:600;font-size:12px;letter-spacing:.2px;color:#444">Quick Analysis</span>
-      </div>
+<div class="analysis-card">
+  <div>
+    <span>Blue</span>
+    <span>Green</span>
+    <span>Quick Analysis</span>
+  </div>
 
-      <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:start">
-        <div>
-          <div style="font-weight:600">${nameA}</div>
-          <div style="font-size:12px;color:#444">Design score: ${sA}%</div>
-          <div style="font-size:12px;color:#444">Thinness: ${Number.isFinite(tA)? tA+"%":"–"}</div>
-        </div>
-        <div style="font-size:12px;align-self:center">vs</div>
-        <div>
-          <div style="font-weight:600">${nameB}</div>
-          <div style="font-size:12px;color:#444">Design score: ${sB}%</div>
-          <div style="font-size:12px;color:#444">Thinness: ${Number.isFinite(tB)? tB+"%":"–"}</div>
-        </div>
-      </div>
-
-      <div style="margin-top:10px;font-size:12px;">
-        <span style="font-weight:600;color:#444">Verdict:</span> ${verdict}
-      </div>
+  <div>
+    <div>
+      <div>${nameA}</div>
+      <div>Design score: ${sA}%</div>
+      <div>Thinness: ${Number.isFinite(tA)? tA+"%":"–"}</div>
     </div>
+    <div>vs</div>
+    <div>
+      <div>${nameB}</div>
+      <div>Design score: ${sB}%</div>
+      <div>Thinness: ${Number.isFinite(tB)? tB+"%":"–"}</div>
+    </div>
+  </div>
+
+  <div>
+    <span>Verdict:</span> ${verdict}
+  </div>
+</div>
+
   `;
 }
 
