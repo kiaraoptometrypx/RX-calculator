@@ -579,11 +579,12 @@ table input {
 
   .section{background:var(--pale);border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0;}
 
-#lensResults {
+#lensResults{
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  grid-template-columns: 1fr;   /* one card per row */
+  gap: 6px;
 }
+
 
 
 /* Colorize each option individually */
@@ -6342,7 +6343,7 @@ function renderLensOptions(geom, rx) {
   const matches = PRODUCTS.filter(row => {
 	const s = getLensScore(row);
 const pct = Math.round((s.total / s.max) * 100);
-if (pct < SCORE_MIN || pct > SCORE_MAX) return false;
+if (!scoreInActiveRanges(pct)) return false;
     const rawDesign  = String(row["LENS_DESIGN"] || "");
     const designKey  = rawDesign.toLowerCase().replace(/\s+/g, " ").trim();
     const designType = getFunctionCat(rawDesign); // "SV", "Multifocal", "Office", "Anti-fatigue"
@@ -6539,15 +6540,16 @@ unique.sort((a, b) => {
     "advance lens": "Advance Lens",
     "advance": "Advance Lens"
   };
-  const BRAND_RATINGS = {
-"Asahi":        { optical: "(Premium ⭐️⭐️⭐️⬤⬤)", price: "(Mid 💰💰💰⬤⬤)" },
-  "Rayfilter":    { optical: "(Good ⭐️⭐️⬤⬤⬤)",    price: "(Budget 💰💰⬤⬤⬤)" },
-  "Rodenstock":   { optical: "(Luxury ⭐️⭐️⭐️⭐️⭐️)",  price: "(Luxury 💰💰💰💰💰)" },
-  "Pentax":       { optical: "(Premium ⭐️⭐️⭐️⬤⬤)", price: "(Premium 💰💰💰💰⬤)" },
-  "Opto-tech":    { optical: "(Premium ⭐️⭐️⭐️⬤⬤)", price: "(Mid 💰💰💰⬤⬤)" },
-  "Seiko":        { optical: "(Luxury ⭐️⭐️⭐️⭐️⭐️)",  price: "(Luxury 💰💰💰💰💰)" },
-  "Advance Lens": { optical: "(Good ⭐️⬤⬤⬤⬤)",    price: "(Budget 💰💰⬤⬤⬤)" }
-  };
+const BRAND_RATINGS = {
+  "Asahi":        { optical: "Medium ⭐️⭐️⭐️⬤⬤",  price: "Mid 💰💰💰⬤⬤" },
+  "Rayfilter":    { optical: "Basic ⭐️⭐️⬤⬤⬤",      price: "Budget 💰💰⬤⬤⬤" },
+  "Rodenstock":   { optical: "Luxury ⭐️⭐️⭐️⭐️⭐️",  price: "Luxury 💰💰💰💰💰" },
+  "Pentax":       { optical: "Medium ⭐️⭐️⭐️⬤⬤",  price: "Premium 💰💰💰💰⬤" },
+  "Opto-tech":    { optical: "Medium ⭐️⭐️⭐️⬤⬤",  price: "Mid 💰💰💰⬤⬤" },
+  "Seiko":        { optical: "Luxury ⭐️⭐️⭐️⭐️⭐️",  price: "Luxury 💰💰💰💰💰" },
+  "Advance Lens": { optical: "Entry ⭐️⬤⬤⬤⬤",      price: "Budget 💰💰⬤⬤⬤" }
+};
+
   function getBrandGroup(val = "") {
     const s = String(val).toLowerCase()
       .replace(/\./g, "")
@@ -6578,7 +6580,7 @@ unique.slice(0, 24).forEach(row => {
     const brandKey = getBrandGroup(brand);
     const rating = BRAND_RATINGS[brandKey];
     const brandMeta = rating
-      ? `<span class="tag meta">Quality: ${rating.optical} · Price: ${rating.price}</span>`
+      ? `<span class="tag meta">${rating.optical}</span>`
       : "";
 
 // --- Scoring ---
@@ -6612,9 +6614,9 @@ const efficiencyHTML = buildEfficiencyHTML(row);
     const selectedClarity = checkedValues(".fl-clarity")[0] || null;
     let coatingHTML = "";
     const labelMap = {
-      UV_400: "UV Filter only",
-      UV_420_BL: "Blue Light Filter",
-      high_clarity: "High Clarity & Filter"
+      UV_400: "UV400",
+      UV_420_BL: "Blue Light",
+      high_clarity: "High Clarity"
     };
     const colorMap = { UV_400: "color:#174063", UV_420_BL: "color:#1B2B8C", high_clarity: "color:#A81448" };
 
@@ -6622,7 +6624,7 @@ const efficiencyHTML = buildEfficiencyHTML(row);
       const p = getPriceByClarity(row, selectedClarity);
       if (p != null){
         const style = colorMap[selectedClarity] ? ` style="${colorMap[selectedClarity]}"` : "";
-        coatingHTML = `<div class="lens-prices"><span class="tag price"${style}>${labelMap[selectedClarity]}: RM ${p}</span></div>`;
+        coatingHTML = `<div class="lens-prices"><span class="tag price"${style}>${labelMap[selectedClarity]} Coating - RM ${p}</span></div>`;
       } else {
         coatingHTML = ""; // shouldn't appear due to filter
       }
@@ -6633,8 +6635,8 @@ const efficiencyHTML = buildEfficiencyHTML(row);
       order.forEach(k=>{
         const v = all[k];
         if (v != null){
-          const style = colorMap[k] ? ` style="${colorMap[k]}"` : "";
-          parts.push(`<span class="tag price"${style}>${labelMap[k]}: RM ${v}</span>`);
+          const style = colorMap[k] ? `style="${colorMap[k]}"` : "";
+          parts.push(`<span class="tag price"${style}>${labelMap[k]} Coating - RM ${v}</span>`);
         }
       });
       coatingHTML = parts.length ? `<div class="lens-prices">${parts.join('<br>')}</div>` : "";
@@ -6645,26 +6647,19 @@ const efficiencyHTML = buildEfficiencyHTML(row);
     card.innerHTML = `
       <div class="lens-header">
 
-<div><b>${row["PRODUCT_NAME"] || "(Unnamed Lens)"}<br> ${idx} ${design} ${app}</b></div>
-<div>${leadHTML}${scoreHTML}${efficiencyHTML}</div>
+<div><b>${row["PRODUCT_NAME"] || "(Unnamed Lens)"} ${idx} ${design} ${app}<br><br> ${coatingHTML}</b></div>
 
-
-   <div style="height:10px"></div>
-     <div>${coatingHTML} </div>
 <div class="card-details" style="display:none;">
-<div>
 <div style="height:20px"></div>
-<b>Lens Brand Maker:</b> ${brandKey || (row["BRAND"] || "")}</div>
-<div><b>Lens Details:</b> ${row["PRODUCT_NAME"] || "(Unnamed Lens)"} ${dia} mm ${idx} ${design} ${app} ${note}
-        <div><b>Lens Tintability Option:</b> ${tintNote}  </div>
-<div><b>Lens Rating & Price:</b> ${brandMeta}</div>
+<div><b>Details:</b> ${brandKey || (row["BRAND"] || "")} ${row["PRODUCT_NAME"] || "(Unnamed Lens)"} ${dia} mm ${idx} ${design} ${app} ${note}
+        <div><b>Tintability Option:</b> ${tintNote}  </div>
+<div><b>Quality & Clarity:</b> ${brandMeta}</div>
 <div>${
   getFunctionCat(row["LENS_DESIGN"]||"") === "Multifocal"
     ? renderMFBadges(row)
     : renderSVBadges(row)   // <-- shows only Functional Lens + Viewing Preference for SV
 }</div>
 
-      </div>
 </div>
     `;
     container.appendChild(card);
@@ -7080,7 +7075,7 @@ bodyHTML = `
   <div class="sv-lines" style="display:grid;gap:6px; margin-left:10px">
     <div><b>Peripheral:</b> ${sentenceGeometry(dG)}</div>
     <div><b>Clarity:</b> ${sentencePersonalization(dP)}</div>
-    <div><b>Ergonimic:</b> ${funcLine}</div>
+    <div><b>Ergonomic:</b> ${funcLine}</div>
     <div><b>Thinness:</b> ${thinnessMmLine(entryA, entryB)}</div>
   </div>
 `;
@@ -7350,35 +7345,43 @@ document.querySelectorAll("#btnShowClear, #btnShowPhoto").forEach(btn => {
 <script>
 let SCORE_MIN = 0, SCORE_MAX = 100;
 
-// ====== Lens Score Buttons (toggle + live update) ======
+// ---- Multi-select score ranges ----
+let ACTIVE_SCORE_RANGES = new Set(); // stores keys like "50-74"
+
+function keyOf(btn){
+  return `${parseInt(btn.dataset.min)}-${parseInt(btn.dataset.max)}`;
+}
+function parseKey(k){
+  const [a,b] = k.split("-").map(n=>parseInt(n));
+  return [a,b];
+}
+function scoreInActiveRanges(pct){
+  if (ACTIVE_SCORE_RANGES.size === 0) return true; // none picked => show all
+  for (const k of ACTIVE_SCORE_RANGES){
+    const [a,b] = parseKey(k);
+    if (pct >= a && pct <= b) return true;
+  }
+  return false;
+}
+
+// ====== Lens Score Buttons (multi-select + live update) ======
 document.querySelectorAll("#scoreButtons .small-normal-btn").forEach(btn => {
   btn.addEventListener("click", () => {
-    const newMin = parseInt(btn.dataset.min);
-    const newMax = parseInt(btn.dataset.max);
+    const k = keyOf(btn);
+    const isActive = ACTIVE_SCORE_RANGES.has(k);
 
-    // --- Toggle logic ---
-    const isSame = (SCORE_MIN === newMin && SCORE_MAX === newMax);
-    if (isSame) {
-      // turn off (reset to show all)
-      SCORE_MIN = 0;
-      SCORE_MAX = 100;
+    // toggle this band only
+    if (isActive){
+      ACTIVE_SCORE_RANGES.delete(k);
+      btn.style.background = "";
+      btn.style.color = "";
     } else {
-      // activate new range
-      SCORE_MIN = newMin;
-      SCORE_MAX = newMax;
-    }
-
-    // --- Button highlight ---
-    document.querySelectorAll("#scoreButtons .small-normal-btn").forEach(b => {
-      b.style.background = "";
-      b.style.color = "";
-    });
-    if (!isSame) {
+      ACTIVE_SCORE_RANGES.add(k);
       btn.style.background = "#155e75";
       btn.style.color = "#fff";
     }
 
-    // --- Refresh lens list ---
+    // refresh list
     const rx = parseRx();
     renderLensOptions(LAST_GEOM, rx);
   });
